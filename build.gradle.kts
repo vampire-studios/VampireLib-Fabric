@@ -62,7 +62,6 @@ publishing {
     publications {
         create<MavenPublication>("mavenJava") {
 			artifactId = "AbnormaLib"
-            from(components["java"])
             artifact(tasks["sourcesJar"])
             pom {
                 name.set("AbnormaLib")
