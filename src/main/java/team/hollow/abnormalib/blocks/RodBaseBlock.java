@@ -4,8 +4,8 @@ import net.fabricmc.fabric.api.block.FabricBlockSettings;
 import net.minecraft.block.*;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.state.StateFactory;
-import net.minecraft.util.Mirror;
-import net.minecraft.util.Rotation;
+import net.minecraft.util.BlockMirror;
+import net.minecraft.util.BlockRotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.shape.VoxelShape;
@@ -30,11 +30,11 @@ public class RodBaseBlock extends FacingBlock {
         this.setDefaultState(this.getDefaultState().with(FACING, Direction.UP));
     }
 
-    public BlockState rotate(BlockState blockState_1, Rotation rotation_1) {
+    public BlockState rotate(BlockState blockState_1, BlockRotation rotation_1) {
         return blockState_1.with(FACING, rotation_1.rotate(blockState_1.get(FACING)));
     }
 
-    public BlockState mirror(BlockState blockState_1, Mirror mirror_1) {
+    public BlockState mirror(BlockState blockState_1, BlockMirror mirror_1) {
         return blockState_1.with(FACING, mirror_1.apply(blockState_1.get(FACING)));
     }
 

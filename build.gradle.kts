@@ -21,7 +21,7 @@ base {
 	archivesBaseName = Constants.name
 }
 
-version = "v${Constants.version}+${Constants.minecraftVersionVer}-${Constants.ending}"
+version = "${Constants.version}+${Constants.minecraftVersionVer}-${Constants.ending}"
 group = "team.hollow"
 
 repositories {
