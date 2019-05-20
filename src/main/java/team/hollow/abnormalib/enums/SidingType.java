@@ -1,8 +1,8 @@
 package team.hollow.abnormalib.enums;
 
-import net.minecraft.util.StringRepresentable;
+import net.minecraft.util.StringIdentifiable;
 
-public enum SidingType implements StringRepresentable {
+public enum SidingType implements StringIdentifiable {
 	SINGLE("single"),
 	DOUBLE("double");
 
