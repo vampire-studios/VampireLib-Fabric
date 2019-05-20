@@ -1,3 +1,6 @@
+import net.fabricmc.loom.task.RemapJarTask
+import net.fabricmc.loom.task.RemapSourcesJarTask
+
 plugins {
 	wrapper
 	idea
@@ -60,17 +63,33 @@ tasks.getByName<ProcessResources>("processResources") {
 	}
 }
 
-tasks.register<Jar>("sourcesJar") {
+val javaCompile = tasks.withType<JavaCompile> {
+    options.encoding = "UTF-8"
+}
+
+val sourcesJar by tasks.registering(Jar::class) {
     from(sourceSets["main"].allSource)
     classifier = "sources"
 }
+
+val jar = tasks.getByName<Jar>("jar") {
+    from("LICENSE")
+}
+
+val remapJar = tasks.getByName<RemapJarTask>("remapJar")
+
+val remapSourcesJar = tasks.getByName<RemapSourcesJarTask>("remapSourcesJar")
 
 publishing {
     publications {
         create<MavenPublication>("mavenJava") {
 			artifactId = "AbnormaLib"
-			artifact(tasks["jar"])
-			artifact(tasks["sourcesJar"])
+            artifact(jar) {
+				builtBy(remapJar)
+			}
+			artifact(sourcesJar.get()) {
+				builtBy(remapSourcesJar)
+			}
             pom {
                 name.set("AbnormaLib")
                 description.set(Constants.description)

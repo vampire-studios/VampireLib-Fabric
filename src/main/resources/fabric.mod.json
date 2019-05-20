@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
   "id": "abnormalib",
-  "version": "${version}",
+  "version": "0.3.0",
 
   "name": "AbnormaLib",
   "description": "AbnormaLib is a library mod for all mods made by Minecraft Abnormals",
   "authors": [
-    "Minecraft Abnormals"
+    "Team Abnormals"
   ],
   "contact": {
     "homepage": "",

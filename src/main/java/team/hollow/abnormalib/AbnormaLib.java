@@ -11,6 +11,6 @@ public class AbnormaLib implements ModInitializer {
     public void onInitialize() {
         Logger logger = LogManager.getLogger("AbnormaLib");
         Version version = FabricLoader.getInstance().getModContainer("abnormalib").get().getMetadata().getVersion();
-        logger.info(String.format("Your running AbnormaLib v%s", version.getFriendlyString()));
+        logger.info(String.format("Your running AbnormaLib %s", version.getFriendlyString()));
     }
 }

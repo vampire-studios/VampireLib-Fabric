@@ -12,12 +12,12 @@ import net.minecraft.state.StateFactory;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.EnumProperty;
 import net.minecraft.state.property.Properties;
+import net.minecraft.util.BlockRotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.IWorld;
-import team.hollow.abnormalib.utils.AbnormaProperties;
 
 public class PostBaseBlock extends Block implements Waterloggable {
 	public static final EnumProperty<Direction.Axis> AXIS;
@@ -32,7 +32,7 @@ public class PostBaseBlock extends Block implements Waterloggable {
 		this.setDefaultState(this.getDefaultState().with(AXIS, Direction.Axis.Y).with(WATERLOGGED, false));
 	}
 
-	public VoxelShape getOutlineShape(BlockState blockState_1, BlockView blockView_1, BlockPos blockPos_1, EntityContext entityContext) {
+	public VoxelShape getOutlineShape(BlockState blockState_1, BlockView blockView_1, BlockPos blockPos_1, EntityContext verticalEntityPosition_1) {
 		Direction.Axis axis = blockState_1.get(AXIS);
 		switch(axis) {
 			case X:
@@ -44,10 +44,27 @@ public class PostBaseBlock extends Block implements Waterloggable {
 		}
 	}
 
-	public VoxelShape getCollisionShape(BlockState blockState_1, BlockView blockView_1, BlockPos blockPos_1, EntityContext entityContext) {
+	public BlockState rotate(BlockState blockState_1, BlockRotation rotation_1) {
+		switch (rotation_1) {
+			case COUNTERCLOCKWISE_90:
+			case CLOCKWISE_90:
+				switch (blockState_1.get(AXIS)) {
+					case X:
+						return blockState_1.with(AXIS, Direction.Axis.Z);
+					case Z:
+						return blockState_1.with(AXIS, Direction.Axis.X);
+					default:
+						return blockState_1;
+				}
+			default:
+				return blockState_1;
+		}
+	}
+
+	public VoxelShape getCollisionShape(BlockState blockState_1, BlockView blockView_1, BlockPos blockPos_1, EntityContext verticalEntityPosition_1) {
 		Direction.Axis axis = blockState_1.get(AXIS);
 		if(axis == Direction.Axis.Y) return Y_COLLISION;
-		else return super.getCollisionShape(blockState_1, blockView_1, blockPos_1, entityContext);
+		else return super.getCollisionShape(blockState_1, blockView_1, blockPos_1, verticalEntityPosition_1);
 	}
 
 	public BlockState getPlacementState(ItemPlacementContext itemPlacementContext_1) {
@@ -77,7 +94,7 @@ public class PostBaseBlock extends Block implements Waterloggable {
 	}
 
 	static {
-		AXIS = AbnormaProperties.AXIS;
+		AXIS = Properties.AXIS_XYZ;
 		WATERLOGGED = Properties.WATERLOGGED;
 		Y_SHAPE = Block.createCuboidShape(6f, 0f, 6f, 10f, 16f, 10f);
 		Y_COLLISION = Block.createCuboidShape(6f, 0f, 6f, 10f, 24f, 10f);

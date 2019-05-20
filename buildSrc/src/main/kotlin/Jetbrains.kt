@@ -8,7 +8,7 @@ object Fabric {
     }
 
     object Loom {
-        const val version = "0.2.2-SNAPSHOT"
+        const val version = "0.2.3-SNAPSHOT"
     }
 
     object Yarn {
