@@ -4,7 +4,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.*;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityContext;
+import net.minecraft.entity.VerticalEntityPosition;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
@@ -56,7 +56,7 @@ public class CornerBaseBlock extends Block implements Waterloggable {
 		return true;
 	}
 
-	public VoxelShape getOutlineShape(BlockState blockState_1, BlockView blockView_1, BlockPos blockPos_1, EntityContext verticalEntityPosition_1) {
+	public VoxelShape getOutlineShape(BlockState blockState_1, BlockView blockView_1, BlockPos blockPos_1, VerticalEntityPosition verticalEntityPosition_1) {
 		switch(blockState_1.get(FACING)) {
 			case EAST:
 				return EAST_SHAPE;
@@ -151,7 +151,7 @@ public class CornerBaseBlock extends Block implements Waterloggable {
 	}
 
 	protected void appendProperties(StateFactory.Builder<Block, BlockState> stateFactory$Builder_1) {
-		stateFactory$Builder_1.add(FACING, WATERLOGGED);
+		stateFactory$Builder_1.with(FACING, WATERLOGGED);
 	}
 
 	public FluidState getFluidState(BlockState blockState_1) {

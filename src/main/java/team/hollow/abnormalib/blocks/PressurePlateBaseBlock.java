@@ -5,7 +5,7 @@ import net.minecraft.block.PressurePlateBlock;
 
 public class PressurePlateBaseBlock extends PressurePlateBlock {
 
-    public PressurePlateBaseBlock(Material material, ActivationRule sensitivity) {
+    public PressurePlateBaseBlock(Material material, Type sensitivity) {
         super(sensitivity, Settings.of(material));
     }
 
