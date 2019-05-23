@@ -1,5 +1,5 @@
-import net.fabricmc.loom.task.RemapJarTask
-import net.fabricmc.loom.task.RemapSourcesJarTask
+import net.fabricmc.loom.task.RemapJar
+import net.fabricmc.loom.task.RemapSourcesJar
 
 plugins {
 	wrapper
@@ -45,9 +45,6 @@ dependencies {
 
 	modCompile(group = "net.fabricmc.fabric-api", name = "fabric-api", version = Fabric.API.version)
 
-	modCompile(group = "com.github.siphalor", name = "tweed-api", version = Dependencies.Tweed.version)
-	include(group = "com.github.siphalor", name = "tweed-api", version = Dependencies.Tweed.version)
-
 	modCompile(group = "io.github.cottonmc", name = "cotton", version = "0.6.7+1.14.1-SNAPSHOT")
 
 }
@@ -75,20 +72,16 @@ val jar = tasks.getByName<Jar>("jar") {
     from("LICENSE")
 }
 
-val remapJar = tasks.getByName<RemapJarTask>("remapJar")
+val remapJar = tasks.getByName<RemapJar>("remapJar")
 
-val remapSourcesJar = tasks.getByName<RemapSourcesJarTask>("remapSourcesJar")
+val remapSourcesJar = tasks.getByName<RemapSourcesJar>("remapSourcesJar")
 
 publishing {
     publications {
         create<MavenPublication>("mavenJava") {
 			artifactId = "AbnormaLib"
-            artifact(jar) {
-				builtBy(remapJar)
-			}
-			artifact(sourcesJar.get()) {
-				builtBy(remapSourcesJar)
-			}
+			artifact(tasks["jar"])
+			artifact(tasks["sourcesJar"])
             pom {
                 name.set("AbnormaLib")
                 description.set(Constants.description)

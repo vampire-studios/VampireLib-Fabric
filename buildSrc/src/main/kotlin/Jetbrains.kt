@@ -8,7 +8,7 @@ object Fabric {
     }
 
     object Loom {
-        const val version = "0.2.3-SNAPSHOT"
+        const val version = "0.2.2-SNAPSHOT"
     }
 
     object Yarn {
@@ -22,6 +22,6 @@ object Minecraft {
 
 object Dependencies {
     object Tweed {
-        const val version = "2.1.0-beta.1"
+        const val version = "2.1.0-beta.6"
     }
 }
