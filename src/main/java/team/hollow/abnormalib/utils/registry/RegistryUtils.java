@@ -17,7 +17,9 @@ public class RegistryUtils {
 
     public static Block register(Block block, Identifier name, ItemGroup itemGroup) {
         Registry.register(Registry.BLOCK, name, block);
-        Registry.register(Registry.ITEM, name, new BlockItem(block, new Item.Settings().itemGroup(itemGroup)));
+        BlockItem item = new BlockItem(block, new Item.Settings().itemGroup(itemGroup));
+        item.registerBlockItemMap(Item.BLOCK_ITEM_MAP, item);
+        Registry.register(Registry.ITEM, name, item);
         return block;
     }
 
@@ -26,8 +28,14 @@ public class RegistryUtils {
         return block;
     }
 
-    public static Block registerNoBI(Block block, Identifier name) {
+    public static Block registerScaffolding(Block block, Identifier name) {
         Registry.register(Registry.BLOCK, name, block);
+        Registry.register(Registry.ITEM, name, new ScaffoldingItem(block, new Item.Settings().itemGroup(ItemGroup.DECORATIONS)));
+        return block;
+    }
+
+    public static Block registerNoBI(Block block, Identifier identifier) {
+        Registry.register(Registry.BLOCK, identifier, block);
         return block;
     }
 

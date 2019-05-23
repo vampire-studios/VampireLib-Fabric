@@ -24,7 +24,7 @@ base {
 	archivesBaseName = Constants.name
 }
 
-version = "${Constants.version}_${Constants.minecraftVersionVer}-${Constants.ending}"
+version = "${Constants.version}+${Constants.minecraftVersionVer}"
 group = "team.hollow"
 
 repositories {
@@ -34,6 +34,7 @@ repositories {
 	maven("https://maven.fabricmc.net")
 	maven("https://minecraft.curseforge.com/api/maven")
 	maven("https://maven.jamieswhiteshirt.com/libs-release/")
+	maven("http://server.bbkr.space:8081/artifactory/libs-snapshot")
 }
 
 dependencies {
@@ -43,6 +44,13 @@ dependencies {
 	modCompile(group = "net.fabricmc", name = "fabric-loader", version = Fabric.Loader.version)
 
 	modCompile(group = "net.fabricmc", name = "fabric", version = Fabric.API.version + ".+")
+	include(group = "net.fabricmc", name = "fabric", version = Fabric.API.version + ".+")
+
+	modCompile(group = "com.github.siphalor", name = "tweed-api", version = Dependencies.Tweed.version)
+	include(group = "com.github.siphalor", name = "tweed-api", version = Dependencies.Tweed.version)
+
+	modCompile(group = "io.github.cottonmc", name = "cotton", version = "0.6.1+1.14-SNAPSHOT")
+
 }
 
 tasks.getByName<ProcessResources>("processResources") {

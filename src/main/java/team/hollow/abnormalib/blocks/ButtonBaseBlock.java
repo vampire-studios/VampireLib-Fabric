@@ -9,8 +9,8 @@ public class ButtonBaseBlock extends AbstractButtonBlock {
 
     boolean wooden;
 
-    public ButtonBaseBlock(boolean wooden) {
-        super(wooden, Settings.of(wooden ? Material.WOOD : Material.STONE));
+    public ButtonBaseBlock(boolean wooden, Settings settings) {
+        super(wooden, settings);
         this.wooden = wooden;
     }
 

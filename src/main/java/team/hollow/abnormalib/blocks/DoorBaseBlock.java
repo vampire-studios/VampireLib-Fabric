@@ -9,9 +9,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.BlockView;
 
 public class DoorBaseBlock extends DoorBlock {
-
-    public DoorBaseBlock(Material materialIn) {
-        super(FabricBlockSettings.of(materialIn).build());
+    public DoorBaseBlock(Settings block$Settings_1) {
+        super(block$Settings_1);
     }
 
     @Override

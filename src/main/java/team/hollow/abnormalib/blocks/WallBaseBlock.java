@@ -5,9 +5,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.WallBlock;
 
 public class WallBaseBlock extends WallBlock {
-
-    public WallBaseBlock(BlockState state) {
-        super(FabricBlockSettings.of(state.getMaterial()).build());
+    public WallBaseBlock(Settings block$Settings_1) {
+        super(block$Settings_1);
     }
-
 }

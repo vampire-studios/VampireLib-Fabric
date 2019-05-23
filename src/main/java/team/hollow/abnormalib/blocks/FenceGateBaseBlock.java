@@ -6,9 +6,7 @@ import net.minecraft.block.Material;
 import net.minecraft.sound.BlockSoundGroup;
 
 public class FenceGateBaseBlock extends FenceGateBlock {
-
-    public FenceGateBaseBlock() {
-        super(FabricBlockSettings.of(Material.WOOD).hardness(3.0F).sounds(BlockSoundGroup.WOOD).build());
+    public FenceGateBaseBlock(Settings block$Settings_1) {
+        super(block$Settings_1);
     }
-
 }
