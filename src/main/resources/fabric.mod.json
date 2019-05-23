@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "abnormalib",
-  "version": "0.3.0",
+  "version": "${version}",
 
   "name": "AbnormaLib",
   "description": "AbnormaLib is a library mod for all mods made by Minecraft Abnormals",
@@ -13,7 +13,7 @@
     "sources": "https://github.com/minecraftabnormals/AbnormaLib-1.14"
   },
 
-  "license": "CC0-1.0",
+  "license": "MIT",
   "icon": "assets/abnormalib/icon.png",
 
   "environment": "*",
@@ -25,6 +25,6 @@
 
   "requires": {
     "fabricloader": ">=0.4.0",
-    "fabric": "*"
+    "fabric": ">=0.3.0"
   }
 }

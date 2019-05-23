@@ -24,7 +24,7 @@ base {
 	archivesBaseName = Constants.name
 }
 
-version = "${Constants.version}+${Constants.minecraftVersionVer}"
+version = "${Constants.version}+${Constants.minecraftVersionVer}-${Constants.ending}"
 group = "team.hollow"
 
 repositories {
@@ -43,13 +43,12 @@ dependencies {
 
 	modCompile(group = "net.fabricmc", name = "fabric-loader", version = Fabric.Loader.version)
 
-	modCompile(group = "net.fabricmc", name = "fabric", version = Fabric.API.version + ".+")
-	include(group = "net.fabricmc", name = "fabric", version = Fabric.API.version + ".+")
+	modCompile(group = "net.fabricmc.fabric-api", name = "fabric-api", version = Fabric.API.version)
 
 	modCompile(group = "com.github.siphalor", name = "tweed-api", version = Dependencies.Tweed.version)
 	include(group = "com.github.siphalor", name = "tweed-api", version = Dependencies.Tweed.version)
 
-	modCompile(group = "io.github.cottonmc", name = "cotton", version = "0.6.1+1.14-SNAPSHOT")
+	modCompile(group = "io.github.cottonmc", name = "cotton", version = "0.6.7+1.14.1-SNAPSHOT")
 
 }
 

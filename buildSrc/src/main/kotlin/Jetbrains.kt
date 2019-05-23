@@ -1,10 +1,10 @@
 object Fabric {
     object Loader {
-        const val version = "0.4.7+build.147" // https://maven.fabricmc.net/net/fabricmc/fabric-loader/
+        const val version = "0.4.7+build.147"
     }
 
     object API {
-        const val version = "0.2.7+build"
+        const val version = "0.3.0-pre+build.165"
     }
 
     object Loom {
@@ -12,12 +12,12 @@ object Fabric {
     }
 
     object Yarn {
-        const val version = "+"
+        const val version = "3"
     }
 }
 
 object Minecraft {
-    const val version = "1.14.2 Pre-Release 1"
+    const val version = "1.14.2 Pre-Release 3"
 }
 
 object Dependencies {

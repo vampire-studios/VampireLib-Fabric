@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import io.github.cottonmc.cotton.datapack.recipe.RecipeUtil;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
@@ -16,6 +15,7 @@ import team.hollow.abnormalib.utils.generators.recipe.ShapelessRecipeIngredient;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class RecipeGenerator {
 
@@ -29,7 +29,7 @@ public class RecipeGenerator {
 
     public RecipeGenerator addShaped(ItemStack result, Identifier recipeName, String group, String[] rows, ShapedRecipeIngredient... shapedRecipeIngredients) {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        Path base = RecipeUtil.getRecipeLocation(recipeName).toPath();
+        Path base = Paths.get("src", "main", "resources", "data", recipeName.getNamespace(), "recipes");
         if (!base.toFile().exists()) {
             base.toFile().mkdirs();
         }
@@ -66,7 +66,7 @@ public class RecipeGenerator {
 
     public void addShapeless(ItemStack result, Identifier recipeName, String group, ShapelessRecipeIngredient... shapelessRecipeIngredients) {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        Path base = RecipeUtil.getRecipeLocation(recipeName).toPath();
+        Path base = Paths.get("src", "main", "resources", "data", recipeName.getNamespace(), "recipes");
         if (!base.toFile().exists()) {
             base.toFile().mkdirs();
         }
@@ -95,7 +95,7 @@ public class RecipeGenerator {
 
     public RecipeGenerator addStonecutting(ItemStack result, Identifier recipeName, String group, ShapelessRecipeIngredient shapelessRecipeIngredient) {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        Path base = RecipeUtil.getRecipeLocation(recipeName).toPath();
+        Path base = Paths.get("src", "main", "resources", "data", recipeName.getNamespace(), "recipes");
         if (!base.toFile().exists()) {
             base.toFile().mkdirs();
         }
@@ -119,7 +119,7 @@ public class RecipeGenerator {
 
     public RecipeGenerator addSmelting(ItemStack result, Identifier recipeName, String group, ShapelessRecipeIngredient... shapelessRecipeIngredients) {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        Path base = RecipeUtil.getRecipeLocation(recipeName).toPath();
+        Path base = Paths.get("src", "main", "resources", "data", recipeName.getNamespace(), "recipes");
         if (!base.toFile().exists()) {
             base.toFile().mkdirs();
         }

@@ -6,6 +6,6 @@ object Constants {
     const val url = "https://github.com/minecraftabnormals/AbnormaLib-1.14"
     const val ending = "SNAPSHOT"
 
-    const val version = "0.3.0"
-    const val minecraftVersionVer = "1.14.2_Pre2"
+    const val version = "0.4.0"
+    const val minecraftVersionVer = "1.14.2_Pre3"
 }
