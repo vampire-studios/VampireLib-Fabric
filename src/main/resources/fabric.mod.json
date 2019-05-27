@@ -19,9 +19,12 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "team.hollow.abnormalib.AbnormaLib"
+      "team.abnormals.abnormalib.AbnormaLib"
     ]
   },
+  "mixins": [
+    "abnormalib.mixins.json"
+  ],
 
   "requires": {
     "fabricloader": ">=0.4.0",

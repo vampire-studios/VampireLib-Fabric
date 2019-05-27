@@ -1,5 +1,5 @@
-import net.fabricmc.loom.task.RemapJar
-import net.fabricmc.loom.task.RemapSourcesJar
+import net.fabricmc.loom.task.RemapJarTask
+import net.fabricmc.loom.task.RemapSourcesJarTask
 
 plugins {
 	wrapper
@@ -44,9 +44,6 @@ dependencies {
 	modCompile(group = "net.fabricmc", name = "fabric-loader", version = Fabric.Loader.version)
 
 	modCompile(group = "net.fabricmc.fabric-api", name = "fabric-api", version = Fabric.API.version)
-
-	modCompile(group = "io.github.cottonmc", name = "cotton", version = "0.6.7+1.14.1-SNAPSHOT")
-
 }
 
 tasks.getByName<ProcessResources>("processResources") {
@@ -72,33 +69,37 @@ val jar = tasks.getByName<Jar>("jar") {
     from("LICENSE")
 }
 
-val remapJar = tasks.getByName<RemapJar>("remapJar")
+val remapJar = tasks.getByName<RemapJarTask>("remapJar")
 
-val remapSourcesJar = tasks.getByName<RemapSourcesJar>("remapSourcesJar")
+val remapSourcesJar = tasks.getByName<RemapSourcesJarTask>("remapSourcesJar")
 
 publishing {
     publications {
         create<MavenPublication>("mavenJava") {
-			artifactId = "AbnormaLib"
-			artifact(tasks["jar"])
-			artifact(tasks["sourcesJar"])
-            pom {
-                name.set("AbnormaLib")
-                description.set(Constants.description)
-                url.set(Constants.url)
-                licenses {
-                    license {
-                        name.set("The Apache License, Version 2.0")
-                        url.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
-                    }
-                }
-                developers {
-                    developer {
-                        id.set("minecraft_abnormals")
-                        name.set("Minecraft Abnormals")
-                    }
-                }
-            }
+			artifactId = Constants.name
+			artifact(jar) {
+				builtBy(remapJar)
+			}
+			artifact(sourcesJar.get()) {
+				builtBy(remapSourcesJar)
+			}
+			pom {
+				name.set(Constants.name)
+				description.set(Constants.description)
+				url.set(Constants.url)
+				licenses {
+					license {
+						name.set("MIT License")
+						url.set("https://tldrlegal.com/license/mit-license#fulltext")
+					}
+				}
+				developers {
+					developer {
+						id.set("team_abnormals")
+						name.set("Team Abnormals")
+					}
+				}
+			}
         }
     }
 }
