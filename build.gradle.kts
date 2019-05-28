@@ -60,11 +60,6 @@ val javaCompile = tasks.withType<JavaCompile> {
     options.encoding = "UTF-8"
 }
 
-val sourcesJar by tasks.registering(Jar::class) {
-    from(sourceSets["main"].allSource)
-    classifier = "sources"
-}
-
 val jar = tasks.getByName<Jar>("jar") {
     from("LICENSE")
 }
