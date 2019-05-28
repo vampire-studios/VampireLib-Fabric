@@ -70,7 +70,7 @@ public class BlockChiseler {
         Collection<Property<?>> toProperties = to.getProperties();
         for (Property property : fromProperties) {
             if (toProperties.contains(property)) {
-                to.with(property, from.get(property));
+                 to = to.with(property, from.get(property));
             }
         }
         return to;
