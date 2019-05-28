@@ -25,7 +25,7 @@ base {
 }
 
 version = "${Constants.version}+${Constants.minecraftVersionVer}-${Constants.ending}"
-group = "team.hollow"
+group = "team.abnormals"
 
 repositories {
 	mavenCentral()
@@ -77,11 +77,8 @@ publishing {
     publications {
         create<MavenPublication>("mavenJava") {
 			artifactId = Constants.name
-			artifact(jar) {
-				builtBy(remapJar)
-			}
-			artifact(sourcesJar.get()) {
-				builtBy(remapSourcesJar)
+			afterEvaluate {
+    			artifact(remapJar.output)
 			}
 			pom {
 				name.set(Constants.name)

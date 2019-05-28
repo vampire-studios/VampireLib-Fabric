@@ -24,7 +24,7 @@ public class AbnormaLib implements ModInitializer {
             .hasEgg(false)
             .build();
     public static String MOD_NAME = "AbnormaLib";
-    public static String MOD_VERSION = "0.6.0-1.14.2-ALPHA";
+    public static String MOD_VERSION = "0.6.1-1.14.2-ALPHA";
     public static BlockEntityType<ChestBaseBlockEntity> CHEST_BASE_BE = RegistryUtils.registerBE(new Identifier(MOD_ID, "chest_base_be"),
             BlockEntityType.Builder.create(ChestBaseBlockEntity::new));
 
