@@ -16,6 +16,15 @@ object Fabric {
     }
 }
 
+object Dependencies {
+    object ClothConfig {
+        const val version = "0.2.4.17"
+    }
+    object AutoConfig {
+        const val version = "+"
+    }
+}
+
 object Minecraft {
     const val version = "1.14.2"
 }

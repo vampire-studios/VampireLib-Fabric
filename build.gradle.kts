@@ -35,6 +35,7 @@ repositories {
 	maven("https://minecraft.curseforge.com/api/maven")
 	maven("https://maven.jamieswhiteshirt.com/libs-release/")
 	maven("http://server.bbkr.space:8081/artifactory/libs-snapshot")
+	maven("http://maven.sargunv.s3-website-us-west-2.amazonaws.com/")
 }
 
 dependencies {
@@ -44,20 +45,28 @@ dependencies {
 	modCompile(group = "net.fabricmc", name = "fabric-loader", version = Fabric.Loader.version)
 
 	modCompile(group = "net.fabricmc.fabric-api", name = "fabric-api", version = Fabric.API.version)
+
+	modCompile(group = "cloth-config", name = "ClothConfig", version = Dependencies.ClothConfig.version)
+	include(group = "cloth-config", name = "ClothConfig", version = Dependencies.ClothConfig.version)
+	modCompile(group = "me.sargunvohra.mcmods", name = "auto-config", version = Dependencies.AutoConfig.version)
+	include(group = "me.sargunvohra.mcmods", name = "auto-config", version = Dependencies.AutoConfig.version)
 }
 
-tasks.getByName<ProcessResources>("processResources") {
-	filesMatching("fabric.mod.json") {
-		expand(
-				mutableMapOf(
-						"version" to version
-				)
-		)
-	}
+val processResources = tasks.getByName<ProcessResources>("processResources") {
+    inputs.property("version", project.version)
+
+    filesMatching("fabric.mod.json") {
+        filter { line -> line.replace("%VERSION%", "${project.version}") }
+    }
 }
 
 val javaCompile = tasks.withType<JavaCompile> {
     options.encoding = "UTF-8"
+}
+
+val sourcesJar by tasks.registering(Jar::class) {
+	from(sourceSets["main"].allSource)
+	classifier = "sources"
 }
 
 val jar = tasks.getByName<Jar>("jar") {
@@ -70,28 +79,33 @@ val remapSourcesJar = tasks.getByName<RemapSourcesJarTask>("remapSourcesJar")
 
 publishing {
     publications {
-        create<MavenPublication>("mavenJava") {
-			artifactId = Constants.name
-			afterEvaluate {
-    			artifact(remapJar.output)
-			}
-			pom {
-				name.set(Constants.name)
-				description.set(Constants.description)
-				url.set(Constants.url)
-				licenses {
-					license {
-						name.set("MIT License")
-						url.set("https://tldrlegal.com/license/mit-license#fulltext")
+		afterEvaluate {
+			register("mavenJava", MavenPublication::class) {
+				artifactId = Constants.name
+				artifact(jar) {
+					builtBy(remapJar)
+				}
+				artifact(sourcesJar.get()) {
+					builtBy(sourcesJar)
+                }
+				pom {
+					name.set(Constants.name)
+					description.set(Constants.description)
+					url.set(Constants.url)
+					licenses {
+						license {
+							name.set("MIT License")
+							url.set("https://tldrlegal.com/license/mit-license#fulltext")
+						}
+					}
+					developers {
+						developer {
+							id.set("team_abnormals")
+							name.set("Team Abnormals")
+						}
 					}
 				}
-				developers {
-					developer {
-						id.set("team_abnormals")
-						name.set("Team Abnormals")
-					}
-				}
-			}
+            }
         }
     }
 }

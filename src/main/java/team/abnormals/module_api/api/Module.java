@@ -22,28 +22,23 @@
  * THE SOFTWARE.
  */
 
-package team.abnormals.abnormalib.utils;
+package team.abnormals.module_api.api;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.DispenserBlock;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPointer;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Position;
-import team.abnormals.abnormalib.entity.FlyingLanternEntity;
+import me.sargunvohra.mcmods.autoconfig1.ConfigData;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 
-public class Utils {
+public abstract class Module {
 
-    public static ItemStack dispense(BlockPointer blockPointer, ItemStack itemStack) {
-        Direction direction = blockPointer.getBlockState().get(DispenserBlock.FACING);
-        Position output = DispenserBlock.getOutputLocation(blockPointer);
+    public abstract Class<? extends ConfigData> getConfig();
 
-        FlyingLanternEntity entity = FlyingLanternEntity.create(blockPointer.getWorld(), output.getX(), output.getY(), output.getZ(), Block.getBlockFromItem(itemStack.getItem()).getDefaultState());
-        entity.setVelocity(direction.getOffsetX() * 0.03, 0, direction.getOffsetZ() * 0.03);
-        blockPointer.getWorld().spawnEntity(entity);
+    public abstract void init();
 
-        itemStack.subtractAmount(1);
-        return itemStack;
+    @Environment(EnvType.CLIENT)
+    public abstract void initClient();
+
+    public void registerFeature(Feature feature) {
+        System.out.println(String.format("We just registered a feature called: %s", feature.name));
     }
 
 }

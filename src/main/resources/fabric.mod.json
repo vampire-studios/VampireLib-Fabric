@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "abnormalib",
-  "version": "${version}",
+  "version": "%VERSION%",
 
   "name": "AbnormaLib",
   "description": "AbnormaLib is a library mod for all mods made by Minecraft Abnormals",
@@ -19,7 +19,14 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "team.abnormals.abnormalib.AbnormaLib"
+      "team.abnormals.abnormalib.AbnormaLib",
+      "team.abnormals.module_api.ModuleManager::init"
+    ],
+    "client": [
+      "team.abnormals.module_api.ModuleManager::initClient"
+    ],
+    "modmenu": [
+      "team.abnormals.module_api.ModuleManager$ModMenuIntegration"
     ]
   },
   "mixins": [
