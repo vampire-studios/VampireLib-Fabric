@@ -32,6 +32,8 @@ public class ModuleDataManager implements SimpleResourceReloadListener<ModuleDat
 
     private static final Gson GSON = new GsonBuilder().create();
 
+    public static final ModuleDataManager INSTANCE = new ModuleDataManager();
+
     private static final Logger LOGGER = LogManager.getFormatterLogger(String.format("[%s Logger : Module Data Manager]", AbnormaLib.MOD_NAME));
 
     @Override

@@ -29,8 +29,6 @@ group = "team.abnormals"
 
 repositories {
 	mavenCentral()
-	maven("https://jitpack.io")
-	maven("https://tehnut.info/maven")
 	maven("https://maven.fabricmc.net")
 	maven("https://minecraft.curseforge.com/api/maven")
 	maven("https://maven.jamieswhiteshirt.com/libs-release/")

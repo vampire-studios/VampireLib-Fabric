@@ -7,6 +7,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import team.abnormals.abnormalib.blocks.entity.ChestBaseBlockEntity;
 import team.abnormals.abnormalib.utils.registry.RegistryUtils;
+import team.abnormals.module_api.data.ModuleDataManager;
 
 public class AbnormaLib implements ModInitializer {
 
@@ -20,6 +21,8 @@ public class AbnormaLib implements ModInitializer {
     public void onInitialize() {
         Logger logger = LogManager.getLogger(MOD_NAME);
         logger.info("Your running " + MOD_NAME + " v" + MOD_VERSION);
+
+        ModuleDataManager.INSTANCE.registerReloadListener();
     }
 
 }

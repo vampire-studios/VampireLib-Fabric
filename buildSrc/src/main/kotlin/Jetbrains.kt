@@ -4,7 +4,7 @@ object Fabric {
     }
 
     object API {
-        const val version = "0.3.0+build.170"
+        const val version = "0.3.0+build.173"
     }
 
     object Loom {
