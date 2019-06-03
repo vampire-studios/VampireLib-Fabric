@@ -5,7 +5,8 @@
   "mixins": [
     "block.MixinBlock",
     "entity.MixinLivingEntity",
-    "entity.damage.MixinDamageTracker"
+    "entity.damage.MixinDamageTracker",
+    "item.MixinBookOnLectern"
   ],
   "injectors": {
     "defaultRequire": 1

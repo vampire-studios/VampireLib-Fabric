@@ -22,29 +22,25 @@
  * THE SOFTWARE.
  */
 
-package team.abnormals.module_api.api;
+package team.abnormals.module_api;
 
-import me.sargunvohra.mcmods.autoconfig1.ConfigData;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import team.abnormals.module_api.FeatureManager;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import team.abnormals.abnormalib.AbnormaLib;
+import team.abnormals.module_api.api.Feature;
 
-public abstract class Module {
+import java.util.HashMap;
+import java.util.Map;
 
-    public abstract Class<? extends ConfigData> getConfig();
+public class FeatureManager {
 
-    public void init() {
-        FeatureManager.MODULES.forEach((feature, s) -> feature.initClient());
-    }
+    public static final Map<Feature, String> MODULES = new HashMap<>();
 
-    @Environment(EnvType.CLIENT)
-    public void initClient() {
-        FeatureManager.MODULES.forEach((feature, s) -> feature.initClient());
-    }
+    private static final Logger LOGGER = LogManager.getFormatterLogger(String.format("[%s Logger : Feature Manager]", AbnormaLib.MOD_NAME));
 
-    public void registerFeature(Feature feature) {
-        FeatureManager.registerFeature(feature, feature.name);
-        System.out.println(String.format("We just registered a feature called: %s", feature.name));
+    public static void registerFeature(Feature feature, String name) {
+        MODULES.put(feature, name);
+        LOGGER.info(String.format("Registered a feature called: %s", name));
     }
 
 }

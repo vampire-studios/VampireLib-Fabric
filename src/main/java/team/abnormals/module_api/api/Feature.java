@@ -1,6 +1,6 @@
 package team.abnormals.module_api.api;
 
-public class Feature {
+public abstract class Feature {
 
     public String name, description;
 
@@ -8,5 +8,9 @@ public class Feature {
         this.name = name;
         this.description = description;
     }
+
+    public abstract void init();
+
+    public abstract void initClient();
 
 }

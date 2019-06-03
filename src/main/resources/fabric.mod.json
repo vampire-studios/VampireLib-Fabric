@@ -9,8 +9,9 @@
     "Team Abnormals"
   ],
   "contact": {
-    "homepage": "",
-    "sources": "https://github.com/minecraftabnormals/AbnormaLib-1.14"
+    "homepage": "https://github.com/minecraftabnormals/AbnormaLib-1.14",
+    "sources": "https://github.com/minecraftabnormals/AbnormaLib-1.14",
+    "issues": "https://github.com/minecraftabnormals/AbnormaLib-1.14/issues"
   },
 
   "license": "MIT",

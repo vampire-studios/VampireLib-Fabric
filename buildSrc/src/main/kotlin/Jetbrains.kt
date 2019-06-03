@@ -4,7 +4,7 @@ object Fabric {
     }
 
     object API {
-        const val version = "0.3.0+build.173"
+        const val version = "0.3.0+build.175"
     }
 
     object Loom {
@@ -12,7 +12,7 @@ object Fabric {
     }
 
     object Yarn {
-        const val version = "1"
+        const val version = "2"
     }
 }
 
@@ -21,6 +21,9 @@ object Dependencies {
         const val version = "0.2.4.17"
     }
     object AutoConfig {
+        const val version = "+"
+    }
+    object ModMenu {
         const val version = "+"
     }
 }

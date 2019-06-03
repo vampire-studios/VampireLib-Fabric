@@ -48,6 +48,8 @@ dependencies {
 	include(group = "cloth-config", name = "ClothConfig", version = Dependencies.ClothConfig.version)
 	modCompile(group = "me.sargunvohra.mcmods", name = "auto-config", version = Dependencies.AutoConfig.version)
 	include(group = "me.sargunvohra.mcmods", name = "auto-config", version = Dependencies.AutoConfig.version)
+
+	modCompile(group = "io.github.prospector.modmenu", name = "ModMenu", version = Dependencies.ModMenu.version)
 }
 
 val processResources = tasks.getByName<ProcessResources>("processResources") {
@@ -80,12 +82,10 @@ publishing {
 		afterEvaluate {
 			register("mavenJava", MavenPublication::class) {
 				artifactId = Constants.name
-				artifact(jar) {
-					builtBy(remapJar)
-				}
+				artifact(jar)
 				artifact(sourcesJar.get()) {
-					builtBy(sourcesJar)
-                }
+					builtBy(remapSourcesJar)
+				}
 				pom {
 					name.set(Constants.name)
 					description.set(Constants.description)

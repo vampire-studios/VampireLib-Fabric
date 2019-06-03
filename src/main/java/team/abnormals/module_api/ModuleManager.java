@@ -53,7 +53,6 @@ public class ModuleManager {
         MODULES.put(module, name);
         LOGGER.info(String.format("Registered a module called: %s", name));
         AutoConfig.register(module.getConfig(), JanksonConfigSerializer::new);
-        System.out.println(module.getConfig());
         LOGGER.info(String.format("Registered a config for: %s", name));
         modid = modidIn;
     }
@@ -84,12 +83,10 @@ public class ModuleManager {
 
         @Override
         public Optional<Supplier<Screen>> getConfigScreen(Screen screen) {
-            for(Module module : MODULES.keySet()) {
-                return Optional.of(AutoConfig.getConfigScreen(module.getConfig(), screen));
-            }
+            for(Module module : MODULES.keySet()) return Optional.of(AutoConfig.getConfigScreen(module.getConfig(), screen));
             return Optional.empty();
         }
-    }
 
+    }
 
 }
