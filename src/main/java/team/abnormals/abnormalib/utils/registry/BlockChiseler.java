@@ -55,8 +55,8 @@ public class BlockChiseler {
 
                         world.playSound(null, hitResult.getBlockPos(), SoundEvents.BLOCK_PUMPKIN_CARVE, SoundCategory.BLOCKS, 1.0F, 1.0F);
                         world.setBlockState(hitResult.getBlockPos(), copyTo(hitBlockState, newBlock.getDefaultState()));
-                        if (heldStack.getItem().canDamage())
-                            heldStack.applyDamage(1, player, playerEntity -> player.sendToolBreakStatus(hand));
+                        if (heldStack.getItem().isDamageable())
+                            heldStack.damage(1, player, playerEntity -> player.sendToolBreakStatus(hand));
                         return ActionResult.SUCCESS;
                     }
                 }

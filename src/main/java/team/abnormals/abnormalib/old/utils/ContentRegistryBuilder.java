@@ -269,7 +269,7 @@ public class ContentRegistryBuilder extends ContentBuilder {
         RegistryUtils.registerNoBI(wallSign, extendIdentifier("_wall_sign"));
         Block sign = new SignBlock(Block.Settings.copy(baseBlock));
         RegistryUtils.registerNoBI(sign, extendIdentifier("_sign"));
-        Item signItem = newItem(baseNameIdentifier.getPath() + "_sign", new SignItem(new Item.Settings().itemGroup(ItemGroup.DECORATIONS), sign, wallSign));
+        Item signItem = newItem(baseNameIdentifier.getPath() + "_sign", new SignItem(new Item.Settings().group(ItemGroup.DECORATIONS), sign, wallSign));
 
         RecipeGenerator.getInstance(getModId()).addShaped(new ItemStack(sign), extendIdentifier("_sign"), "signs", new String[]{
                         "PPP",

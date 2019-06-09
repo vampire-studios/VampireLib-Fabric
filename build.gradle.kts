@@ -24,7 +24,7 @@ base {
 	archivesBaseName = Constants.name
 }
 
-version = "${Constants.version}+${Constants.minecraftVersionVer}-${Constants.ending}"
+version = "${Constants.version}+${Constants.minecraftVersionVer}"
 group = "team.abnormals"
 
 repositories {
@@ -44,8 +44,8 @@ dependencies {
 
 	modCompile(group = "net.fabricmc.fabric-api", name = "fabric-api", version = Fabric.API.version)
 
-	modCompile(group = "cloth-config", name = "ClothConfig", version = Dependencies.ClothConfig.version)
-	include(group = "cloth-config", name = "ClothConfig", version = Dependencies.ClothConfig.version)
+	modCompile(group = "cloth-config", name = "ClothConfig2", version = Dependencies.ClothConfig.version)
+	include(group = "cloth-config", name = "ClothConfig2", version = Dependencies.ClothConfig.version)
 	modCompile(group = "me.sargunvohra.mcmods", name = "auto-config", version = Dependencies.AutoConfig.version)
 	include(group = "me.sargunvohra.mcmods", name = "auto-config", version = Dependencies.AutoConfig.version)
 

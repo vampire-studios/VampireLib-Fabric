@@ -28,7 +28,7 @@ public class PostBaseBlock extends Block implements Waterloggable {
     protected static final VoxelShape Y_COLLISION;
 
     static {
-        AXIS = Properties.AXIS_XYZ;
+        AXIS = Properties.AXIS;
         WATERLOGGED = Properties.WATERLOGGED;
         Y_SHAPE = Block.createCuboidShape(6f, 0f, 6f, 10f, 16f, 10f);
         Y_COLLISION = Block.createCuboidShape(6f, 0f, 6f, 10f, 24f, 10f);

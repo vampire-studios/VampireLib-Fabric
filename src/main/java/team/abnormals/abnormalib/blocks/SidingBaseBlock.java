@@ -37,7 +37,7 @@ public class SidingBaseBlock extends Block implements Waterloggable {
     static {
         TYPE = AbnormaProperties.SIDING_TYPE;
         WATERLOGGED = Properties.WATERLOGGED;
-        FACING_HORIZONTAL = Properties.FACING_HORIZONTAL;
+        FACING_HORIZONTAL = Properties.HORIZONTAL_FACING;
         SINGLE_SHAPE_NORTH = Block.createCuboidShape(0.0D, 0.0D, 8.0D, 16.0D, 16.0D, 16.0D);
         SINGLE_SHAPE_SOUTH = Block.createCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 8.0D);
         SINGLE_SHAPE_EAST = Block.createCuboidShape(0.0D, 0.0D, 0.0D, 8.0D, 16.0D, 16.0D);
@@ -106,10 +106,10 @@ public class SidingBaseBlock extends Block implements Waterloggable {
             return blockState.with(TYPE, SidingType.DOUBLE).with(FACING_HORIZONTAL, blockState.get(FACING_HORIZONTAL)).with(WATERLOGGED, false);
         } else {
             FluidState fluidState = placementContext.getWorld().getFluidState(blockPos);
-            Direction playerHorizontalFacing = placementContext.getPlayerHorizontalFacing();
-            Direction facing = placementContext.getFacing();
-            double xPos = placementContext.getPos().getX() - blockPos.getX();
-            double zPos = placementContext.getPos().getZ() - blockPos.getZ();
+            Direction playerHorizontalFacing = placementContext.getPlayerLookDirection();
+            Direction facing = placementContext.getPlayerFacing();
+            double xPos = placementContext.getHitPos().getX() - blockPos.getX();
+            double zPos = placementContext.getHitPos().getZ() - blockPos.getZ();
             Direction direction = playerHorizontalFacing.getOpposite();
             if (facing.getAxis().isVertical()) {
                 if (direction == Direction.EAST || direction == Direction.WEST) {

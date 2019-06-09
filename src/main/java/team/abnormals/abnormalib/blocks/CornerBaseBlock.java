@@ -68,7 +68,7 @@ public class CornerBaseBlock extends Block implements Waterloggable {
     protected static final VoxelShape WEST_SHAPE;
 
     static {
-        FACING = Properties.FACING_HORIZONTAL;
+        FACING = Properties.HORIZONTAL_FACING;
         WATERLOGGED = Properties.WATERLOGGED;
         NORTH_SIDING_SHAPE = SidingBaseBlock.SINGLE_SHAPE_NORTH;
         EAST_SIDING_SHAPE = SidingBaseBlock.SINGLE_SHAPE_EAST;
@@ -168,9 +168,9 @@ public class CornerBaseBlock extends Block implements Waterloggable {
     public BlockState getPlacementState(ItemPlacementContext itemPlacementContext_1) {
         BlockPos blockPos_1 = itemPlacementContext_1.getBlockPos();
         FluidState fluidState_1 = itemPlacementContext_1.getWorld().getFluidState(blockPos_1);
-        double xPos = itemPlacementContext_1.getPos().getX() - blockPos_1.getX();
-        double zPos = itemPlacementContext_1.getPos().getZ() - blockPos_1.getZ();
-        Direction direction_1 = itemPlacementContext_1.getPlayerHorizontalFacing().getOpposite();
+        double xPos = itemPlacementContext_1.getHitPos().getX() - blockPos_1.getX();
+        double zPos = itemPlacementContext_1.getHitPos().getZ() - blockPos_1.getZ();
+        Direction direction_1 = itemPlacementContext_1.getPlayerLookDirection().getOpposite();
         if (direction_1 == Direction.EAST) {
             if (zPos < 0.5) direction_1 = direction_1.rotateYClockwise();
         } else if (direction_1 == Direction.WEST) {

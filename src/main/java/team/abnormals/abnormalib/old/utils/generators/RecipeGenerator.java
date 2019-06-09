@@ -52,7 +52,7 @@ public class RecipeGenerator {
         root.add("key", key);
         JsonObject resultName = new JsonObject();
         resultName.addProperty("item", Registry.ITEM.getId(result.getItem()).toString());
-        if (result.getAmount() > 1) resultName.addProperty("count", result.getAmount());
+        if (result.getCount() > 1) resultName.addProperty("count", result.getCount());
         root.add("result", resultName);
         String json = gson.toJson(root);
         try {
@@ -82,7 +82,7 @@ public class RecipeGenerator {
         root.add("ingredients", ingredients);
         JsonObject resultName = new JsonObject();
         resultName.addProperty("item", Registry.ITEM.getId(result.getItem()).toString());
-        if (result.getAmount() > 1) resultName.addProperty("count", result.getAmount());
+        if (result.getCount() > 1) resultName.addProperty("count", result.getCount());
         root.add("result", resultName);
         String json = gson.toJson(root);
         try {
@@ -106,7 +106,7 @@ public class RecipeGenerator {
         ingredients.addProperty("item", Registry.ITEM.getId(shapelessRecipeIngredient.getStack().getItem()).toString());
         root.add("ingredient", ingredients);
         root.addProperty("result", Registry.ITEM.getId(result.getItem()).toString());
-        if (result.getAmount() > 1) root.addProperty("count", result.getAmount());
+        if (result.getCount() > 1) root.addProperty("count", result.getCount());
         String json = gson.toJson(root);
         try {
             if (!base.resolve(recipeName.getPath() + ".json").toFile().exists())
@@ -136,7 +136,7 @@ public class RecipeGenerator {
         root.add("key", key);
         JsonObject resultName = new JsonObject();
         resultName.addProperty("item", Registry.ITEM.getId(result.getItem()).toString());
-        if (result.getAmount() > 1) resultName.addProperty("count", result.getAmount());
+        if (result.getCount() > 1) resultName.addProperty("count", result.getCount());
         root.add("result", resultName);
         String json = gson.toJson(root);
         try {

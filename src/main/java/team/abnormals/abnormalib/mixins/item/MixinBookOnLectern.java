@@ -47,7 +47,7 @@ public abstract class MixinBookOnLectern {
         BlockPos blockPos_1 = itemUsageContext_1.getBlockPos();
         BlockState blockState_1 = world_1.getBlockState(blockPos_1);
         if (blockState_1.getBlock().matches(NTags.LECTERNS)) {
-            cir.setReturnValue(LecternBaseBlock.putBookIfAbsent(world_1, blockPos_1, blockState_1, itemUsageContext_1.getItemStack()) ? ActionResult.SUCCESS : ActionResult.PASS);
+            cir.setReturnValue(LecternBaseBlock.putBookIfAbsent(world_1, blockPos_1, blockState_1, itemUsageContext_1.getStack()) ? ActionResult.SUCCESS : ActionResult.PASS);
         } else {
             cir.setReturnValue(ActionResult.PASS);
         }

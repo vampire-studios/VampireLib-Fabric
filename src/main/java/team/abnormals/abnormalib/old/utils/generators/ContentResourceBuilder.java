@@ -245,7 +245,7 @@ public class ContentResourceBuilder extends ContentBuilder {
     public Block addPotted(Identifier plantTexture) {
         Identifier identifier = new Identifier(getModId(), "potted_" + baseNameIdentifier.getPath());
         resourceGenerator.genPottedBlock(identifier, plantTexture);
-        resourceGenerator.genSimpleLootTable(identifier, Registry.ITEM.getId(Item.BLOCK_ITEM_MAP.get(Registry.BLOCK.get(baseNameIdentifier))), Registry.ITEM.getId(Items.FLOWER_POT));
+        resourceGenerator.genSimpleLootTable(identifier, Registry.ITEM.getId(Item.BLOCK_ITEMS.get(Registry.BLOCK.get(baseNameIdentifier))), Registry.ITEM.getId(Items.FLOWER_POT));
         return null;
     }
 

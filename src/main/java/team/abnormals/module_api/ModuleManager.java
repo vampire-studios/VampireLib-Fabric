@@ -24,12 +24,8 @@
 
 package team.abnormals.module_api;
 
-import io.github.prospector.modmenu.api.ModMenuApi;
 import me.sargunvohra.mcmods.autoconfig1.AutoConfig;
 import me.sargunvohra.mcmods.autoconfig1.serializer.JanksonConfigSerializer;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import net.minecraft.client.gui.screen.Screen;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import team.abnormals.abnormalib.AbnormaLib;
@@ -38,8 +34,6 @@ import team.abnormals.module_api.data.ModuleDataManager;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
-import java.util.function.Supplier;
 
 public class ModuleManager {
 
@@ -71,22 +65,6 @@ public class ModuleManager {
 
     public static void initClient() {
         MODULES.keySet().forEach(Module::initClient);
-    }
-
-    @Environment(EnvType.CLIENT)
-    public static class ModMenuIntegration implements ModMenuApi {
-
-        @Override
-        public String getModId() {
-            return modid;
-        }
-
-        @Override
-        public Optional<Supplier<Screen>> getConfigScreen(Screen screen) {
-            for(Module module : MODULES.keySet()) return Optional.of(AutoConfig.getConfigScreen(module.getConfig(), screen));
-            return Optional.empty();
-        }
-
     }
 
 }

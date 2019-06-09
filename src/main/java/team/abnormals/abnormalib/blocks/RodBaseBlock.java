@@ -68,7 +68,7 @@ public class RodBaseBlock extends FacingBlock {
 
     @Override
     public BlockState getPlacementState(ItemPlacementContext itemPlacementContext_1) {
-        Direction direction_1 = itemPlacementContext_1.getFacing();
+        Direction direction_1 = itemPlacementContext_1.getPlayerFacing();
         BlockState blockState_1 = itemPlacementContext_1.getWorld().getBlockState(itemPlacementContext_1.getBlockPos().offset(direction_1.getOpposite()));
         return blockState_1.getBlock() == this && blockState_1.get(FACING) == direction_1 ? this.getDefaultState().with(FACING, direction_1.getOpposite()) : this.getDefaultState().with(FACING, direction_1);
     }
