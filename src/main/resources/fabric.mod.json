@@ -1,8 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "abnormalib",
-  "version": "0.7.0",
-
+  "version": "0.7.1-1.14.3-pre2",
   "name": "AbnormaLib",
   "description": "AbnormaLib is a library mod for all mods made by Minecraft Abnormals",
   "authors": [
@@ -13,10 +12,8 @@
     "sources": "https://github.com/minecraftabnormals/AbnormaLib-1.14",
     "issues": "https://github.com/minecraftabnormals/AbnormaLib-1.14/issues"
   },
-
   "license": "MIT",
   "icon": "assets/abnormalib/icon.png",
-
   "environment": "*",
   "entrypoints": {
     "main": [
@@ -25,15 +22,11 @@
     ],
     "client": [
       "team.abnormals.module_api.ModuleManager::initClient"
-    ],
-    "modmenu": [
-      "team.abnormals.module_api.ModMenuIntegration"
     ]
   },
   "mixins": [
     "abnormalib.mixins.json"
   ],
-
   "depends": {
     "fabricloader": ">=0.4.0",
     "fabric": ">=0.3.0"
