@@ -24,7 +24,7 @@ base {
 	archivesBaseName = Constants.name
 }
 
-version = "${Constants.version}+${Constants.minecraftVersionVer}"
+version = "${Constants.version}-${Constants.minecraftVersionVer}"
 group = "team.abnormals"
 
 repositories {
