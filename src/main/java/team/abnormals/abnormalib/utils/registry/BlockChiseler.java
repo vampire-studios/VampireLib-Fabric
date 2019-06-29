@@ -18,15 +18,26 @@ import java.util.concurrent.ConcurrentLinkedDeque;
 public class BlockChiseler {
 
     public static Map<Identifier, ChiselEntry> chiselRegistry = new HashMap<>();
-    public static Map<Tag<Item>, Set<ChiselEntry>> toolsToEntries = new HashMap<>();
+    public static Map<Tag<Item>, Set<ChiselEntry>> toolTagsToEntries = new HashMap<>();
+    public static Map<Item, Set<ChiselEntry>> itemsToEntries = new HashMap<>();
 
     public static void create(Identifier identifier, Tag<Item> toolTag, Collection<Block> chiselBlocks) {
         ChiselEntry chiselEntry = new ChiselEntry(chiselBlocks);
         chiselRegistry.put(identifier, chiselEntry);
-        if (toolsToEntries.containsKey(toolTag)) {
-            toolsToEntries.get(toolTag).add(chiselEntry);
+        if (toolTagsToEntries.containsKey(toolTag)) {
+            toolTagsToEntries.get(toolTag).add(chiselEntry);
         } else {
-            toolsToEntries.put(toolTag, new HashSet<>(Collections.singleton(chiselEntry)));
+            toolTagsToEntries.put(toolTag, new HashSet<>(Collections.singleton(chiselEntry)));
+        }
+    }
+
+    public static void create(Identifier identifier, Item item, Collection<Block> chiselBlocks) {
+        ChiselEntry chiselEntry = new ChiselEntry(chiselBlocks);
+        chiselRegistry.put(identifier, chiselEntry);
+        if (itemsToEntries.containsKey(item)) {
+            itemsToEntries.get(item).add(chiselEntry);
+        } else {
+            itemsToEntries.put(item, new HashSet<>(Collections.singleton(chiselEntry)));
         }
     }
 
@@ -42,10 +53,28 @@ public class BlockChiseler {
             if (!world.isClient()) {
                 BlockState hitBlockState = world.getBlockState(hitResult.getBlockPos());
                 ItemStack heldStack = player.getStackInHand(hand);
-                for (Map.Entry<Tag<Item>, Set<ChiselEntry>> toolToEntries : toolsToEntries.entrySet()) {
+                for (Map.Entry<Tag<Item>, Set<ChiselEntry>> toolToEntries : toolTagsToEntries.entrySet()) {
                     if (!toolToEntries.getKey().contains(heldStack.getItem()))
                         continue;
                     for (ChiselEntry chiselEntry : toolToEntries.getValue()) {
+                        Block newBlock;
+                        if (player.isSneaking())
+                            newBlock = chiselEntry.getPreviousBlock(hitBlockState.getBlock());
+                        else
+                            newBlock = chiselEntry.getNextBlock(hitBlockState.getBlock());
+                        if (newBlock == null) continue;
+
+                        world.playSound(null, hitResult.getBlockPos(), SoundEvents.BLOCK_PUMPKIN_CARVE, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                        world.setBlockState(hitResult.getBlockPos(), copyTo(hitBlockState, newBlock.getDefaultState()));
+                        if (heldStack.getItem().isDamageable())
+                            heldStack.damage(1, player, playerEntity -> player.sendToolBreakStatus(hand));
+                        return ActionResult.SUCCESS;
+                    }
+                }
+                for (Map.Entry<Item, Set<ChiselEntry>> itemsToEntry : itemsToEntries.entrySet()) {
+                    if (itemsToEntry.getKey() != heldStack.getItem())
+                        continue;
+                    for (ChiselEntry chiselEntry : itemsToEntry.getValue()) {
                         Block newBlock;
                         if (player.isSneaking())
                             newBlock = chiselEntry.getPreviousBlock(hitBlockState.getBlock());
@@ -65,7 +94,7 @@ public class BlockChiseler {
         });
     }
 
-    protected static BlockState copyTo(BlockState from, BlockState to) {
+    private static BlockState copyTo(BlockState from, BlockState to) {
         Collection<Property<?>> fromProperties = from.getProperties();
         Collection<Property<?>> toProperties = to.getProperties();
         for (Property property : fromProperties) {

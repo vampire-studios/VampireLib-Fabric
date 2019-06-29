@@ -4,7 +4,7 @@ object Fabric {
     }
 
     object API {
-        const val version = "0.3.0+build.185"
+        const val version = "0.3.0+build.187"
     }
 
     object Loom {
@@ -12,7 +12,7 @@ object Fabric {
     }
 
     object Yarn {
-        const val version = "12"
+        const val version = "9"
     }
 }
 
@@ -29,5 +29,5 @@ object Dependencies {
 }
 
 object Minecraft {
-    const val version = "1.14.3-pre2"
+    const val version = "1.14.3"
 }
