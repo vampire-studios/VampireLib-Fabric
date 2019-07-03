@@ -22,29 +22,27 @@
  * THE SOFTWARE.
  */
 
-package team.abnormals.module_api.api;
+package team.abnormals.abnormalib.init;
 
-import me.sargunvohra.mcmods.autoconfig1.ConfigData;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import team.abnormals.module_api.FeatureManager;
+import net.fabricmc.fabric.api.tag.TagRegistry;
+import net.minecraft.block.Block;
+import net.minecraft.item.Item;
+import net.minecraft.tag.ItemTags;
+import net.minecraft.tag.Tag;
+import net.minecraft.util.Identifier;
+import team.abnormals.abnormalib.AbnormaLib;
 
-public abstract class Module {
+public class AbnormaTags {
 
-    public abstract Class<? extends ConfigData> getConfig();
+    public static final Tag<Block> LECTERNS = registerBlockTag("lecterns");
+    public static final Tag<Item> SHEARS = registerItemTag("shears");
 
-    public void init() {
-        FeatureManager.MODULES.forEach((feature, s) -> feature.initClient());
+    public static Tag<Block> registerBlockTag(String id) {
+        return TagRegistry.block(new Identifier(AbnormaLib.MOD_ID, id));
     }
 
-    @Environment(EnvType.CLIENT)
-    public void initClient() {
-        FeatureManager.MODULES.forEach((feature, s) -> feature.initClient());
-    }
-
-    public void registerFeature(Feature feature) {
-        FeatureManager.registerFeature(feature, feature.name);
-        System.out.println(String.format("We just registered a feature called: %s", feature.name));
+    public static Tag<Item> registerItemTag(String id) {
+        return new ItemTags.CachingTag(new Identifier(AbnormaLib.MOD_ID, id));
     }
 
 }

@@ -44,11 +44,6 @@ dependencies {
 
 	modCompile(group = "net.fabricmc.fabric-api", name = "fabric-api", version = Fabric.API.version)
 
-	modCompile(group = "cloth-config", name = "ClothConfig2", version = Dependencies.ClothConfig.version)
-	include(group = "cloth-config", name = "ClothConfig2", version = Dependencies.ClothConfig.version)
-	modCompile(group = "me.sargunvohra.mcmods", name = "auto-config", version = Dependencies.AutoConfig.version)
-	include(group = "me.sargunvohra.mcmods", name = "auto-config", version = Dependencies.AutoConfig.version)
-
 	modCompile(group = "io.github.prospector.modmenu", name = "ModMenu", version = Dependencies.ModMenu.version)
 }
 

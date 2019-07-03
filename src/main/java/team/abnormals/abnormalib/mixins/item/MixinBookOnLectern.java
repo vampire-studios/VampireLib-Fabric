@@ -36,7 +36,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import team.abnormals.abnormalib.blocks.LecternBaseBlock;
-import team.abnormals.abnormalib.init.NTags;
+import team.abnormals.abnormalib.init.AbnormaTags;
 
 @Mixin({WritableBookItem.class, WrittenBookItem.class})
 public abstract class MixinBookOnLectern {
@@ -46,7 +46,7 @@ public abstract class MixinBookOnLectern {
         World world_1 = itemUsageContext_1.getWorld();
         BlockPos blockPos_1 = itemUsageContext_1.getBlockPos();
         BlockState blockState_1 = world_1.getBlockState(blockPos_1);
-        if (blockState_1.getBlock().matches(NTags.LECTERNS)) {
+        if (blockState_1.getBlock().matches(AbnormaTags.LECTERNS)) {
             cir.setReturnValue(LecternBaseBlock.putBookIfAbsent(world_1, blockPos_1, blockState_1, itemUsageContext_1.getStack()) ? ActionResult.SUCCESS : ActionResult.PASS);
         } else {
             cir.setReturnValue(ActionResult.PASS);
