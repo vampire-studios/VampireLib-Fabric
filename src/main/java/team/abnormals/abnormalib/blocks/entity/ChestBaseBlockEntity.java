@@ -37,7 +37,7 @@ public class ChestBaseBlockEntity extends ChestBlockEntity {
     }
 
     public ChestBaseBlockEntity(ChestBaseBlock chestBaseBlock) {
-        super(AbnormaLib.CHEST_BASE_BE);
+        //super(AbnormaLib.CHEST_BASE_BE);
         this.baseBlock = chestBaseBlock;
     }
 
