@@ -25,6 +25,7 @@
 package team.abnormals.abnormalib.mixins.item;
 
 import net.minecraft.block.BlockState;
+import net.minecraft.block.LecternBlock;
 import net.minecraft.item.ItemUsageContext;
 import net.minecraft.item.WritableBookItem;
 import net.minecraft.item.WrittenBookItem;
@@ -35,8 +36,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import team.abnormals.abnormalib.blocks.LecternBaseBlock;
-import team.abnormals.abnormalib.init.AbnormaTags;
 
 @Mixin({WritableBookItem.class, WrittenBookItem.class})
 public abstract class MixinBookOnLectern {
@@ -46,8 +45,8 @@ public abstract class MixinBookOnLectern {
         World world_1 = itemUsageContext_1.getWorld();
         BlockPos blockPos_1 = itemUsageContext_1.getBlockPos();
         BlockState blockState_1 = world_1.getBlockState(blockPos_1);
-        if (blockState_1.getBlock().matches(AbnormaTags.LECTERNS)) {
-            cir.setReturnValue(LecternBaseBlock.putBookIfAbsent(world_1, blockPos_1, blockState_1, itemUsageContext_1.getStack()) ? ActionResult.SUCCESS : ActionResult.PASS);
+        if (blockState_1.getBlock() instanceof LecternBlock) {
+            cir.setReturnValue(LecternBlock.putBookIfAbsent(world_1, blockPos_1, blockState_1, itemUsageContext_1.getStack()) ? ActionResult.SUCCESS : ActionResult.PASS);
         } else {
             cir.setReturnValue(ActionResult.PASS);
         }

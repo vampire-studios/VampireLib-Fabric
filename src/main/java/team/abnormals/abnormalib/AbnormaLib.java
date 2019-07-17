@@ -9,7 +9,7 @@ public class AbnormaLib implements ModInitializer {
 
     public static String MOD_ID = "abnormalib";
     public static String MOD_NAME = "AbnormaLib";
-    public static String MOD_VERSION = "0.7.4-1.14.3";
+    public static String MOD_VERSION = "0.7.8-1.14.4-pre5";
 
     @Override
     public void onInitialize() {

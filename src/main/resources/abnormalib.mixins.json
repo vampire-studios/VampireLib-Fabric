@@ -6,7 +6,8 @@
     "block.MixinBlock",
     "entity.MixinLivingEntity",
     "entity.damage.MixinDamageTracker",
-    "item.MixinBookOnLectern"
+    "item.MixinBookOnLectern",
+    "command.LocateCommandMixin"
   ],
   "client": [
     "client.MixinClientPlayNetworkHandler"

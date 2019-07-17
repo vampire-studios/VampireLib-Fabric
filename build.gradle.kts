@@ -29,6 +29,7 @@ group = "team.abnormals"
 
 repositories {
 	mavenCentral()
+	mavenLocal()
 	maven("https://maven.fabricmc.net")
 	maven("https://minecraft.curseforge.com/api/maven")
 	maven("https://maven.jamieswhiteshirt.com/libs-release/")
@@ -77,7 +78,9 @@ publishing {
 		afterEvaluate {
 			register("mavenJava", MavenPublication::class) {
 				artifactId = Constants.name
-				artifact(jar)
+				artifact(jar) {
+					builtBy(remapJar)
+				}
 				artifact(sourcesJar.get()) {
 					builtBy(remapSourcesJar)
 				}

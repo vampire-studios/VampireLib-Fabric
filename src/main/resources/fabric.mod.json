@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "abnormalib",
-  "version": "0.7.4-1.14.3",
+  "version": "0.7.6-1.14.4-pre4",
   "name": "AbnormaLib",
   "description": "AbnormaLib is a library mod for all mods made by Minecraft Abnormals",
   "authors": [
@@ -24,7 +24,6 @@
     "abnormalib.mixins.json"
   ],
   "depends": {
-    "fabricloader": ">=0.4.0",
-    "fabric": ">=0.3.0"
+    "fabricloader": ">=0.4.0"
   }
 }

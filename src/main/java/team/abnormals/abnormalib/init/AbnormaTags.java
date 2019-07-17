@@ -24,8 +24,6 @@
 
 package team.abnormals.abnormalib.init;
 
-import net.fabricmc.fabric.api.tag.TagRegistry;
-import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.tag.ItemTags;
 import net.minecraft.tag.Tag;
@@ -34,12 +32,7 @@ import team.abnormals.abnormalib.AbnormaLib;
 
 public class AbnormaTags {
 
-    public static final Tag<Block> LECTERNS = registerBlockTag("lecterns");
     public static final Tag<Item> SHEARS = registerItemTag("shears");
-
-    public static Tag<Block> registerBlockTag(String id) {
-        return TagRegistry.block(new Identifier(AbnormaLib.MOD_ID, id));
-    }
 
     public static Tag<Item> registerItemTag(String id) {
         return new ItemTags.CachingTag(new Identifier(AbnormaLib.MOD_ID, id));
