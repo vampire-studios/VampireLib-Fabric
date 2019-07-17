@@ -10,7 +10,8 @@
     "command.LocateCommandMixin"
   ],
   "client": [
-    "client.MixinClientPlayNetworkHandler"
+    "client.MixinClientPlayNetworkHandler",
+    "client.MixinWorldRenderer"
   ],
   "injectors": {
     "defaultRequire": 1
