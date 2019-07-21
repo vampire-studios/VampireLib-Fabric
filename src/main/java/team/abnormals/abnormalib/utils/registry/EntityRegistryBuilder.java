@@ -3,7 +3,7 @@ package team.abnormals.abnormalib.utils.registry;
 import net.fabricmc.fabric.api.entity.FabricEntityTypeBuilder;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCategory;
-import net.minecraft.entity.EntitySize;
+import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
@@ -27,7 +27,7 @@ public class EntityRegistryBuilder<E extends Entity> {
     private int secondaryColor;
     private boolean hasEgg;
 
-    private EntitySize size;
+    private EntityDimensions dimensions;
 
     public static <E extends Entity> EntityRegistryBuilder<E> createBuilder(Identifier nameIn) {
         name = nameIn;
@@ -62,17 +62,17 @@ public class EntityRegistryBuilder<E extends Entity> {
         return this;
     }
 
-    public EntityRegistryBuilder<E> size(EntitySize size) {
-        this.size = size;
+    public EntityRegistryBuilder<E> dimensions(EntityDimensions size) {
+        this.dimensions = size;
         return this;
     }
 
     public EntityType<E> build() {
-        EntityType<E> entityBuilder = FabricEntityTypeBuilder.create(category, entityFactory).dimensions(size).disableSaving().build();
+        EntityType<E> entityBuilder = FabricEntityTypeBuilder.create(category, entityFactory).dimensions(dimensions).disableSaving().build();
         EntityType<E> entityType = Registry.register(Registry.ENTITY_TYPE, name, entityBuilder);
         if ((this.alwaysUpdateVelocity)) {
             if (this.updateIntervalTicks != 0 & this.trackingDistance != 0)
-                FabricEntityTypeBuilder.create(category, entityFactory).dimensions(size).trackable(trackingDistance, updateIntervalTicks, alwaysUpdateVelocity).disableSaving().build();
+                FabricEntityTypeBuilder.create(category, entityFactory).dimensions(dimensions).trackable(trackingDistance, updateIntervalTicks, alwaysUpdateVelocity).disableSaving().build();
         }
         if (hasEgg) {
             RegistryUtils.registerItem(new SpawnEggItem(entityType, primaryColor, secondaryColor, new Item.Settings().group(ItemGroup.MISC)), new Identifier(name.getNamespace(), String.format("%s_spawn_egg", name.getPath())));

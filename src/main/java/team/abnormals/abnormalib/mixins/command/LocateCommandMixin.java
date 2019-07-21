@@ -49,6 +49,7 @@ public class LocateCommandMixin {
 
     /**
      * @author OliviaTheVampire
+     * @reason Allow to find all registered structures
      */
     @Overwrite
     public static void register(CommandDispatcher<ServerCommandSource> commandDispatcher_1) {

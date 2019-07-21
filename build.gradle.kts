@@ -41,11 +41,11 @@ dependencies {
 	minecraft(group = "com.mojang", name = "minecraft", version = Minecraft.version)
 	mappings(group = "net.fabricmc", name = "yarn", version = "${Minecraft.version}+build.${Fabric.Yarn.version}")
 
-	modCompile(group = "net.fabricmc", name = "fabric-loader", version = Fabric.Loader.version)
+	modApi(group = "net.fabricmc", name = "fabric-loader", version = Fabric.Loader.version)
 
-	modCompile(group = "net.fabricmc.fabric-api", name = "fabric-api", version = Fabric.API.version)
+	modApi(group = "net.fabricmc.fabric-api", name = "fabric-api", version = Fabric.API.version)
 
-	modCompile(group = "io.github.prospector.modmenu", name = "ModMenu", version = Dependencies.ModMenu.version)
+	modApi(group = "io.github.prospector.modmenu", name = "ModMenu", version = Dependencies.ModMenu.version)
 }
 
 val processResources = tasks.getByName<ProcessResources>("processResources") {

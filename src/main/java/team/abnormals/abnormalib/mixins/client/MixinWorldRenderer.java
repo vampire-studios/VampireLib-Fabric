@@ -34,24 +34,24 @@ public class MixinWorldRenderer {
 	@Inject(method = "renderSky", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/WorldRenderer;renderEndSky()V", shift = At.Shift.AFTER))
 	private void onEndSkyRendered(float delta, CallbackInfo callbackInfo) {
 		Vec3d skyColor = client.world.getSkyColor(client.gameRenderer.getCamera().getBlockPos(), 0.0F);
-		if (skyColor.x != abnormaLib$originColor.x() + abnormaLib$targetDelta.x() || skyColor.y != abnormaLib$originColor.y() + abnormaLib$targetDelta.y() || skyColor.z != abnormaLib$originColor.z() + abnormaLib$targetDelta.z()) {
+		if (skyColor.x != abnormaLib$originColor.getX() + abnormaLib$targetDelta.getX() || skyColor.y != abnormaLib$originColor.getY() + abnormaLib$targetDelta.getY() || skyColor.z != abnormaLib$originColor.getZ() + abnormaLib$targetDelta.getZ()) {
 			// Set origin color to current color
-			abnormaLib$originColor.set(abnormaLib$originColor.x() + abnormaLib$targetDelta.x() * abnormaLib$progress, abnormaLib$originColor.y() + abnormaLib$targetDelta.y() * abnormaLib$progress, abnormaLib$originColor.z() + abnormaLib$targetDelta.z() * abnormaLib$progress, abnormaLib$originColor.w() + abnormaLib$targetDelta.w() * abnormaLib$progress);
+			abnormaLib$originColor.set(abnormaLib$originColor.getX() + abnormaLib$targetDelta.getX() * abnormaLib$progress, abnormaLib$originColor.getY() + abnormaLib$targetDelta.getY() * abnormaLib$progress, abnormaLib$originColor.getZ() + abnormaLib$targetDelta.getZ() * abnormaLib$progress, abnormaLib$originColor.getW() + abnormaLib$targetDelta.getW() * abnormaLib$progress);
 			abnormaLib$progress = 0.0F;
 			if (skyColor.x == 0 && skyColor.y == 0 && skyColor.z == 0) {
-				abnormaLib$targetDelta.set(-abnormaLib$originColor.x(), -abnormaLib$originColor.y(), -abnormaLib$originColor.z(), -abnormaLib$originColor.w());
+				abnormaLib$targetDelta.set(-abnormaLib$originColor.getX(), -abnormaLib$originColor.getY(), -abnormaLib$originColor.getZ(), -abnormaLib$originColor.getW());
 			} else {
-				abnormaLib$targetDelta.set((float) skyColor.x - abnormaLib$originColor.x(), (float) skyColor.y - abnormaLib$originColor.y(), (float) skyColor.z - abnormaLib$originColor.z(), 1.0F - abnormaLib$originColor.w());
+				abnormaLib$targetDelta.set((float) skyColor.x - abnormaLib$originColor.getX(), (float) skyColor.y - abnormaLib$originColor.getY(), (float) skyColor.z - abnormaLib$originColor.getZ(), 1.0F - abnormaLib$originColor.getW());
 			}
 		}
 
 		abnormaLib$progress = Math.min(1.0F, abnormaLib$progress + delta * 0.04F);
 
-		if(!MathHelper.equalsApproximate(abnormaLib$originColor.w() + abnormaLib$targetDelta.w() * abnormaLib$progress, 0.0F)) {
+		if(!MathHelper.equalsApproximate(abnormaLib$originColor.getW() + abnormaLib$targetDelta.getW() * abnormaLib$progress, 0.0F)) {
 			GlStateManager.disableTexture();
 			GlStateManager.depthMask(false);
 			GlStateManager.enableFog();
-			GlStateManager.color4f(abnormaLib$originColor.x() + abnormaLib$targetDelta.x() * abnormaLib$progress, abnormaLib$originColor.y() + abnormaLib$targetDelta.y() * abnormaLib$progress, abnormaLib$originColor.z() + abnormaLib$targetDelta.z() * abnormaLib$progress, abnormaLib$originColor.w() + abnormaLib$targetDelta.w() * abnormaLib$progress);
+			GlStateManager.color4f(abnormaLib$originColor.getX() + abnormaLib$targetDelta.getX() * abnormaLib$progress, abnormaLib$originColor.getY() + abnormaLib$targetDelta.getY() * abnormaLib$progress, abnormaLib$originColor.getZ() + abnormaLib$targetDelta.getZ() * abnormaLib$progress, abnormaLib$originColor.getW() + abnormaLib$targetDelta.getW() * abnormaLib$progress);
 			if(vertexBufferObjectsEnabled) {
 				field_4087.bind();
 				GlStateManager.enableClientState(32884);
