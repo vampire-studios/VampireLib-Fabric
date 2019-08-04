@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
-  "id": "abnormalib",
-  "version": "0.7.6-1.14.4-pre4",
-  "name": "AbnormaLib",
-  "description": "AbnormaLib is a library mod for all mods made by Minecraft Abnormals",
+  "id": "vampirelib",
+  "version": "1.0.1-1.14.4",
+  "name": "VampireLib",
+  "description": "VampireLib is a library mod for all minecraft mods made by Vampire Studios",
   "authors": [
-    "Team Abnormals"
+    "Vampire Studios"
   ],
   "contact": {
     "homepage": "https://github.com/minecraftabnormals/AbnormaLib-1.14",
@@ -13,15 +13,15 @@
     "issues": "https://github.com/minecraftabnormals/AbnormaLib-1.14/issues"
   },
   "license": "MIT",
-  "icon": "assets/abnormalib/icon.png",
+  "icon": "assets/vampirelib/icon.png",
   "environment": "*",
   "entrypoints": {
     "main": [
-      "team.abnormals.abnormalib.AbnormaLib"
+      "io.github.vampirestudios.vampirelib.VampireLib"
     ]
   },
   "mixins": [
-    "abnormalib.mixins.json"
+    "vampirelib.mixins.json"
   ],
   "depends": {
     "fabricloader": ">=0.4.0"

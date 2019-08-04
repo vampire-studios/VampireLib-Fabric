@@ -25,7 +25,7 @@ base {
 }
 
 version = "${Constants.version}+${Constants.minecraftVersionVer}"
-group = "team.abnormals"
+group = Constants.group
 
 repositories {
 	mavenCentral()
@@ -45,15 +45,7 @@ dependencies {
 
 	modApi(group = "net.fabricmc.fabric-api", name = "fabric-api", version = Fabric.API.version)
 
-	modApi(group = "io.github.prospector.modmenu", name = "ModMenu", version = Dependencies.ModMenu.version)
-}
-
-val processResources = tasks.getByName<ProcessResources>("processResources") {
-    inputs.property("version", project.version)
-
-    filesMatching("fabric.mod.json") {
-        filter { line -> line.replace("%VERSION%", "${project.version}") }
-    }
+	modApi(group = "io.github.prospector", name = "modmenu", version = Dependencies.ModMenu.version)
 }
 
 val javaCompile = tasks.withType<JavaCompile> {
@@ -69,20 +61,30 @@ val jar = tasks.getByName<Jar>("jar") {
     from("LICENSE")
 }
 
-val remapJar = tasks.getByName<RemapJarTask>("remapJar")
+val remapSourcesJar: RemapSourcesJarTask by tasks.getting {}
 
-val remapSourcesJar = tasks.getByName<RemapSourcesJarTask>("remapSourcesJar")
+val remapJar: RemapJarTask by tasks.getting {}
 
 publishing {
-    publications {
+	publications {
 		afterEvaluate {
-			register("mavenJava", MavenPublication::class) {
+			register("mavenLocal", MavenPublication::class) {
 				artifactId = Constants.name
-				artifact(jar) {
+				artifact("${project.buildDir.absolutePath}/libs/${base.archivesBaseName}-${project.version}.jar") { //release jar - file location not provided anywhere in loom
+					classifier = null
 					builtBy(remapJar)
 				}
-				artifact(sourcesJar.get()) {
-					builtBy(remapSourcesJar)
+				artifact ("${project.buildDir.absolutePath}/libs/${base.archivesBaseName}-${project.version}-dev.jar") { //release jar - file location not provided anywhere in loom
+					classifier = "dev"
+					builtBy(remapJar)
+				}
+				artifact ("${project.buildDir.absolutePath}/libs/${base.archivesBaseName}-${project.version}-sources.jar") { //release jar - file location not provided anywhere in loom
+					classifier = "sources"
+					builtBy(remapJar)
+				}
+				artifact ("${project.buildDir.absolutePath}/libs/${base.archivesBaseName}-${project.version}-sources-dev.jar") { //release jar - file location not provided anywhere in loom
+					classifier = "sources-dev"
+					builtBy(remapJar)
 				}
 				pom {
 					name.set(Constants.name)
@@ -96,12 +98,12 @@ publishing {
 					}
 					developers {
 						developer {
-							id.set("team_abnormals")
-							name.set("Team Abnormals")
+							id.set("vampire-studios")
+							name.set("Vampire Studios")
 						}
 					}
 				}
-            }
-        }
-    }
+			}
+		}
+	}
 }

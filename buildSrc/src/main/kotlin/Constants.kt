@@ -1,8 +1,9 @@
 object Constants {
-    const val name = "AbnormaLib"
-    const val description = "AbnormaLib is a library mod for all mods made by Minecraft Abnormals"
-    const val url = "https://github.com/minecraftabnormals/AbnormaLib-1.14"
+    const val name = "VampireLib"
+    const val group = "io.github.vampirestudios"
+    const val description = "VampireLib is a library mod for all minecraft mods made by Vampire studios"
+    const val url = "https://github.com/vampire-studios/VampireLib-Fabric"
 
-    const val version = "0.7.9"
-    const val minecraftVersionVer = "1.14.4-pre6"
+    const val version = "1.0.1"
+    const val minecraftVersionVer = "1.14.4"
 }
