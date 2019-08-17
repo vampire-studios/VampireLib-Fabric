@@ -43,7 +43,7 @@ dependencies {
 
 	modApi(group = "net.fabricmc", name = "fabric-loader", version = Fabric.Loader.version)
 
-	modApi(group = "net.fabricmc.fabric-api", name = "fabric-api", version = Fabric.API.version)
+	modApi (group = "net.fabricmc.fabric-api", name = "fabric-api", version = Fabric.API.version)
 
 	modApi(group = "io.github.prospector", name = "modmenu", version = Dependencies.ModMenu.version)
 }
@@ -70,21 +70,11 @@ publishing {
 		afterEvaluate {
 			register("mavenLocal", MavenPublication::class) {
 				artifactId = Constants.name
-				artifact("${project.buildDir.absolutePath}/libs/${base.archivesBaseName}-${project.version}.jar") { //release jar - file location not provided anywhere in loom
-					classifier = null
+				artifact(jar) {
 					builtBy(remapJar)
 				}
-				artifact ("${project.buildDir.absolutePath}/libs/${base.archivesBaseName}-${project.version}-dev.jar") { //release jar - file location not provided anywhere in loom
-					classifier = "dev"
-					builtBy(remapJar)
-				}
-				artifact ("${project.buildDir.absolutePath}/libs/${base.archivesBaseName}-${project.version}-sources.jar") { //release jar - file location not provided anywhere in loom
-					classifier = "sources"
-					builtBy(remapJar)
-				}
-				artifact ("${project.buildDir.absolutePath}/libs/${base.archivesBaseName}-${project.version}-sources-dev.jar") { //release jar - file location not provided anywhere in loom
-					classifier = "sources-dev"
-					builtBy(remapJar)
+				artifact(sourcesJar.get()) {
+					builtBy(remapSourcesJar)
 				}
 				pom {
 					name.set(Constants.name)
