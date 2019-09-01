@@ -1,7 +1,7 @@
 /*
- * The MIT License (MIT)
+ * MIT License
  *
- * Copyright (c) 2019 Team Abnormals
+ * Copyright (c) 2019 Vampire Studios
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -10,16 +10,16 @@
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
  *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 
 package io.github.vampirestudios.vampirelib.api.custom_villagers;
@@ -43,6 +43,7 @@ import net.minecraft.item.map.MapState;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionUtil;
 import net.minecraft.recipe.BrewingRecipeRegistry;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.DyeColor;
 import net.minecraft.util.math.BlockPos;
@@ -52,7 +53,6 @@ import net.minecraft.village.TradeOffer;
 import net.minecraft.village.TradeOffers;
 import net.minecraft.village.VillagerDataContainer;
 import net.minecraft.village.VillagerType;
-import net.minecraft.world.World;
 
 import java.util.List;
 import java.util.Locale;
@@ -110,16 +110,20 @@ public class TradeOfferFactories {
 
 
         public TradeOffer create(Entity entity_1, Random random_1) {
-            World world_1 = entity_1.world;
-            BlockPos blockPos_1 = world_1.locateStructure(this.structure, new BlockPos(entity_1), 100, true);
-            if (blockPos_1 != null) {
-                ItemStack itemStack_1 = FilledMapItem.createMap(world_1, blockPos_1.getX(), blockPos_1.getZ(), (byte) 2, true, true);
-                FilledMapItem.copyMap(world_1, itemStack_1);
-                MapState.addDecorationsTag(itemStack_1, blockPos_1, "+", this.iconType);
-                itemStack_1.setCustomName(new TranslatableText("filled_map." + this.structure.toLowerCase(Locale.ROOT)));
-                return new TradeOffer(new ItemStack(Items.EMERALD, this.price), new ItemStack(Items.COMPASS), itemStack_1, this.maxUses, this.experience, 0.2F);
-            } else {
+            if (!(entity_1.world instanceof ServerWorld)) {
                 return null;
+            } else {
+                ServerWorld serverWorld_1 = (ServerWorld) entity_1.world;
+                BlockPos blockPos_1 = serverWorld_1.locateStructure(this.structure, new BlockPos(entity_1), 100, true);
+                if (blockPos_1 != null) {
+                    ItemStack itemStack_1 = FilledMapItem.createMap(serverWorld_1, blockPos_1.getX(), blockPos_1.getZ(), (byte) 2, true, true);
+                    FilledMapItem.copyMap(serverWorld_1, itemStack_1);
+                    MapState.addDecorationsTag(itemStack_1, blockPos_1, "+", this.iconType);
+                    itemStack_1.setCustomName(new TranslatableText("filled_map." + this.structure.toLowerCase(Locale.ROOT)));
+                    return new TradeOffer(new ItemStack(Items.EMERALD, this.price), new ItemStack(Items.COMPASS), itemStack_1, this.maxUses, this.experience, 0.2F);
+                } else {
+                    return null;
+                }
             }
         }
     }
@@ -419,7 +423,7 @@ public class TradeOfferFactories {
         }
 
         @Override
-        public boolean neutronia$isApplicable(AbstractTraderEntity entity, Random random) {
+        public boolean vl$isApplicable(AbstractTraderEntity entity, Random random) {
             return itemMap.containsKey(VillagerTypeRegistry.getVillagerTypeForBiome(entity.world.getBiome(entity.getBlockPos())));
         }
     }

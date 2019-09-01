@@ -15,9 +15,7 @@
   ],
   "client": [
     "client.MixinClientPlayNetworkHandler",
-    "client.MixinWorldRenderer",
-    "client.network.ClientPlayerEntityMixin",
-    "client.render.entity.feature.CapeFeatureRendererMixin",
+//    "client.MixinWorldRenderer",
     "client.VillagerResemblingModelMixin"
   ],
   "injectors": {
