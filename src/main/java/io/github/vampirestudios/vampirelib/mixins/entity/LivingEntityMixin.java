@@ -115,7 +115,7 @@ public abstract class LivingEntityMixin extends Entity {
         Climbable.ClimbBehavior behavior = climbable.canClimb(thisLivingEntity, state, thisLivingEntity.getBlockPos());
         if (behavior != Climbable.ClimbBehavior.Vanilla) {
 
-            if (behavior == Climbable.ClimbBehavior.True) {
+            if (behavior == Climbable.ClimbBehavior.True || behavior == Climbable.ClimbBehavior.Scaffolding) {
                 cir.setReturnValue(true);
             } else {
                 cir.setReturnValue(false);
@@ -125,9 +125,9 @@ public abstract class LivingEntityMixin extends Entity {
     }
 
     @Inject(method = "applyClimbingSpeed", at = @At(value = "INVOKE_ASSIGN", target = "Ljava/lang/Math;max(DD)D"), cancellable = true, locals = LocalCapture.CAPTURE_FAILSOFT)
-    private void applyClimbingSpeed(Vec3d vec3d, CallbackInfoReturnable<Vec3d> callbackInfoReturnable, double x, double y, double z) {
+    private void applyClimbingSpeed(Vec3d vec3d, CallbackInfoReturnable<Vec3d> callbackInfoReturnable, float temp, double x, double z, double y) {
         Block block = getBlockState().getBlock();
-        if(block instanceof Climbable && ((Climbable) block).canClimb((LivingEntity)(Object) this, getBlockState(), getBlockPos()) == Climbable.ClimbBehavior.Scaffolding)
+        if(y < 0.0D && block instanceof Climbable && ((Climbable) block).canClimb((LivingEntity)(Object) this, getBlockState(), getBlockPos()) == Climbable.ClimbBehavior.Scaffolding)
             callbackInfoReturnable.setReturnValue(new Vec3d(x, y, z));
     }
 
