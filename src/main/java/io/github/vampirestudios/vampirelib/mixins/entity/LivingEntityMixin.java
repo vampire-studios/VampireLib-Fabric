@@ -25,6 +25,7 @@
 package io.github.vampirestudios.vampirelib.mixins.entity;
 
 import io.github.vampirestudios.vampirelib.api.Climbable;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -36,6 +37,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
@@ -55,8 +57,9 @@ public abstract class LivingEntityMixin extends Entity {
     @Shadow
     public abstract ItemStack getEquippedStack(EquipmentSlot var1);
 
-    @Shadow
-    protected int field_6239;
+    @Shadow public abstract BlockState getBlockState();
+
+    @Shadow protected int roll;
 
     /**
      * @author OliviaTheVampire
@@ -68,7 +71,7 @@ public abstract class LivingEntityMixin extends Entity {
             ItemStack itemStack_1 = this.getEquippedStack(EquipmentSlot.CHEST);
             if (itemStack_1.getItem() instanceof ElytraItem && ElytraItem.isUsable(itemStack_1)) {
              boolean_1 = true;
-             if (!this.world.isClient && (this.field_6239 + 1) % 20 == 0) {
+             if (!this.world.isClient && (this.roll + 1) % 20 == 0) {
                  itemStack_1.damage(1, (LivingEntity) (Object) this, (livingEntity_1) ->
                          livingEntity_1.sendEquipmentBreakStatus(EquipmentSlot.CHEST));
              }
@@ -119,6 +122,13 @@ public abstract class LivingEntityMixin extends Entity {
             }
             cir.cancel();
         }
+    }
+
+    @Inject(method = "applyClimbingSpeed", at = @At(value = "INVOKE_ASSIGN", target = "Ljava/lang/Math;max(DD)D"), cancellable = true, locals = LocalCapture.CAPTURE_FAILSOFT)
+    private void applyClimbingSpeed(Vec3d vec3d, CallbackInfoReturnable<Vec3d> callbackInfoReturnable, double x, double y, double z) {
+        Block block = getBlockState().getBlock();
+        if(block instanceof Climbable && ((Climbable) block).canClimb((LivingEntity)(Object) this, getBlockState(), getBlockPos()) == Climbable.ClimbBehavior.Scaffolding)
+            callbackInfoReturnable.setReturnValue(new Vec3d(x, y, z));
     }
 
 }

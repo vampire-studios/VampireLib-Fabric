@@ -58,6 +58,7 @@ public interface Climbable {
 
     enum ClimbBehavior {
         True,
+        Scaffolding,
         False,
         Vanilla
     }
