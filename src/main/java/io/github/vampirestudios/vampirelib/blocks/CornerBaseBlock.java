@@ -35,7 +35,7 @@ import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.state.StateFactory;
+import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.DirectionProperty;
 import net.minecraft.state.property.Properties;
@@ -129,10 +129,6 @@ public class CornerBaseBlock extends Block implements Waterloggable {
         return this.baseBlock.getBlastResistance();
     }
 
-    public BlockRenderLayer getRenderLayer() {
-        return this.baseBlock.getRenderLayer();
-    }
-
     public int getTickRate(class_4538 viewableWorld_1) {
         return this.baseBlock.getTickRate(viewableWorld_1);
     }
@@ -154,12 +150,14 @@ public class CornerBaseBlock extends Block implements Waterloggable {
         this.baseBlock.onSteppedOn(world_1, blockPos_1, entity_1);
     }
 
-    public void onScheduledTick(BlockState blockState_1, ServerWorld world_1, BlockPos blockPos_1, Random random_1) {
-        this.baseBlock.onScheduledTick(blockState_1, world_1, blockPos_1, random_1);
+    @Override
+    public void scheduledTick(BlockState blockState_1, ServerWorld world_1, BlockPos blockPos_1, Random random_1) {
+        this.baseBlock.scheduledTick(blockState_1, world_1, blockPos_1, random_1);
     }
 
-    public boolean activate(BlockState blockState_1, World world_1, BlockPos blockPos_1, PlayerEntity playerEntity_1, Hand hand_1, BlockHitResult blockHitResult_1) {
-        return this.baseBlockState.activate(world_1, playerEntity_1, hand_1, blockHitResult_1);
+    @Override
+    public boolean onUse(BlockState blockState_1, World world_1, BlockPos blockPos_1, PlayerEntity playerEntity_1, Hand hand_1, BlockHitResult blockHitResult_1) {
+        return this.baseBlockState.onUse(world_1, playerEntity_1, hand_1, blockHitResult_1);
     }
 
     public void onDestroyedByExplosion(World world_1, BlockPos blockPos_1, Explosion explosion_1) {
@@ -193,7 +191,8 @@ public class CornerBaseBlock extends Block implements Waterloggable {
         return super.getStateForNeighborUpdate(blockState_1, direction_1, blockState_2, iWorld_1, blockPos_1, blockPos_2);
     }
 
-    protected void appendProperties(StateFactory.Builder<Block, BlockState> stateFactory$Builder_1) {
+    @Override
+    protected void appendProperties(StateManager.Builder<Block, BlockState> stateFactory$Builder_1) {
         stateFactory$Builder_1.add(FACING, WATERLOGGED);
     }
 

@@ -116,7 +116,7 @@ public abstract class StructureBlockBlockEntityMixin extends BlockEntity {
         this.powered = tag.getBoolean("powered");
         this.showAir = tag.getBoolean("showair");
         this.showBoundingBox = tag.getBoolean("showboundingbox");
-        if (tag.containsKey("integrity")) {
+        if (tag.contains("integrity")) {
             this.integrity = tag.getFloat("integrity");
         } else {
             this.integrity = 1.0F;

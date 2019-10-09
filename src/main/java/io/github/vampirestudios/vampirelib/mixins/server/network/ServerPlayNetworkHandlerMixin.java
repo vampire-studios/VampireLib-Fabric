@@ -69,7 +69,7 @@ public class ServerPlayNetworkHandlerMixin {
                 break;
             case STOP_SLEEPING:
                 if (this.player.isSleeping()) {
-                    this.player.wakeUp(false, true, true);
+                    this.player.wakeUp(false, true);
                     this.requestedTeleportPos = new Vec3d(this.player.x, this.player.y, this.player.z);
                 }
                 break;

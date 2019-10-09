@@ -41,6 +41,10 @@ dependencies {
 		force = true
 		exclude(group: "net.fabricmc.fabric-api", module: "fabric-renderer-indigo")
 	}
+	modImplementation("me.shedaniel:RoughlyEnoughItems:${project.rei_version}") {
+		exclude group: "io.github.prospector.modmenu"
+	}
+	modImplementation "io.github.prospector:modmenu:${project.modmenu_version}"
 
 	compile "com.google.code.findbugs:jsr305:3.0.2"
 }
