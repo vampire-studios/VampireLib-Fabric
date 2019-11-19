@@ -24,6 +24,8 @@
 
 package io.github.vampirestudios.vampirelib.blocks;
 
+import io.github.vampirestudios.vampirelib.enums.SidingType;
+import io.github.vampirestudios.vampirelib.utils.VProperties;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockPlacementEnvironment;
 import net.minecraft.block.BlockState;
@@ -33,7 +35,7 @@ import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.state.StateFactory;
+import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.DirectionProperty;
 import net.minecraft.state.property.EnumProperty;
@@ -45,8 +47,6 @@ import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.IWorld;
-import io.github.vampirestudios.vampirelib.enums.SidingType;
-import io.github.vampirestudios.vampirelib.utils.VProperties;
 
 public class SidingBaseBlock extends Block implements Waterloggable {
     public static final EnumProperty<SidingType> TYPE;
@@ -95,7 +95,7 @@ public class SidingBaseBlock extends Block implements Waterloggable {
         return blockState_1.get(TYPE) != SidingType.DOUBLE;
     }
 
-    protected void appendProperties(StateFactory.Builder<Block, BlockState> stateFactory$Builder_1) {
+    protected void appendProperties(StateManager.Builder<Block, BlockState> stateFactory$Builder_1) {
         stateFactory$Builder_1.add(TYPE, FACING_HORIZONTAL, WATERLOGGED);
     }
 

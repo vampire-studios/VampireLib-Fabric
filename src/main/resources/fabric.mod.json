@@ -24,6 +24,7 @@
     "vampirelib.mixins.json"
   ],
   "depends": {
-    "fabricloader": ">=0.4.0"
+    "fabricloader": ">=0.4.0",
+    "minecraft": ">=1.15-alpha.19.40.a"
   }
 }

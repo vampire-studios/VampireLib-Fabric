@@ -31,8 +31,8 @@ import org.spongepowered.asm.mixin.injection.ModifyConstant;
 
 @Mixin(VillagerResemblingModel.class)
 public class VillagerResemblingModelMixin {
-    @ModifyConstant(method = "<init>(FII)V", constant = @Constant(intValue = 18, ordinal = 0))
-    public int extendRobe(int old) {
-        return 20;
+    @ModifyConstant(method = "<init>(FII)V", constant = @Constant(floatValue = 18.0F, ordinal = 0))
+    public float extendRobe(float old) {
+        return 20.0F;
     }
 }

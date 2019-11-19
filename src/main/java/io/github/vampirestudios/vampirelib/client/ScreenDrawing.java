@@ -24,8 +24,8 @@
 
 package io.github.vampirestudios.vampirelib.client;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.class_4493;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.BufferBuilder;
 import net.minecraft.client.render.Tessellator;
@@ -58,7 +58,8 @@ public class ScreenDrawing {
         BufferBuilder buffer = tessellator.getBufferBuilder();
         RenderSystem.enableBlend();
         //RenderSystem.disableTexture2D();
-        RenderSystem.blendFuncSeparate(class_4493.class_4535.SRC_ALPHA, class_4493.class_4534.ONE_MINUS_SRC_ALPHA, class_4493.class_4535.ONE, class_4493.class_4534.ZERO);
+        RenderSystem.blendFuncSeparate(GlStateManager.class_4535.SRC_ALPHA, GlStateManager.class_4534.ONE_MINUS_SRC_ALPHA,
+                GlStateManager.class_4535.ONE, GlStateManager.class_4534.ZERO);
         RenderSystem.color4f(r, g, b, 1.0f);
         buffer.begin(GL11.GL_QUADS, VertexFormats.POSITION_UV); //I thought GL_QUADS was deprecated but okay, sure.
         buffer.vertex(left,         top + height, z).texture(u1, v2).next();
@@ -85,7 +86,8 @@ public class ScreenDrawing {
         BufferBuilder buffer = tessellator.getBufferBuilder();
         RenderSystem.enableBlend();
         RenderSystem.disableTexture();
-        RenderSystem.blendFuncSeparate(class_4493.class_4535.SRC_ALPHA, class_4493.class_4534.ONE_MINUS_SRC_ALPHA, class_4493.class_4535.ONE, class_4493.class_4534.ZERO);
+        RenderSystem.blendFuncSeparate(GlStateManager.class_4535.SRC_ALPHA, GlStateManager.class_4534.ONE_MINUS_SRC_ALPHA,
+                GlStateManager.class_4535.ONE, GlStateManager.class_4534.ZERO);
         RenderSystem.color4f(r, g, b, a);
         buffer.begin(GL11.GL_QUADS, VertexFormats.POSITION); //I thought GL_QUADS was deprecated but okay, sure.
         buffer.vertex(left, top + height, 0.0D).next();
@@ -110,10 +112,10 @@ public class ScreenDrawing {
         Tessellator tess = Tessellator.getInstance();
         BufferBuilder buffer = tess.getBufferBuilder();
         buffer.begin(GL11.GL_QUADS, VertexFormats.POSITION_COLOR);
-        buffer.vertex(x, y+height, z).color(r, g, b, 1.0f).next();
-        buffer.vertex(x+width, y+height, z).color(r, g, b, 1.0f).next();
-        buffer.vertex(x+width, y, z).color(r, g, b, 1.0f).next();
-        buffer.vertex(x, y, z).color(r, g, b, 1.0f).next();
+        buffer.vertex(x, y+height, z).method_22915(r, g, b, 1.0f).next();
+        buffer.vertex(x+width, y+height, z).method_22915(r, g, b, 1.0f).next();
+        buffer.vertex(x+width, y, z).method_22915(r, g, b, 1.0f).next();
+        buffer.vertex(x, y, z).method_22915(r, g, b, 1.0f).next();
         tess.draw();
         GL11.glEnable(GL11.GL_TEXTURE_2D);
     }
