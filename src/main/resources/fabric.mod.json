@@ -8,9 +8,9 @@
     "Vampire Studios"
   ],
   "contact": {
-    "homepage": "https://github.com/minecraftabnormals/AbnormaLib-1.14",
-    "sources": "https://github.com/minecraftabnormals/AbnormaLib-1.14",
-    "issues": "https://github.com/minecraftabnormals/AbnormaLib-1.14/issues"
+    "homepage": "https://github.com/vampire-studios/VampireLib-Fabric",
+    "sources": "https://github.com/vampire-studios/VampireLib-Fabric",
+    "issues": "https://github.com/vampire-studios/VampireLib-Fabric/issues"
   },
   "license": "MIT",
   "icon": "assets/vampirelib/icon.png",
@@ -24,7 +24,7 @@
     "vampirelib.mixins.json"
   ],
   "depends": {
-    "fabricloader": ">=0.4.0",
-    "minecraft": ">=1.15-alpha.19.40.a"
+    "fabricloader": ">=0.6.0",
+    "minecraft": ">=1.15-alpha.19.46.b"
   }
 }

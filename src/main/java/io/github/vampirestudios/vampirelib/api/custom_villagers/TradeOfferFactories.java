@@ -424,7 +424,7 @@ public class TradeOfferFactories {
 
         @Override
         public boolean vl$isApplicable(AbstractTraderEntity entity, Random random) {
-            return itemMap.containsKey(VillagerTypeRegistry.getVillagerTypeForBiome(entity.world.getBiome(entity.getBlockPos())));
+            return itemMap.containsKey(VillagerTypeRegistry.getVillagerTypeForBiome(entity.world.getBiomeAccess().getBiome(entity.getBlockPos())));
         }
     }
 

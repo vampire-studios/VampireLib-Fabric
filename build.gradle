@@ -1,13 +1,18 @@
 plugins {
-	id 'fabric-loom' version '0.2.5-SNAPSHOT'
+	id 'fabric-loom' version '0.2.6-SNAPSHOT'
 	id 'maven-publish'
 	id 'net.minecrell.licenser' version '0.4.1'
 	id "org.ajoberstar.grgit" version "3.1.1"
-	id 'com.matthewprenger.cursegradle' version "1.1.2"
-	id 'moe.nikky.persistentCounter' version '0.0.8-SNAPSHOT'
+	id "co.riiid.gradle" version "0.4.2"
+	id "com.matthewprenger.cursegradle" version "1.4.0"
+	id "com.wynprice.cursemaven" version "2.1.0"
 }
 
 def ENV = System.getenv()
+
+def gittoken = System.getenv('GH_TOKEN')
+def buildnumber = System.getenv('TRAVIS_BUILD_NUMBER')
+def buildbranch = System.getenv('TRAVIS_BRANCH')
 
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
@@ -31,18 +36,15 @@ repositories {
 }
 
 dependencies {
-	//to change the versions see the gradle.properties file
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}"
-	modCompile "net.fabricmc:fabric-loader:${project.loader_version}"
 
-	// Fabric API. This is technically optional, but you probably want it anyway.
-	modApi("net.fabricmc.fabric-api:fabric-api:${project.fabric_version}") {
-		force = true
-		exclude(group: "net.fabricmc.fabric-api", module: "fabric-renderer-indigo")
-	}
+	modCompile "net.fabricmc:fabric-loader:${project.loader_version}"
+	modCompile "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+
 	modImplementation("me.shedaniel:RoughlyEnoughItems:${project.rei_version}") {
 		exclude group: "io.github.prospector.modmenu"
+		exclude group :"net.fabricmc.fabric-api"
 	}
 	modImplementation "io.github.prospector:modmenu:${project.modmenu_version}"
 
@@ -60,6 +62,35 @@ processResources {
 	from(sourceSets.main.resources.srcDirs) {
 		exclude "fabric.mod.json"
 	}
+}
+
+configurations.all {
+	resolutionStrategy {
+		eachDependency {
+			if (requested.group == "net.fabricmc") {
+				if(requested.name =="tiny-mappings-parser"){
+					useVersion("0.2.0.11")
+				}
+
+			}
+		}
+	}
+}
+
+github {
+	owner = 'vampire-studios'
+	repo = 'VampireLib-Fabric'
+	token = gittoken ?: "a key"
+	tagName = version + "-" + project.minecraft_version.replace(" ", "-")
+	name = version + "-" + "MC" + project.minecraft_version.replace(" ", "-")
+	targetCommitish = buildbranch
+	prerelease = true
+	assets = [
+			"build/libs/${archivesBaseName}-${version}-dev.jar",
+			"build/libs/${archivesBaseName}-${version}.jar",
+			"build/libs/${archivesBaseName}-${version}-sources-dev.jar",
+			"build/libs/${archivesBaseName}-${version}-sources.jar"
+	]
 }
 
 // ensure that the encoding is set to UTF-8, no matter what the system default is

@@ -25,7 +25,6 @@
 package io.github.vampirestudios.vampirelib.mixins.entity;
 
 import io.github.vampirestudios.vampirelib.api.custom_villagers.VillagerTypeRegistry;
-import net.minecraft.entity.EntityData;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnType;
 import net.minecraft.entity.passive.AbstractTraderEntity;
@@ -55,7 +54,8 @@ public abstract class VillagerEntityMixin extends AbstractTraderEntity {
     public abstract void setVillagerData(VillagerData villagerData_1);
 
     @Inject(method = "initialize", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/passive/VillagerEntity;setVillagerData(Lnet/minecraft/village/VillagerData;)V", ordinal = 1, shift = At.Shift.AFTER))
-    public void onInitialize(IWorld world, LocalDifficulty localDifficulty, SpawnType spawnType, EntityData entityData, CompoundTag compoundTag, CallbackInfoReturnable<EntityData> callbackInfoReturnable) {
-        setVillagerData(getVillagerData().withType(VillagerTypeRegistry.getVillagerTypeForBiome(world.getBiome(new BlockPos(this)))));
+    public void onInitialize(IWorld world, LocalDifficulty difficulty, SpawnType spawnType, net.minecraft.entity.EntityData entityData, CompoundTag entityTag, CallbackInfoReturnable<net.minecraft.entity.EntityData> callbackInfoReturnable) {
+        setVillagerData(getVillagerData().withType(VillagerTypeRegistry.getVillagerTypeForBiome(world.getBiomeAccess().getBiome(new BlockPos(this)))));
     }
+
 }

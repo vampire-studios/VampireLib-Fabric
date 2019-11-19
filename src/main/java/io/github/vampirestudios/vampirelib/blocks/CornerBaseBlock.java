@@ -27,7 +27,6 @@ package io.github.vampirestudios.vampirelib.blocks;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.*;
-import net.minecraft.class_4538;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityContext;
 import net.minecraft.entity.player.PlayerEntity;
@@ -39,6 +38,7 @@ import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.DirectionProperty;
 import net.minecraft.state.property.Properties;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
@@ -48,6 +48,7 @@ import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldView;
 import net.minecraft.world.explosion.Explosion;
 
 import java.util.Random;
@@ -90,7 +91,7 @@ public class CornerBaseBlock extends Block implements Waterloggable {
 
     public CornerBaseBlock(BlockState blockState_1, Block.Settings block$Settings_1) {
         super(block$Settings_1);
-        this.setDefaultState(this.stateFactory.getDefaultState().with(FACING, Direction.NORTH).with(WATERLOGGED, false));
+        this.setDefaultState(this.getStateManager().getDefaultState().with(FACING, Direction.NORTH).with(WATERLOGGED, false));
         this.baseBlock = blockState_1.getBlock();
         this.baseBlockState = blockState_1;
     }
@@ -129,7 +130,7 @@ public class CornerBaseBlock extends Block implements Waterloggable {
         return this.baseBlock.getBlastResistance();
     }
 
-    public int getTickRate(class_4538 viewableWorld_1) {
+    public int getTickRate(WorldView viewableWorld_1) {
         return this.baseBlock.getTickRate(viewableWorld_1);
     }
 
@@ -156,7 +157,7 @@ public class CornerBaseBlock extends Block implements Waterloggable {
     }
 
     @Override
-    public boolean onUse(BlockState blockState_1, World world_1, BlockPos blockPos_1, PlayerEntity playerEntity_1, Hand hand_1, BlockHitResult blockHitResult_1) {
+    public ActionResult onUse(BlockState blockState_1, World world_1, BlockPos blockPos_1, PlayerEntity playerEntity_1, Hand hand_1, BlockHitResult blockHitResult_1) {
         return this.baseBlockState.onUse(world_1, playerEntity_1, hand_1, blockHitResult_1);
     }
 
@@ -179,8 +180,7 @@ public class CornerBaseBlock extends Block implements Waterloggable {
         } else {
             if (xPos < 0.5) direction_1 = direction_1.rotateYClockwise();
         }
-        BlockState blockState_1 = this.getDefaultState().with(FACING, direction_1).with(WATERLOGGED, fluidState_1.getFluid() == Fluids.WATER);
-        return blockState_1;
+        return this.getDefaultState().with(FACING, direction_1).with(WATERLOGGED, fluidState_1.getFluid() == Fluids.WATER);
     }
 
     public BlockState getStateForNeighborUpdate(BlockState blockState_1, Direction direction_1, BlockState blockState_2, IWorld iWorld_1, BlockPos blockPos_1, BlockPos blockPos_2) {

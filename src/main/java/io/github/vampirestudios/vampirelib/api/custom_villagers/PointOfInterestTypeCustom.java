@@ -66,7 +66,7 @@ public class PointOfInterestTypeCustom {
     }
 
     public static Set<BlockState> getAllStatesOf(Block block_1) {
-        return ImmutableSet.copyOf(block_1.getStateFactory().getStates());
+        return ImmutableSet.copyOf(block_1.getStateManager().getStates());
     }
 
     public PointOfInterestType register() {

@@ -55,13 +55,13 @@ public class ScreenDrawing {
         float g = (color >> 8 & 255) / 255.0F;
         float b = (color & 255) / 255.0F;
         Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder buffer = tessellator.getBufferBuilder();
+        BufferBuilder buffer = tessellator.getBuffer();
         RenderSystem.enableBlend();
         //RenderSystem.disableTexture2D();
-        RenderSystem.blendFuncSeparate(GlStateManager.class_4535.SRC_ALPHA, GlStateManager.class_4534.ONE_MINUS_SRC_ALPHA,
-                GlStateManager.class_4535.ONE, GlStateManager.class_4534.ZERO);
+        RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA,
+                GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
         RenderSystem.color4f(r, g, b, 1.0f);
-        buffer.begin(GL11.GL_QUADS, VertexFormats.POSITION_UV); //I thought GL_QUADS was deprecated but okay, sure.
+        buffer.begin(GL11.GL_QUADS, VertexFormats.POSITION_TEXTURE); //I thought GL_QUADS was deprecated but okay, sure.
         buffer.vertex(left,         top + height, z).texture(u1, v2).next();
         buffer.vertex(left + width, top + height, z).texture(u2, v2).next();
         buffer.vertex(left + width, top,          z).texture(u2, v1).next();
@@ -83,11 +83,11 @@ public class ScreenDrawing {
         float g = (color >> 8 & 255) / 255.0F;
         float b = (color & 255) / 255.0F;
         Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder buffer = tessellator.getBufferBuilder();
+        BufferBuilder buffer = tessellator.getBuffer();
         RenderSystem.enableBlend();
         RenderSystem.disableTexture();
-        RenderSystem.blendFuncSeparate(GlStateManager.class_4535.SRC_ALPHA, GlStateManager.class_4534.ONE_MINUS_SRC_ALPHA,
-                GlStateManager.class_4535.ONE, GlStateManager.class_4534.ZERO);
+        RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA,
+                GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
         RenderSystem.color4f(r, g, b, a);
         buffer.begin(GL11.GL_QUADS, VertexFormats.POSITION); //I thought GL_QUADS was deprecated but okay, sure.
         buffer.vertex(left, top + height, 0.0D).next();
@@ -110,12 +110,12 @@ public class ScreenDrawing {
     public static void colorFill(int x, int y, int width, int height, double z, float r, float g, float b) {
         GL11.glDisable(GL11.GL_TEXTURE_2D);
         Tessellator tess = Tessellator.getInstance();
-        BufferBuilder buffer = tess.getBufferBuilder();
+        BufferBuilder buffer = tess.getBuffer();
         buffer.begin(GL11.GL_QUADS, VertexFormats.POSITION_COLOR);
-        buffer.vertex(x, y+height, z).method_22915(r, g, b, 1.0f).next();
-        buffer.vertex(x+width, y+height, z).method_22915(r, g, b, 1.0f).next();
-        buffer.vertex(x+width, y, z).method_22915(r, g, b, 1.0f).next();
-        buffer.vertex(x, y, z).method_22915(r, g, b, 1.0f).next();
+        buffer.vertex(x, y+height, z).color(r, g, b, 1.0f).next();
+        buffer.vertex(x+width, y+height, z).color(r, g, b, 1.0f).next();
+        buffer.vertex(x+width, y, z).color(r, g, b, 1.0f).next();
+        buffer.vertex(x, y, z).color(r, g, b, 1.0f).next();
         tess.draw();
         GL11.glEnable(GL11.GL_TEXTURE_2D);
     }
@@ -133,8 +133,8 @@ public class ScreenDrawing {
         MinecraftClient.getInstance().getTextureManager().bindTexture(tex);
         
         Tessellator tess = Tessellator.getInstance();
-        BufferBuilder buffer = tess.getBufferBuilder();
-        buffer.begin(GL11.GL_QUADS, VertexFormats.POSITION_UV);
+        BufferBuilder buffer = tess.getBuffer();
+        buffer.begin(GL11.GL_QUADS, VertexFormats.POSITION_TEXTURE);
         buffer.vertex(x, y+height, 0.0f).texture(u1, v2).next();
         buffer.vertex(x+width, y+height, 0.0f).texture(u2, v2).next();
         buffer.vertex(x+width, y, 0.0f).texture(u2, v1).next();
