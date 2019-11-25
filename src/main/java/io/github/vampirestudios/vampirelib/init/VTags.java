@@ -25,6 +25,7 @@
 package io.github.vampirestudios.vampirelib.init;
 
 import net.minecraft.item.Item;
+import net.minecraft.tag.BlockTags;
 import net.minecraft.tag.ItemTags;
 import net.minecraft.tag.Tag;
 import net.minecraft.util.Identifier;

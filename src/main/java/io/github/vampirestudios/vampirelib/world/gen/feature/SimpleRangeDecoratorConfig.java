@@ -22,12 +22,15 @@
  * SOFTWARE.
  */
 
-package io.github.vampirestudios.vampirelib.blocks;
+package io.github.vampirestudios.vampirelib.world.gen.feature;
 
-import net.minecraft.block.FenceGateBlock;
+import net.minecraft.world.gen.decorator.RangeDecoratorConfig;
 
-public class FenceGateBaseBlock extends FenceGateBlock {
-    public FenceGateBaseBlock(Settings block$Settings_1) {
-        super(block$Settings_1);
+public class SimpleRangeDecoratorConfig extends RangeDecoratorConfig {
+
+    // count = veins per chunk
+    public SimpleRangeDecoratorConfig(int count, int min, int max) {
+        super(count, min, min, max);
     }
+
 }

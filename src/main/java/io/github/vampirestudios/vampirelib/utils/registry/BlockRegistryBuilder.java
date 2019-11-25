@@ -25,6 +25,8 @@
 package io.github.vampirestudios.vampirelib.utils.registry;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.FenceBlock;
+import net.minecraft.block.FenceGateBlock;
 import net.minecraft.block.PressurePlateBlock;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.util.Identifier;
@@ -83,7 +85,7 @@ public class BlockRegistryBuilder {
      * @return an instance of this class
      */
     public BlockRegistryBuilder fence() {
-        Block fence = new FenceBaseBlock(Block.Settings.copy(baseBlock));
+        Block fence = new FenceBlock(Block.Settings.copy(baseBlock));
         RegistryUtils.register(fence, new Identifier(name.getNamespace(), name.getPath() + "_fence"));
         return this;
     }
@@ -93,7 +95,7 @@ public class BlockRegistryBuilder {
      * @return an instance of this class
      */
     public BlockRegistryBuilder fenceGate() {
-        RegistryUtils.register(new FenceGateBaseBlock(Block.Settings.copy(baseBlock)), new Identifier(name.getNamespace(), name.getPath() + "_fence_gate"), ItemGroup.REDSTONE);
+        RegistryUtils.register(new FenceGateBlock(Block.Settings.copy(baseBlock)), new Identifier(name.getNamespace(), name.getPath() + "_fence_gate"), ItemGroup.REDSTONE);
         return this;
     }
 

@@ -22,27 +22,39 @@
  * SOFTWARE.
  */
 
-package io.github.vampirestudios.vampirelib.enums;
+package io.github.vampirestudios.vampirelib.utils.registry;
 
 import net.minecraft.util.StringIdentifiable;
 
-public enum SidingType implements StringIdentifiable {
-    SINGLE("single"),
-    DOUBLE("double"),
-    CORNER_RIGHT("corner_right"),
-    CORNER_LEFT("corner_left");
+import java.util.ArrayList;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
-    private final String name;
+public abstract class WoodTypeRegistry implements StringIdentifiable {
+    public static ArrayList<WoodType> woodTypes = new ArrayList<>();
 
-    SidingType(String name) {
-        this.name = name;
+    private static Queue<ModdedTypeListener> listeners = new ConcurrentLinkedQueue<>();
+
+    static WoodType registerVanilla(WoodType woodType) {
+        woodTypes.add(woodType);
+        System.out.println(woodType.getIdentifier().toString());
+        return woodType;
     }
 
-    public String toString() {
-        return this.name;
+    public static WoodType registerModded(WoodType woodType, float hardness, float resistance) {
+        registerVanilla(woodType);
+
+        listeners.forEach(listener -> listener.onModdedWoodTypeRegistered(woodType, hardness, resistance));
+        System.out.println(woodType.getIdentifier().toString());
+        return woodType;
     }
 
-    public String asString() {
-        return this.name;
+    public static void registerModdedTypeListener(ModdedTypeListener listener) {
+        listeners.add(listener);
     }
+
+    public interface ModdedTypeListener {
+        void onModdedWoodTypeRegistered(WoodType woodType, float hardness, float resistance);
+    }
+
 }
