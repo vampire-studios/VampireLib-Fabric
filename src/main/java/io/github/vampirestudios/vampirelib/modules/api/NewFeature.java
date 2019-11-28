@@ -22,18 +22,53 @@
  * SOFTWARE.
  */
 
-package io.github.vampirestudios.vampirelib.blocks;
+package io.github.vampirestudios.vampirelib.modules.api;
 
-import net.minecraft.block.Blocks;
-import net.minecraft.block.ChestBlock;
-import net.minecraft.block.entity.BlockEntityType;
+import me.sargunvohra.mcmods.autoconfig1u.ConfigData;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.util.Identifier;
 
-public class SimpleChestBaseBlock extends ChestBlock {
-    public final Identifier type;
+public abstract class NewFeature<T extends ConfigData> {
 
-    public SimpleChestBaseBlock(Identifier type) {
-        super(Settings.copy(Blocks.CHEST), () -> BlockEntityType.CHEST);
-        this.type = type;
+    public Identifier name;
+    public String description;
+    private static boolean enabled = true;
+    public EnvType envType;
+
+    public NewFeature(Identifier name, String description, EnvType envType) {
+        this.name = name;
+        this.description = description;
+        this.envType = envType;
     }
+
+    public NewFeature(Identifier name, String description) {
+        this(name, description, EnvType.SERVER);
+    }
+
+    public void setEnabled(boolean enabledIn) {
+        enabled = enabledIn;
+    }
+
+    public void init() {
+
+    }
+
+    @Environment(EnvType.CLIENT)
+    public void initClient() {
+
+    }
+
+    public T getConfig() {
+        return null;
+    }
+
+    public static boolean isEnabled() {
+        return enabled;
+    }
+
+    public EnvType getEnvType() {
+        return envType;
+    }
+
 }

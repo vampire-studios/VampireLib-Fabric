@@ -4,19 +4,12 @@
   "compatibilityLevel": "JAVA_8",
   "mixins": [
     "block.MixinBlock",
-    "entity.LivingEntityMixin",
     "entity.damage.MixinDamageTracker",
     "item.MixinBookOnLectern",
-    "server.network.ServerPlayNetworkHandlerMixin",
-    "entity.AbstractTraderEntityMixin",
-    "entity.VillagerEntityMixin",
-    "village.TradeFactoryMixin",
     "block.StructureBlockBlockEntityMixin"
   ],
   "client": [
-    "client.MixinClientPlayNetworkHandler",
-//    "client.MixinWorldRenderer",
-    "client.VillagerResemblingModelMixin"
+    "client.MixinClientPlayNetworkHandler"
   ],
   "injectors": {
     "defaultRequire": 1

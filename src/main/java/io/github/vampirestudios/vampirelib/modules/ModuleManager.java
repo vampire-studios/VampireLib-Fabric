@@ -1,7 +1,7 @@
 /*
- * The MIT License (MIT)
+ * MIT License
  *
- * Copyright (c) 2019 Team Abnormals
+ * Copyright (c) 2019 Vampire Studios
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -10,30 +10,32 @@
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
  *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 
-package io.github.vampirestudios.vampirelib.module_api;
+package io.github.vampirestudios.vampirelib.modules;
 
-import io.github.vampirestudios.vampirelib.module_api.api.Feature;
-import io.github.vampirestudios.vampirelib.module_api.api.Module;
-import io.github.vampirestudios.vampirelib.module_api.api.NewFeature;
-import io.github.vampirestudios.vampirelib.module_api.api.SubModule;
-import io.github.vampirestudios.vampirelib.module_api.utils.ConsoleUtils;
+import io.github.vampirestudios.vampirelib.VampireLib;
+import io.github.vampirestudios.vampirelib.modules.api.Feature;
+import io.github.vampirestudios.vampirelib.modules.api.Module;
+import io.github.vampirestudios.vampirelib.modules.api.NewFeature;
+import io.github.vampirestudios.vampirelib.modules.api.SubModule;
+import io.github.vampirestudios.vampirelib.modules.utils.ConsoleUtils;
 import me.sargunvohra.mcmods.autoconfig1u.AutoConfig;
 import me.sargunvohra.mcmods.autoconfig1u.serializer.GsonConfigSerializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.registry.Registry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -47,8 +49,12 @@ public class ModuleManager {
     public static final Map<Module, Identifier> CLIENT_MODULES = new HashMap<>();
     private static Logger LOGGER = LogManager.getFormatterLogger("[VampireLib: Module Loader]");
 
-    public static ModuleManager createModuleManager() {
-        return new ModuleManager();
+    public static ModuleManager createModuleManager(Identifier modIdentifier) {
+        return Registry.register(VampireLib.MODULE_MANAGERS, modIdentifier, new ModuleManager());
+    }
+
+    public static ModuleManager getModuleManager(Identifier modIdentifier) {
+        return VampireLib.MODULE_MANAGERS.get(modIdentifier);
     }
 
     public void registerModule(Module module) {
@@ -58,6 +64,12 @@ public class ModuleManager {
         if (module.isConfigAvailable() && module.getConfig() != null) {
             AutoConfig.register(module.getConfig(), GsonConfigSerializer::new);
             LOGGER.info(String.format("Registered a config for: %s", module.getRegistryName()));
+        }
+        for (NewFeature features : module.getNewFeatures()) {
+            if (features.getConfig() != null) {
+                AutoConfig.register(features.getConfig().getClass(), GsonConfigSerializer::new);
+                LOGGER.info(String.format("Registered a config for: %s", features.name));
+            }
         }
     }
 
@@ -85,9 +97,15 @@ public class ModuleManager {
             AutoConfig.register(module.getConfig(), GsonConfigSerializer::new);
             LOGGER.info(String.format("Registered a config for: %s", module.getRegistryName()));
         }
+        for (NewFeature features : module.getNewClientFeatures()) {
+            if (features.getConfig() != null) {
+                AutoConfig.register(features.getConfig().getClass(), GsonConfigSerializer::new);
+                LOGGER.info(String.format("Registered a config for: %s", features.name));
+            }
+        }
     }
 
-    public static void init() {
+    public void init() {
         SERVER_MODULES.keySet().forEach(module -> {
             module.init();
             module.getServerFeatures().forEach(Feature::init);
@@ -111,7 +129,7 @@ public class ModuleManager {
     }
 
     @Environment(EnvType.CLIENT)
-    public static void initClient() {
+    public void initClient() {
         CLIENT_MODULES.keySet().forEach(module -> {
             module.initClient();
             module.getClientFeatures().forEach(Feature::initClient);

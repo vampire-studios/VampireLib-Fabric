@@ -1,7 +1,7 @@
 /*
- * The MIT License (MIT)
+ * MIT License
  *
- * Copyright (c) 2019 Team Abnormals
+ * Copyright (c) 2019 Vampire Studios
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -10,19 +10,19 @@
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
  *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 
-package io.github.vampirestudios.vampirelib.module_api.api;
+package io.github.vampirestudios.vampirelib.modules.api;
 
 import me.sargunvohra.mcmods.autoconfig1u.ConfigData;
 import net.fabricmc.api.EnvType;
@@ -48,27 +48,16 @@ public abstract class Module {
     private List<SubModule> serverSubModules = new ArrayList<>();
     private List<SubModule> clientSubModules = new ArrayList<>();
 
-    public Module(String description, boolean hasConfig) {
-        this.description = description;
-        this.hasConfig = hasConfig;
-    }
-
     public Module(Identifier name, String description, boolean hasConfig) {
         this.registryName = name;
         this.description = description;
         this.hasConfig = hasConfig;
     }
 
-    public Module(String registryName, String description, boolean hasConfig) {
-        this.registryName = Identifier.tryParse(registryName);
+    public Module(Identifier name, String description) {
+        this.registryName = name;
         this.description = description;
-        this.hasConfig = hasConfig;
-    }
-
-    public Module(String modId, String name, String description, boolean hasConfig) {
-        this.registryName = new Identifier(modId, name);
-        this.description = description;
-        this.hasConfig = hasConfig;
+        this.hasConfig = false;
     }
 
     public String getDescription() {
@@ -184,4 +173,5 @@ public abstract class Module {
     public List<NewFeature> getNewClientFeatures() {
         return newClientFeatures;
     }
+
 }
