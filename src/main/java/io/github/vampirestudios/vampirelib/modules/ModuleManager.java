@@ -27,7 +27,7 @@ package io.github.vampirestudios.vampirelib.modules;
 import io.github.vampirestudios.vampirelib.VampireLib;
 import io.github.vampirestudios.vampirelib.modules.api.Feature;
 import io.github.vampirestudios.vampirelib.modules.api.Module;
-import io.github.vampirestudios.vampirelib.modules.api.NewFeature;
+import io.github.vampirestudios.vampirelib.modules.api.NonFeatureModule;
 import io.github.vampirestudios.vampirelib.modules.api.SubModule;
 import io.github.vampirestudios.vampirelib.modules.utils.ConsoleUtils;
 import me.sargunvohra.mcmods.autoconfig1u.AutoConfig;
@@ -36,17 +36,17 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
+import net.minecraft.util.registry.SimpleRegistry;
+import org.apache.commons.lang3.text.WordUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class ModuleManager {
 
-    public static final Map<Module, Identifier> MODULES = new HashMap<>();
-    public static final Map<Module, Identifier> SERVER_MODULES = new HashMap<>();
-    public static final Map<Module, Identifier> CLIENT_MODULES = new HashMap<>();
+    public static final Registry<Module> MODULES = new SimpleRegistry<>();
+    public static final Registry<Module> SERVER_MODULES = new SimpleRegistry<>();
+    public static final Registry<Module> CLIENT_MODULES = new SimpleRegistry<>();
+    public static final Registry<NonFeatureModule> NON_FEATURE_MODULES = new SimpleRegistry<>();
     private static Logger LOGGER = LogManager.getFormatterLogger("[VampireLib: Module Loader]");
 
     public static ModuleManager createModuleManager(Identifier modIdentifier) {
@@ -58,55 +58,44 @@ public class ModuleManager {
     }
 
     public void registerModule(Module module) {
-        if (!MODULES.containsKey(module)) {
-            MODULES.put(module, module.getRegistryName());
+        if (!MODULES.containsId(module.getRegistryName())) {
+            Registry.register(MODULES, module.getRegistryName(), module);
         }
         if (module.isConfigAvailable() && module.getConfig() != null) {
             AutoConfig.register(module.getConfig(), GsonConfigSerializer::new);
             LOGGER.info(String.format("Registered a config for: %s", module.getRegistryName()));
-        }
-        for (NewFeature features : module.getNewFeatures()) {
-            if (features.getConfig() != null) {
-                AutoConfig.register(features.getConfig().getClass(), GsonConfigSerializer::new);
-                LOGGER.info(String.format("Registered a config for: %s", features.name));
-            }
         }
     }
 
+    public void registerNonFeatureModule(NonFeatureModule module) {
+        if (!NON_FEATURE_MODULES.containsId(module.getRegistryName())) {
+            Registry.register(NON_FEATURE_MODULES, module.getRegistryName(), module);
+        }
+        ModuleConfig.load(WordUtils.capitalize(module.getRegistryName().getPath()), module.getRegistryName().getPath());
+    }
+
     public void registerServerModule(Module module) {
-        if (!SERVER_MODULES.containsKey(module)) {
-            SERVER_MODULES.put(module, module.getRegistryName());
+        if (!SERVER_MODULES.containsId(module.getRegistryName())) {
+            Registry.register(SERVER_MODULES, module.getRegistryName(), module);
         }
         if (module.isConfigAvailable() && module.getConfig() != null) {
             AutoConfig.register(module.getConfig(), GsonConfigSerializer::new);
             LOGGER.info(String.format("Registered a config for: %s", module.getRegistryName()));
-        }
-        for (NewFeature features : module.getNewServerFeatures()) {
-            if (features.getConfig() != null) {
-                AutoConfig.register(features.getConfig().getClass(), GsonConfigSerializer::new);
-                LOGGER.info(String.format("Registered a config for: %s", features.name));
-            }
         }
     }
 
     public void registerClientModule(Module module) {
-        if (!CLIENT_MODULES.containsKey(module)) {
-            CLIENT_MODULES.put(module, module.getRegistryName());
+        if (!SERVER_MODULES.containsId(module.getRegistryName())) {
+            Registry.register(SERVER_MODULES, module.getRegistryName(), module);
         }
         if (module.isConfigAvailable() && module.getConfig() != null) {
             AutoConfig.register(module.getConfig(), GsonConfigSerializer::new);
             LOGGER.info(String.format("Registered a config for: %s", module.getRegistryName()));
         }
-        for (NewFeature features : module.getNewClientFeatures()) {
-            if (features.getConfig() != null) {
-                AutoConfig.register(features.getConfig().getClass(), GsonConfigSerializer::new);
-                LOGGER.info(String.format("Registered a config for: %s", features.name));
-            }
-        }
     }
 
     public void init() {
-        SERVER_MODULES.keySet().forEach(module -> {
+        SERVER_MODULES.forEach(module -> {
             module.init();
             module.getServerFeatures().forEach(Feature::init);
             module.getServerSubModules().forEach(SubModule::init);
@@ -115,7 +104,7 @@ public class ModuleManager {
             module.getSubModules().forEach(SubModule::init);
             module.getSubModules().forEach(subModule -> subModule.getFeatures().forEach(Feature::init));
         });
-        MODULES.keySet().forEach(module -> {
+        MODULES.forEach(module -> {
             module.init();
             module.getServerFeatures().forEach(Feature::init);
             module.getServerSubModules().forEach(SubModule::init);
@@ -124,13 +113,14 @@ public class ModuleManager {
             module.getSubModules().forEach(SubModule::init);
             module.getSubModules().forEach(subModule -> subModule.getFeatures().forEach(Feature::init));
         });
+        NON_FEATURE_MODULES.forEach(NonFeatureModule::init);
 
         ConsoleUtils.logServerModules();
     }
 
     @Environment(EnvType.CLIENT)
     public void initClient() {
-        CLIENT_MODULES.keySet().forEach(module -> {
+        CLIENT_MODULES.forEach(module -> {
             module.initClient();
             module.getClientFeatures().forEach(Feature::initClient);
             module.getClientSubModules().forEach(SubModule::initClient);
@@ -140,7 +130,7 @@ public class ModuleManager {
             module.getSubModules().forEach(SubModule::initClient);
             module.getSubModules().forEach(subModule -> subModule.getFeatures().forEach(Feature::initClient));
         });
-        MODULES.keySet().forEach(module -> {
+        MODULES.forEach(module -> {
             module.initClient();
             module.getClientFeatures().forEach(Feature::initClient);
             module.getClientSubModules().forEach(SubModule::initClient);
@@ -150,6 +140,7 @@ public class ModuleManager {
             module.getSubModules().forEach(SubModule::initClient);
             module.getSubModules().forEach(subModule -> subModule.getFeatures().forEach(Feature::initClient));
         });
+        NON_FEATURE_MODULES.forEach(NonFeatureModule::initClient);
 
         ConsoleUtils.logClientModules();
     }

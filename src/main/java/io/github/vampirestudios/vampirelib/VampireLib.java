@@ -37,14 +37,14 @@ public class VampireLib implements ModInitializer, ClientModInitializer {
 
     public static String MOD_ID = "vampirelib";
     public static String MOD_NAME = "VampireLib";
-    public static String MOD_VERSION = "1.3.2+1.15-pre2-build.1";
+    public static String MOD_VERSION = "1.3.3+1.15.1";
     public static final Logger LOGGER = LogManager.getLogger(MOD_NAME);
 
     public static final Registry<ModuleManager> MODULE_MANAGERS = new DefaultedRegistry<>("vampirelib:module_managers");
 
     @Override
     public void onInitialize() {
-        LOGGER.info("Your running " + MOD_NAME + " v" + MOD_VERSION);
+        LOGGER.info("You're running " + MOD_NAME + " v" + MOD_VERSION);
 
         BlockChiseler.setup();
         MODULE_MANAGERS.forEach(ModuleManager::init);

@@ -34,16 +34,13 @@ import java.util.List;
 
 public abstract class Module {
 
-    public String description;
-    public boolean hasConfig;
-    public boolean enabled = true;
-    public Identifier registryName;
+    private String description;
+    private boolean hasConfig;
+    private boolean enabled = true;
+    private Identifier registryName;
     private List<Feature> features = new ArrayList<>();
     private List<Feature> serverFeatures = new ArrayList<>();
     private List<Feature> clientFeatures = new ArrayList<>();
-    private List<NewFeature> newFeatures = new ArrayList<>();
-    private List<NewFeature> newServerFeatures = new ArrayList<>();
-    private List<NewFeature> newClientFeatures = new ArrayList<>();
     private List<SubModule> subModules = new ArrayList<>();
     private List<SubModule> serverSubModules = new ArrayList<>();
     private List<SubModule> clientSubModules = new ArrayList<>();
@@ -80,6 +77,10 @@ public abstract class Module {
         return enabled;
     }
 
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
     public void init() {
 
     }
@@ -105,21 +106,6 @@ public abstract class Module {
 
     public <T extends Feature> T registerServerFeature(T feature) {
         this.serverFeatures.add(feature);
-        return feature;
-    }
-
-    public <T extends NewFeature> T registerNewFeature(T feature) {
-        this.newFeatures.add(feature);
-        return feature;
-    }
-
-    public <T extends NewFeature> T registerNewClientFeature(T feature) {
-        this.newClientFeatures.add(feature);
-        return feature;
-    }
-
-    public <T extends NewFeature> T registerNewServerFeature(T feature) {
-        this.newServerFeatures.add(feature);
         return feature;
     }
 
@@ -160,18 +146,6 @@ public abstract class Module {
 
     public List<SubModule> getClientSubModules() {
         return clientSubModules;
-    }
-
-    public List<NewFeature> getNewFeatures() {
-        return newFeatures;
-    }
-
-    public List<NewFeature> getNewServerFeatures() {
-        return newServerFeatures;
-    }
-
-    public List<NewFeature> getNewClientFeatures() {
-        return newClientFeatures;
     }
 
 }

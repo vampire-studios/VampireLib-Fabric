@@ -39,16 +39,16 @@ public class ConsoleUtils {
 
     public static void logServerModules() {
         String moduleText;
-        if (MODULES.size() > 1) {
+        if (MODULES.stream().count() > 1) {
             moduleText = "Loading %d modules:";
         } else {
             moduleText = "Loading %d module:";
         }
 
-        LOGGER.info("[" + ModuleManager.class.getSimpleName() + "] " + moduleText, MODULES.keySet().size());
+        LOGGER.info("[" + ModuleManager.class.getSimpleName() + "] " + moduleText, MODULES.stream().count());
 
-        for (Module candidate : MODULES.keySet()) {
-            LOGGER.info(String.format(" - %s - Enabled: %s", candidate.getRegistryName(), candidate.enabled ? "true" : "false"));
+        for (Module candidate : MODULES) {
+            LOGGER.info(String.format(" - %s - Enabled: %s", candidate.getRegistryName(), candidate.isEnabled() ? "true" : "false"));
 
             if (!candidate.getFeatures().isEmpty()) {
                 String featureText;
@@ -60,7 +60,7 @@ public class ConsoleUtils {
 
                 if (candidate.getFeatures().size() > 1) {
                     LOGGER.info(String.format("     [" + ModuleManager.class.getSimpleName() + "] " + featureText, candidate.getFeatures().size(),
-                            candidate.registryName.toString()));
+                            candidate.getRegistryName().toString()));
                     for (Feature feature : candidate.getFeatures()) {
                         LOGGER.info(String.format("     - %s - Enabled: %s", feature.name, feature.isEnabled() ? "true" : "false"));
                     }
@@ -77,7 +77,7 @@ public class ConsoleUtils {
 
                 if (candidate.getSubModules().size() > 1) {
                     LOGGER.info(String.format("     [" + ModuleManager.class.getSimpleName() + "] " + featureText, candidate.getSubModules().size(),
-                            candidate.registryName.toString()));
+                            candidate.getRegistryName().toString()));
                     for (SubModule subModule : candidate.getSubModules()) {
                         LOGGER.info(String.format("         - %s - Enabled: %s", subModule.name, subModule.enabled ? "true" : "false"));
 
@@ -105,16 +105,16 @@ public class ConsoleUtils {
 
     public static void logClientModules() {
         String moduleText;
-        if (MODULES.size() > 1) {
+        if (MODULES.stream().count() > 1) {
             moduleText = "Loading %d client modules:";
         } else {
             moduleText = "Loading %d client module:";
         }
 
-        LOGGER.info("[" + ModuleManager.class.getSimpleName() + "] " + moduleText, MODULES.keySet().size());
+        LOGGER.info("[" + ModuleManager.class.getSimpleName() + "] " + moduleText, MODULES.stream().count());
 
-        for (Module candidate : MODULES.keySet()) {
-            LOGGER.info(String.format(" - %s - Enabled: %s", candidate.getRegistryName(), candidate.enabled ? "true" : "false"));
+        for (Module candidate : MODULES) {
+            LOGGER.info(String.format(" - %s - Enabled: %s", candidate.getRegistryName(), candidate.isEnabled() ? "true" : "false"));
 
             if (!candidate.getFeatures().isEmpty()) {
                 String featureText;
@@ -126,7 +126,7 @@ public class ConsoleUtils {
 
                 if (candidate.getFeatures().size() > 1) {
                     LOGGER.info(String.format("     [" + ModuleManager.class.getSimpleName() + "] " + featureText, candidate.getFeatures().size(),
-                            candidate.registryName.toString()));
+                            candidate.getRegistryName().toString()));
                     for (Feature feature : candidate.getFeatures()) {
                         LOGGER.info(String.format("     - %s - Enabled: %s", feature.name, feature.isEnabled() ? "true" : "false"));
                     }
@@ -146,7 +146,7 @@ public class ConsoleUtils {
 
                 if (candidate.getSubModules().size() > 1) {
                     LOGGER.info(String.format("     [" + ModuleManager.class.getSimpleName() + "] " + featureText, candidate.getSubModules().size(),
-                            candidate.registryName.toString()));
+                            candidate.getRegistryName().toString()));
                     for (SubModule subModule : candidate.getSubModules()) {
                         LOGGER.info(String.format("         - %s - Enabled: %s", subModule.name, subModule.enabled ? "true" : "false"));
 
