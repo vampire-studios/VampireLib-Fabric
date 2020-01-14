@@ -71,7 +71,7 @@ public class ModuleManager {
         if (!NON_FEATURE_MODULES.containsId(module.getRegistryName())) {
             Registry.register(NON_FEATURE_MODULES, module.getRegistryName(), module);
         }
-        ModuleConfig.load(WordUtils.capitalize(module.getRegistryName().getPath()), module.getRegistryName().getPath());
+        ModuleConfig.load(module, WordUtils.capitalize(module.getRegistryName().getNamespace()));
     }
 
     public void registerServerModule(Module module) {
