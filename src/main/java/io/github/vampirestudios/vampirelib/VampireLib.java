@@ -37,7 +37,7 @@ public class VampireLib implements ModInitializer, ClientModInitializer {
 
     public static String MOD_ID = "vampirelib";
     public static String MOD_NAME = "VampireLib";
-    public static String MOD_VERSION = "1.3.3+1.15.1";
+    public static String MOD_VERSION = "1.3.3+1.15.1-build.2";
     public static final Logger LOGGER = LogManager.getLogger(MOD_NAME);
 
     public static final Registry<ModuleManager> MODULE_MANAGERS = new DefaultedRegistry<>("vampirelib:module_managers");
