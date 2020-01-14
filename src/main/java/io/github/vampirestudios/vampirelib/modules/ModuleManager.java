@@ -37,7 +37,6 @@ import net.fabricmc.api.Environment;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.SimpleRegistry;
-import org.apache.commons.lang3.text.WordUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -47,6 +46,8 @@ public class ModuleManager {
     public static final Registry<Module> SERVER_MODULES = new SimpleRegistry<>();
     public static final Registry<Module> CLIENT_MODULES = new SimpleRegistry<>();
     public static final Registry<NonFeatureModule> NON_FEATURE_MODULES = new SimpleRegistry<>();
+    public static final Registry<NonFeatureModule> CLIENT_NON_FEATURE_MODULES = new SimpleRegistry<>();
+    public static final Registry<NonFeatureModule> SERVER_NON_FEATURE_MODULES = new SimpleRegistry<>();
     private static Logger LOGGER = LogManager.getFormatterLogger("[VampireLib: Module Loader]");
 
     public static ModuleManager createModuleManager(Identifier modIdentifier) {
@@ -72,6 +73,20 @@ public class ModuleManager {
             Registry.register(NON_FEATURE_MODULES, module.getRegistryName(), module);
         }
         ModuleConfig.load(module, WordUtils.capitalize(module.getRegistryName().getNamespace()));
+    }
+
+    public void registerClientNonFeatureModule(NonFeatureModule module) {
+        if (!CLIENT_NON_FEATURE_MODULES.containsId(module.getRegistryName())) {
+            Registry.register(CLIENT_NON_FEATURE_MODULES, module.getRegistryName(), module);
+        }
+        ModuleConfig.load(module.getName(), module.getRegistryName().getPath());
+    }
+
+    public void registerServerNonFeatureModule(NonFeatureModule module) {
+        if (!SERVER_NON_FEATURE_MODULES.containsId(module.getRegistryName())) {
+            Registry.register(SERVER_NON_FEATURE_MODULES, module.getRegistryName(), module);
+        }
+        ModuleConfig.load(module.getName(), module.getRegistryName().getPath());
     }
 
     public void registerServerModule(Module module) {
@@ -114,6 +129,7 @@ public class ModuleManager {
             module.getSubModules().forEach(subModule -> subModule.getFeatures().forEach(Feature::init));
         });
         NON_FEATURE_MODULES.forEach(NonFeatureModule::init);
+        SERVER_NON_FEATURE_MODULES.forEach(NonFeatureModule::initClient);
 
         ConsoleUtils.logServerModules();
     }
@@ -141,6 +157,7 @@ public class ModuleManager {
             module.getSubModules().forEach(subModule -> subModule.getFeatures().forEach(Feature::initClient));
         });
         NON_FEATURE_MODULES.forEach(NonFeatureModule::initClient);
+        CLIENT_NON_FEATURE_MODULES.forEach(NonFeatureModule::initClient);
 
         ConsoleUtils.logClientModules();
     }
