@@ -38,24 +38,24 @@ public class ModuleConfig {
 	private static final Jankson JANKSON = Jankson.builder().build();
 
 	public static void load(NonFeatureModule module, String modName) {
-		File configFile = new File("config/quark/" + module.getRegistryName().getPath() + ".json5");
+		File configFile = new File("config/" + module.getRegistryName().getNamespace() + ".json5");
 		JsonObject config = new JsonObject();
 		if(configFile.exists()) {
 			try {
 				config = JANKSON.load(configFile);
-				loadFrom(module, config);
-				writeConfigFile(module, modName, configFile, config);
+				loadFrom(config);
+				writeConfigFile(modName, configFile, config);
 			} catch (IOException | SyntaxError e) {
 				VampireLib.LOGGER.error(modName + " config could not be loaded. Default values will be used.", e);
 			}
 		} else {
-			saveTo(module, config);
-			writeConfigFile(module, modName, configFile, config);
+			saveTo(config);
+			writeConfigFile(modName, configFile, config);
 		}
 	}
 
-	private static void writeConfigFile(NonFeatureModule module, String modName, File file, JsonObject config) {
-		saveTo(module, config);
+	private static void writeConfigFile(String modName, File file, JsonObject config) {
+		saveTo(config);
 		try(OutputStream out = new BufferedOutputStream(new FileOutputStream(file))) {
 			out.write(config.toJson(JsonGrammar.JANKSON).getBytes(StandardCharsets.UTF_8));
 		} catch (IOException e) {
@@ -63,15 +63,19 @@ public class ModuleConfig {
 		}
 	}
 
-	public static void loadFrom(NonFeatureModule module, JsonObject obj) {
-		JsonObject moduleConfig = getObjectOrEmpty(module.getRegistryName().toString(), obj);
-		module.setEnabled(moduleConfig);
-		module.configure(moduleConfig);
+	public static void loadFrom(JsonObject obj) {
+		for(NonFeatureModule module : ModuleManager.NON_FEATURE_MODULES) {
+			JsonObject moduleConfig = getObjectOrEmpty(module.getRegistryName().toString(), obj);
+			module.setEnabled(moduleConfig);
+			module.configure(moduleConfig);
+		}
 	}
 
-	public static void saveTo(NonFeatureModule module, JsonObject obj) {
-		JsonObject moduleConfig = module.getConfig();
-		obj.put(module.getRegistryName().toString(), moduleConfig);
+	public static void saveTo(JsonObject obj) {
+		for(NonFeatureModule module : ModuleManager.NON_FEATURE_MODULES) {
+			JsonObject moduleConfig = module.getConfig();
+			obj.put(module.getRegistryName().toString(), moduleConfig);
+		}
 	}
 
 	public static JsonObject getObjectOrEmpty(String key, JsonObject on) {

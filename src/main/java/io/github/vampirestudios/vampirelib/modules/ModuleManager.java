@@ -37,6 +37,7 @@ import net.fabricmc.api.Environment;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.SimpleRegistry;
+import org.apache.commons.lang3.text.WordUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -79,14 +80,14 @@ public class ModuleManager {
         if (!CLIENT_NON_FEATURE_MODULES.containsId(module.getRegistryName())) {
             Registry.register(CLIENT_NON_FEATURE_MODULES, module.getRegistryName(), module);
         }
-        ModuleConfig.load(module.getName(), module.getRegistryName().getPath());
+        ModuleConfig.load(module, WordUtils.capitalize(module.getRegistryName().getNamespace()));
     }
 
     public void registerServerNonFeatureModule(NonFeatureModule module) {
         if (!SERVER_NON_FEATURE_MODULES.containsId(module.getRegistryName())) {
             Registry.register(SERVER_NON_FEATURE_MODULES, module.getRegistryName(), module);
         }
-        ModuleConfig.load(module.getName(), module.getRegistryName().getPath());
+        ModuleConfig.load(module, WordUtils.capitalize(module.getRegistryName().getNamespace()));
     }
 
     public void registerServerModule(Module module) {
