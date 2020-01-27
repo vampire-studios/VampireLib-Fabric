@@ -18,6 +18,9 @@
   "entrypoints": {
     "main": [
       "io.github.vampirestudios.vampirelib.VampireLib"
+    ],
+    "client": [
+      "io.github.vampirestudios.vampirelib.VampireLibClient"
     ]
   },
   "mixins": [
