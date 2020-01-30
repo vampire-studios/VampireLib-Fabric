@@ -110,55 +110,73 @@ public class ModuleManager {
         }
     }
 
-    public void init() {
+    public void init(String modId) {
         SERVER_MODULES.forEach(module -> {
-            module.init();
-            module.getServerFeatures().forEach(Feature::init);
-            module.getServerSubModules().forEach(SubModule::init);
-            module.getServerSubModules().forEach(subModule -> subModule.getServerFeatures().forEach(Feature::init));
-            module.getFeatures().forEach(Feature::init);
-            module.getSubModules().forEach(SubModule::init);
-            module.getSubModules().forEach(subModule -> subModule.getFeatures().forEach(Feature::init));
+            if (module.getRegistryName().getNamespace().equals(modId)) {
+                module.init();
+                module.getServerFeatures().forEach(Feature::init);
+                module.getServerSubModules().forEach(SubModule::init);
+                module.getServerSubModules().forEach(subModule -> subModule.getServerFeatures().forEach(Feature::init));
+                module.getFeatures().forEach(Feature::init);
+                module.getSubModules().forEach(SubModule::init);
+                module.getSubModules().forEach(subModule -> subModule.getFeatures().forEach(Feature::init));
+            }
         });
         MODULES.forEach(module -> {
-            module.init();
-            module.getServerFeatures().forEach(Feature::init);
-            module.getServerSubModules().forEach(SubModule::init);
-            module.getServerSubModules().forEach(subModule -> subModule.getServerFeatures().forEach(Feature::init));
-            module.getFeatures().forEach(Feature::init);
-            module.getSubModules().forEach(SubModule::init);
-            module.getSubModules().forEach(subModule -> subModule.getFeatures().forEach(Feature::init));
+            if (module.getRegistryName().getNamespace().equals(modId)) {
+                module.init();
+                module.getServerFeatures().forEach(Feature::init);
+                module.getServerSubModules().forEach(SubModule::init);
+                module.getServerSubModules().forEach(subModule -> subModule.getServerFeatures().forEach(Feature::init));
+                module.getFeatures().forEach(Feature::init);
+                module.getSubModules().forEach(SubModule::init);
+                module.getSubModules().forEach(subModule -> subModule.getFeatures().forEach(Feature::init));
+            }
         });
-        NON_FEATURE_MODULES.forEach(NonFeatureModule::init);
-        SERVER_NON_FEATURE_MODULES.forEach(NonFeatureModule::initClient);
+        NON_FEATURE_MODULES.forEach(nonFeatureModule -> {
+            if (nonFeatureModule.getRegistryName().getNamespace().equals(modId)) {
+                nonFeatureModule.init();
+            }
+        });
+        SERVER_NON_FEATURE_MODULES.forEach(nonFeatureModule -> {
+            if (nonFeatureModule.getRegistryName().getNamespace().equals(modId)) nonFeatureModule.init();
+        });
 
         ConsoleUtils.logServerModules();
     }
 
     @Environment(EnvType.CLIENT)
-    public void initClient() {
+    public void initClient(String modId) {
         CLIENT_MODULES.forEach(module -> {
-            module.initClient();
-            module.getClientFeatures().forEach(Feature::initClient);
-            module.getClientSubModules().forEach(SubModule::initClient);
-            module.getClientSubModules().forEach(subModule -> subModule.getClientFeatures().forEach(Feature::initClient));
-            System.out.println("Initializing old client features");
-            module.getFeatures().forEach(Feature::initClient);
-            module.getSubModules().forEach(SubModule::initClient);
-            module.getSubModules().forEach(subModule -> subModule.getFeatures().forEach(Feature::initClient));
+            if (module.getRegistryName().getNamespace().equals(modId)) {
+                module.initClient();
+                module.getClientFeatures().forEach(Feature::initClient);
+                module.getClientSubModules().forEach(SubModule::initClient);
+                module.getClientSubModules().forEach(subModule -> subModule.getClientFeatures().forEach(Feature::initClient));
+                System.out.println("Initializing old client features");
+                module.getFeatures().forEach(Feature::initClient);
+                module.getSubModules().forEach(SubModule::initClient);
+                module.getSubModules().forEach(subModule -> subModule.getFeatures().forEach(Feature::initClient));
+            }
         });
         MODULES.forEach(module -> {
-            module.initClient();
-            module.getClientFeatures().forEach(Feature::initClient);
-            module.getClientSubModules().forEach(SubModule::initClient);
-            module.getClientSubModules().forEach(subModule -> subModule.getClientFeatures().forEach(Feature::initClient));
-            System.out.println("Initializing old client features");
-            module.getFeatures().forEach(Feature::initClient);
-            module.getSubModules().forEach(SubModule::initClient);
-            module.getSubModules().forEach(subModule -> subModule.getFeatures().forEach(Feature::initClient));
+            if (module.getRegistryName().getNamespace().equals(modId)) {
+                module.initClient();
+                module.getClientFeatures().forEach(Feature::initClient);
+                module.getClientSubModules().forEach(SubModule::initClient);
+                module.getClientSubModules().forEach(subModule -> subModule.getClientFeatures().forEach(Feature::initClient));
+                System.out.println("Initializing old client features");
+                module.getFeatures().forEach(Feature::initClient);
+                module.getSubModules().forEach(SubModule::initClient);
+                module.getSubModules().forEach(subModule -> subModule.getFeatures().forEach(Feature::initClient));
+            }
         });
-        NON_FEATURE_MODULES.forEach(NonFeatureModule::initClient);
-        CLIENT_NON_FEATURE_MODULES.forEach(NonFeatureModule::initClient);
+        NON_FEATURE_MODULES.forEach(nonFeatureModule -> {
+            if (nonFeatureModule.getRegistryName().getNamespace().equals(modId)) nonFeatureModule.initClient();
+        });
+        CLIENT_NON_FEATURE_MODULES.forEach(nonFeatureModule -> {
+            if (nonFeatureModule.getRegistryName().getNamespace().equals(modId)) nonFeatureModule.initClient();
+        });
 
         ConsoleUtils.logClientModules();
     }

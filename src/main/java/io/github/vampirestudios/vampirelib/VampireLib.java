@@ -25,6 +25,7 @@
 package io.github.vampirestudios.vampirelib;
 
 import io.github.vampirestudios.vampirelib.modules.ModuleManager;
+import io.github.vampirestudios.vampirelib.utils.Rands;
 import io.github.vampirestudios.vampirelib.utils.registry.BlockChiseler;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.util.registry.DefaultedRegistry;
@@ -36,14 +37,14 @@ public class VampireLib implements ModInitializer {
 
     public static String MOD_ID = "vampirelib";
     public static String MOD_NAME = "VampireLib";
-    public static String MOD_VERSION = "1.3.3+1.15.1-build.5";
+    public static String MOD_VERSION = "1.3.4+1.15.2-build.1";
     public static final Logger LOGGER = LogManager.getLogger(MOD_NAME);
 
     public static final Registry<ModuleManager> MODULE_MANAGERS = new DefaultedRegistry<>("vampirelib:module_managers");
 
     @Override
     public void onInitialize() {
-        LOGGER.info("You're running " + MOD_NAME + " v" + MOD_VERSION);
+        LOGGER.info(Rands.chance(15) ? "Your are" : "You're" + " running " + MOD_NAME + " v" + MOD_VERSION);
 
         BlockChiseler.setup();
 //        MODULE_MANAGERS.forEach(ModuleManager::init);
