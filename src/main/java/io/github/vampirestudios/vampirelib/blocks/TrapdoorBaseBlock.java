@@ -27,7 +27,7 @@ package io.github.vampirestudios.vampirelib.blocks;
 import io.github.vampirestudios.vampirelib.api.Climbable;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.TrapdoorBlock;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
 
 public class TrapdoorBaseBlock extends TrapdoorBlock implements Climbable {
@@ -37,14 +37,12 @@ public class TrapdoorBaseBlock extends TrapdoorBlock implements Climbable {
 
     /**
      * Determines if the passed LivingEntity can climb this block.
-     *
      * @param entity The LivingEntity that is attempting to climb this block.
      * @param state  The block state of the ladder being climbed.
      * @param pos    The position of the block.
      */
     @Override
-    public ClimbBehavior canClimb(LivingEntity entity, BlockState state, BlockPos pos) {
-        return ClimbBehavior.True;
+    public ClimbBehavior getClimbBehavior(Entity entity, BlockState state, BlockPos pos) {
+        return ClimbBehavior.Ladder;
     }
-
 }
