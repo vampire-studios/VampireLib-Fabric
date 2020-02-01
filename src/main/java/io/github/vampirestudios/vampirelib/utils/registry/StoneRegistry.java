@@ -27,7 +27,6 @@ package io.github.vampirestudios.vampirelib.utils.registry;
 import io.github.vampirestudios.vampirelib.blocks.SlabBaseBlock;
 import io.github.vampirestudios.vampirelib.blocks.StairsBaseBlock;
 import io.github.vampirestudios.vampirelib.blocks.WallBaseBlock;
-import io.github.vampirestudios.vampirelib.utils.registry.RegistryUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.Identifier;
@@ -396,7 +395,7 @@ public class StoneRegistry {
 
         public Builder crackedBricksSlab() {
             stoneRegistry.crackedBricksSlab = RegistryUtils.register(new SlabBaseBlock(Block.Settings.copy(Blocks.STONE_SLAB)),
-                    new Identifier(name.getNamespace(), "cracked_" +  name.getPath() + "_bricks_slab"));
+                    new Identifier(name.getNamespace(), "cracked_" + name.getPath() + "_bricks_slab"));
             return this;
         }
 

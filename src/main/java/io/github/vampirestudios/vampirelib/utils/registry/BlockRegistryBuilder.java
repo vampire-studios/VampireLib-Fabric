@@ -24,13 +24,13 @@
 
 package io.github.vampirestudios.vampirelib.utils.registry;
 
+import io.github.vampirestudios.vampirelib.blocks.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.FenceBlock;
 import net.minecraft.block.FenceGateBlock;
 import net.minecraft.block.PressurePlateBlock;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.util.Identifier;
-import io.github.vampirestudios.vampirelib.blocks.*;
 
 public class BlockRegistryBuilder {
 
@@ -50,7 +50,7 @@ public class BlockRegistryBuilder {
     private static Identifier name;
 
     /**
-     * @param nameIn The name that will be used as a base for all blocks
+     * @param nameIn  The name that will be used as a base for all blocks
      * @param blockIn the base block which will be used for some blocks
      * @return a new instance of this class
      */
@@ -62,6 +62,7 @@ public class BlockRegistryBuilder {
 
     /**
      * Adds a new slab block based on the base block properties
+     *
      * @return an instance of this class
      */
     public BlockRegistryBuilder slab() {
@@ -72,6 +73,7 @@ public class BlockRegistryBuilder {
 
     /**
      * Adds a new stair block based on the base block properties
+     *
      * @return an instance of this class
      */
     public BlockRegistryBuilder stair() {
@@ -82,6 +84,7 @@ public class BlockRegistryBuilder {
 
     /**
      * Adds a new fence block based on the base block properties
+     *
      * @return an instance of this class
      */
     public BlockRegistryBuilder fence() {
@@ -92,6 +95,7 @@ public class BlockRegistryBuilder {
 
     /**
      * Adds a new fence gate block based on the base block properties
+     *
      * @return an instance of this class
      */
     public BlockRegistryBuilder fenceGate() {
@@ -101,6 +105,7 @@ public class BlockRegistryBuilder {
 
     /**
      * Adds a new wall block based on the base block properties
+     *
      * @return an instance of this class
      */
     public BlockRegistryBuilder wall() {
@@ -111,6 +116,7 @@ public class BlockRegistryBuilder {
 
     /**
      * Adds a new button block based on the base block properties
+     *
      * @return an instance of this class
      */
     public BlockRegistryBuilder button(boolean wooden) {
@@ -121,6 +127,7 @@ public class BlockRegistryBuilder {
 
     /**
      * Adds a new pressure plate block based on the base block properties
+     *
      * @return an instance of this class
      */
     public BlockRegistryBuilder pressurePlate(PressurePlateBlock.ActivationRule type) {

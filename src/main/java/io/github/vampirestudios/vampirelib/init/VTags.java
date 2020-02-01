@@ -24,12 +24,11 @@
 
 package io.github.vampirestudios.vampirelib.init;
 
+import io.github.vampirestudios.vampirelib.VampireLib;
 import net.minecraft.item.Item;
-import net.minecraft.tag.BlockTags;
 import net.minecraft.tag.ItemTags;
 import net.minecraft.tag.Tag;
 import net.minecraft.util.Identifier;
-import io.github.vampirestudios.vampirelib.VampireLib;
 
 public class VTags {
 

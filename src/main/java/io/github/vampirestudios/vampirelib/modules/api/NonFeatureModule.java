@@ -67,7 +67,8 @@ public abstract class NonFeatureModule {
         return name;
     }
 
-    public void configure(JsonObject obj) {}
+    public void configure(JsonObject obj) {
+    }
 
     public final JsonObject getConfig() {
         JsonObject obj = new JsonObject();
@@ -78,6 +79,7 @@ public abstract class NonFeatureModule {
         return obj;
     }
 
-    public void writeToConfig(JsonObject obj) {}
+    public void writeToConfig(JsonObject obj) {
+    }
 
 }

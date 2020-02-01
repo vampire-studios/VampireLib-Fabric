@@ -44,6 +44,9 @@ public abstract class Module {
     private List<SubModule> subModules = new ArrayList<>();
     private List<SubModule> serverSubModules = new ArrayList<>();
     private List<SubModule> clientSubModules = new ArrayList<>();
+    private List<NonFeatureModule> nonFeatureModules = new ArrayList<>();
+    private List<NonFeatureModule> serverNonFeatureModules = new ArrayList<>();
+    private List<NonFeatureModule> clientNonFeatureModules = new ArrayList<>();
 
     public Module(Identifier name, String description, boolean hasConfig) {
         this.registryName = name;
@@ -69,7 +72,7 @@ public abstract class Module {
         return null;
     }
 
-    public boolean isHasConfig() {
+    public boolean hasConfig() {
         return hasConfig;
     }
 
@@ -124,12 +127,31 @@ public abstract class Module {
         return subModule;
     }
 
+    public <T extends NonFeatureModule> T registerNonFeatureModule(T subModule) {
+        this.nonFeatureModules.add(subModule);
+        return subModule;
+    }
+
+    public <T extends NonFeatureModule> T registerClientNonFeatureModule(T subModule) {
+        this.clientNonFeatureModules.add(subModule);
+        return subModule;
+    }
+
+    public <T extends NonFeatureModule> T registerServerNonFeatureModule(T subModule) {
+        this.serverNonFeatureModules.add(subModule);
+        return subModule;
+    }
+
     public List<Feature> getFeatures() {
         return features;
     }
 
     public List<SubModule> getSubModules() {
         return subModules;
+    }
+
+    public List<NonFeatureModule> getNonFeatureModules() {
+        return nonFeatureModules;
     }
 
     public List<Feature> getServerFeatures() {
@@ -140,12 +162,20 @@ public abstract class Module {
         return serverSubModules;
     }
 
+    public List<NonFeatureModule> getServerNonFeatureModules() {
+        return serverNonFeatureModules;
+    }
+
     public List<Feature> getClientFeatures() {
         return clientFeatures;
     }
 
     public List<SubModule> getClientSubModules() {
         return clientSubModules;
+    }
+
+    public List<NonFeatureModule> getClientNonFeatureModules() {
+        return clientNonFeatureModules;
     }
 
 }

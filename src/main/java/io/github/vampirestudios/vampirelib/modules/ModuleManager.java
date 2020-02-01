@@ -153,7 +153,6 @@ public class ModuleManager {
                 module.getClientFeatures().forEach(Feature::initClient);
                 module.getClientSubModules().forEach(SubModule::initClient);
                 module.getClientSubModules().forEach(subModule -> subModule.getClientFeatures().forEach(Feature::initClient));
-                System.out.println("Initializing old client features");
                 module.getFeatures().forEach(Feature::initClient);
                 module.getSubModules().forEach(SubModule::initClient);
                 module.getSubModules().forEach(subModule -> subModule.getFeatures().forEach(Feature::initClient));
@@ -165,7 +164,6 @@ public class ModuleManager {
                 module.getClientFeatures().forEach(Feature::initClient);
                 module.getClientSubModules().forEach(SubModule::initClient);
                 module.getClientSubModules().forEach(subModule -> subModule.getClientFeatures().forEach(Feature::initClient));
-                System.out.println("Initializing old client features");
                 module.getFeatures().forEach(Feature::initClient);
                 module.getSubModules().forEach(SubModule::initClient);
                 module.getSubModules().forEach(subModule -> subModule.getFeatures().forEach(Feature::initClient));

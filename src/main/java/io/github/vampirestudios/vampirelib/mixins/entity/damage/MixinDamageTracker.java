@@ -24,6 +24,7 @@
 
 package io.github.vampirestudios.vampirelib.mixins.entity.damage;
 
+import io.github.vampirestudios.vampirelib.api.Climbable;
 import net.minecraft.block.Block;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageTracker;
@@ -35,7 +36,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
-import io.github.vampirestudios.vampirelib.api.Climbable;
 
 @Mixin(DamageTracker.class)
 public abstract class MixinDamageTracker {

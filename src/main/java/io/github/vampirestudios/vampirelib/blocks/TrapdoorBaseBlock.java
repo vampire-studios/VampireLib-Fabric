@@ -24,11 +24,11 @@
 
 package io.github.vampirestudios.vampirelib.blocks;
 
+import io.github.vampirestudios.vampirelib.api.Climbable;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.TrapdoorBlock;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.BlockPos;
-import io.github.vampirestudios.vampirelib.api.Climbable;
 
 public class TrapdoorBaseBlock extends TrapdoorBlock implements Climbable {
     public TrapdoorBaseBlock(Settings block$Settings_1) {

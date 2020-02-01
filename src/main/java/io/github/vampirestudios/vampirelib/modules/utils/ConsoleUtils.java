@@ -62,7 +62,7 @@ public class ConsoleUtils {
                     LOGGER.info(String.format("     [" + ModuleManager.class.getSimpleName() + "] " + featureText, candidate.getFeatures().size(),
                             candidate.getRegistryName().toString()));
                     for (Feature feature : candidate.getFeatures()) {
-                        LOGGER.info(String.format("     - %s - Enabled: %s", feature.name, feature.isEnabled() ? "true" : "false"));
+                        LOGGER.info(String.format("     - %s - Enabled: %s", feature.name, Feature.isEnabled() ? "true" : "false"));
                     }
                 }
             }
@@ -93,7 +93,7 @@ public class ConsoleUtils {
                                 LOGGER.info(String.format("         [" + ModuleManager.class.getSimpleName() + "] " + subModuleFeatureText, subModule.getFeatures().size(),
                                         subModule.name));
                                 for (Feature subModuleFeature : subModule.getFeatures()) {
-                                    LOGGER.info(String.format("             - %s - Enabled: %s", subModuleFeature.name, subModuleFeature.isEnabled() ? "true" : "false"));
+                                    LOGGER.info(String.format("             - %s - Enabled: %s", subModuleFeature.name, Feature.isEnabled() ? "true" : "false"));
                                 }
                             }
                         }
@@ -128,21 +128,17 @@ public class ConsoleUtils {
                     LOGGER.info(String.format("     [" + ModuleManager.class.getSimpleName() + "] " + featureText, candidate.getFeatures().size(),
                             candidate.getRegistryName().toString()));
                     for (Feature feature : candidate.getFeatures()) {
-                        LOGGER.info(String.format("     - %s - Enabled: %s", feature.name, feature.isEnabled() ? "true" : "false"));
+                        LOGGER.info(String.format("     - %s - Enabled: %s", feature.name, Feature.isEnabled() ? "true" : "false"));
                     }
                     for (Feature feature : candidate.getClientFeatures()) {
-                        LOGGER.info(String.format("     - %s - Enabled: %s", feature.name, feature.isEnabled() ? "true" : "false"));
+                        LOGGER.info(String.format("     - %s - Enabled: %s", feature.name, Feature.isEnabled() ? "true" : "false"));
                     }
                 }
             }
 
             if (!candidate.getSubModules().isEmpty()) {
                 String featureText;
-                if (candidate.getSubModules().size() > 1) {
-                    featureText = "Loading %d client sub-modules for %s:";
-                } else {
-                    featureText = "Loading %d client sub-modules for %s:";
-                }
+                featureText = "Loading %d client sub-modules for %s:";
 
                 if (candidate.getSubModules().size() > 1) {
                     LOGGER.info(String.format("     [" + ModuleManager.class.getSimpleName() + "] " + featureText, candidate.getSubModules().size(),
@@ -162,14 +158,14 @@ public class ConsoleUtils {
                                 LOGGER.info(String.format("         [" + ModuleManager.class.getSimpleName() + "] " + subModuleFeatureText, subModule.getFeatures().size(),
                                         subModule.name));
                                 for (Feature subModuleFeature : subModule.getFeatures()) {
-                                    LOGGER.info(String.format("             - %s - Enabled: %s", subModuleFeature.name, subModuleFeature.isEnabled() ? "true" : "false"));
+                                    LOGGER.info(String.format("             - %s - Enabled: %s", subModuleFeature.name, Feature.isEnabled() ? "true" : "false"));
                                 }
                             }
                             if (subModule.getClientFeatures().size() > 1) {
                                 LOGGER.info(String.format("         [" + ModuleManager.class.getSimpleName() + "] " + subModuleFeatureText, subModule.getFeatures().size(),
                                         subModule.name));
                                 for (Feature subModuleFeature : subModule.getClientFeatures()) {
-                                    LOGGER.info(String.format("             - %s - Enabled: %s", subModuleFeature.name, subModuleFeature.isEnabled() ? "true" : "false"));
+                                    LOGGER.info(String.format("             - %s - Enabled: %s", subModuleFeature.name, Feature.isEnabled() ? "true" : "false"));
                                 }
                             }
                         }

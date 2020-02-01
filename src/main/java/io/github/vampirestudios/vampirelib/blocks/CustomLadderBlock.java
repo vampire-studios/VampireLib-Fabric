@@ -24,6 +24,7 @@
 
 package io.github.vampirestudios.vampirelib.blocks;
 
+import io.github.vampirestudios.vampirelib.api.Climbable;
 import net.fabricmc.fabric.api.block.FabricBlockSettings;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.LadderBlock;
@@ -32,7 +33,6 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
-import io.github.vampirestudios.vampirelib.api.Climbable;
 
 public class CustomLadderBlock extends LadderBlock implements Climbable {
 
