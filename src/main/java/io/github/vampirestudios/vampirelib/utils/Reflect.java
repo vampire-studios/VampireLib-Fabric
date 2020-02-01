@@ -27,10 +27,11 @@ package io.github.vampirestudios.vampirelib.utils;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 
+@SuppressWarnings("unused")
 public class Reflect {
-    public static Class getInnerClass(Class clazz, String name) {
-        Class[] declaredClasses = clazz.getDeclaredClasses();
-        for (Class c : declaredClasses) {
+    public static Class<?> getInnerClass(Class<?> clazz, String name) {
+        Class<?>[] declaredClasses = clazz.getDeclaredClasses();
+        for (Class<?> c : declaredClasses) {
             if (c.getName().equalsIgnoreCase(name)) {
                 return c;
             }
@@ -38,9 +39,9 @@ public class Reflect {
         return null;
     }
 
-    public static Object constructClass(Class clazz, Object... args) {
-        Constructor<?>[] cap = clazz.getDeclaredConstructors();
-        for (Constructor<?> c : cap) {
+    public static <T> T constructClass(Class<T> clazz, Object... args) {
+        Constructor<T>[] cap = (Constructor<T>[]) clazz.getDeclaredConstructors();
+        for (Constructor<T> c : cap) {
             Class<?>[] types = c.getParameterTypes();
             boolean match = true;
             for (int t = 0; t < types.length; t++) {
@@ -55,7 +56,7 @@ public class Reflect {
             if (match) {
                 c.setAccessible(true);
                 try {
-                    return c.newInstance(args);
+                    return (T) c.newInstance(args);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -68,7 +69,7 @@ public class Reflect {
 		return getMemberByType(field_class, object_class, null);
 	}*/
 
-    public static Field getFieldByType(Class object_class, Class field_class) {
+    public static Field getFieldByType(Class<?> object_class, Class<?> field_class) {
         Field[] fields = object_class.getDeclaredFields();
         for (Field f : fields) {
             f.setAccessible(true);
@@ -79,11 +80,11 @@ public class Reflect {
     }
 
 
-    public static Object getMemberByType(Class object_class, Class field_class, Object object) {
+    public static <T> T getMemberByType(Class<?> object_class, Class<T> field_class, Object object) {
         Field f = getFieldByType(object_class, field_class);
         try {
             if (f != null) {
-                return f.get(object);
+                return (T) f.get(object);
             }
         } catch (Exception ignored) {
         }
@@ -114,15 +115,15 @@ public class Reflect {
     }
 
 
-    public static Object[] getMemberArrayByType(Class type, Object object) {
+    public static <T> T[] getMemberArrayByType(Class<T> type, Object object) {
         Field[] fields = object.getClass().getDeclaredFields();
         for (Field f : fields) {
             f.setAccessible(true);
             if (f.getType().isArray()) {
-                Class ofArray = f.getType().getComponentType();
+                Class<?> ofArray = f.getType().getComponentType();
                 if (isInstanceOf(ofArray, type)) {
                     try {
-                        return (Object[]) f.get(object);
+                        return (T[]) f.get(object);
                     } catch (Exception ignored) {
 
                     }
@@ -132,7 +133,7 @@ public class Reflect {
         return null;
     }
 
-    public static boolean isInstanceOf(Class clazz, Class possibleInstance) {
+    public static boolean isInstanceOf(Class<?> clazz, Class<?> possibleInstance) {
         if (clazz.isAssignableFrom(possibleInstance))
             return true;
         if (clazz.isPrimitive()) {

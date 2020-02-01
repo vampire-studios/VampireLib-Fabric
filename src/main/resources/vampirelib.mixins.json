@@ -1,17 +1,19 @@
 {
-  "required": true,
-  "package": "io.github.vampirestudios.vampirelib.mixins",
-  "compatibilityLevel": "JAVA_8",
-  "mixins": [
-    "block.BlockMixin",
-    "entity.damage.MixinDamageTracker",
-    "item.MixinBookOnLectern",
-    "block.StructureBlockBlockEntityMixin"
-  ],
-  "client": [
-    "client.MixinClientPlayNetworkHandler"
-  ],
-  "injectors": {
-    "defaultRequire": 1
-  }
+	"required": true,
+	"package": "io.github.vampirestudios.vampirelib.mixins",
+	"compatibilityLevel": "JAVA_8",
+	"mixins": [
+		"block.BlockMixin",
+		"block.StructureBlockBlockEntityMixin",
+		"entity.EntityMixin",
+		"entity.LivingEntityMixin",
+		"entity.damage.MixinDamageTracker",
+		"item.MixinBookOnLectern"
+	],
+	"client": [
+		"client.MixinClientPlayNetworkHandler"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	}
 }

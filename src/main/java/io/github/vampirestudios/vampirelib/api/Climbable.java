@@ -25,7 +25,7 @@
 package io.github.vampirestudios.vampirelib.api;
 
 import net.minecraft.block.BlockState;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
 
 /**
@@ -44,7 +44,7 @@ public interface Climbable {
      * to indicate that the game should ignore the result of this method and instead
      * perform the usual checks.
      */
-    ClimbBehavior canClimb(LivingEntity entity, BlockState state, BlockPos pos);
+    ClimbBehavior getClimbBehavior(Entity entity, BlockState state, BlockPos pos);
 
     /**
      * @return The suffix of the death message when falling off this block and dying. Your translation file should
@@ -57,10 +57,16 @@ public interface Climbable {
     }
 
     enum ClimbBehavior {
-        True,
-        Scaffolding,
-        False,
-        Vanilla
+        Ladder(true),
+        Scaffolding(true),
+        None(false),
+        Vanilla(false);
+
+        public boolean normalClimbing;
+
+        ClimbBehavior(boolean normalClimbing) {
+            this.normalClimbing = normalClimbing;
+        }
     }
 
 }
