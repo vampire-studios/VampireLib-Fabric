@@ -37,25 +37,25 @@ import java.nio.charset.StandardCharsets;
 public class ModuleConfig {
     private static final Jankson JANKSON = Jankson.builder().build();
 
-    public static void load(NonFeatureModule module, String modName) {
-        File configFile = new File("config/" + module.getRegistryName().getNamespace() + ".json5");
+    public static void load(NonFeatureModule module, String modName, String configType) {
+        File configFile = new File(String.format("config/%s-%s.json5", module.getRegistryName().getNamespace(), configType));
         JsonObject config = new JsonObject();
         if (configFile.exists()) {
             try {
                 config = JANKSON.load(configFile);
-                loadFrom(config);
-                writeConfigFile(modName, configFile, config);
+                loadFrom(config, configType);
+                writeConfigFile(modName, configFile, config, configType);
             } catch (IOException | SyntaxError e) {
                 VampireLib.LOGGER.error(modName + " config could not be loaded. Default values will be used.", e);
             }
         } else {
-            saveTo(config);
-            writeConfigFile(modName, configFile, config);
+            saveTo(config, configType);
+            writeConfigFile(modName, configFile, config, configType);
         }
     }
 
-    private static void writeConfigFile(String modName, File file, JsonObject config) {
-        saveTo(config);
+    private static void writeConfigFile(String modName, File file, JsonObject config, String configType) {
+        saveTo(config, configType);
         try (OutputStream out = new BufferedOutputStream(new FileOutputStream(file))) {
             out.write(config.toJson(JsonGrammar.JANKSON).getBytes(StandardCharsets.UTF_8));
         } catch (IOException e) {
@@ -63,18 +63,44 @@ public class ModuleConfig {
         }
     }
 
-    public static void loadFrom(JsonObject obj) {
-        for (NonFeatureModule module : ModuleManager.NON_FEATURE_MODULES) {
-            JsonObject moduleConfig = getObjectOrEmpty(module.getRegistryName().toString(), obj);
-            module.setEnabled(moduleConfig);
-            module.configure(moduleConfig);
+    public static void loadFrom(JsonObject obj, String configType) {
+        if (configType.equals("server")) {
+            for (NonFeatureModule module : ModuleManager.SERVER_NON_FEATURE_MODULES) {
+                JsonObject moduleConfig = getObjectOrEmpty(module.getRegistryName().toString(), obj);
+                module.setEnabled(moduleConfig);
+                module.configure(moduleConfig);
+            }
+        } else if (configType.equals("client")) {
+            for (NonFeatureModule module : ModuleManager.CLIENT_NON_FEATURE_MODULES) {
+                JsonObject moduleConfig = getObjectOrEmpty(module.getRegistryName().toString(), obj);
+                module.setEnabled(moduleConfig);
+                module.configure(moduleConfig);
+            }
+        } else {
+            for (NonFeatureModule module : ModuleManager.NON_FEATURE_MODULES) {
+                JsonObject moduleConfig = getObjectOrEmpty(module.getRegistryName().toString(), obj);
+                module.setEnabled(moduleConfig);
+                module.configure(moduleConfig);
+            }
         }
     }
 
-    public static void saveTo(JsonObject obj) {
-        for (NonFeatureModule module : ModuleManager.NON_FEATURE_MODULES) {
-            JsonObject moduleConfig = module.getConfig();
-            obj.put(module.getRegistryName().toString(), moduleConfig);
+    public static void saveTo(JsonObject obj, String configType) {
+        if (configType.equals("server")) {
+            for (NonFeatureModule module : ModuleManager.SERVER_NON_FEATURE_MODULES) {
+                JsonObject moduleConfig = module.getConfig();
+                obj.put(module.getRegistryName().toString(), moduleConfig);
+            }
+        } else if (configType.equals("client")) {
+            for (NonFeatureModule module : ModuleManager.CLIENT_NON_FEATURE_MODULES) {
+                JsonObject moduleConfig = module.getConfig();
+                obj.put(module.getRegistryName().toString(), moduleConfig);
+            }
+        } else {
+            for (NonFeatureModule module : ModuleManager.NON_FEATURE_MODULES) {
+                JsonObject moduleConfig = module.getConfig();
+                obj.put(module.getRegistryName().toString(), moduleConfig);
+            }
         }
     }
 

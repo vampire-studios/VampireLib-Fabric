@@ -60,7 +60,7 @@ public class ModuleManager {
     }
 
     public void registerModule(Module module) {
-        if (!MODULES.containsId(module.getRegistryName())) {
+        if (!MODULES.getOrEmpty(module.getRegistryName()).isPresent()) {
             Registry.register(MODULES, module.getRegistryName(), module);
         }
         if (module.isConfigAvailable() && module.getConfig() != null) {
@@ -70,28 +70,28 @@ public class ModuleManager {
     }
 
     public void registerNonFeatureModule(NonFeatureModule module) {
-        if (!NON_FEATURE_MODULES.containsId(module.getRegistryName())) {
+        if (!NON_FEATURE_MODULES.getOrEmpty(module.getRegistryName()).isPresent()) {
             Registry.register(NON_FEATURE_MODULES, module.getRegistryName(), module);
         }
-        ModuleConfig.load(module, WordUtils.capitalize(module.getRegistryName().getNamespace()));
+        ModuleConfig.load(module, WordUtils.capitalize(module.getRegistryName().getNamespace()), "common");
     }
 
     public void registerClientNonFeatureModule(NonFeatureModule module) {
-        if (!CLIENT_NON_FEATURE_MODULES.containsId(module.getRegistryName())) {
+        if (!CLIENT_NON_FEATURE_MODULES.getOrEmpty(module.getRegistryName()).isPresent()) {
             Registry.register(CLIENT_NON_FEATURE_MODULES, module.getRegistryName(), module);
         }
-        ModuleConfig.load(module, WordUtils.capitalize(module.getRegistryName().getNamespace()));
+        ModuleConfig.load(module, WordUtils.capitalize(module.getRegistryName().getNamespace()), "client");
     }
 
     public void registerServerNonFeatureModule(NonFeatureModule module) {
-        if (!SERVER_NON_FEATURE_MODULES.containsId(module.getRegistryName())) {
+        if (!SERVER_NON_FEATURE_MODULES.getOrEmpty(module.getRegistryName()).isPresent()) {
             Registry.register(SERVER_NON_FEATURE_MODULES, module.getRegistryName(), module);
         }
-        ModuleConfig.load(module, WordUtils.capitalize(module.getRegistryName().getNamespace()));
+        ModuleConfig.load(module, WordUtils.capitalize(module.getRegistryName().getNamespace()), "server");
     }
 
     public void registerServerModule(Module module) {
-        if (!SERVER_MODULES.containsId(module.getRegistryName())) {
+        if (!SERVER_MODULES.getOrEmpty(module.getRegistryName()).isPresent()) {
             Registry.register(SERVER_MODULES, module.getRegistryName(), module);
         }
         if (module.isConfigAvailable() && module.getConfig() != null) {
@@ -101,8 +101,8 @@ public class ModuleManager {
     }
 
     public void registerClientModule(Module module) {
-        if (!SERVER_MODULES.containsId(module.getRegistryName())) {
-            Registry.register(SERVER_MODULES, module.getRegistryName(), module);
+        if (!CLIENT_MODULES.getOrEmpty(module.getRegistryName()).isPresent()) {
+            Registry.register(CLIENT_MODULES, module.getRegistryName(), module);
         }
         if (module.isConfigAvailable() && module.getConfig() != null) {
             AutoConfig.register(module.getConfig(), GsonConfigSerializer::new);
@@ -120,6 +120,8 @@ public class ModuleManager {
                 module.getFeatures().forEach(Feature::init);
                 module.getSubModules().forEach(SubModule::init);
                 module.getSubModules().forEach(subModule -> subModule.getFeatures().forEach(Feature::init));
+                module.getNonFeatureModules().forEach(NonFeatureModule::init);
+                module.getServerNonFeatureModules().forEach(NonFeatureModule::init);
             }
         });
         MODULES.forEach(module -> {
@@ -131,6 +133,8 @@ public class ModuleManager {
                 module.getFeatures().forEach(Feature::init);
                 module.getSubModules().forEach(SubModule::init);
                 module.getSubModules().forEach(subModule -> subModule.getFeatures().forEach(Feature::init));
+                module.getNonFeatureModules().forEach(NonFeatureModule::init);
+                module.getServerNonFeatureModules().forEach(NonFeatureModule::init);
             }
         });
         NON_FEATURE_MODULES.forEach(nonFeatureModule -> {
@@ -143,6 +147,7 @@ public class ModuleManager {
         });
 
         ConsoleUtils.logServerModules();
+        ConsoleUtils.logServerNonFeatureModules();
     }
 
     @Environment(EnvType.CLIENT)
@@ -156,6 +161,8 @@ public class ModuleManager {
                 module.getFeatures().forEach(Feature::initClient);
                 module.getSubModules().forEach(SubModule::initClient);
                 module.getSubModules().forEach(subModule -> subModule.getFeatures().forEach(Feature::initClient));
+                module.getNonFeatureModules().forEach(NonFeatureModule::initClient);
+                module.getClientNonFeatureModules().forEach(NonFeatureModule::initClient);
             }
         });
         MODULES.forEach(module -> {
@@ -167,6 +174,8 @@ public class ModuleManager {
                 module.getFeatures().forEach(Feature::initClient);
                 module.getSubModules().forEach(SubModule::initClient);
                 module.getSubModules().forEach(subModule -> subModule.getFeatures().forEach(Feature::initClient));
+                module.getNonFeatureModules().forEach(NonFeatureModule::initClient);
+                module.getClientNonFeatureModules().forEach(NonFeatureModule::initClient);
             }
         });
         NON_FEATURE_MODULES.forEach(nonFeatureModule -> {
@@ -177,6 +186,7 @@ public class ModuleManager {
         });
 
         ConsoleUtils.logClientModules();
+        ConsoleUtils.logClientNonFeatureModules();
     }
 
 }

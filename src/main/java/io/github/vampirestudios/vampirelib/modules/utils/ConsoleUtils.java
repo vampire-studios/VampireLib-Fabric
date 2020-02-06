@@ -27,11 +27,12 @@ package io.github.vampirestudios.vampirelib.modules.utils;
 import io.github.vampirestudios.vampirelib.modules.ModuleManager;
 import io.github.vampirestudios.vampirelib.modules.api.Feature;
 import io.github.vampirestudios.vampirelib.modules.api.Module;
+import io.github.vampirestudios.vampirelib.modules.api.NonFeatureModule;
 import io.github.vampirestudios.vampirelib.modules.api.SubModule;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import static io.github.vampirestudios.vampirelib.modules.ModuleManager.MODULES;
+import static io.github.vampirestudios.vampirelib.modules.ModuleManager.*;
 
 public class ConsoleUtils {
 
@@ -100,6 +101,21 @@ public class ConsoleUtils {
                     }
                 }
             }
+        }
+    }
+
+    public static void logServerNonFeatureModules() {
+        String moduleText;
+        if (NON_FEATURE_MODULES.stream().count() > 1) {
+            moduleText = "Loading %d non-feature-modules:";
+        } else {
+            moduleText = "Loading %d non-feature-module:";
+        }
+
+        LOGGER.info("[" + ModuleManager.class.getSimpleName() + "] " + moduleText, NON_FEATURE_MODULES.stream().count());
+
+        for (NonFeatureModule candidate : NON_FEATURE_MODULES) {
+            LOGGER.info(String.format(" - %s - Enabled: %s", candidate.getRegistryName(), candidate.isEnabled() ? "true" : "false"));
         }
     }
 
@@ -172,6 +188,21 @@ public class ConsoleUtils {
                     }
                 }
             }
+        }
+    }
+
+    public static void logClientNonFeatureModules() {
+        String moduleText;
+        if (NON_FEATURE_MODULES.stream().count() > 1) {
+            moduleText = "Loading %d client non-feature-modules:";
+        } else {
+            moduleText = "Loading %d client non-feature-module:";
+        }
+
+        LOGGER.info("[" + ModuleManager.class.getSimpleName() + "] " + moduleText, NON_FEATURE_MODULES.stream().count());
+
+        for (NonFeatureModule candidate : NON_FEATURE_MODULES) {
+            LOGGER.info(String.format(" - %s - Enabled: %s", candidate.getRegistryName(), candidate.isEnabled() ? "true" : "false"));
         }
     }
 

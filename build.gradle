@@ -22,7 +22,7 @@ if (rootProject.file('private.gradle').exists()) {
 }
 
 archivesBaseName = project.archives_base_name
-version = project.mod_version + "+" + project.minecraft_version + "-" + "build." + project.build_number
+version = project.mod_version + "+" + "build." + project.build_number + "-" + project.minecraft_version
 group = project.maven_group
 
 minecraft {
