@@ -60,8 +60,8 @@ public class PostBaseBlock extends Block implements Waterloggable {
         Z_SHAPE = Block.createCuboidShape(6f, 6f, 0f, 10f, 10f, 16f);
     }
 
-    public PostBaseBlock(Settings block$Settings_1) {
-        super(block$Settings_1);
+    public PostBaseBlock(Settings settings) {
+        super(settings);
         this.setDefaultState(this.getDefaultState().with(AXIS, Direction.Axis.Y).with(WATERLOGGED, false));
     }
 

@@ -27,7 +27,7 @@ package io.github.vampirestudios.vampirelib.utils.registry;
 import io.github.vampirestudios.vampirelib.blocks.*;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.fabric.api.block.FabricBlockSettings;
-import net.fabricmc.fabric.api.client.render.ColorProviderRegistry;
+import net.fabricmc.fabric.impl.client.rendering.ColorProviderRegistryImpl;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.*;
 import net.minecraft.block.sapling.SaplingGenerator;
@@ -234,12 +234,12 @@ public class WoodRegistry {
             woodRegistry.leaves = RegistryUtils.register(new LeavesBaseBlock(), new Identifier(name.getNamespace(), name.getPath() + "_leaves"),
                     ItemGroup.DECORATIONS);
             if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
-                ColorProviderRegistry.BLOCK.register((block, world, pos, layer) -> {
-                    BlockColorProvider provider = ColorProviderRegistry.BLOCK.get(Blocks.OAK_LEAVES);
+                ColorProviderRegistryImpl.BLOCK.register((block, world, pos, layer) -> {
+                    BlockColorProvider provider = ColorProviderRegistryImpl.BLOCK.get(Blocks.OAK_LEAVES);
                     return provider == null ? -1 : provider.getColor(block, world, pos, layer);
                 }, woodRegistry.leaves);
-                ColorProviderRegistry.ITEM.register((item, layer) -> {
-                    ItemColorProvider provider = ColorProviderRegistry.ITEM.get(Blocks.OAK_LEAVES);
+                ColorProviderRegistryImpl.ITEM.register((item, layer) -> {
+                    ItemColorProvider provider = ColorProviderRegistryImpl.ITEM.get(Blocks.OAK_LEAVES);
                     return provider == null ? -1 : provider.getColor(item, layer);
                 }, woodRegistry.leaves);
             }

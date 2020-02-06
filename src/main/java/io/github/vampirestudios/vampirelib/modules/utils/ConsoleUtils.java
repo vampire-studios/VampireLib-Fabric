@@ -32,7 +32,8 @@ import io.github.vampirestudios.vampirelib.modules.api.SubModule;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import static io.github.vampirestudios.vampirelib.modules.ModuleManager.*;
+import static io.github.vampirestudios.vampirelib.modules.ModuleManager.MODULES;
+import static io.github.vampirestudios.vampirelib.modules.ModuleManager.NON_FEATURE_MODULES;
 
 public class ConsoleUtils {
 

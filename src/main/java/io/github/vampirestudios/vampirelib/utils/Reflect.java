@@ -56,7 +56,7 @@ public class Reflect {
             if (match) {
                 c.setAccessible(true);
                 try {
-                    return (T) c.newInstance(args);
+                    return c.newInstance(args);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

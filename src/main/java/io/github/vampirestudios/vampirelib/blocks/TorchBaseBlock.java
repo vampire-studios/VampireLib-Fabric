@@ -27,11 +27,12 @@ package io.github.vampirestudios.vampirelib.blocks;
 import net.fabricmc.fabric.api.block.FabricBlockSettings;
 import net.minecraft.block.Material;
 import net.minecraft.block.TorchBlock;
+import net.minecraft.particle.ParticleTypes;
 
 public class TorchBaseBlock extends TorchBlock {
 
     public TorchBaseBlock() {
-        super(FabricBlockSettings.of(Material.WOOD).build());
+        super(FabricBlockSettings.of(Material.WOOD).build(), ParticleTypes.FLAME);
     }
 
 }

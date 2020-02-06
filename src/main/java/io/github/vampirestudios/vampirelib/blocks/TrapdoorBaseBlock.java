@@ -37,6 +37,7 @@ public class TrapdoorBaseBlock extends TrapdoorBlock implements Climbable {
 
     /**
      * Determines if the passed LivingEntity can climb this block.
+     *
      * @param entity The LivingEntity that is attempting to climb this block.
      * @param state  The block state of the ladder being climbed.
      * @param pos    The position of the block.
