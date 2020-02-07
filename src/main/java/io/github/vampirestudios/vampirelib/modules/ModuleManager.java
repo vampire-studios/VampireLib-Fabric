@@ -120,8 +120,8 @@ public class ModuleManager {
                 module.getFeatures().forEach(Feature::init);
                 module.getSubModules().forEach(SubModule::init);
                 module.getSubModules().forEach(subModule -> subModule.getFeatures().forEach(Feature::init));
-                module.getNonFeatureModules().forEach(NonFeatureModule::init);
-                module.getServerNonFeatureModules().forEach(NonFeatureModule::init);
+                module.getNonFeatureModules().forEach(module1 -> module1.getModInitializer().onInitialize());
+                module.getServerNonFeatureModules().forEach(module1 -> module1.getModInitializer().onInitialize());
             }
         });
         MODULES.forEach(module -> {
@@ -133,17 +133,17 @@ public class ModuleManager {
                 module.getFeatures().forEach(Feature::init);
                 module.getSubModules().forEach(SubModule::init);
                 module.getSubModules().forEach(subModule -> subModule.getFeatures().forEach(Feature::init));
-                module.getNonFeatureModules().forEach(NonFeatureModule::init);
-                module.getServerNonFeatureModules().forEach(NonFeatureModule::init);
+                module.getNonFeatureModules().forEach(module1 -> module1.getModInitializer().onInitialize());
+                module.getServerNonFeatureModules().forEach(module1 -> module1.getModInitializer().onInitialize());
             }
         });
         NON_FEATURE_MODULES.forEach(nonFeatureModule -> {
             if (nonFeatureModule.getRegistryName().getNamespace().equals(modId)) {
-                nonFeatureModule.init();
+                nonFeatureModule.getModInitializer().onInitialize();
             }
         });
         SERVER_NON_FEATURE_MODULES.forEach(nonFeatureModule -> {
-            if (nonFeatureModule.getRegistryName().getNamespace().equals(modId)) nonFeatureModule.init();
+            if (nonFeatureModule.getRegistryName().getNamespace().equals(modId)) nonFeatureModule.getModInitializer().onInitialize();
         });
 
         ConsoleUtils.logServerModules();
@@ -161,8 +161,8 @@ public class ModuleManager {
                 module.getFeatures().forEach(Feature::initClient);
                 module.getSubModules().forEach(SubModule::initClient);
                 module.getSubModules().forEach(subModule -> subModule.getFeatures().forEach(Feature::initClient));
-                module.getNonFeatureModules().forEach(NonFeatureModule::initClient);
-                module.getClientNonFeatureModules().forEach(NonFeatureModule::initClient);
+                module.getNonFeatureModules().forEach(module1 -> module1.getClientModInitializer().onInitializeClient());
+                module.getClientNonFeatureModules().forEach(module1 -> module1.getClientModInitializer().onInitializeClient());
             }
         });
         MODULES.forEach(module -> {
@@ -174,15 +174,15 @@ public class ModuleManager {
                 module.getFeatures().forEach(Feature::initClient);
                 module.getSubModules().forEach(SubModule::initClient);
                 module.getSubModules().forEach(subModule -> subModule.getFeatures().forEach(Feature::initClient));
-                module.getNonFeatureModules().forEach(NonFeatureModule::initClient);
-                module.getClientNonFeatureModules().forEach(NonFeatureModule::initClient);
+                module.getNonFeatureModules().forEach(module1 -> module1.getClientModInitializer().onInitializeClient());
+                module.getClientNonFeatureModules().forEach(module1 -> module1.getClientModInitializer().onInitializeClient());
             }
         });
         NON_FEATURE_MODULES.forEach(nonFeatureModule -> {
-            if (nonFeatureModule.getRegistryName().getNamespace().equals(modId)) nonFeatureModule.initClient();
+            if (nonFeatureModule.getRegistryName().getNamespace().equals(modId)) nonFeatureModule.getClientModInitializer().onInitializeClient();
         });
         CLIENT_NON_FEATURE_MODULES.forEach(nonFeatureModule -> {
-            if (nonFeatureModule.getRegistryName().getNamespace().equals(modId)) nonFeatureModule.initClient();
+            if (nonFeatureModule.getRegistryName().getNamespace().equals(modId)) nonFeatureModule.getClientModInitializer().onInitializeClient();
         });
 
         ConsoleUtils.logClientModules();

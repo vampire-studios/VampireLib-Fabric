@@ -26,6 +26,10 @@ package io.github.vampirestudios.vampirelib.modules.api;
 
 import blue.endless.jankson.JsonObject;
 import blue.endless.jankson.JsonPrimitive;
+import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.fabricmc.api.ModInitializer;
 import net.minecraft.util.Identifier;
 
 public abstract class NonFeatureModule {
@@ -39,12 +43,13 @@ public abstract class NonFeatureModule {
         this.name = name;
     }
 
-    public void init() {
-
+    public ModInitializer getModInitializer() {
+        return null;
     }
 
-    public void initClient() {
-
+    @Environment(EnvType.CLIENT)
+    public ClientModInitializer getClientModInitializer() {
+        return null;
     }
 
     public final boolean isEnabled() {
