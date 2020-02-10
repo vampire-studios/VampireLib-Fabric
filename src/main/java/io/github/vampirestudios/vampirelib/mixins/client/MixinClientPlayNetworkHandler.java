@@ -60,7 +60,7 @@ public class MixinClientPlayNetworkHandler {
 
     @ModifyVariable(
             method = "onEntitySpawn",
-            at = @At(value = "JUMP", opcode = Opcodes.IFNULL, ordinal = 0, shift = At.Shift.BEFORE),
+            at = @At(value = "JUMP", opcode = Opcodes.IFNULL, ordinal = 3, shift = At.Shift.BEFORE),
             index = 8
     )
     private Entity setSpawnEntity(Entity old) {
