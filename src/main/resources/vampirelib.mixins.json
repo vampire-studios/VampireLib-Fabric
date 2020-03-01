@@ -3,11 +3,8 @@
 	"package": "io.github.vampirestudios.vampirelib.mixins",
 	"compatibilityLevel": "JAVA_8",
 	"mixins": [
-		"block.BlockMixin",
 		"block.StructureBlockBlockEntityMixin",
 		"entity.EntityMixin",
-		"entity.LivingEntityMixin",
-		"entity.damage.MixinDamageTracker",
 		"item.MixinBookOnLectern"
 	],
 	"client": [
