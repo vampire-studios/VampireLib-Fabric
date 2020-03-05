@@ -189,4 +189,20 @@ public class ModuleManager {
         ConsoleUtils.logClientNonFeatureModules();
     }
 
+    public boolean doesModuleExist(Module module) {
+        return MODULES.containsId(module.getRegistryName());
+    }
+
+    public boolean isModuleEnabled(Module module) {
+        return module.isEnabled();
+    }
+
+    public boolean doesNonFeatureModuleExist(NonFeatureModule module) {
+        return NON_FEATURE_MODULES.containsId(module.getRegistryName());
+    }
+
+    public boolean isNonFeatureModuleEnabled(NonFeatureModule module) {
+        return module.isEnabled();
+    }
+
 }
