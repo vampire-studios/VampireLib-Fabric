@@ -41,6 +41,8 @@ import org.apache.commons.lang3.text.WordUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.Objects;
+
 public class ModuleManager {
 
     public static final Registry<Module> MODULES = new SimpleRegistry<>();
@@ -193,16 +195,24 @@ public class ModuleManager {
         return MODULES.containsId(module.getRegistryName());
     }
 
-    public boolean isModuleEnabled(Module module) {
-        return module.isEnabled();
+    public boolean isModuleEnabled(Identifier name) {
+        if (MODULES.containsId(name)) {
+            Module module = MODULES.get(name);
+            return Objects.requireNonNull(module).isEnabled();
+        }
+        return false;
     }
 
     public boolean doesNonFeatureModuleExist(NonFeatureModule module) {
         return NON_FEATURE_MODULES.containsId(module.getRegistryName());
     }
 
-    public boolean isNonFeatureModuleEnabled(NonFeatureModule module) {
-        return module.isEnabled();
+    public boolean isNonFeatureModuleEnabled(Identifier name) {
+        if (NON_FEATURE_MODULES.containsId(name)) {
+            NonFeatureModule module = NON_FEATURE_MODULES.get(name);
+            return Objects.requireNonNull(module).isEnabled();
+        }
+        return false;
     }
 
 }
