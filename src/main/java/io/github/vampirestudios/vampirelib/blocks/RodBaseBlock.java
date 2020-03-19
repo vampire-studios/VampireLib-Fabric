@@ -84,11 +84,6 @@ public class RodBaseBlock extends FacingBlock {
     }
 
     @Override
-    public boolean isSimpleFullBlock(BlockState blockState_1, BlockView blockView_1, BlockPos blockPos_1) {
-        return false;
-    }
-
-    @Override
     public boolean canPlaceAt(BlockState blockState_1, WorldView viewableWorld_1, BlockPos blockPos_1) {
         return true;
     }

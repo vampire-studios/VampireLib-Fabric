@@ -33,6 +33,7 @@ import net.minecraft.network.packet.s2c.play.EntitySpawnS2CPacket;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
@@ -41,21 +42,26 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 @Mixin(ClientPlayNetworkHandler.class)
 public class MixinClientPlayNetworkHandler {
-    private static double vampireLib$x;
-    private static double vampireLib$y;
-    private static double vampireLib$z;
-    private static EntityType vampireLib$entityType;
-    private static int vampireLib$entityData;
+    @Unique
+    private static double x;
+    @Unique
+    private static double y;
+    @Unique
+    private static double z;
+    @Unique
+    private static EntityType<?> entityType;
+    @Unique
+    private static int entityData;
     @Shadow
     private ClientWorld world;
 
     @Inject(method = "onEntitySpawn", at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/network/packet/s2c/play/EntitySpawnS2CPacket;getEntityTypeId()Lnet/minecraft/entity/EntityType;"), locals = LocalCapture.CAPTURE_FAILHARD)
-    public void onEntitySpawn(EntitySpawnS2CPacket packet, CallbackInfo callbackInfo, double x, double y, double z, EntityType entityType) {
-        vampireLib$x = x;
-        vampireLib$y = y;
-        vampireLib$z = z;
-        vampireLib$entityType = entityType;
-        vampireLib$entityData = packet.getEntityData();
+    public void onEntitySpawn(EntitySpawnS2CPacket packet, CallbackInfo callbackInfo, double xIn, double yIn, double zIn, EntityType<?> entityTypeIn) {
+        x = xIn;
+        y = yIn;
+        z = zIn;
+        entityType = entityTypeIn;
+        entityData = packet.getEntityData();
     }
 
     @ModifyVariable(
@@ -65,7 +71,7 @@ public class MixinClientPlayNetworkHandler {
     )
     private Entity setSpawnEntity(Entity old) {
         if (old == null)
-            return EntityRegistry.construct(vampireLib$entityType, world, vampireLib$x, vampireLib$y, vampireLib$z, vampireLib$entityData);
+            return EntityRegistry.construct(entityType, world, x, y, z, entityData);
         return old;
     }
 

@@ -41,12 +41,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class MixinBookOnLectern {
 
     @Inject(method = "useOnBlock", at = @At(value = "HEAD"), cancellable = true)
-    public void useOnBlock(ItemUsageContext itemUsageContext_1, CallbackInfoReturnable<ActionResult> cir) {
-        World world_1 = itemUsageContext_1.getWorld();
-        BlockPos blockPos_1 = itemUsageContext_1.getBlockPos();
-        BlockState blockState_1 = world_1.getBlockState(blockPos_1);
-        if (blockState_1.getBlock() instanceof LecternBlock) {
-            cir.setReturnValue(LecternBlock.putBookIfAbsent(world_1, blockPos_1, blockState_1, itemUsageContext_1.getStack()) ? ActionResult.SUCCESS : ActionResult.PASS);
+    public void useOnBlock(ItemUsageContext usageContext, CallbackInfoReturnable<ActionResult> cir) {
+        World world = usageContext.getWorld();
+        BlockPos blockPos = usageContext.getBlockPos();
+        BlockState blockState = world.getBlockState(blockPos);
+        if (blockState.getBlock() instanceof LecternBlock) {
+            cir.setReturnValue(LecternBlock.putBookIfAbsent(world, blockPos, blockState, usageContext.getStack()) ? ActionResult.SUCCESS : ActionResult.PASS);
         } else {
             cir.setReturnValue(ActionResult.PASS);
         }

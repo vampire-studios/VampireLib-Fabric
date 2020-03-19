@@ -70,12 +70,7 @@ public class ConsoleUtils {
             }
 
             if (!candidate.getSubModules().isEmpty()) {
-                String featureText;
-                if (candidate.getSubModules().size() > 1) {
-                    featureText = "Loading %d sub-modules for %s:";
-                } else {
-                    featureText = "Loading %d sub-modules for %s:";
-                }
+                String featureText = "Loading %d sub-modules for %s:";
 
                 if (candidate.getSubModules().size() > 1) {
                     LOGGER.info(String.format("     [" + ModuleManager.class.getSimpleName() + "] " + featureText, candidate.getSubModules().size(),
@@ -99,6 +94,17 @@ public class ConsoleUtils {
                                 }
                             }
                         }
+                    }
+                }
+            }
+
+            if (!candidate.getNonFeatureModules().isEmpty()) {
+                String featureText = "Loading %d non-feature-modules for %s:";
+                if (candidate.getNonFeatureModules().size() > 1) {
+                    LOGGER.info(String.format("     [" + ModuleManager.class.getSimpleName() + "] " + featureText, candidate.getSubModules().size(),
+                            candidate.getRegistryName().toString()));
+                    for (NonFeatureModule subModule : candidate.getNonFeatureModules()) {
+                        LOGGER.info(String.format("         - %s - Enabled: %s", subModule.getName(), subModule.isEnabled() ? "true" : "false"));
                     }
                 }
             }
@@ -186,6 +192,16 @@ public class ConsoleUtils {
                                 }
                             }
                         }
+                    }
+                }
+            }
+            if (!candidate.getClientNonFeatureModules().isEmpty()) {
+                String featureText = "Loading %d client non-feature-modules for %s:";
+                if (candidate.getClientNonFeatureModules().size() > 1) {
+                    LOGGER.info(String.format("     [" + ModuleManager.class.getSimpleName() + "] " + featureText, candidate.getSubModules().size(),
+                            candidate.getRegistryName().toString()));
+                    for (NonFeatureModule subModule : candidate.getClientNonFeatureModules()) {
+                        LOGGER.info(String.format("         - %s - Enabled: %s", subModule.getName(), subModule.isEnabled() ? "true" : "false"));
                     }
                 }
             }

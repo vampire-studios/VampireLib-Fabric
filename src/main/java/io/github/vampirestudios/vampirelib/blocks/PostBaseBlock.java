@@ -25,10 +25,10 @@
 package io.github.vampirestudios.vampirelib.blocks;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockPlacementEnvironment;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Waterloggable;
 import net.minecraft.entity.EntityContext;
+import net.minecraft.entity.ai.pathing.NavigationType;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemPlacementContext;
@@ -106,23 +106,25 @@ public class PostBaseBlock extends Block implements Waterloggable {
         return this.getDefaultState().with(AXIS, Direction.Axis.Y).with(WATERLOGGED, fluidState_1.getFluid() == Fluids.WATER);
     }
 
-    public BlockState getStateForNeighborUpdate(BlockState blockState_1, Direction direction_1, BlockState blockState_2, IWorld iWorld_1, BlockPos blockPos_1, BlockPos blockPos_2) {
-        if (blockState_1.get(WATERLOGGED)) {
-            iWorld_1.getFluidTickScheduler().schedule(blockPos_1, Fluids.WATER, Fluids.WATER.getTickRate(iWorld_1));
+    @Override
+    public BlockState getStateForNeighborUpdate(BlockState blockState, Direction direction, BlockState blockState2, IWorld iWorld, BlockPos pos, BlockPos pos1) {
+        if (blockState.get(WATERLOGGED)) {
+            iWorld.getFluidTickScheduler().schedule(pos, Fluids.WATER, Fluids.WATER.getTickRate(iWorld));
         }
 
-        return super.getStateForNeighborUpdate(blockState_1, direction_1, blockState_2, iWorld_1, blockPos_1, blockPos_2);
+        return super.getStateForNeighborUpdate(blockState, direction, blockState2, iWorld, pos, pos1);
     }
 
-    protected void appendProperties(StateManager.Builder<Block, BlockState> stateFactory$Builder_1) {
-        stateFactory$Builder_1.add(AXIS, WATERLOGGED);
+    protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
+        builder.add(AXIS, WATERLOGGED);
     }
 
-    public FluidState getFluidState(BlockState blockState_1) {
-        return blockState_1.get(WATERLOGGED) ? Fluids.WATER.getStill(false) : super.getFluidState(blockState_1);
+    public FluidState getFluidState(BlockState state) {
+        return state.get(WATERLOGGED) ? Fluids.WATER.getStill(false) : super.getFluidState(state);
     }
 
-    public boolean canPlaceAtSide(BlockState blockState_1, BlockView blockView_1, BlockPos blockPos_1, BlockPlacementEnvironment blockPlacementEnvironment_1) {
+    public boolean canPathfindThrough(BlockState state, BlockView blockView, BlockPos pos, NavigationType navigationType) {
         return false;
     }
+
 }
