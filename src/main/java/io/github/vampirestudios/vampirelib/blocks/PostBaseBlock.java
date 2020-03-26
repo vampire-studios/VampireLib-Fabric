@@ -26,8 +26,8 @@ package io.github.vampirestudios.vampirelib.blocks;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.ShapeContext;
 import net.minecraft.block.Waterloggable;
-import net.minecraft.entity.EntityContext;
 import net.minecraft.entity.ai.pathing.NavigationType;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
@@ -42,6 +42,8 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.IWorld;
+
+import java.util.Objects;
 
 public class PostBaseBlock extends Block implements Waterloggable {
     public static final EnumProperty<Direction.Axis> AXIS;
@@ -65,8 +67,8 @@ public class PostBaseBlock extends Block implements Waterloggable {
         this.setDefaultState(this.getDefaultState().with(AXIS, Direction.Axis.Y).with(WATERLOGGED, false));
     }
 
-    public VoxelShape getOutlineShape(BlockState blockState_1, BlockView blockView_1, BlockPos blockPos_1, EntityContext verticalEntityPosition_1) {
-        Direction.Axis axis = blockState_1.get(AXIS);
+    public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+        Direction.Axis axis = Objects.requireNonNull(state).get(AXIS);
         switch (axis) {
             case X:
                 return X_SHAPE;
@@ -78,7 +80,7 @@ public class PostBaseBlock extends Block implements Waterloggable {
     }
 
     public BlockState rotate(BlockState blockState_1, BlockRotation rotation_1) {
-        switch (rotation_1) {
+        switch (Objects.requireNonNull(rotation_1)) {
             case COUNTERCLOCKWISE_90:
             case CLOCKWISE_90:
                 switch (blockState_1.get(AXIS)) {
@@ -94,7 +96,7 @@ public class PostBaseBlock extends Block implements Waterloggable {
         }
     }
 
-    public VoxelShape getCollisionShape(BlockState blockState_1, BlockView blockView_1, BlockPos blockPos_1, EntityContext verticalEntityPosition_1) {
+    public VoxelShape getCollisionShape(BlockState blockState_1, BlockView blockView_1, BlockPos blockPos_1, ShapeContext verticalEntityPosition_1) {
         Direction.Axis axis = blockState_1.get(AXIS);
         if (axis == Direction.Axis.Y) return Y_COLLISION;
         else return super.getCollisionShape(blockState_1, blockView_1, blockPos_1, verticalEntityPosition_1);
