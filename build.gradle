@@ -33,7 +33,7 @@ repositories {
 	mavenLocal()
 	maven{ url="https://minecraft.curseforge.com/api/maven" }
 	maven{ url="https://maven.fabricmc.net" }
-	maven { url "http://server.bbkr.space:8081/artifactory/libs-release" }
+	maven { url "https://server.bbkr.space:8081/artifactory/libs-release" }
 }
 
 dependencies {
