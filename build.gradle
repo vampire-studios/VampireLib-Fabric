@@ -33,7 +33,7 @@ repositories {
 	mavenLocal()
 	maven{ url="https://minecraft.curseforge.com/api/maven" }
 	maven{ url="https://maven.fabricmc.net" }
-	maven { url "https://server.bbkr.space:8081/artifactory/libs-release" }
+	maven { url "https://server.bbkr.space/artifactory/libs-release" }
 }
 
 dependencies {
@@ -53,12 +53,6 @@ dependencies {
 	include "io.github.cottonmc:Jankson-Fabric:${project.jankson_version}"
 
 	compile "com.google.code.findbugs:jsr305:3.0.2"
-}
-
-configurations.all {
-	resolutionStrategy {
-		force 'net.fabricmc.fabric-api:fabric-content-registries-v0:0.1.3+b7f9825d30'
-	}
 }
 
 processResources {
