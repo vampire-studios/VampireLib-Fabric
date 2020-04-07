@@ -35,7 +35,8 @@ public class VTags {
     public static final Tag<Item> SHEARS = registerItemTag("shears");
 
     public static Tag<Item> registerItemTag(String id) {
-        return new ItemTags.CachingTag(new Identifier(VampireLib.MOD_ID, id));
+        Identifier name = new Identifier(VampireLib.MOD_ID, id);
+        return ItemTags.register(name.toString());
     }
 
 }

@@ -27,8 +27,7 @@
     "vampirelib.mixins.json"
   ],
   "depends": {
-    "fabricloader": ">=0.7.0",
-    "minecraft": ">=1.15.1"
+    "fabricloader": ">=0.8.0"
   },
   "custom": {
     "modmenu:api": true
