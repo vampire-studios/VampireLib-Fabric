@@ -25,8 +25,8 @@
 package io.github.vampirestudios.vampirelib.init;
 
 import io.github.vampirestudios.vampirelib.VampireLib;
+import net.fabricmc.fabric.api.tag.TagRegistry;
 import net.minecraft.item.Item;
-import net.minecraft.tag.ItemTags;
 import net.minecraft.tag.Tag;
 import net.minecraft.util.Identifier;
 
@@ -35,8 +35,7 @@ public class VTags {
     public static final Tag<Item> SHEARS = registerItemTag("shears");
 
     public static Tag<Item> registerItemTag(String id) {
-        Identifier name = new Identifier(VampireLib.MOD_ID, id);
-        return ItemTags.register(name.toString());
+        return TagRegistry.item(new Identifier(VampireLib.MOD_ID, id));
     }
 
 }
