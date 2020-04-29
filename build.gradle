@@ -26,7 +26,6 @@ version = project.mod_version + "+" + "build." + project.build_number + "-" + pr
 group = project.maven_group
 
 minecraft {
-	accessWidener = file("src/main/resources/vampirelib.accesswidener")
 }
 
 repositories {
