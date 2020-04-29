@@ -39,12 +39,11 @@ public class VampireLib implements ModInitializer {
     public static String MOD_ID = "vampirelib";
     public static String MOD_NAME = "VampireLib";
     public static final Logger LOGGER = LogManager.getLogger(MOD_NAME);
-    public static String MOD_VERSION = "1.5.2+build.1-20w14a";
+    public static String MOD_VERSION = "1.6.0+build.1-20w18a";
 
     @Override
     public void onInitialize() {
         LOGGER.info((Rands.chance(15) ? "Your are" : (Rands.chance(15) ? "You're" : "You are")) + " running " + MOD_NAME + " v" + MOD_VERSION);
-
         BlockChiseler.setup();
     }
 

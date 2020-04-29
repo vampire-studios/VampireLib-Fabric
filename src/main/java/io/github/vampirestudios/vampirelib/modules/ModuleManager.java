@@ -51,7 +51,7 @@ public class ModuleManager {
     public static final Registry<NonFeatureModule> NON_FEATURE_MODULES = new SimpleRegistry<>();
     public static final Registry<NonFeatureModule> CLIENT_NON_FEATURE_MODULES = new SimpleRegistry<>();
     public static final Registry<NonFeatureModule> SERVER_NON_FEATURE_MODULES = new SimpleRegistry<>();
-    private static Logger LOGGER = LogManager.getFormatterLogger("[VampireLib: Module Loader]");
+    private static final Logger LOGGER = LogManager.getFormatterLogger("[VampireLib: Module Loader]");
 
     public static ModuleManager createModuleManager(Identifier modIdentifier) {
         return Registry.register(VampireLib.MODULE_MANAGERS, modIdentifier, new ModuleManager());
