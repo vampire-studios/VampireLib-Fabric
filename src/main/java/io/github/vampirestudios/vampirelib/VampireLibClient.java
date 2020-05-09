@@ -30,7 +30,7 @@ public class VampireLibClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-//        VampireLib.MODULE_MANAGERS.forEach(ModuleManager::initClient);
+
     }
 
 }
