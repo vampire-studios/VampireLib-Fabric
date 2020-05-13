@@ -39,7 +39,7 @@ public class VampireLib implements ModInitializer {
     public static String MOD_ID = "vampirelib";
     public static String MOD_NAME = "VampireLib";
     public static final Logger LOGGER = LogManager.getLogger(MOD_NAME);
-    public static String MOD_VERSION = "1.6.0+build.1-20w18a";
+    public static String MOD_VERSION = "1.6.1+build.1-20w20a";
 
     @Override
     public void onInitialize() {
