@@ -24,6 +24,7 @@
 
 package io.github.vampirestudios.vampirelib.modules;
 
+import com.mojang.serialization.Lifecycle;
 import io.github.vampirestudios.vampirelib.VampireLib;
 import io.github.vampirestudios.vampirelib.modules.api.Feature;
 import io.github.vampirestudios.vampirelib.modules.api.Module;
@@ -36,6 +37,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
+import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.util.registry.SimpleRegistry;
 import org.apache.commons.lang3.text.WordUtils;
 import org.apache.logging.log4j.LogManager;
@@ -45,12 +47,12 @@ import java.util.Objects;
 
 public class ModuleManager {
 
-    public static final Registry<Module> MODULES = new SimpleRegistry<>();
-    public static final Registry<Module> SERVER_MODULES = new SimpleRegistry<>();
-    public static final Registry<Module> CLIENT_MODULES = new SimpleRegistry<>();
-    public static final Registry<NonFeatureModule> NON_FEATURE_MODULES = new SimpleRegistry<>();
-    public static final Registry<NonFeatureModule> CLIENT_NON_FEATURE_MODULES = new SimpleRegistry<>();
-    public static final Registry<NonFeatureModule> SERVER_NON_FEATURE_MODULES = new SimpleRegistry<>();
+    public static final Registry<Module> MODULES = new SimpleRegistry<>(RegistryKey.getOrCreateRootKey(new Identifier("vampirelib:modules")), Lifecycle.stable());
+    public static final Registry<Module> SERVER_MODULES = new SimpleRegistry<>(RegistryKey.getOrCreateRootKey(new Identifier("vampirelib:server_modules")), Lifecycle.stable());
+    public static final Registry<Module> CLIENT_MODULES = new SimpleRegistry<>(RegistryKey.getOrCreateRootKey(new Identifier("vampirelib:client_modules")), Lifecycle.stable());
+    public static final Registry<NonFeatureModule> NON_FEATURE_MODULES = new SimpleRegistry<>(RegistryKey.getOrCreateRootKey(new Identifier("vampirelib:non_feature_modules")), Lifecycle.stable());
+    public static final Registry<NonFeatureModule> CLIENT_NON_FEATURE_MODULES = new SimpleRegistry<>(RegistryKey.getOrCreateRootKey(new Identifier("vampirelib:client_non_feature_modules")), Lifecycle.stable());
+    public static final Registry<NonFeatureModule> SERVER_NON_FEATURE_MODULES = new SimpleRegistry<>(RegistryKey.getOrCreateRootKey(new Identifier("vampirelib:server_non_feature_modules")), Lifecycle.stable());
     private static final Logger LOGGER = LogManager.getFormatterLogger("[VampireLib: Module Loader]");
 
     public static ModuleManager createModuleManager(Identifier modIdentifier) {

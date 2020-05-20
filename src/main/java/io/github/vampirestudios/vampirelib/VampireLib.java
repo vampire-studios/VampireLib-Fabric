@@ -24,22 +24,25 @@
 
 package io.github.vampirestudios.vampirelib;
 
+import com.mojang.serialization.Lifecycle;
 import io.github.vampirestudios.vampirelib.modules.ModuleManager;
 import io.github.vampirestudios.vampirelib.utils.Rands;
 import io.github.vampirestudios.vampirelib.utils.registry.BlockChiseler;
 import net.fabricmc.api.ModInitializer;
-import net.minecraft.util.registry.DefaultedRegistry;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
+import net.minecraft.util.registry.RegistryKey;
+import net.minecraft.util.registry.SimpleRegistry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class VampireLib implements ModInitializer {
 
-    public static final Registry<ModuleManager> MODULE_MANAGERS = new DefaultedRegistry<>("vampirelib:module_managers");
+    public static final Registry<ModuleManager> MODULE_MANAGERS = new SimpleRegistry<>(RegistryKey.getOrCreateRootKey(new Identifier("vampirelib:module_managers")), Lifecycle.stable());
     public static String MOD_ID = "vampirelib";
     public static String MOD_NAME = "VampireLib";
     public static final Logger LOGGER = LogManager.getLogger(MOD_NAME);
-    public static String MOD_VERSION = "1.6.1+build.1-20w20a";
+    public static String MOD_VERSION = "1.7.0+build.1-20w21a";
 
     @Override
     public void onInitialize() {

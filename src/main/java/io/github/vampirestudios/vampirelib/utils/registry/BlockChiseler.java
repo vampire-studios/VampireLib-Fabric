@@ -119,8 +119,8 @@ public class BlockChiseler {
     }
 
     private static BlockState copyTo(BlockState from, BlockState to) {
-        Collection<Property<?>> fromProperties = from.getProperties();
-        Collection<Property<?>> toProperties = to.getProperties();
+        Collection<Property<?>> fromProperties = from.getEntries().keySet();
+        Collection<Property<?>> toProperties = to.getEntries().keySet();
         for (Property property : fromProperties) {
             if (toProperties.contains(property)) {
                 to = to.with(property, from.get(property));

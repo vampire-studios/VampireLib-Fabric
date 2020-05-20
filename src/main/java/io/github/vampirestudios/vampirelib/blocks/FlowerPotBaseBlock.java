@@ -32,7 +32,7 @@ import net.minecraft.block.Material;
 public class FlowerPotBaseBlock extends FlowerPotBlock {
 
     public FlowerPotBaseBlock(Block block_1) {
-        super(block_1, FabricBlockSettings.of(Material.PART).breakInstantly().build());
+        super(block_1, FabricBlockSettings.of(Material.AGGREGATE).breakInstantly().build());
     }
 
 }

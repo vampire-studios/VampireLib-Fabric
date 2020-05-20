@@ -33,7 +33,7 @@ import net.minecraft.util.math.Direction;
 public class CustomLadderBlock extends LadderBlock {
 
     public CustomLadderBlock() {
-        super(FabricBlockSettings.of(Material.PART).hardness(0.4F).sounds(BlockSoundGroup.LADDER).build());
+        super(FabricBlockSettings.of(Material.AGGREGATE).hardness(0.4F).sounds(BlockSoundGroup.LADDER).build());
         setDefaultState(this.getDefaultState().with(FACING, Direction.NORTH).with(WATERLOGGED, false));
     }
 

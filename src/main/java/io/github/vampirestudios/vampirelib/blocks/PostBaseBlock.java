@@ -41,7 +41,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
-import net.minecraft.world.IWorld;
+import net.minecraft.world.WorldAccess;
 
 import java.util.Objects;
 
@@ -109,7 +109,7 @@ public class PostBaseBlock extends Block implements Waterloggable {
     }
 
     @Override
-    public BlockState getStateForNeighborUpdate(BlockState blockState, Direction direction, BlockState blockState2, IWorld iWorld, BlockPos pos, BlockPos pos1) {
+    public BlockState getStateForNeighborUpdate(BlockState blockState, Direction direction, BlockState blockState2, WorldAccess iWorld, BlockPos pos, BlockPos pos1) {
         if (blockState.get(WATERLOGGED)) {
             iWorld.getFluidTickScheduler().schedule(pos, Fluids.WATER, Fluids.WATER.getTickRate(iWorld));
         }
