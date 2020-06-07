@@ -47,12 +47,12 @@ import java.util.Objects;
 
 public class ModuleManager {
 
-    public static final Registry<Module> MODULES = new SimpleRegistry<>(RegistryKey.getOrCreateRootKey(new Identifier("vampirelib:modules")), Lifecycle.stable());
-    public static final Registry<Module> SERVER_MODULES = new SimpleRegistry<>(RegistryKey.getOrCreateRootKey(new Identifier("vampirelib:server_modules")), Lifecycle.stable());
-    public static final Registry<Module> CLIENT_MODULES = new SimpleRegistry<>(RegistryKey.getOrCreateRootKey(new Identifier("vampirelib:client_modules")), Lifecycle.stable());
-    public static final Registry<NonFeatureModule> NON_FEATURE_MODULES = new SimpleRegistry<>(RegistryKey.getOrCreateRootKey(new Identifier("vampirelib:non_feature_modules")), Lifecycle.stable());
-    public static final Registry<NonFeatureModule> CLIENT_NON_FEATURE_MODULES = new SimpleRegistry<>(RegistryKey.getOrCreateRootKey(new Identifier("vampirelib:client_non_feature_modules")), Lifecycle.stable());
-    public static final Registry<NonFeatureModule> SERVER_NON_FEATURE_MODULES = new SimpleRegistry<>(RegistryKey.getOrCreateRootKey(new Identifier("vampirelib:server_non_feature_modules")), Lifecycle.stable());
+    public static final Registry<Module> MODULES = new SimpleRegistry<>(RegistryKey.ofRegistry(new Identifier("vampirelib:modules")), Lifecycle.stable());
+    public static final Registry<Module> SERVER_MODULES = new SimpleRegistry<>(RegistryKey.ofRegistry(new Identifier("vampirelib:server_modules")), Lifecycle.stable());
+    public static final Registry<Module> CLIENT_MODULES = new SimpleRegistry<>(RegistryKey.ofRegistry(new Identifier("vampirelib:client_modules")), Lifecycle.stable());
+    public static final Registry<NonFeatureModule> NON_FEATURE_MODULES = new SimpleRegistry<>(RegistryKey.ofRegistry(new Identifier("vampirelib:non_feature_modules")), Lifecycle.stable());
+    public static final Registry<NonFeatureModule> CLIENT_NON_FEATURE_MODULES = new SimpleRegistry<>(RegistryKey.ofRegistry(new Identifier("vampirelib:client_non_feature_modules")), Lifecycle.stable());
+    public static final Registry<NonFeatureModule> SERVER_NON_FEATURE_MODULES = new SimpleRegistry<>(RegistryKey.ofRegistry(new Identifier("vampirelib:server_non_feature_modules")), Lifecycle.stable());
     private static final Logger LOGGER = LogManager.getFormatterLogger("[VampireLib: Module Loader]");
 
     public static ModuleManager createModuleManager(Identifier modIdentifier) {

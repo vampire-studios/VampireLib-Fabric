@@ -38,11 +38,11 @@ import org.apache.logging.log4j.Logger;
 
 public class VampireLib implements ModInitializer {
 
-    public static final Registry<ModuleManager> MODULE_MANAGERS = new SimpleRegistry<>(RegistryKey.getOrCreateRootKey(new Identifier("vampirelib:module_managers")), Lifecycle.stable());
+    public static final Registry<ModuleManager> MODULE_MANAGERS = new SimpleRegistry<>(RegistryKey.ofRegistry(new Identifier("vampirelib:module_managers")), Lifecycle.stable());
     public static String MOD_ID = "vampirelib";
     public static String MOD_NAME = "VampireLib";
     public static final Logger LOGGER = LogManager.getLogger(MOD_NAME);
-    public static String MOD_VERSION = "1.7.0+build.1-20w21a";
+    public static String MOD_VERSION = "1.8.0+build.1-1.16-pre2";
 
     @Override
     public void onInitialize() {

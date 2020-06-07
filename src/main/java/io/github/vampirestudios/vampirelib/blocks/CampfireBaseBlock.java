@@ -33,7 +33,8 @@ import net.minecraft.sound.BlockSoundGroup;
 public class CampfireBaseBlock extends CampfireBlock {
 
     public CampfireBaseBlock() {
-        super(false, AbstractBlock.Settings.of(Material.WOOD, MaterialColor.SPRUCE).strength(2.0F).sounds(BlockSoundGroup.WOOD).lightLevel(value -> 15).ticksRandomly());
+        super(true, 1, AbstractBlock.Settings.of(Material.WOOD, MaterialColor.SPRUCE).strength(2.0F).sounds(BlockSoundGroup.WOOD)
+                .lightLevel(value -> 15).ticksRandomly());
     }
 
 }

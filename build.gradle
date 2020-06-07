@@ -1,5 +1,5 @@
 plugins {
-	id 'fabric-loom' version '0.2.7-SNAPSHOT'
+	id 'fabric-loom' version '0.4-SNAPSHOT'
 	id 'maven-publish'
 	id 'net.minecrell.licenser' version '0.4.1'
 	id "co.riiid.gradle" version "0.4.2"
@@ -45,11 +45,15 @@ dependencies {
 	modCompile "net.fabricmc:fabric-loader:${project.loader_version}"
 	modCompile "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-	modImplementation("me.shedaniel:RoughlyEnoughItems:${project.rei_version}") {
-		exclude group: "io.github.prospector.modmenu"
-		exclude group :"net.fabricmc.fabric-api"
+	modCompile ("me.shedaniel.cloth:config-2:${project.cloth_config_version}") { exclude group: "net.fabricmc.fabric-api" }
+	include ("me.shedaniel.cloth:config-2:${project.cloth_config_version}") { exclude group: "net.fabricmc.fabric-api" }
+
+	modCompile("me.sargunvohra.mcmods:autoconfig1u:${project.autoconfig1u}") {
+		exclude module: "fabric-api"
 	}
-	modImplementation "io.github.prospector:modmenu:${project.modmenu_version}"
+	include("me.sargunvohra.mcmods:autoconfig1u:${project.autoconfig1u}") {
+		exclude module: "fabric-api"
+	}
 
 	modImplementation "io.github.cottonmc:Jankson-Fabric:${project.jankson_version}"
 	include "io.github.cottonmc:Jankson-Fabric:${project.jankson_version}"
