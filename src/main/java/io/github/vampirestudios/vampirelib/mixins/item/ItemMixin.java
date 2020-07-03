@@ -22,23 +22,12 @@
  * SOFTWARE.
  */
 
-package io.github.vampirestudios.vampirelib.api;
+package io.github.vampirestudios.vampirelib.mixins.item;
 
+import io.github.vampirestudios.vampirelib.api.IItemGroupItem;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
+import org.spongepowered.asm.mixin.Mixin;
 
-import java.util.Collection;
-import java.util.Collections;
-
-public interface IItemGroupItem {
-
-    // Helpers for accessing Item data
-    default Item getItem() {
-        return (Item) this;
-    }
-
-    default Collection<ItemGroup> getCreativeTabs() {
-        return Collections.singletonList(getItem().getGroup());
-    }
-
+@Mixin(Item.class)
+public class ItemMixin implements IItemGroupItem {
 }

@@ -105,7 +105,7 @@ public class EntityRegistryBuilder<E extends Entity> {
                 FabricEntityTypeBuilder.create(category, entityFactory).size(dimensions).trackable(trackingDistance, updateIntervalTicks, alwaysUpdateVelocity).disableSaving().build();
         }
         if (hasEgg) {
-            RegistryUtils.registerItem(new SpawnEggItem(entityType, primaryColor, secondaryColor, new Item.Settings().group(ItemGroup.MISC)), new Identifier(name.getNamespace(), String.format("%s_spawn_egg", name.getPath())));
+            RegistryHelper.createRegistryHelper(name.getNamespace()).registerItem(new SpawnEggItem(entityType, primaryColor, secondaryColor, new Item.Settings().group(ItemGroup.MISC)), String.format("%s_spawn_egg", name.getPath()));
         }
         return entityType;
     }

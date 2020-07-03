@@ -24,25 +24,6 @@ public class ItemStackUtils {
     }
 
     /**
-     * Converts an Integer to a String of Roman Numerals; useful for levels
-     * @param number - The Integer to convert
-     * @return - The String of the Integer converted to Roman Numerals
-     */
-    public static String intToRomanNumerals(int number) {
-        String[] m = {"", "M", "MM", "MMM"};
-        String[] c = {"", "C", "CC", "CCC", "CD", "D", "DC", "DCC", "DCCC", "CM"};
-        String[] x = {"", "X", "XX", "XXX", "XL", "L", "LX", "LXX", "LXXX", "XC"};
-        String[] i = {"", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX"};
-
-        String thousands = m[number / 1000];
-        String hundereds = c[(number % 1000) / 100];
-        String tens = x[(number % 100) / 10];
-        String ones = i[number % 10];
-
-        return thousands + hundereds + tens + ones;
-    }
-
-    /**
      * Searches for if an {@link Item} is present in an {@link ItemGroup} and returns if it is
      * @param item - The item searched
      * @param group - The group searched

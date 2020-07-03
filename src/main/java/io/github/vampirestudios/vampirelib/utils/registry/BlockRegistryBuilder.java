@@ -50,6 +50,11 @@ public class BlockRegistryBuilder {
     private static Identifier name;
 
     /**
+     * A private static instance of a registry helper with the modid thats put in the name
+     */
+    private static RegistryHelper registryHelper;
+
+    /**
      * @param nameIn  The name that will be used as a base for all blocks
      * @param blockIn the base block which will be used for some blocks
      * @return a new instance of this class
@@ -57,6 +62,7 @@ public class BlockRegistryBuilder {
     public static BlockRegistryBuilder getInstance(Identifier nameIn, Block blockIn) {
         name = nameIn;
         baseBlock = blockIn;
+        registryHelper = RegistryHelper.createRegistryHelper(name.getNamespace());
         return INSTANCE.get();
     }
 
@@ -67,7 +73,7 @@ public class BlockRegistryBuilder {
      */
     public BlockRegistryBuilder slab() {
         Block slab = new SlabBaseBlock(Block.Settings.copy(baseBlock));
-        RegistryUtils.register(slab, new Identifier(name.getNamespace(), name.getPath() + "_slab"), ItemGroup.BUILDING_BLOCKS);
+        registryHelper.registerBlock(slab, name.getPath() + "_slab", ItemGroup.BUILDING_BLOCKS);
         return this;
     }
 
@@ -78,7 +84,7 @@ public class BlockRegistryBuilder {
      */
     public BlockRegistryBuilder stair() {
         Block stair = new StairsBaseBlock(baseBlock.getDefaultState());
-        RegistryUtils.register(stair, new Identifier(name.getNamespace(), name.getPath() + "_stairs"), ItemGroup.BUILDING_BLOCKS);
+        registryHelper.registerBlock(stair, name.getPath() + "_stairs", ItemGroup.BUILDING_BLOCKS);
         return this;
     }
 
@@ -89,7 +95,7 @@ public class BlockRegistryBuilder {
      */
     public BlockRegistryBuilder fence() {
         Block fence = new FenceBlock(Block.Settings.copy(baseBlock));
-        RegistryUtils.register(fence, new Identifier(name.getNamespace(), name.getPath() + "_fence"));
+        registryHelper.registerBlock(fence, name.getPath() + "_fence");
         return this;
     }
 
@@ -99,7 +105,7 @@ public class BlockRegistryBuilder {
      * @return an instance of this class
      */
     public BlockRegistryBuilder fenceGate() {
-        RegistryUtils.register(new FenceGateBlock(Block.Settings.copy(baseBlock)), new Identifier(name.getNamespace(), name.getPath() + "_fence_gate"), ItemGroup.REDSTONE);
+        registryHelper.registerBlock(new FenceGateBlock(Block.Settings.copy(baseBlock)), name.getPath() + "_fence_gate", ItemGroup.REDSTONE);
         return this;
     }
 
@@ -110,7 +116,7 @@ public class BlockRegistryBuilder {
      */
     public BlockRegistryBuilder wall() {
         Block wall = new WallBaseBlock(Block.Settings.copy(baseBlock));
-        RegistryUtils.register(wall, new Identifier(name.getNamespace(), name.getPath() + "_wall"), ItemGroup.DECORATIONS);
+        registryHelper.registerBlock(wall, name.getPath() + "_wall", ItemGroup.DECORATIONS);
         return this;
     }
 
@@ -121,7 +127,7 @@ public class BlockRegistryBuilder {
      */
     public BlockRegistryBuilder button(boolean wooden) {
         Block button = new ButtonBaseBlock(wooden, Block.Settings.copy(baseBlock));
-        RegistryUtils.register(button, new Identifier(name.getNamespace(), name.getPath() + "_button"), ItemGroup.REDSTONE);
+        registryHelper.registerBlock(button, name.getPath() + "_button", ItemGroup.REDSTONE);
         return this;
     }
 
@@ -131,8 +137,8 @@ public class BlockRegistryBuilder {
      * @return an instance of this class
      */
     public BlockRegistryBuilder pressurePlate(PressurePlateBlock.ActivationRule type) {
-        RegistryUtils.register(new PressurePlateBaseBlock(Block.Settings.copy(baseBlock), type),
-                new Identifier(name.getNamespace(), name.getPath() + "_pressure_plate"), ItemGroup.REDSTONE);
+        registryHelper.registerBlock(new PressurePlateBaseBlock(Block.Settings.copy(baseBlock), type),
+                name.getPath() + "_pressure_plate", ItemGroup.REDSTONE);
         return this;
     }
 

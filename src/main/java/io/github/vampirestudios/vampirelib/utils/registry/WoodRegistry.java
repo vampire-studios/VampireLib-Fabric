@@ -153,10 +153,12 @@ public class WoodRegistry {
 
         public Identifier name;
         private WoodRegistry woodRegistry;
+        private RegistryHelper registryHelper;
 
         public Builder of(Identifier name) {
             this.name = name;
             woodRegistry = new WoodRegistry(name);
+            registryHelper = RegistryHelper.createRegistryHelper(name.getNamespace());
             return this;
         }
 
@@ -164,74 +166,76 @@ public class WoodRegistry {
             this.name = name;
             woodRegistry = new WoodRegistry(name);
             woodRegistry.planks = planks;
+            registryHelper = RegistryHelper.createRegistryHelper(name.getNamespace());
             return this;
         }
 
         public Builder of(Identifier name, SaplingGenerator saplingGenerator) {
             this.name = name;
             woodRegistry = new WoodRegistry(name, saplingGenerator);
+            registryHelper = RegistryHelper.createRegistryHelper(name.getNamespace());
             return this;
         }
 
         public Builder log() {
-            woodRegistry.log = RegistryUtils.register(new PillarBlock(FabricBlockSettings.of(Material.WOOD, MaterialColor.SPRUCE).hardness(2.0F)
-                    .sounds(BlockSoundGroup.WOOD).build()), new Identifier(name.getNamespace(), name.getPath() + "_log"), ItemGroup.BUILDING_BLOCKS);
+            woodRegistry.log = registryHelper.registerBlock(new PillarBlock(FabricBlockSettings.of(Material.WOOD, MaterialColor.SPRUCE).hardness(2.0F)
+                    .sounds(BlockSoundGroup.WOOD).build()), name.getPath() + "_log", ItemGroup.BUILDING_BLOCKS);
             return this;
         }
 
         public Builder wood() {
-            woodRegistry.wood = RegistryUtils.register(new Block(FabricBlockSettings.of(Material.WOOD, MaterialColor.WOOD).hardness(2.0F)
-                    .sounds(BlockSoundGroup.WOOD).build()), new Identifier(name.getNamespace(), name.getPath() + "_wood"), ItemGroup.BUILDING_BLOCKS);
+            woodRegistry.wood = registryHelper.registerBlock(new Block(FabricBlockSettings.of(Material.WOOD, MaterialColor.WOOD).hardness(2.0F)
+                    .sounds(BlockSoundGroup.WOOD).build()), name.getPath() + "_wood", ItemGroup.BUILDING_BLOCKS);
             return this;
         }
 
         public Builder strippedLog() {
-            woodRegistry.strippedLog = RegistryUtils.register(new PillarBlock(FabricBlockSettings.of(Material.WOOD, MaterialColor.SPRUCE).hardness(2.0F)
-                            .sounds(BlockSoundGroup.WOOD).build()), new Identifier(name.getNamespace(), "stripped_" + name.getPath() + "_log"),
+            woodRegistry.strippedLog = registryHelper.registerBlock(new PillarBlock(FabricBlockSettings.of(Material.WOOD, MaterialColor.SPRUCE).hardness(2.0F)
+                            .sounds(BlockSoundGroup.WOOD).build()), "stripped_" + name.getPath() + "_log",
                     ItemGroup.BUILDING_BLOCKS);
             return this;
         }
 
         public Builder strippedWood() {
-            woodRegistry.strippedWood = RegistryUtils.register(new Block(FabricBlockSettings.of(Material.WOOD, MaterialColor.WOOD).hardness(2.0F)
-                            .sounds(BlockSoundGroup.WOOD).build()), new Identifier(name.getNamespace(), "stripped_" + name.getPath() + "_wood"),
+            woodRegistry.strippedWood = registryHelper.registerBlock(new Block(FabricBlockSettings.of(Material.WOOD, MaterialColor.WOOD).hardness(2.0F)
+                            .sounds(BlockSoundGroup.WOOD).build()), "stripped_" + name.getPath() + "_wood",
                     ItemGroup.BUILDING_BLOCKS);
             return this;
         }
 
         public Builder stairs() {
-            woodRegistry.stairs = RegistryUtils.register(new StairsBaseBlock(woodRegistry.planks.getDefaultState()), new Identifier(name.getNamespace(),
-                    name.getPath() + "_stairs"), ItemGroup.BUILDING_BLOCKS);
+            woodRegistry.stairs = registryHelper.registerBlock(new StairsBaseBlock(woodRegistry.planks.getDefaultState()),
+                    name.getPath() + "_stairs", ItemGroup.BUILDING_BLOCKS);
             return this;
         }
 
         public Builder slab() {
-            woodRegistry.slab = RegistryUtils.register(new SlabBaseBlock(FabricBlockSettings.copy(woodRegistry.planks).build()),
-                    new Identifier(name.getNamespace(), name.getPath() + "_slab"), ItemGroup.BUILDING_BLOCKS);
+            woodRegistry.slab = registryHelper.registerBlock(new SlabBaseBlock(FabricBlockSettings.copy(woodRegistry.planks).build()),
+                    name.getPath() + "_slab", ItemGroup.BUILDING_BLOCKS);
             return this;
         }
 
         public Builder planks() {
-            woodRegistry.planks = RegistryUtils.register(new Block(FabricBlockSettings.of(Material.WOOD, MaterialColor.WOOD)
+            woodRegistry.planks = registryHelper.registerBlock(new Block(FabricBlockSettings.of(Material.WOOD, MaterialColor.WOOD)
                             .strength(2.0F, 3.0F).sounds(BlockSoundGroup.WOOD).build()),
-                    new Identifier(name.getNamespace(), name.getPath() + "_planks"), ItemGroup.BUILDING_BLOCKS);
+                    name.getPath() + "_planks", ItemGroup.BUILDING_BLOCKS);
             return this;
         }
 
         public Builder leaves() {
-            woodRegistry.leaves = RegistryUtils.register(new LeavesBaseBlock(), new Identifier(name.getNamespace(), name.getPath() + "_leaves"),
+            woodRegistry.leaves = registryHelper.registerBlock(new LeavesBaseBlock(), name.getPath() + "_leaves",
                     ItemGroup.DECORATIONS);
             return this;
         }
 
         public Builder leaves(String nameIn) {
-            woodRegistry.leaves = RegistryUtils.register(new LeavesBaseBlock(), new Identifier(name.getNamespace(), nameIn + "_leaves"),
+            woodRegistry.leaves = registryHelper.registerBlock(new LeavesBaseBlock(), nameIn + "_leaves",
                     ItemGroup.DECORATIONS);
             return this;
         }
 
         public Builder coloredLeaves() {
-            woodRegistry.leaves = RegistryUtils.register(new LeavesBaseBlock(), new Identifier(name.getNamespace(), name.getPath() + "_leaves"),
+            woodRegistry.leaves = registryHelper.registerBlock(new LeavesBaseBlock(), name.getPath() + "_leaves",
                     ItemGroup.DECORATIONS);
             if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
                 ColorProviderRegistryImpl.BLOCK.register((block, world, pos, layer) -> {
@@ -247,56 +251,56 @@ public class WoodRegistry {
         }
 
         public Builder sapling() {
-            woodRegistry.sapling = RegistryUtils.register(new SaplingBaseBlock(woodRegistry.saplingGenerator),
-                    new Identifier(name.getNamespace(), name.getPath() + "_sapling"), ItemGroup.DECORATIONS);
+            woodRegistry.sapling = registryHelper.registerBlock(new SaplingBaseBlock(woodRegistry.saplingGenerator),
+                    name.getPath() + "_sapling", ItemGroup.DECORATIONS);
             return this;
         }
 
         public Builder fence() {
-            woodRegistry.fence = RegistryUtils.register(new FenceBlock(FabricBlockSettings.copy(woodRegistry.planks).build()),
-                    new Identifier(name.getNamespace(), name.getPath() + "_fence"), ItemGroup.DECORATIONS);
+            woodRegistry.fence = registryHelper.registerBlock(new FenceBlock(FabricBlockSettings.copy(woodRegistry.planks).build()),
+                    name.getPath() + "_fence", ItemGroup.DECORATIONS);
             return this;
         }
 
         public Builder fenceGate() {
-            woodRegistry.fenceGate = RegistryUtils.register(new FenceGateBlock(FabricBlockSettings.copy(woodRegistry.planks).build()),
-                    new Identifier(name.getNamespace(), name.getPath() + "_fence_gate"), ItemGroup.REDSTONE);
+            woodRegistry.fenceGate = registryHelper.registerBlock(new FenceGateBlock(FabricBlockSettings.copy(woodRegistry.planks).build()),
+                    name.getPath() + "_fence_gate", ItemGroup.REDSTONE);
             return this;
         }
 
         public Builder bookshelf() {
-            woodRegistry.bookshelf = RegistryUtils.register(new Block(Block.Settings.copy(woodRegistry.planks)),
-                    new Identifier(name.getNamespace(), name.getPath() + "_bookshelf"), ItemGroup.BUILDING_BLOCKS);
+            woodRegistry.bookshelf = registryHelper.registerBlock(new Block(Block.Settings.copy(woodRegistry.planks)),
+                    name.getPath() + "_bookshelf", ItemGroup.BUILDING_BLOCKS);
             return this;
         }
 
         public Builder door() {
-            woodRegistry.door = RegistryUtils.register(new DoorBaseBlock(FabricBlockSettings.copy(woodRegistry.planks).build()),
-                    new Identifier(name.getNamespace(), name.getPath() + "_door"), ItemGroup.REDSTONE);
+            woodRegistry.door = registryHelper.registerBlock(new DoorBaseBlock(FabricBlockSettings.copy(woodRegistry.planks).build()),
+                    name.getPath() + "_door", ItemGroup.REDSTONE);
             return this;
         }
 
         public Builder trapdoor() {
-            woodRegistry.trapdoor = RegistryUtils.register(new TrapdoorBaseBlock(FabricBlockSettings.copy(woodRegistry.planks).build()),
-                    new Identifier(name.getNamespace(), name.getPath() + "_trapdoor"), ItemGroup.REDSTONE);
+            woodRegistry.trapdoor = registryHelper.registerBlock(new TrapdoorBaseBlock(FabricBlockSettings.copy(woodRegistry.planks).build()),
+                    name.getPath() + "_trapdoor", ItemGroup.REDSTONE);
             return this;
         }
 
         public Builder button() {
-            woodRegistry.button = RegistryUtils.register(new ButtonBaseBlock(true, FabricBlockSettings.copy(woodRegistry.planks).build()),
-                    new Identifier(name.getNamespace(), name.getPath() + "_button"), ItemGroup.REDSTONE);
+            woodRegistry.button = registryHelper.registerBlock(new ButtonBaseBlock(true, FabricBlockSettings.copy(woodRegistry.planks).build()),
+                    name.getPath() + "_button", ItemGroup.REDSTONE);
             return this;
         }
 
         public Builder pressurePlate(PressurePlateBlock.ActivationRule type) {
-            woodRegistry.pressurePlate = RegistryUtils.register(new PressurePlateBaseBlock(FabricBlockSettings.copy(woodRegistry.planks).build(), type),
-                    new Identifier(name.getNamespace(), name.getPath() + "_pressure_plate"), ItemGroup.REDSTONE);
+            woodRegistry.pressurePlate = registryHelper.registerBlock(new PressurePlateBaseBlock(FabricBlockSettings.copy(woodRegistry.planks).build(), type),
+                    name.getPath() + "_pressure_plate", ItemGroup.REDSTONE);
             return this;
         }
 
         public Builder ladder() {
-            woodRegistry.ladder = RegistryUtils.register(new CustomLadderBlock(), new Identifier(name.getNamespace(),
-                    name.getPath() + "_ladder"), ItemGroup.DECORATIONS);
+            woodRegistry.ladder = registryHelper.registerBlock(new CustomLadderBlock(),
+                    name.getPath() + "_ladder", ItemGroup.DECORATIONS);
             return this;
         }
 

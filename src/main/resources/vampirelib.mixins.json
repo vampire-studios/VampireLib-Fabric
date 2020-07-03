@@ -5,7 +5,8 @@
 	"mixins": [
 		"block.StructureBlockBlockEntityMixin",
 		"entity.EntityMixin",
-		"item.MixinBookOnLectern"
+		"item.MixinBookOnLectern",
+		"item.ItemMixin"
 	],
 	"client": [
 		"client.MixinClientPlayNetworkHandler",
