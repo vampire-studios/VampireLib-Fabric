@@ -1,0 +1,42 @@
+{
+    "registryName": "example_mod:example_module",
+    "name": "Example Module",
+    "init": {
+        "common": {
+            "features": [
+                "com.example.modules.TestFeature1",
+                "com.example.modules.TestFeature2",
+                "com.example.modules.TestFeature3"
+            ],
+            "subModules": [
+                "com.example.modules.TestSubModule1",
+                "com.example.modules.TestSubModule2",
+                "com.example.modules.TestSubModule3",
+                "com.example.modules.TestSubModule4"
+            ]
+        },
+        "client": {
+            "features": [
+                "com.example.modules.client.TestFeature1"
+            ],
+            "subModules": [
+                "com.example.modules.client.TestSubModule1",
+                "com.example.modules.client.TestSubModule2"
+            ]
+        },
+        "server": {
+            "features": [
+                "com.example.modules.server.TestFeature1",
+                "com.example.modules.server.TestFeature2",
+                "com.example.modules.server.TestFeature3",
+                "com.example.modules.server.TestFeature3"
+            ],
+            "subModules": [
+                "com.example.modules.server.TestSubModule1",
+                "com.example.modules.server.TestSubModule2",
+                "com.example.modules.server.TestSubModule3",
+                "com.example.modules.server.TestSubModule4"
+            ]
+        }
+    }
+}
