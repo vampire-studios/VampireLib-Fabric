@@ -24,8 +24,6 @@
 
 package io.github.vampirestudios.vampirelib.modules.api;
 
-import blue.endless.jankson.JsonObject;
-import blue.endless.jankson.JsonPrimitive;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.util.Identifier;
@@ -58,8 +56,8 @@ public abstract class NonFeatureModule {
         this.enabled = enabled;
     }
 
-    public final void setEnabled(JsonObject obj) {
-        setEnabled(obj.getBoolean("enabled", true));
+    public final void setEnabled(com.google.gson.JsonObject obj) {
+        setEnabled(obj.get("enabled").getAsBoolean());
     }
 
     public Identifier getRegistryName() {
@@ -70,19 +68,19 @@ public abstract class NonFeatureModule {
         return name;
     }
 
-    public void configure(JsonObject obj) {
+    public void configure(com.google.gson.JsonObject obj) {
     }
 
-    public final JsonObject getConfig() {
-        JsonObject obj = new JsonObject();
-        obj.put("enabled", new JsonPrimitive(isEnabled()));
-        obj.put("registryName", new JsonPrimitive(getRegistryName().toString()));
-        obj.put("name", new JsonPrimitive(getName()));
+    public final com.google.gson.JsonObject getConfig() {
+        com.google.gson.JsonObject obj = new com.google.gson.JsonObject();
+        obj.add("enabled", new com.google.gson.JsonPrimitive(isEnabled()));
+        obj.add("registryName", new com.google.gson.JsonPrimitive(getRegistryName().toString()));
+        obj.add("name", new com.google.gson.JsonPrimitive(getName()));
         writeToConfig(obj);
         return obj;
     }
 
-    public void writeToConfig(JsonObject obj) {
+    public void writeToConfig(com.google.gson.JsonObject obj) {
     }
 
 }

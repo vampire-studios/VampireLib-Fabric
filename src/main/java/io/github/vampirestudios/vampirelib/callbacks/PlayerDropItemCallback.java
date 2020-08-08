@@ -22,17 +22,38 @@
  * SOFTWARE.
  */
 
-package io.github.vampirestudios.vampirelib.blocks;
+package io.github.vampirestudios.vampirelib.callbacks;
 
-import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
-import net.minecraft.block.Block;
-import net.minecraft.state.property.DirectionProperty;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ActionResult;
 
-public abstract class DirectionalBlock extends Block {
-    public static final DirectionProperty FACING = DirectionProperty.of("facing");
+import net.fabricmc.fabric.api.event.Event;
+import net.fabricmc.fabric.api.event.EventFactory;
 
-    public DirectionalBlock(FabricBlockSettings builder) {
-        super(builder);
-    }
+/**
+ * Callback for the player dropping an item entity.
+ * Is hooked in before the item is dropped.
+ *
+ * <p>Upon return:
+ * <ul><li>SUCCESS cancels further processing and drops the item.
+ * <li>PASS falls back to further processing.
+ * <li>FAIL cancels further processing and does not drop the item.</ul>
+ */
+public interface PlayerDropItemCallback {
+	Event<PlayerDropItemCallback> EVENT = EventFactory.createArrayBacked(PlayerDropItemCallback.class,
+			(listeners) -> (player, stack) -> {
+				for (PlayerDropItemCallback event : listeners) {
+					ActionResult result = event.interact(player, stack);
 
+					if (result != ActionResult.PASS) {
+						return result;
+					}
+				}
+
+				return ActionResult.PASS;
+			}
+		);
+
+	ActionResult interact(PlayerEntity player, ItemStack stack);
 }

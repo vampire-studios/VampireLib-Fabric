@@ -26,7 +26,7 @@ package io.github.vampirestudios.vampirelib.utils.registry;
 
 import io.github.vampirestudios.vampirelib.blocks.*;
 import net.fabricmc.api.EnvType;
-import net.fabricmc.fabric.api.block.FabricBlockSettings;
+import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.fabricmc.fabric.impl.client.rendering.ColorProviderRegistryImpl;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.*;
@@ -179,26 +179,26 @@ public class WoodRegistry {
 
         public Builder log() {
             woodRegistry.log = registryHelper.registerBlock(new PillarBlock(FabricBlockSettings.of(Material.WOOD, MaterialColor.SPRUCE).hardness(2.0F)
-                    .sounds(BlockSoundGroup.WOOD).build()), name.getPath() + "_log", ItemGroup.BUILDING_BLOCKS);
+                    .sounds(BlockSoundGroup.WOOD)), name.getPath() + "_log", ItemGroup.BUILDING_BLOCKS);
             return this;
         }
 
         public Builder wood() {
             woodRegistry.wood = registryHelper.registerBlock(new Block(FabricBlockSettings.of(Material.WOOD, MaterialColor.WOOD).hardness(2.0F)
-                    .sounds(BlockSoundGroup.WOOD).build()), name.getPath() + "_wood", ItemGroup.BUILDING_BLOCKS);
+                    .sounds(BlockSoundGroup.WOOD)), name.getPath() + "_wood", ItemGroup.BUILDING_BLOCKS);
             return this;
         }
 
         public Builder strippedLog() {
             woodRegistry.strippedLog = registryHelper.registerBlock(new PillarBlock(FabricBlockSettings.of(Material.WOOD, MaterialColor.SPRUCE).hardness(2.0F)
-                            .sounds(BlockSoundGroup.WOOD).build()), "stripped_" + name.getPath() + "_log",
+                            .sounds(BlockSoundGroup.WOOD)), "stripped_" + name.getPath() + "_log",
                     ItemGroup.BUILDING_BLOCKS);
             return this;
         }
 
         public Builder strippedWood() {
             woodRegistry.strippedWood = registryHelper.registerBlock(new Block(FabricBlockSettings.of(Material.WOOD, MaterialColor.WOOD).hardness(2.0F)
-                            .sounds(BlockSoundGroup.WOOD).build()), "stripped_" + name.getPath() + "_wood",
+                            .sounds(BlockSoundGroup.WOOD)), "stripped_" + name.getPath() + "_wood",
                     ItemGroup.BUILDING_BLOCKS);
             return this;
         }
@@ -210,14 +210,14 @@ public class WoodRegistry {
         }
 
         public Builder slab() {
-            woodRegistry.slab = registryHelper.registerBlock(new SlabBaseBlock(FabricBlockSettings.copy(woodRegistry.planks).build()),
+            woodRegistry.slab = registryHelper.registerBlock(new SlabBaseBlock(FabricBlockSettings.copy(woodRegistry.planks)),
                     name.getPath() + "_slab", ItemGroup.BUILDING_BLOCKS);
             return this;
         }
 
         public Builder planks() {
             woodRegistry.planks = registryHelper.registerBlock(new Block(FabricBlockSettings.of(Material.WOOD, MaterialColor.WOOD)
-                            .strength(2.0F, 3.0F).sounds(BlockSoundGroup.WOOD).build()),
+                            .strength(2.0F, 3.0F).sounds(BlockSoundGroup.WOOD)),
                     name.getPath() + "_planks", ItemGroup.BUILDING_BLOCKS);
             return this;
         }
@@ -257,13 +257,13 @@ public class WoodRegistry {
         }
 
         public Builder fence() {
-            woodRegistry.fence = registryHelper.registerBlock(new FenceBlock(FabricBlockSettings.copy(woodRegistry.planks).build()),
+            woodRegistry.fence = registryHelper.registerBlock(new FenceBlock(FabricBlockSettings.copy(woodRegistry.planks)),
                     name.getPath() + "_fence", ItemGroup.DECORATIONS);
             return this;
         }
 
         public Builder fenceGate() {
-            woodRegistry.fenceGate = registryHelper.registerBlock(new FenceGateBlock(FabricBlockSettings.copy(woodRegistry.planks).build()),
+            woodRegistry.fenceGate = registryHelper.registerBlock(new FenceGateBlock(FabricBlockSettings.copy(woodRegistry.planks)),
                     name.getPath() + "_fence_gate", ItemGroup.REDSTONE);
             return this;
         }
@@ -275,25 +275,25 @@ public class WoodRegistry {
         }
 
         public Builder door() {
-            woodRegistry.door = registryHelper.registerBlock(new DoorBaseBlock(FabricBlockSettings.copy(woodRegistry.planks).build()),
+            woodRegistry.door = registryHelper.registerBlock(new DoorBaseBlock(FabricBlockSettings.copy(woodRegistry.planks)),
                     name.getPath() + "_door", ItemGroup.REDSTONE);
             return this;
         }
 
         public Builder trapdoor() {
-            woodRegistry.trapdoor = registryHelper.registerBlock(new TrapdoorBaseBlock(FabricBlockSettings.copy(woodRegistry.planks).build()),
+            woodRegistry.trapdoor = registryHelper.registerBlock(new TrapdoorBaseBlock(FabricBlockSettings.copy(woodRegistry.planks)),
                     name.getPath() + "_trapdoor", ItemGroup.REDSTONE);
             return this;
         }
 
         public Builder button() {
-            woodRegistry.button = registryHelper.registerBlock(new ButtonBaseBlock(true, FabricBlockSettings.copy(woodRegistry.planks).build()),
+            woodRegistry.button = registryHelper.registerBlock(new ButtonBaseBlock(true, FabricBlockSettings.copy(woodRegistry.planks)),
                     name.getPath() + "_button", ItemGroup.REDSTONE);
             return this;
         }
 
         public Builder pressurePlate(PressurePlateBlock.ActivationRule type) {
-            woodRegistry.pressurePlate = registryHelper.registerBlock(new PressurePlateBaseBlock(FabricBlockSettings.copy(woodRegistry.planks).build(), type),
+            woodRegistry.pressurePlate = registryHelper.registerBlock(new PressurePlateBaseBlock(FabricBlockSettings.copy(woodRegistry.planks), type),
                     name.getPath() + "_pressure_plate", ItemGroup.REDSTONE);
             return this;
         }

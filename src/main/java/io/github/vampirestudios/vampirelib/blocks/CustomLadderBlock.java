@@ -24,7 +24,7 @@
 
 package io.github.vampirestudios.vampirelib.blocks;
 
-import net.fabricmc.fabric.api.block.FabricBlockSettings;
+import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.LadderBlock;
 import net.minecraft.block.Material;
 import net.minecraft.sound.BlockSoundGroup;
@@ -33,7 +33,7 @@ import net.minecraft.util.math.Direction;
 public class CustomLadderBlock extends LadderBlock {
 
     public CustomLadderBlock() {
-        super(FabricBlockSettings.of(Material.AGGREGATE).hardness(0.4F).sounds(BlockSoundGroup.LADDER).build());
+        super(FabricBlockSettings.of(Material.AGGREGATE).hardness(0.4F).sounds(BlockSoundGroup.LADDER));
         setDefaultState(this.getDefaultState().with(FACING, Direction.NORTH).with(WATERLOGGED, false));
     }
 

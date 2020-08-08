@@ -22,17 +22,27 @@
  * SOFTWARE.
  */
 
-package io.github.vampirestudios.vampirelib.blocks;
+package io.github.vampirestudios.vampirelib.mixins;
 
-import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
-import net.minecraft.block.Block;
-import net.minecraft.state.property.DirectionProperty;
+import io.github.vampirestudios.vampirelib.callbacks.PlayerDropItemCallback;
+import net.minecraft.entity.ItemEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.util.ActionResult;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-public abstract class DirectionalBlock extends Block {
-    public static final DirectionProperty FACING = DirectionProperty.of("facing");
+@Mixin(ServerPlayerEntity.class)
+public class MixinServerPlayerEntity {
+	@Inject(method = "dropItem", at = @At("HEAD"), cancellable = true)
+	private void onPlayerDropItem(final ItemStack stack, final boolean dropAtFeet, final boolean saveThrower, final CallbackInfoReturnable<ItemEntity> info) {
+		ServerPlayerEntity player = (ServerPlayerEntity) (Object) this;
+		ActionResult result = PlayerDropItemCallback.EVENT.invoker().interact(player, stack);
 
-    public DirectionalBlock(FabricBlockSettings builder) {
-        super(builder);
-    }
-
+		if (result == ActionResult.FAIL) {
+			info.cancel();
+		}
+	}
 }

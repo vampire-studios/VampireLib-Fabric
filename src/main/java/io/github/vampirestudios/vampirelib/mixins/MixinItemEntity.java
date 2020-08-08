@@ -22,17 +22,25 @@
  * SOFTWARE.
  */
 
-package io.github.vampirestudios.vampirelib.blocks;
+package io.github.vampirestudios.vampirelib.mixins;
 
-import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
-import net.minecraft.block.Block;
-import net.minecraft.state.property.DirectionProperty;
+import io.github.vampirestudios.vampirelib.callbacks.PlayerPickupItemCallback;
+import net.minecraft.entity.ItemEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.ActionResult;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-public abstract class DirectionalBlock extends Block {
-    public static final DirectionProperty FACING = DirectionProperty.of("facing");
+@Mixin(ItemEntity.class)
+public abstract class MixinItemEntity {
+	@Inject(at = @At("HEAD"), method = "onPlayerCollision", cancellable = true)
+	private void pickupItem(final PlayerEntity playerEntity, final CallbackInfo info) {
+		ActionResult result = PlayerPickupItemCallback.EVENT.invoker().interact(playerEntity, (ItemEntity) (Object) this);
 
-    public DirectionalBlock(FabricBlockSettings builder) {
-        super(builder);
-    }
-
+		if (result == ActionResult.FAIL) {
+			info.cancel();
+		}
+	}
 }

@@ -22,17 +22,38 @@
  * SOFTWARE.
  */
 
-package io.github.vampirestudios.vampirelib.blocks;
+package io.github.vampirestudios.vampirelib.callbacks;
 
-import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
-import net.minecraft.block.Block;
-import net.minecraft.state.property.DirectionProperty;
+import net.minecraft.entity.ItemEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.ActionResult;
 
-public abstract class DirectionalBlock extends Block {
-    public static final DirectionProperty FACING = DirectionProperty.of("facing");
+import net.fabricmc.fabric.api.event.Event;
+import net.fabricmc.fabric.api.event.EventFactory;
 
-    public DirectionalBlock(FabricBlockSettings builder) {
-        super(builder);
-    }
+/**
+ * Callback for the player picking up an item entity.
+ * Is hooked in before the item is picked up.
+ *
+ * <p>Upon return:
+ * <ul><li>SUCCESS cancels further processing and picks up the item.
+ * <li>PASS falls back to further processing. If all listeners return PASS, the item is picked up.
+ * <li>FAIL cancels further processing and does not pick up the item.</ul>
+ */
+public interface PlayerPickupItemCallback {
+	Event<PlayerPickupItemCallback> EVENT = EventFactory.createArrayBacked(PlayerPickupItemCallback.class,
+			(listeners) -> (player, entity) -> {
+				for (PlayerPickupItemCallback event : listeners) {
+					ActionResult result = event.interact(player, entity);
 
+					if (result != ActionResult.PASS) {
+						return result;
+					}
+				}
+
+				return ActionResult.PASS;
+			}
+		);
+
+	ActionResult interact(PlayerEntity player, ItemEntity pickupEntity);
 }

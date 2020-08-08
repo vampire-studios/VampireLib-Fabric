@@ -22,17 +22,26 @@
  * SOFTWARE.
  */
 
-package io.github.vampirestudios.vampirelib.blocks;
+package io.github.vampirestudios.vampirelib.mixins;
 
-import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
-import net.minecraft.block.Block;
-import net.minecraft.state.property.DirectionProperty;
+import io.github.vampirestudios.vampirelib.callbacks.EntityHealthChangeCallback;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.util.ActionResult;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-public abstract class DirectionalBlock extends Block {
-    public static final DirectionProperty FACING = DirectionProperty.of("facing");
-
-    public DirectionalBlock(FabricBlockSettings builder) {
-        super(builder);
-    }
-
+@Mixin(LivingEntity.class)
+public abstract class MixinLivingEntity {
+	/**
+	 * Callback injector for monitoring entity health changes.
+	 */
+	@Inject(at = @At("INVOKE"), method = "setHealth(F)V", cancellable = true)
+	private void entityHealthChange(float health, CallbackInfo ci) {
+		ActionResult result = EntityHealthChangeCallback.EVENT.invoker().health(((LivingEntity) (Object) this), health);
+		if (result == ActionResult.FAIL) {
+			ci.cancel();
+		}
+	}
 }

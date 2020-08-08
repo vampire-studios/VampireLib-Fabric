@@ -24,15 +24,20 @@
 
 package io.github.vampirestudios.vampirelib.blocks;
 
-import net.fabricmc.fabric.api.block.FabricBlockSettings;
+import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.Material;
 import net.minecraft.block.TorchBlock;
+import net.minecraft.particle.DefaultParticleType;
 import net.minecraft.particle.ParticleTypes;
 
 public class TorchBaseBlock extends TorchBlock {
 
     public TorchBaseBlock() {
-        super(FabricBlockSettings.of(Material.WOOD).build(), ParticleTypes.FLAME);
+        super(FabricBlockSettings.of(Material.WOOD), ParticleTypes.FLAME);
+    }
+
+    public TorchBaseBlock(DefaultParticleType particleType) {
+        super(FabricBlockSettings.of(Material.WOOD), particleType);
     }
 
 }

@@ -24,7 +24,7 @@
 
 package io.github.vampirestudios.vampirelib.utils.registry;
 
-import net.fabricmc.fabric.api.entity.FabricEntityTypeBuilder;
+import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.EntityType;
@@ -50,6 +50,7 @@ public class EntityRegistryBuilder<E extends Entity> {
     private int primaryColor;
     private int secondaryColor;
     private boolean hasEgg;
+    private boolean fireImmune;
 
     private EntityDimensions dimensions;
 
@@ -92,21 +93,32 @@ public class EntityRegistryBuilder<E extends Entity> {
         return this;
     }
 
+    public EntityRegistryBuilder<E> makeFireImmune() {
+        this.fireImmune = true;
+        return this;
+    }
+
     public EntityRegistryBuilder<E> dimensions(EntityDimensions size) {
         this.dimensions = size;
         return this;
     }
 
     public EntityType<E> build() {
-        EntityType<E> entityBuilder = FabricEntityTypeBuilder.create(category, entityFactory).size(dimensions).disableSaving().build();
-        EntityType<E> entityType = Registry.register(Registry.ENTITY_TYPE, name, entityBuilder);
-        if ((this.alwaysUpdateVelocity)) {
-            if (this.updateIntervalTicks != 0 & this.trackingDistance != 0)
-                FabricEntityTypeBuilder.create(category, entityFactory).size(dimensions).trackable(trackingDistance, updateIntervalTicks, alwaysUpdateVelocity).disableSaving().build();
+        EntityType.Builder<E> entityBuilder = EntityType.Builder.create(this.entityFactory, this.category).setDimensions(this.dimensions.height, this.dimensions.width);
+        if (fireImmune) {
+            entityBuilder.makeFireImmune();
         }
+        if (this.alwaysUpdateVelocity && this.updateIntervalTicks != 0 & this.trackingDistance != 0) {
+            FabricEntityTypeBuilder.create(this.category, this.entityFactory).dimensions(this.dimensions)
+                    .trackable(this.trackingDistance, this.updateIntervalTicks, this.alwaysUpdateVelocity).build();
+        }
+
+        EntityType<E> entityType = Registry.register(Registry.ENTITY_TYPE, name, entityBuilder.build(name.getPath()));
+
         if (hasEgg) {
             RegistryHelper.createRegistryHelper(name.getNamespace()).registerItem(new SpawnEggItem(entityType, primaryColor, secondaryColor, new Item.Settings().group(ItemGroup.MISC)), String.format("%s_spawn_egg", name.getPath()));
         }
+        
         return entityType;
     }
 

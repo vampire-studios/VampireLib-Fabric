@@ -36,13 +36,26 @@ import net.minecraft.util.registry.SimpleRegistry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class VampireLib implements ModInitializer {
 
     public static final Registry<ModuleManager> MODULE_MANAGERS = new SimpleRegistry<>(RegistryKey.ofRegistry(new Identifier("vampirelib:module_managers")), Lifecycle.stable());
     public static String MOD_ID = "vampirelib";
     public static String MOD_NAME = "VampireLib";
     public static final Logger LOGGER = LogManager.getLogger(MOD_NAME);
-    public static String MOD_VERSION = "1.8.0+build.1-1.16-pre2";
+    public static String MOD_VERSION = "2.0.0+build.1 (alpha) for 1.16.2";
+    public static final Map<String, Identifier> DEV_UUID = new HashMap<String, Identifier>(){{
+        //CatCore
+        this.put("5bb676ef-ecee-4258-ae1f-53e163839585", new Identifier(MOD_ID, "textures/misc/cat_cape.png"));
+        //OliviaTheVampire
+        this.put("b344687b-ec74-479a-9540-1aa8ccb13e92", new Identifier(MOD_ID, "textures/misc/zombified_piglin_cape.png"));
+        //Tridentflayer
+        this.put("ab6a4eb9-b02a-4909-a71e-65a8dbe5ee54", new Identifier(MOD_ID, "textures/misc/turtle.png"));
+        //SkyladySelena
+        this.put("641cb212-8d44-4a2c-aa47-8396918fa336", new Identifier(MOD_ID, "textures/misc/selena_cape.png"));
+    }};
 
     @Override
     public void onInitialize() {

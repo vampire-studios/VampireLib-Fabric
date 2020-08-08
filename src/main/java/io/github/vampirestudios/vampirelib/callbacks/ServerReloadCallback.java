@@ -22,17 +22,39 @@
  * SOFTWARE.
  */
 
-package io.github.vampirestudios.vampirelib.blocks;
+package io.github.vampirestudios.vampirelib.callbacks;
 
-import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
-import net.minecraft.block.Block;
-import net.minecraft.state.property.DirectionProperty;
+import net.minecraft.server.MinecraftServer;
 
-public abstract class DirectionalBlock extends Block {
-    public static final DirectionProperty FACING = DirectionProperty.of("facing");
+import net.fabricmc.fabric.api.event.Event;
+import net.fabricmc.fabric.api.event.EventFactory;
 
-    public DirectionalBlock(FabricBlockSettings builder) {
-        super(builder);
-    }
+/**
+ * A callback for the server's reloading, as of {@code /reload} command is typed.
+ */
+public interface ServerReloadCallback {
+	/**
+	 * An event invoked immediately before the server starts reloading.
+	 */
+	Event<ServerReloadCallback> BEFORE = EventFactory.createArrayBacked(ServerReloadCallback.class, listeners -> server -> {
+		for (ServerReloadCallback event : listeners) {
+			event.onServerReload(server);
+		}
+	});
 
+	/**
+	 * An event invoked after the server just finished reloading or its initial loading.
+	 */
+	Event<ServerReloadCallback> AFTER = EventFactory.createArrayBacked(ServerReloadCallback.class, listeners -> server -> {
+		for (ServerReloadCallback event : listeners) {
+			event.onServerReload(server);
+		}
+	});
+
+	/**
+	 * Handles the event.
+	 *
+	 * @param server the server
+	 */
+	void onServerReload(MinecraftServer server);
 }

@@ -22,17 +22,45 @@
  * SOFTWARE.
  */
 
-package io.github.vampirestudios.vampirelib.blocks;
+package io.github.vampirestudios.vampirelib.client;
 
-import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
-import net.minecraft.block.Block;
-import net.minecraft.state.property.DirectionProperty;
+import net.minecraft.entity.player.PlayerEntity;
 
-public abstract class DirectionalBlock extends Block {
-    public static final DirectionProperty FACING = DirectionProperty.of("facing");
+/**
+ * Author: MachineMuse (Claire Semple)
+ * Created: 6:07 PM, 9/5/13
+ */
+public class FOVUpdateEvent {
 
-    public DirectionalBlock(FabricBlockSettings builder) {
-        super(builder);
+    private final PlayerEntity entity;
+    private final float fov;
+    private float newfov;
+
+    public FOVUpdateEvent(PlayerEntity entity, float fov)
+    {
+        this.entity = entity;
+        this.fov = fov;
+        this.setNewfov(fov);
+    }
+
+    public PlayerEntity getEntity()
+    {
+        return entity;
+    }
+
+    public float getFov()
+    {
+        return fov;
+    }
+
+    public float getNewfov()
+    {
+        return newfov;
+    }
+
+    public void setNewfov(float newfov)
+    {
+        this.newfov = newfov;
     }
 
 }

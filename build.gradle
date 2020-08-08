@@ -1,5 +1,5 @@
 plugins {
-	id 'fabric-loom' version '0.4-SNAPSHOT'
+	id 'fabric-loom' version '0.5-SNAPSHOT'
 	id 'maven-publish'
 	id 'net.minecrell.licenser' version '0.4.1'
 	id "co.riiid.gradle" version "0.4.2"
@@ -54,11 +54,6 @@ dependencies {
 	include("me.sargunvohra.mcmods:autoconfig1u:${project.autoconfig1u}") {
 		exclude module: "fabric-api"
 	}
-
-	modImplementation "io.github.cottonmc:Jankson-Fabric:${project.jankson_version}"
-	include "io.github.cottonmc:Jankson-Fabric:${project.jankson_version}"
-
-	compile "com.google.code.findbugs:jsr305:3.0.2"
 }
 
 processResources {

@@ -24,7 +24,7 @@
 
 package io.github.vampirestudios.vampirelib.blocks;
 
-import net.fabricmc.fabric.api.block.FabricBlockSettings;
+import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.CakeBlock;
 import net.minecraft.block.Material;
 import net.minecraft.sound.BlockSoundGroup;
@@ -37,7 +37,7 @@ public class CakeBaseBlock extends CakeBlock {
     }
 
     public CakeBaseBlock(int slices) {
-        super(FabricBlockSettings.of(Material.CAKE).hardness(0.5F).sounds(BlockSoundGroup.WOOL).build());
+        super(FabricBlockSettings.of(Material.CAKE).hardness(0.5F).sounds(BlockSoundGroup.WOOL));
         this.slices = slices;
     }
 

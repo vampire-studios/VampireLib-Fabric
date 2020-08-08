@@ -22,17 +22,26 @@
  * SOFTWARE.
  */
 
-package io.github.vampirestudios.vampirelib.blocks;
+package io.github.vampirestudios.vampirelib.callbacks;
 
-import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
-import net.minecraft.block.Block;
-import net.minecraft.state.property.DirectionProperty;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.world.level.LevelProperties;
 
-public abstract class DirectionalBlock extends Block {
-    public static final DirectionProperty FACING = DirectionProperty.of("facing");
+import net.fabricmc.fabric.api.event.Event;
+import net.fabricmc.fabric.api.event.EventFactory;
 
-    public DirectionalBlock(FabricBlockSettings builder) {
-        super(builder);
-    }
+/**
+ * A callback for the server's saving.
+ */
+public interface ServerSaveCallback {
+	/**
+	 * An event invoked when the server's vanilla saving logic has completed.
+	 */
+	Event<ServerSaveCallback> EVENT = EventFactory.createArrayBacked(ServerSaveCallback.class, listeners -> (server, levelProperties) -> {
+		for (ServerSaveCallback event : listeners) {
+			event.onServerSave(server, levelProperties);
+		}
+	});
 
+	void onServerSave(MinecraftServer server, LevelProperties levelProperties);
 }

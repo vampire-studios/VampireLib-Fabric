@@ -22,17 +22,28 @@
  * SOFTWARE.
  */
 
-package io.github.vampirestudios.vampirelib.blocks;
+package io.github.vampirestudios.vampirelib.callbacks;
 
-import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
-import net.minecraft.block.Block;
-import net.minecraft.state.property.DirectionProperty;
+import net.fabricmc.fabric.api.event.Event;
+import net.fabricmc.fabric.api.event.EventFactory;
+import net.minecraft.util.ActionResult;
+import net.minecraft.entity.LivingEntity;
 
-public abstract class DirectionalBlock extends Block {
-    public static final DirectionProperty FACING = DirectionProperty.of("facing");
+public interface EntityHealthChangeCallback {
+	/**
+	 * Callback for entity health change. Triggered whenever the game updates the entity's health. Returns the entity
+	 * and it's new health
+	 */
+	Event<EntityHealthChangeCallback> EVENT = EventFactory.createArrayBacked(EntityHealthChangeCallback.class,
+			(listeners) -> (entity, health) -> {
+				for (EntityHealthChangeCallback event : listeners) {
+					ActionResult result = event.health(entity, health);
+					if (result != ActionResult.PASS) {
+						return result;
+					}
+				}
+				return ActionResult.PASS;
+			});
 
-    public DirectionalBlock(FabricBlockSettings builder) {
-        super(builder);
-    }
-
+	ActionResult health(LivingEntity entity, float health);
 }
