@@ -5,7 +5,7 @@
   "mixins": [
     "MixinItemEntity",
     "MixinLivingEntity",
-//    "MixinPlayerManager",
+    "MixinPlayerManager",
     "MixinServerPlayerEntity",
     "block.StructureBlockBlockEntityMixin",
     "entity.EntityMixin",

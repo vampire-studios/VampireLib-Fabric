@@ -66,7 +66,7 @@ public class RodBaseBlock extends FacingBlock {
     }
 
     @Override
-    public VoxelShape getRayTraceShape(BlockState blockState_1, BlockView blockView_1, BlockPos blockPos_1) {
+    public VoxelShape getRaycastShape(BlockState blockState_1, BlockView blockView_1, BlockPos blockPos_1) {
         switch (blockState_1.get(FACING).getAxis()) {
             case X:
             default:
