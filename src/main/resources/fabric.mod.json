@@ -17,14 +17,18 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "io.github.vampirestudios.vampirelib.VampireLib"
+      "io.github.vampirestudios.vampirelib.VampireLib",
+      "io.github.vampirestudios.vampirelib.RendererRegistriesTest"
+    ],
+    "client": [
+      "io.github.vampirestudios.vampirelib.ClientRendererRegistriesTest"
     ]
   },
   "mixins": [
     "vampirelib.mixins.json"
   ],
   "depends": {
-    "fabricloader": ">=0.8.0"
+    "fabricloader": ">=0.9.2"
   },
   "custom": {
     "modmenu:api": true
