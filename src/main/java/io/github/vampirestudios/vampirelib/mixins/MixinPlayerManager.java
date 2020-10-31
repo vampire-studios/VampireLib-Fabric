@@ -24,7 +24,9 @@
 
 package io.github.vampirestudios.vampirelib.mixins;
 
+import io.github.vampirestudios.vampirelib.callbacks.PlayerJoinCallback;
 import io.github.vampirestudios.vampirelib.callbacks.PlayerRespawnCallback;
+import net.minecraft.network.ClientConnection;
 import net.minecraft.server.PlayerManager;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.network.ServerPlayerInteractionManager;
@@ -33,6 +35,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Slice;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
@@ -44,5 +47,9 @@ public abstract class MixinPlayerManager {
 	@Inject(method = "respawnPlayer(Lnet/minecraft/server/network/ServerPlayerEntity;Z)Lnet/minecraft/server/network/ServerPlayerEntity;", slice = @Slice(from = @At(value = "INVOKE", target = "Lnet/minecraft/server/world/ServerWorld;doesNotCollide(Lnet/minecraft/entity/Entity;)Z")), at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;getLevelProperties()Lnet/minecraft/world/level/LevelProperties;"), locals = LocalCapture.CAPTURE_FAILHARD)
 	private void fabric_onPlayerRespawnFireEvent(ServerPlayerEntity oldPlayer, boolean alive, CallbackInfoReturnable<ServerPlayerEntity> cir, BlockPos spawnPos, boolean forcedSpawn, ServerPlayerInteractionManager manager, ServerPlayerEntity clone) {
 		PlayerRespawnCallback.EVENT.invoker().onRespawn(clone, oldPlayer, alive);
+	}
+	@Inject(at = @At("RETURN"), method = "onPlayerConnect")
+	private void onPlayerConnect(ClientConnection connection, ServerPlayerEntity player, CallbackInfo ci) {
+		PlayerJoinCallback.EVENT.invoker().onPlayerJoin(player);
 	}
 }

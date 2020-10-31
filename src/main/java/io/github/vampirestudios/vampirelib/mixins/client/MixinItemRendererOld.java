@@ -1,6 +1,30 @@
-package io.github.vampirestudios.vampirelib.mixins;
+/*
+ * MIT License
+ *
+ * Copyright (c) 2020 Vampire Studios
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
 
-import io.github.vampirestudios.vampirelib.api.ItemCooldownInfo;
+package io.github.vampirestudios.vampirelib.mixins.client;
+
+import io.github.vampirestudios.vampirelib.api.ItemCooldownOverlayInfo;
 import io.github.vampirestudios.vampirelib.api.ItemDamageBarInfo;
 import io.github.vampirestudios.vampirelib.api.ItemLabelInfo;
 import io.github.vampirestudios.vampirelib.api.ItemOverlayRenderer;
@@ -14,7 +38,6 @@ import net.minecraft.entity.player.ItemCooldownManager;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Matrix4f;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -54,7 +77,7 @@ public abstract class MixinItemRendererOld {
 		}
 
 		matrixStack.push();
-		boolean cancel = preRenderer.renderOverlay(new MatrixStack(), renderer, stack, x, y, countLabel);
+		boolean cancel = preRenderer.renderOverlay(matrixStack, renderer, stack, x, y, countLabel);
 		matrixStack.pop();
 
 		if (cancel) {
@@ -111,7 +134,7 @@ public abstract class MixinItemRendererOld {
 	@Redirect(method = "renderGuiItemOverlay(Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/item/ItemStack;IILjava/lang/String;)V",
 			at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;draw(Ljava/lang/String;FFIZLnet/minecraft/util/math/Matrix4f;Lnet/minecraft/client/render/VertexConsumerProvider;ZII)I"))
 	public int countColor(TextRenderer textRenderer, String text, float x, float y, int color, boolean shadow, Matrix4f matrix, VertexConsumerProvider vertexConsumers, boolean seeThrough, int backgroundColor, int light,
-						TextRenderer textRenderer2, ItemStack stack, int x2, int y2, String countLabel) {
+						  TextRenderer textRenderer2, ItemStack stack, int x2, int y2, String countLabel) {
 		ItemLabelInfo props = ItemOverlayMaps.LABEL_INFO_MAP.get(stack.getItem());
 
 		if (props == null) {
@@ -130,20 +153,20 @@ public abstract class MixinItemRendererOld {
 		return countLabelTmp;
 	}
 
-	// changes "is durability bar visible" condition
+	// changes "is damage bar visible" condition
 	@Redirect(method = "renderGuiItemOverlay(Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/item/ItemStack;IILjava/lang/String;)V",
 			at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;isDamaged()Z"))
 	public boolean barVisible(ItemStack stack) {
 		ItemDamageBarInfo props = ItemOverlayMaps.DAMAGE_BAR_INFO_MAP.get(stack.getItem());
 
 		if (props == null) {
-			return stack.isDamageable();
+			return stack.isDamaged();
 		}
 
 		return props.isVisible(stack);
 	}
 
-	// changes durability bar fill factor and color
+	// changes damage bar fill factor and color
 	@ModifyArgs(method = "renderGuiItemOverlay(Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/item/ItemStack;IILjava/lang/String;)V",
 			at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/item/ItemRenderer;renderGuiQuad(Lnet/minecraft/client/render/BufferBuilder;IIIIIIII)V",
 					ordinal = 1))
@@ -164,8 +187,8 @@ public abstract class MixinItemRendererOld {
 	@Redirect(method = "renderGuiItemOverlay(Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/item/ItemStack;IILjava/lang/String;)V",
 			at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/ItemCooldownManager;getCooldownProgress(Lnet/minecraft/item/Item;F)F"))
 	public float cooldownVisible(ItemCooldownManager itemCooldownManager, Item item, float partialTicks,
-			TextRenderer renderer, ItemStack stack) {
-		ItemCooldownInfo props = ItemOverlayMaps.COOLDOWN_INFO_MAP.get(item);
+								 TextRenderer renderer, ItemStack stack) {
+		ItemCooldownOverlayInfo props = ItemOverlayMaps.COOLDOWN_OVERLAY_INFO_MAP.get(item);
 
 		if (props == null) {
 			return itemCooldownManager.getCooldownProgress(item, partialTicks);
@@ -174,12 +197,12 @@ public abstract class MixinItemRendererOld {
 		return props.isVisible(stack, MinecraftClient.getInstance()) ? 1 : 0;
 	}
 
-	// changes cooldown fill factor and color
-	@ModifyArgs(method = "renderGuiItemOverlay(Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/item/ItemStack;IILjava/lang/String;)V",
+	// changes cooldown overlay fill factor and color
+	/*@ModifyArgs(method = "renderGuiItemOverlay(Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/item/ItemStack;IILjava/lang/String;)V",
 			at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/item/ItemRenderer;renderGuiQuad(Lnet/minecraft/client/render/BufferBuilder;IIIIIIII)V",
 					ordinal = 2))
 	public void cooldownFillAndColor(Args args, TextRenderer renderer, ItemStack stack, int x, int y) {
-		ItemCooldownInfo props = ItemOverlayMaps.COOLDOWN_INFO_MAP.get(stack.getItem());
+		ItemCooldownOverlayInfo props = ItemOverlayMaps.COOLDOWN_OVERLAY_INFO_MAP.get(stack.getItem());
 
 		if (props == null) {
 			return;
@@ -192,7 +215,7 @@ public abstract class MixinItemRendererOld {
 		args.set(4, MathHelper.ceil(16 * fill));
 		// set color
 		setGuiQuadColor(args, props.getColor(stack, MinecraftClient.getInstance()));
-	}
+	}*/
 
 	// calls the post-renderer
 	@Inject(method = "renderGuiItemOverlay(Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/item/ItemStack;IILjava/lang/String;)V",

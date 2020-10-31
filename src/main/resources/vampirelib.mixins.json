@@ -1,23 +1,41 @@
 {
-    "required": true,
-    "package": "io.github.vampirestudios.vampirelib.mixins",
-    "compatibilityLevel": "JAVA_8",
-    "mixins": [
-        "MixinItem",
-        "MixinItemEntity",
-        "MixinItemRendererOld",
-        "MixinLivingEntity",
-        "MixinServerPlayerEntity",
-        "block.StructureBlockBlockEntityMixin",
-        "entity.EntityMixin",
-        "item.ItemMixin",
-        "item.MixinBookOnLectern"
-    ],
-    "client": [
-        "client.MixinClientPlayNetworkHandler",
-        "client.SpriteAccessor"
-    ],
-    "injectors": {
-        "defaultRequire": 1
-	}
+  "required": true,
+  "package": "io.github.vampirestudios.vampirelib.mixins",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "BackgroundRendererMixin",
+    "BiomeEffectsAccessor",
+    "DynamicRegistryManagerMixin",
+    "HandledScreenMixin",
+    "LivingEntityMixin",
+    "MixinItemEntity",
+    "MixinLivingEntity",
+    "MixinMobEntity",
+    "MixinMobSpawnerLogic",
+    "MixinPlayerEntity",
+    "MixinRemoveOffHandItemTask",
+    "MixinServerPlayerEntity",
+    "MixinSpawnHelper",
+    "ScreenMixin",
+    "ServerPlayerEntityDamageMixin",
+    "ServerWorldAccessor",
+    "ServerWorldMixin",
+    "SpawnDensityAccessor",
+    "SpawnSettingsAccessor",
+    "block.StructureBlockBlockEntityMixin",
+    "entity.EntityMixin",
+    "item.ItemMixin",
+    "item.MixinBookOnLectern",
+    "item.MixinItem"
+  ],
+  "client": [
+    "client.MixinClientPlayerEntity",
+    "client.MixinClientPlayNetworkHandler",
+    "client.SpriteAccessor",
+    "client.MixinItemRendererOld",
+    "client.TextRendererMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
 }

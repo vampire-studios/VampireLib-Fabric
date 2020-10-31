@@ -34,7 +34,7 @@ public class CampfireBaseBlock extends CampfireBlock {
 
     public CampfireBaseBlock() {
         super(true, 1, AbstractBlock.Settings.of(Material.WOOD, MaterialColor.SPRUCE).strength(2.0F).sounds(BlockSoundGroup.WOOD)
-                .lightLevel(value -> 15).ticksRandomly());
+                .luminance(value -> 15).ticksRandomly());
     }
 
 }
