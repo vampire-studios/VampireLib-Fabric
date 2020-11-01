@@ -44,16 +44,6 @@ dependencies {
 	modCompile "net.fabricmc:fabric-loader:${project.loader_version}"
 	modCompile "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-	modCompile ("me.shedaniel.cloth:config-2:${project.cloth_config_version}") { exclude group: "net.fabricmc.fabric-api" }
-	include ("me.shedaniel.cloth:config-2:${project.cloth_config_version}") { exclude group: "net.fabricmc.fabric-api" }
-
-	modCompile("me.sargunvohra.mcmods:autoconfig1u:${project.autoconfig1u}") {
-		exclude module: "fabric-api"
-	}
-	include("me.sargunvohra.mcmods:autoconfig1u:${project.autoconfig1u}") {
-		exclude module: "fabric-api"
-	}
-
 	modImplementation "com.github.cottonmc:Jankson-Fabric:1.16-SNAPSHOT"
 	include "com.github.cottonmc:Jankson-Fabric:1.16-SNAPSHOT"
 }

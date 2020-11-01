@@ -24,7 +24,6 @@
 
 package io.github.vampirestudios.vampirelib.modules.api;
 
-import me.sargunvohra.mcmods.autoconfig1u.ConfigData;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.util.Identifier;
@@ -62,18 +61,6 @@ public abstract class Module {
 
     public String getDescription() {
         return description;
-    }
-
-    public boolean isConfigAvailable() {
-        return hasConfig;
-    }
-
-    public Class<? extends ConfigData> getConfig() {
-        return null;
-    }
-
-    public boolean hasConfig() {
-        return hasConfig;
     }
 
     public boolean isEnabled() {

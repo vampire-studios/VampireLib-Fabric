@@ -31,8 +31,6 @@ import io.github.vampirestudios.vampirelib.modules.api.Module;
 import io.github.vampirestudios.vampirelib.modules.api.NonFeatureModule;
 import io.github.vampirestudios.vampirelib.modules.api.SubModule;
 import io.github.vampirestudios.vampirelib.modules.utils.ConsoleUtils;
-import me.sargunvohra.mcmods.autoconfig1u.AutoConfig;
-import me.sargunvohra.mcmods.autoconfig1u.serializer.GsonConfigSerializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.util.Identifier;
@@ -67,10 +65,6 @@ public class ModuleManager {
         if (!MODULES.getOrEmpty(module.getRegistryName()).isPresent()) {
             Registry.register(MODULES, module.getRegistryName(), module);
         }
-        if (module.isConfigAvailable() && module.getConfig() != null) {
-            AutoConfig.register(module.getConfig(), GsonConfigSerializer::new);
-            LOGGER.info(String.format("Registered a config for: %s", module.getRegistryName()));
-        }
     }
 
     public void registerNonFeatureModule(NonFeatureModule module) {
@@ -98,19 +92,11 @@ public class ModuleManager {
         if (!SERVER_MODULES.getOrEmpty(module.getRegistryName()).isPresent()) {
             Registry.register(SERVER_MODULES, module.getRegistryName(), module);
         }
-        if (module.isConfigAvailable() && module.getConfig() != null) {
-            AutoConfig.register(module.getConfig(), GsonConfigSerializer::new);
-            LOGGER.info(String.format("Registered a config for: %s", module.getRegistryName()));
-        }
     }
 
     public void registerClientModule(Module module) {
         if (!CLIENT_MODULES.getOrEmpty(module.getRegistryName()).isPresent()) {
             Registry.register(CLIENT_MODULES, module.getRegistryName(), module);
-        }
-        if (module.isConfigAvailable() && module.getConfig() != null) {
-            AutoConfig.register(module.getConfig(), GsonConfigSerializer::new);
-            LOGGER.info(String.format("Registered a config for: %s", module.getRegistryName()));
         }
     }
 
