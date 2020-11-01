@@ -3,7 +3,7 @@
   "package": "io.github.vampirestudios.vampirelib.mixins",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-    "BackgroundRendererMixin",
+//    "BackgroundRendererMixin",
     "BiomeEffectsAccessor",
     "DynamicRegistryManagerMixin",
     "HandledScreenMixin",
