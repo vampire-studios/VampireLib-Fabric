@@ -51,7 +51,7 @@ public class BackgroundRendererMixin {
     @Inject(method = "applyFog", at=@At("RETURN"))
     private static void onFogApplied(Camera camera, BackgroundRenderer.FogType fogType, float viewDistance, boolean thickFog, CallbackInfo info) {
         ActionResult result = FogRenderCallback.EVENT.invoker().onRender(fogType, camera, viewDistance, viewDistance);
-        if (result != ActionResult.PASS) {
+        if (result == ActionResult.FAIL) {
             info.cancel();
         }
     }
@@ -62,7 +62,7 @@ public class BackgroundRendererMixin {
         float red = colors.getX();
         float green = colors.getY();
         float blue = colors.getZ();
-        RenderSystem.clearColor(red, green, blue, 0.0F);
+        RenderSystem.clearColor(red, green, blue, 1.0F);
     }
 
     @ModifyConstant(method = "method_23792", constant = @Constant())

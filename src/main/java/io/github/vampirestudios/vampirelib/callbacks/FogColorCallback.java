@@ -37,7 +37,7 @@ public interface FogColorCallback {
             for (FogColorCallback handler : listeners) {
                 return handler.onRender(info, partialTicks, red, green, blue);
             }
-            return new Vector3f(0, 0, 0);
+            return new Vector3f(red, green, blue);
         });
 
     Vector3f onRender(Camera info, float partialTicks, float red, float green, float blue);

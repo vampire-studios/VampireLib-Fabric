@@ -3,7 +3,7 @@
   "package": "io.github.vampirestudios.vampirelib.mixins",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-//    "BackgroundRendererMixin",
+    "BackgroundRendererMixin",
     "BiomeEffectsAccessor",
     "DynamicRegistryManagerMixin",
     "HandledScreenMixin",
@@ -31,8 +31,8 @@
   "client": [
     "client.MixinClientPlayerEntity",
     "client.MixinClientPlayNetworkHandler",
-    "client.SpriteAccessor",
     "client.MixinItemRendererOld",
+    "client.SpriteAccessor",
     "client.TextRendererMixin"
   ],
   "injectors": {
