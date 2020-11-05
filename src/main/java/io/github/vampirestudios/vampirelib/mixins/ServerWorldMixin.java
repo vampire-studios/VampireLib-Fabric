@@ -45,7 +45,7 @@ public class ServerWorldMixin {
         AddEntityCallback.EVENT.invoker().interact(entity);
     }
 
-    @Inject(
+    /*@Inject(
         method = "loadEntity",
         at = @At(
             value = "INVOKE",
@@ -54,5 +54,5 @@ public class ServerWorldMixin {
     )
     private void hookLoadEntity(Entity entity, CallbackInfoReturnable<Boolean> cir) {
         AddEntityCallback.EVENT.invoker().interact(entity);
-    }
+    }*/
 }
