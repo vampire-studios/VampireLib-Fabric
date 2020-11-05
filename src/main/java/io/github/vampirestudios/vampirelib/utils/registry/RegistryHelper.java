@@ -29,8 +29,8 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.item.*;
 import net.minecraft.potion.Potion;
 import net.minecraft.sound.BlockSoundGroup;
@@ -128,7 +128,7 @@ public class RegistryHelper {
         return Registry.register(Registry.SOUND_EVENT, new Identifier(modId, name), soundEvent);
     }
 
-    public Item registerSpawnEgg(String name, EntityType<? extends Entity> entity, int primaryColor, int secondaryColor) {
+    public Item registerSpawnEgg(String name, EntityType<? extends MobEntity> entity, int primaryColor, int secondaryColor) {
         return registerItem(new SpawnEggItem(entity, primaryColor, secondaryColor, new Item.Settings().group(ItemGroup.MISC)), name + "_spawn_egg");
     }
 

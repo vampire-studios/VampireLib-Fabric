@@ -24,9 +24,11 @@
 
 package io.github.vampirestudios.vampirelib.mixins.block;
 
+import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.block.entity.StructureBlockBlockEntity;
+import net.minecraft.util.math.BlockPos;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.ModifyConstant;
@@ -34,8 +36,8 @@ import org.spongepowered.asm.mixin.injection.ModifyConstant;
 @Mixin(StructureBlockBlockEntity.class)
 public abstract class StructureBlockBlockEntityMixin extends BlockEntity {
 
-    public StructureBlockBlockEntityMixin(BlockEntityType<?> type) {
-        super(type);
+    public StructureBlockBlockEntityMixin(BlockEntityType<?> blockEntityType, BlockPos blockPos, BlockState blockState) {
+        super(blockEntityType, blockPos, blockState);
     }
 
     @ModifyConstant(method = "fromTag", constant = @Constant(intValue = 48))

@@ -40,7 +40,6 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
-import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 
 public class LecternBaseBlock extends LecternBlock {
@@ -50,8 +49,8 @@ public class LecternBaseBlock extends LecternBlock {
     }
 
     @Override
-    public BlockEntity createBlockEntity(BlockView blockView) {
-        return new LecternBlockEntity();
+    public BlockEntity createBlockEntity(BlockPos blockPos, BlockState blockState) {
+        return new LecternBlockEntity(blockPos, blockState);
     }
 
     public static boolean putBookIfAbsent(World world, BlockPos pos, BlockState state, ItemStack stack) {

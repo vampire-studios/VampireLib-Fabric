@@ -32,13 +32,11 @@ import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.render.BufferBuilder;
 import net.minecraft.client.render.BufferRenderer;
 import net.minecraft.client.render.Tessellator;
-import net.minecraft.client.render.VertexFormats;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Matrix4f;
-import org.lwjgl.opengl.GL11;
 
 public class StackBorder extends DrawableHelper implements ItemOverlayRenderer.Pre {
 	protected static final Identifier BORDER_TEX = new Identifier(VampireLib.MOD_ID, "textures/gui/border.png");
@@ -77,7 +75,7 @@ public class StackBorder extends DrawableHelper implements ItemOverlayRenderer.P
 		int b = color & 255;
 		MinecraftClient.getInstance().getTextureManager().bindTexture(BORDER_TEX);
 		BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
-		bufferBuilder.begin(GL11.GL_QUADS, VertexFormats.POSITION_COLOR_TEXTURE);
+//		bufferBuilder.begin(GL11.GL_QUADS, VertexFormats.POSITION_COLOR_TEXTURE);
 		bufferBuilder.vertex(matrix4f, x, y + 18, 0).color(r, g, b, 255).texture(0, 1).next();
 		bufferBuilder.vertex(matrix4f, x + 18, y + 18, 0).color(r, g, b, 255).texture(1, 1).next();
 		bufferBuilder.vertex(matrix4f, x + 18, y, 0).color(r, g, b, 255).texture(1, 0).next();

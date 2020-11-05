@@ -46,26 +46,20 @@ public abstract class MixinPlayerEntity extends LivingEntity {
 
 	/**
 	 * Allows modded shields to receive damage.
+	 * @return
 	 */
-	@Redirect(method = "damageShield", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;getItem()Lnet/minecraft/item/Item;"))
-	private Item damageFabricShields(ItemStack itemStack) {
-		if (itemStack.getItem() == Items.SHIELD || ShieldRegistry.INSTANCE.isShield(itemStack.getItem())) {
-			return Items.SHIELD;
-		}
-
-		return itemStack.getItem();
+	@Redirect(method = "damageShield", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;method_31574(Lnet/minecraft/item/Item;)Z"))
+	private boolean damageFabricShields(ItemStack itemStack, Item item) {
+		return item == Items.SHIELD || ShieldRegistry.INSTANCE.isShield(item);
 	}
 
 	/**
 	 * Allows modded shields to receive damage.
+	 * @return
 	 */
-	@Redirect(method = "checkFallFlying", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;getItem()Lnet/minecraft/item/Item;"))
-	private Item checkFallFlyingFabric(ItemStack itemStack) {
-		if (itemStack.getItem() == Items.ELYTRA || ElytraRegistry.INSTANCE.isElytra(itemStack.getItem())) {
-			return Items.ELYTRA;
-		}
-
-		return itemStack.getItem();
+	@Redirect(method = "checkFallFlying", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;method_31574(Lnet/minecraft/item/Item;)Z"))
+	private boolean checkFallFlyingFabric(ItemStack itemStack, Item item) {
+		return item == Items.ELYTRA || ElytraRegistry.INSTANCE.isElytra(item);
 	}
 
 	/**

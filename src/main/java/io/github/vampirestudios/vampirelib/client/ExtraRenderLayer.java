@@ -27,9 +27,7 @@ package io.github.vampirestudios.vampirelib.client;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 
-import net.minecraft.client.render.RenderLayer;
-import net.minecraft.client.render.RenderPhase;
-import net.minecraft.client.render.VertexFormats;
+import net.minecraft.client.render.*;
 import net.minecraft.util.Identifier;
 
 // import net.minecraft.client.render.entity.feature.SpiderEyesFeatureRenderer;
@@ -45,7 +43,7 @@ public class ExtraRenderLayer {
       });
 
   public static RenderLayer getGlowing(Identifier string) {
-    return RenderLayer.of("entity_glowing", VertexFormats.POSITION_COLOR_TEXTURE_OVERLAY_LIGHT_NORMAL, 7, 256,
+    return RenderLayer.of("entity_glowing", VertexFormats.POSITION_COLOR_TEXTURE_OVERLAY_LIGHT_NORMAL, VertexFormat.class_5596.field_27382, 256,
         RenderLayer.MultiPhaseParameters.builder()
             .texture(new RenderPhase.Texture(string, false, false)).transparency(GLOWING_TRANSPARENCY)
             .build(true));
