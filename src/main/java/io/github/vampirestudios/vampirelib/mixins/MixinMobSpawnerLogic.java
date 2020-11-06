@@ -39,7 +39,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 public class MixinMobSpawnerLogic {
 	@Redirect(
 			at = @At(value = "INVOKE", target = "Lnet/minecraft/server/world/ServerWorld;shouldCreateNewEntityWithPassenger(Lnet/minecraft/entity/Entity;)Z"),
-			method = "update()V"
+			method = "Lnet/minecraft/world/MobSpawnerLogic;method_31588(Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/util/math/BlockPos;)V"
 			)
 	private boolean entitySpawnEventSpawner(ServerWorld self, Entity entity) {
 		return EntitySpawnImpl.spawnEntityZ(self, entity);

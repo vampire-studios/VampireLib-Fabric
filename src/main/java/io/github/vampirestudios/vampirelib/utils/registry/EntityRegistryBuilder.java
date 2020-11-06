@@ -24,7 +24,6 @@
 
 package io.github.vampirestudios.vampirelib.utils.registry;
 
-import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.EntityType;
@@ -110,8 +109,8 @@ public class EntityRegistryBuilder<E extends Entity> {
             entityBuilder.makeFireImmune();
         }
         if (this.alwaysUpdateVelocity && this.updateIntervalTicks != 0 & this.trackingDistance != 0) {
-            FabricEntityTypeBuilder.create(this.category, this.entityFactory).dimensions(this.dimensions)
-                    .trackable(this.trackingDistance, this.updateIntervalTicks, this.alwaysUpdateVelocity).build();
+//            FabricEntityTypeBuilder.create(this.category, this.entityFactory).dimensions(this.dimensions)
+//                    .trackable(this.trackingDistance, this.updateIntervalTicks, this.alwaysUpdateVelocity).build();
         }
 
         EntityType<E> entityType = Registry.register(Registry.ENTITY_TYPE, name, entityBuilder.build(name.getPath()));

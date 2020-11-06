@@ -148,14 +148,14 @@ public abstract class MixinItemRendererOld {
 
 	// undoes the "countLabel != null" expression hack *again* (since the 1st undo only happens if the count label is rendered)
 	@ModifyVariable(method = "renderGuiItemOverlay(Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/item/ItemStack;IILjava/lang/String;)V",
-			at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;isDamaged()Z"), ordinal = 0)
+			at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;method_31578()Z"), ordinal = 0)
 	public String countVisibleCondHackUndoAgain(String countLabel) {
 		return countLabelTmp;
 	}
 
 	// changes "is damage bar visible" condition
 	@Redirect(method = "renderGuiItemOverlay(Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/item/ItemStack;IILjava/lang/String;)V",
-			at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;isDamaged()Z"))
+			at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;method_31578()Z"))
 	public boolean barVisible(ItemStack stack) {
 		ItemDamageBarInfo props = ItemOverlayMaps.DAMAGE_BAR_INFO_MAP.get(stack.getItem());
 

@@ -19,7 +19,7 @@
     "ScreenMixin",
     "ServerPlayerEntityDamageMixin",
     "ServerWorldAccessor",
-    "ServerWorldMixin",
+//    "ServerWorldMixin",
     "SpawnDensityAccessor",
     "SpawnSettingsAccessor",
     "block.StructureBlockBlockEntityMixin",
@@ -29,7 +29,7 @@
     "item.MixinItem"
   ],
   "client": [
-    "client.MixinClientPlayerEntity",
+//    "client.MixinClientPlayerEntity",
     "client.MixinClientPlayNetworkHandler",
     "client.MixinItemRendererOld",
     "client.SpriteAccessor",

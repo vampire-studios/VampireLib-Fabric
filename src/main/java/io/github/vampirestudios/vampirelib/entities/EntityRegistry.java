@@ -32,7 +32,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class EntityRegistry {
-    private static Map<Class<? extends EntityType>, EntityConstructor> entityConstructorMap = new HashMap<>();
+    private static final Map<Class<? extends EntityType>, EntityConstructor> entityConstructorMap = new HashMap<>();
 
     public static <T extends Entity> void register(EntityType<T> entityType, EntityConstructor<T> entityConstructor) {
         entityConstructorMap.put(entityType.getClass(), entityConstructor);

@@ -24,7 +24,7 @@
 
 package io.github.vampirestudios.vampirelib.blocks;
 
-import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
+import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Material;
 import net.minecraft.block.SaplingBlock;
 import net.minecraft.block.sapling.SaplingGenerator;
@@ -33,7 +33,7 @@ import net.minecraft.sound.BlockSoundGroup;
 public class SaplingBaseBlock extends SaplingBlock {
 
     public SaplingBaseBlock(SaplingGenerator saplingGenerator_1) {
-        super(saplingGenerator_1, FabricBlockSettings.of(Material.PLANT).noCollision().ticksRandomly().breakInstantly().sounds(BlockSoundGroup.GRASS));
+        super(saplingGenerator_1, AbstractBlock.Settings.of(Material.PLANT).noCollision().ticksRandomly().breakInstantly().sounds(BlockSoundGroup.GRASS));
     }
 
 }

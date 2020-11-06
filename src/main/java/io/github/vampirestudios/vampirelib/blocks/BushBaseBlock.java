@@ -24,14 +24,14 @@
 
 package io.github.vampirestudios.vampirelib.blocks;
 
-import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
+import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Material;
 import net.minecraft.block.PlantBlock;
 
 public class BushBaseBlock extends PlantBlock {
 
     public BushBaseBlock() {
-        super(FabricBlockSettings.of(Material.PLANT));
+        super(AbstractBlock.Settings.of(Material.PLANT));
     }
 
 }
