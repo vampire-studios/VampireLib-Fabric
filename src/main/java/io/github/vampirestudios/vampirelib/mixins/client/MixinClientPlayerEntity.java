@@ -28,6 +28,7 @@ import io.github.vampirestudios.vampirelib.api.ElytraRegistry;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.item.ElytraItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -44,13 +45,10 @@ public abstract class MixinClientPlayerEntity extends LivingEntity {
 
 	/**
 	 * Allows modded shields to receive damage.
+	 * @return
 	 */
-	@Redirect(method = "tickMovement", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;getItem()Lnet/minecraft/item/Item;"))
-	private Item damageFabricShields(ItemStack itemStack) {
-		if (itemStack.getItem() == Items.ELYTRA || ElytraRegistry.INSTANCE.isElytra(itemStack.getItem())) {
-			return Items.ELYTRA;
-		}
-
-		return itemStack.getItem();
+	@Redirect(method = "tickMovement", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;itemMatches(Lnet/minecraft/item/Item;)Z"))
+	private boolean damageFabricShields(ItemStack itemStack, Item item) {
+		return itemStack.itemMatches(Items.ELYTRA) || item instanceof ElytraItem || ElytraRegistry.INSTANCE.isElytra(item);
 	}
 }

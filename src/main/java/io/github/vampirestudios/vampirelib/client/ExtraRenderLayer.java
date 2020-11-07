@@ -43,7 +43,7 @@ public class ExtraRenderLayer {
       });
 
   public static RenderLayer getGlowing(Identifier string) {
-    return RenderLayer.of("entity_glowing", VertexFormats.POSITION_COLOR_TEXTURE_OVERLAY_LIGHT_NORMAL, VertexFormat.class_5596.field_27382, 256,
+    return RenderLayer.of("entity_glowing", VertexFormats.POSITION_COLOR_TEXTURE_OVERLAY_LIGHT_NORMAL, VertexFormat.DrawMode.QUADS, 256,
         RenderLayer.MultiPhaseParameters.builder()
             .texture(new RenderPhase.Texture(string, false, false)).transparency(GLOWING_TRANSPARENCY)
             .build(true));

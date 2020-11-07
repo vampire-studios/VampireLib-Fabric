@@ -26,6 +26,7 @@ package io.github.vampirestudios.vampirelib.utils.registry;
 
 import io.github.vampirestudios.vampirelib.blocks.*;
 import net.fabricmc.api.EnvType;
+import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.fabricmc.fabric.impl.client.rendering.ColorProviderRegistryImpl;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.*;
@@ -177,26 +178,26 @@ public class WoodRegistry {
         }
 
         public Builder log() {
-            woodRegistry.log = registryHelper.registerBlock(new PillarBlock(AbstractBlock.Settings.of(Material.WOOD, MaterialColor.SPRUCE).strength(2.0F)
+            woodRegistry.log = registryHelper.registerBlock(new PillarBlock(FabricBlockSettings.of(Material.WOOD, MapColor.SPRUCE).hardness(2.0F)
                     .sounds(BlockSoundGroup.WOOD)), name.getPath() + "_log", ItemGroup.BUILDING_BLOCKS);
             return this;
         }
 
         public Builder wood() {
-            woodRegistry.wood = registryHelper.registerBlock(new Block(AbstractBlock.Settings.of(Material.WOOD, MaterialColor.WOOD).strength(2.0F)
+            woodRegistry.wood = registryHelper.registerBlock(new Block(FabricBlockSettings.of(Material.WOOD, MapColor.WOOD).hardness(2.0F)
                     .sounds(BlockSoundGroup.WOOD)), name.getPath() + "_wood", ItemGroup.BUILDING_BLOCKS);
             return this;
         }
 
         public Builder strippedLog() {
-            woodRegistry.strippedLog = registryHelper.registerBlock(new PillarBlock(AbstractBlock.Settings.of(Material.WOOD, MaterialColor.SPRUCE).strength(2.0F)
+            woodRegistry.strippedLog = registryHelper.registerBlock(new PillarBlock(FabricBlockSettings.of(Material.WOOD, MapColor.SPRUCE).hardness(2.0F)
                             .sounds(BlockSoundGroup.WOOD)), "stripped_" + name.getPath() + "_log",
                     ItemGroup.BUILDING_BLOCKS);
             return this;
         }
 
         public Builder strippedWood() {
-            woodRegistry.strippedWood = registryHelper.registerBlock(new Block(AbstractBlock.Settings.of(Material.WOOD, MaterialColor.WOOD).strength(2.0F)
+            woodRegistry.strippedWood = registryHelper.registerBlock(new Block(FabricBlockSettings.of(Material.WOOD, MapColor.WOOD).hardness(2.0F)
                             .sounds(BlockSoundGroup.WOOD)), "stripped_" + name.getPath() + "_wood",
                     ItemGroup.BUILDING_BLOCKS);
             return this;
@@ -215,7 +216,7 @@ public class WoodRegistry {
         }
 
         public Builder planks() {
-            woodRegistry.planks = registryHelper.registerBlock(new Block(AbstractBlock.Settings.of(Material.WOOD, MaterialColor.WOOD)
+            woodRegistry.planks = registryHelper.registerBlock(new Block(FabricBlockSettings.of(Material.WOOD, MapColor.WOOD)
                             .strength(2.0F, 3.0F).sounds(BlockSoundGroup.WOOD)),
                     name.getPath() + "_planks", ItemGroup.BUILDING_BLOCKS);
             return this;

@@ -33,6 +33,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.item.ShieldItem;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -44,13 +45,9 @@ public abstract class MixinMobEntity {
 	/**
 	 * Also disable modded shields.
 	 */
-	@Redirect(method = "disablePlayerShield", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;getItem()Lnet/minecraft/item/Item;"))
-	private Item disableFabricShields(ItemStack itemStack) {
-		if (itemStack.getItem() == Items.SHIELD || ShieldRegistry.INSTANCE.isShield(itemStack.getItem())) {
-			return Items.SHIELD;
-		}
-
-		return itemStack.getItem();
+	@Redirect(method = "disablePlayerShield", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;itemMatches(Lnet/minecraft/item/Item;)Z"))
+	private boolean damageFabricShields(ItemStack itemStack, Item item) {
+		return itemStack.itemMatches(Items.SHIELD) || item instanceof ShieldItem || ShieldRegistry.INSTANCE.isShield(item);
 	}
 
 	/**
@@ -58,7 +55,7 @@ public abstract class MixinMobEntity {
 	 */
 	@Redirect(method = "disablePlayerShield", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/ItemCooldownManager;set(Lnet/minecraft/item/Item;I)V"))
 	private void setCooldownForShields(ItemCooldownManager cooldownManager, Item item, int duration, PlayerEntity player, ItemStack mobStack, ItemStack playerStack) {
-		if (playerStack.getItem() == Items.SHIELD) {
+		if (playerStack.getItem() instanceof ShieldItem) {
 			cooldownManager.set(item, duration);
 		}
 

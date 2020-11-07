@@ -30,9 +30,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.ItemCooldownManager;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
+import net.minecraft.item.*;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -48,18 +46,18 @@ public abstract class MixinPlayerEntity extends LivingEntity {
 	 * Allows modded shields to receive damage.
 	 * @return
 	 */
-	@Redirect(method = "damageShield", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;method_31574(Lnet/minecraft/item/Item;)Z"))
+	@Redirect(method = "damageShield", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;itemMatches(Lnet/minecraft/item/Item;)Z"))
 	private boolean damageFabricShields(ItemStack itemStack, Item item) {
-		return item == Items.SHIELD || ShieldRegistry.INSTANCE.isShield(item);
+		return itemStack.itemMatches(Items.SHIELD) || item instanceof ShieldItem || ShieldRegistry.INSTANCE.isShield(item);
 	}
 
 	/**
 	 * Allows modded shields to receive damage.
 	 * @return
 	 */
-	@Redirect(method = "checkFallFlying", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;method_31574(Lnet/minecraft/item/Item;)Z"))
+	@Redirect(method = "checkFallFlying", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;itemMatches(Lnet/minecraft/item/Item;)Z"))
 	private boolean checkFallFlyingFabric(ItemStack itemStack, Item item) {
-		return item == Items.ELYTRA || ElytraRegistry.INSTANCE.isElytra(item);
+		return itemStack.itemMatches(Items.ELYTRA) || item instanceof ElytraItem || ElytraRegistry.INSTANCE.isElytra(item);
 	}
 
 	/**
@@ -67,10 +65,14 @@ public abstract class MixinPlayerEntity extends LivingEntity {
 	 */
 	@Redirect(method = "disableShield", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/ItemCooldownManager;set(Lnet/minecraft/item/Item;I)V"))
 	private void setCooldownForShields(ItemCooldownManager cooldownManager, Item item, int duration) {
-		if (this.activeItemStack.getItem() == Items.SHIELD) {
-			cooldownManager.set(Items.SHIELD, duration);
+		if (this.activeItemStack.getItem() instanceof ShieldItem) {
+			cooldownManager.set(item, duration);
 		} else if (ShieldRegistry.INSTANCE.isShield(this.activeItemStack.getItem())) {
-			cooldownManager.set(this.activeItemStack.getItem(), 100);
+			cooldownManager.set(item, 100);
+		} else if (item instanceof ShieldItem) {
+			cooldownManager.set(item, duration);
+		} else if (ShieldRegistry.INSTANCE.isShield(item)) {
+			cooldownManager.set(item, 100);
 		}
 	}
 }

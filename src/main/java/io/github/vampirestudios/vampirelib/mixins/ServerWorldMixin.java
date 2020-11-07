@@ -38,7 +38,7 @@ public class ServerWorldMixin {
         method = "addEntity",
         at = @At(
             value = "INVOKE",
-            target = "net/minecraft/server/world/ServerWorld.getChunk(IILnet/minecraft/world/chunk/ChunkStatus;Z)Lnet/minecraft/world/chunk/Chunk;"
+            target = "Lnet/minecraft/class_5579;addEntity(Lnet/minecraft/class_5568;)Z"
         )
     )
     private void hookAddEntity(Entity entity, CallbackInfoReturnable<Boolean> cir) {

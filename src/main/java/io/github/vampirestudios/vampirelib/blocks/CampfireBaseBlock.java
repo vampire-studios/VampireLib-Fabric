@@ -26,14 +26,14 @@ package io.github.vampirestudios.vampirelib.blocks;
 
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.CampfireBlock;
+import net.minecraft.block.MapColor;
 import net.minecraft.block.Material;
-import net.minecraft.block.MaterialColor;
 import net.minecraft.sound.BlockSoundGroup;
 
 public class CampfireBaseBlock extends CampfireBlock {
 
     public CampfireBaseBlock() {
-        super(true, 1, AbstractBlock.Settings.of(Material.WOOD, MaterialColor.SPRUCE).strength(2.0F).sounds(BlockSoundGroup.WOOD)
+        super(true, 1, AbstractBlock.Settings.of(Material.WOOD, MapColor.SPRUCE).strength(2.0F).sounds(BlockSoundGroup.WOOD)
                 .luminance(value -> 15).ticksRandomly());
     }
 

@@ -70,13 +70,13 @@ public class RegistryHelper {
         return block;
     }
 
-    public Block registerNetherStem(String name, MaterialColor materialColor) {
+    public Block registerNetherStem(String name, MapColor materialColor) {
         return registerBlock(new PillarBlock(AbstractBlock.Settings.of(Material.WOOD, (blockState) -> materialColor)
                         .strength(1.0F).sounds(BlockSoundGroup.NETHER_STEM)), name,
                 ItemGroup.BUILDING_BLOCKS);
     }
 
-    public Block registerLog(String name, MaterialColor materialColor, MaterialColor materialColor2) {
+    public Block registerLog(String name, MapColor materialColor, MapColor materialColor2) {
         return registerBlock(new PillarBlock(AbstractBlock.Settings.of(Material.WOOD, (blockState) ->
                 blockState.get(PillarBlock.AXIS) == Direction.Axis.Y ? materialColor : materialColor2)
                 .strength(2.0F).sounds(BlockSoundGroup.WOOD)), name);

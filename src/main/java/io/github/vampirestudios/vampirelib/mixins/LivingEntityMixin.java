@@ -29,6 +29,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.item.ShieldItem;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -37,14 +38,11 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 public abstract class LivingEntityMixin {
 	/**
 	 * Allows modded shields to receive damage.
+	 * @return
 	 */
-	@Redirect(method = "initAi", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;getItem()Lnet/minecraft/item/Item;"))
-	private Item damageFabricShields(ItemStack itemStack) {
-		if (itemStack.getItem() == Items.ELYTRA || ElytraRegistry.INSTANCE.isElytra(itemStack.getItem())) {
-			return Items.ELYTRA;
-		}
-
-		return itemStack.getItem();
+	@Redirect(method = "initAi", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;itemMatches(Lnet/minecraft/item/Item;)Z"))
+	private boolean damageFabricShields(ItemStack itemStack, Item item) {
+		return itemStack.itemMatches(Items.SHIELD) || item instanceof ShieldItem || ElytraRegistry.INSTANCE.isElytra(item);
 	}
 
 }
