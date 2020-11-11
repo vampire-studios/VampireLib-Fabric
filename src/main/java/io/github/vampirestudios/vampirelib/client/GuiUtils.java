@@ -29,9 +29,7 @@ import io.github.vampirestudios.vampirelib.client.callbacks.RenderTooltipCallbac
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawableHelper;
-import net.minecraft.client.render.BufferBuilder;
-import net.minecraft.client.render.Tessellator;
-import net.minecraft.client.render.VertexConsumerProvider;
+import net.minecraft.client.render.*;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.OrderedText;
@@ -211,7 +209,7 @@ public class GuiUtils
 
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder wr = tessellator.getBuffer();
-//        wr.begin(GL11.GL_QUADS, VertexFormats.POSITION_TEXTURE);
+        wr.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
         wr.vertex(x        , y + height, zLevel).texture( u          * uScale, ((v + height) * vScale)).next();
         wr.vertex(x + width, y + height, zLevel).texture((u + width) * uScale, ((v + height) * vScale)).next();
         wr.vertex(x + width, y         , zLevel).texture((u + width) * uScale, ( v           * vScale)).next();
@@ -437,7 +435,7 @@ public class GuiUtils
 
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder buffer = tessellator.getBuffer();
-//        buffer.begin(GL11.GL_QUADS, VertexFormats.POSITION_COLOR);
+        buffer.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR);
         buffer.vertex(mat, right,    top, zLevel).color(startRed, startGreen, startBlue, startAlpha).next();
         buffer.vertex(mat,  left,    top, zLevel).color(startRed, startGreen, startBlue, startAlpha).next();
         buffer.vertex(mat,  left, bottom, zLevel).color(  endRed,   endGreen,   endBlue,   endAlpha).next();

@@ -37,13 +37,10 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 public abstract class MixinRemoveOffHandItemTask {
 	/**
 	 * Piglins should not drop modded shields either.
+	 * @return
 	 */
-	@Redirect(method = "shouldRun", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;getItem()Lnet/minecraft/item/Item;"))
-	private Item dontDropShields(ItemStack stack) {
-		if (stack.getItem() == Items.SHIELD || ShieldRegistry.INSTANCE.isShield(stack.getItem())) {
-			return Items.SHIELD;
-		}
-
-		return stack.getItem();
+	@Redirect(method = "shouldRun", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"))
+	private boolean dontDropShields(ItemStack stack, Item item) {
+		return stack.isOf(Items.SHIELD) || ShieldRegistry.INSTANCE.isShield(stack.getItem());
 	}
 }

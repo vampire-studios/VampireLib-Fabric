@@ -132,7 +132,7 @@ public class FabricBiomeBuilder {
 		builder.creatureSpawnProbability(spawnSettings.getCreatureSpawnProbability());
 
 		for (SpawnGroup group : SpawnGroup.values()) {
-			for (SpawnSettings.SpawnEntry entry : spawnSettings.getSpawnEntry(group)) {
+			for (SpawnSettings.SpawnEntry entry : spawnSettings.getSpawnEntries(group)) {
 				builder.spawn(group, entry);
 			}
 		}

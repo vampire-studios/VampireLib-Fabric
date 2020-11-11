@@ -40,9 +40,9 @@ public abstract class LivingEntityMixin {
 	 * Allows modded shields to receive damage.
 	 * @return
 	 */
-	@Redirect(method = "initAi", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;itemMatches(Lnet/minecraft/item/Item;)Z"))
+	@Redirect(method = "initAi", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"))
 	private boolean damageFabricShields(ItemStack itemStack, Item item) {
-		return itemStack.itemMatches(Items.SHIELD) || item instanceof ShieldItem || ElytraRegistry.INSTANCE.isElytra(item);
+		return itemStack.isOf(Items.SHIELD) || item instanceof ShieldItem || ElytraRegistry.INSTANCE.isElytra(item);
 	}
 
 }

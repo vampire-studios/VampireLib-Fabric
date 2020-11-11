@@ -34,7 +34,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 
 public class WarningIcon extends DrawableHelper implements ItemOverlayRenderer.Post {
-	private static final Identifier WARNING_TEX = new Identifier(VampireLib.MOD_ID, "textures/gui/warning.png");
+	private static final Identifier WARNING_TEX = new Identifier(VampireLib.MOD_ID, "textures/misc/warning.png");
 
 	@SuppressWarnings("deprecation")
 	@Override

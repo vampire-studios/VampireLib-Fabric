@@ -160,7 +160,7 @@ public abstract class MixinItemRendererOld {
 		ItemDamageBarInfo props = ItemOverlayMaps.DAMAGE_BAR_INFO_MAP.get(stack.getItem());
 
 		if (props == null) {
-			return stack.isDamaged();
+			return stack.isItemBarVisible();
 		}
 
 		return props.isVisible(stack);

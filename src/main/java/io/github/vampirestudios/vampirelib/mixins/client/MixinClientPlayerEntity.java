@@ -47,8 +47,8 @@ public abstract class MixinClientPlayerEntity extends LivingEntity {
 	 * Allows modded shields to receive damage.
 	 * @return
 	 */
-	@Redirect(method = "tickMovement", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;itemMatches(Lnet/minecraft/item/Item;)Z"))
+	@Redirect(method = "tickMovement", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"))
 	private boolean damageFabricShields(ItemStack itemStack, Item item) {
-		return itemStack.itemMatches(Items.ELYTRA) || item instanceof ElytraItem || ElytraRegistry.INSTANCE.isElytra(item);
+		return itemStack.isOf(Items.ELYTRA) || item instanceof ElytraItem || ElytraRegistry.INSTANCE.isElytra(item);
 	}
 }
