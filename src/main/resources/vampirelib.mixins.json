@@ -31,7 +31,7 @@
   "client": [
     "client.MixinClientPlayerEntity",
     //    "client.MixinClientPlayNetworkHandler",
-    "client.MixinItemRendererOld",
+//    "client.MixinItemRendererOld",
     "client.SpriteAccessor",
     "client.TextRendererMixin"
   ],
