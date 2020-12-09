@@ -5,10 +5,12 @@ plugins {
 	id "co.riiid.gradle" version "0.4.2"
 	id "com.matthewprenger.cursegradle" version "1.4.0"
 	id "com.wynprice.cursemaven" version "2.1.0"
+	id "com.modrinth.minotaur" version "1.1.0"
 }
 
 def gittoken = System.getenv('GH_TOKEN')
 def buildbranch = System.getenv('TRAVIS_BRANCH')
+def modrinthToken = System.getenv('MODRINTH_TOKEN')
 
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
@@ -61,14 +63,26 @@ github {
 	owner = 'vampire-studios'
 	repo = 'VampireLib-Fabric'
 	token = gittoken ?: "a key"
-	tagName = version + "-" + project.minecraft_version.replace(" ", "-")
-	name = version + "-" + "MC" + project.minecraft_version.replace(" ", "-")
+	tagName = "[" + minecraft_version + "] ${archivesBaseName}-${version}"
+	name = "[" + minecraft_version + "] ${archivesBaseName}-${version}"
 	targetCommitish = buildbranch
 	prerelease = true
 	assets = [
 			"build/libs/${archivesBaseName}-${version}.jar",
 			"build/libs/${archivesBaseName}-${version}-sources.jar"
 	]
+}
+
+import com.modrinth.minotaur.TaskModrinthUpload
+
+task publishModrinth (type: TaskModrinthUpload){
+	token = modrinthToken // Use an environment property!
+	projectId = "tyCNRhS8"
+	releaseType = "beta"
+	versionNumber = "${archivesBaseName}-${version}"
+	uploadFile = jar // This is the java jar task
+	addGameVersion('20w49a')
+	addLoader('fabric')
 }
 
 tasks.withType(JavaCompile) {
