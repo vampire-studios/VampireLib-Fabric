@@ -11,13 +11,10 @@ plugins {
 def gittoken = System.getenv('GH_TOKEN')
 def buildbranch = System.getenv('TRAVIS_BRANCH')
 def modrinthToken = System.getenv('MODRINTH_TOKEN')
+def curseforgeToken = System.getenv('CURSEFORGE_TOKEN')
 
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
-
-if (rootProject.file('private.gradle').exists()) {
-	apply from: 'private.gradle'
-}
 
 archivesBaseName = project.archives_base_name
 version = project.mod_version + "+" + "build." + project.build_number + "-" + project.minecraft_version
@@ -81,8 +78,33 @@ task publishModrinth (type: TaskModrinthUpload){
 	releaseType = "beta"
 	versionNumber = "${archivesBaseName}-${version}"
 	uploadFile = jar // This is the java jar task
+	changelog = 'A lot have changed, check github for more exact stuff'
 	addGameVersion('20w49a')
 	addLoader('fabric')
+}
+
+curseforge {
+	apiKey = curseforgeToken ?: "a key"
+	project {
+		id = '324329'
+		changelog = 'A lot have changed, check github for more exact stuff'
+		releaseType = 'release'
+		gameVersionStrings.clear()
+		gameVersionStrings.add("1.17")
+		gameVersionStrings.add("Fabric")
+		mainArtifact(file("build/libs/${archivesBaseName}-${version}.jar")) {
+			displayName = "[" + minecraft_version + "] " + version
+			relations {
+				requiredDependency "fabric-api"
+			}
+		}
+		afterEvaluate {
+			uploadTask.dependsOn("remapJar")
+		}
+	}
+	options{
+		forgeGradleIntegration = false
+	}
 }
 
 tasks.withType(JavaCompile) {
