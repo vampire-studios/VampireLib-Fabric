@@ -56,7 +56,7 @@ public class VampireLib implements ModInitializer {
         //SkyladySelena
         this.put("641cb212-8d44-4a2c-aa47-8396918fa336", new Identifier(MOD_ID, "textures/misc/selena_cape.png"));
         //AgentM
-        this.put("b5701a2d-9593-4224-a61e-cabb3887cfc7", new Identifier(MOD_ID, "textures/misc/"));
+        this.put("b5701a2d-9593-4224-a61e-cabb3887cfc7", new Identifier(MOD_ID, "textures/misc/agent_m_cape_v1.png"));
     }};
 
     @Override
