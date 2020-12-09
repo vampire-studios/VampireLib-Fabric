@@ -1,0 +1,95 @@
+name: On Push
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  build_run_publish_everywhere:
+    name: Run tests for ${{ matrix.minecraftVersion }} and Release
+    runs-on: ubuntu-latest
+    if: "contains(github.event.head_commit.message, '[Release Everywhere]')"
+    strategy:
+      fail-fast: false
+      matrix:
+        minecraftVersion:
+          - latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          lfs: true
+      - uses: Geometrically/fabric-test-runner@v1
+        id: testRunner
+        with:
+          minecraftVersion: ${{ matrix.minecraftVersion }}
+      - name: Upload to Bintray and CurseForge
+        run: ./gradlew clean github curseforge publishModrinth
+        env:
+          GH_TOKEN: "27f956895e58febf98b10bde06b2dfe406ee239e"
+          TRAVIS_BRANCH: "dev/1.17-snapshots"
+          MODRINTH_TOKEN: "9a917a97a11c6d16e857e2b9afecd308a16d8455"
+          CURSEFORGE_TOKEN: "6fb8684d-02f1-4cc6-8d58-a099f96f083d"
+  build_run_publish_github:
+    name: Run tests for ${{ matrix.minecraftVersion }} and Release
+    runs-on: ubuntu-latest
+    if: "contains(github.event.head_commit.message, '[Release Github]')"
+    strategy:
+      fail-fast: false
+      matrix:
+        minecraftVersion:
+          - latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          lfs: true
+      - uses: Geometrically/fabric-test-runner@v1
+        id: testRunner
+        with:
+          minecraftVersion: ${{ matrix.minecraftVersion }}
+      - name: Upload to Github
+        run: ./gradlew clean github
+        env:
+          GH_TOKEN: "27f956895e58febf98b10bde06b2dfe406ee239e"
+          TRAVIS_BRANCH: "dev/1.17-snapshots"
+  build_run_publish_curseforge:
+    name: Run tests for ${{ matrix.minecraftVersion }} and Release
+    runs-on: ubuntu-latest
+    if: "contains(github.event.head_commit.message, '[Release Curseforge]')"
+    strategy:
+      fail-fast: false
+      matrix:
+        minecraftVersion:
+          - latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          lfs: true
+      - uses: Geometrically/fabric-test-runner@v1
+        id: testRunner
+        with:
+          minecraftVersion: ${{ matrix.minecraftVersion }}
+      - name: Upload to Curseforge
+        run: ./gradlew clean curseforge
+        env:
+          CURSEFORGE_TOKEN: "6fb8684d-02f1-4cc6-8d58-a099f96f083d"  
+  build_run_publish_modrinth:
+    name: Run tests for ${{ matrix.minecraftVersion }} and Release
+    runs-on: ubuntu-latest
+    if: "contains(github.event.head_commit.message, '[Release Modrinth]')"
+    strategy:
+      fail-fast: false
+      matrix:
+        minecraftVersion:
+          - latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          lfs: true
+      - uses: Geometrically/fabric-test-runner@v1
+        id: testRunner
+        with:
+          minecraftVersion: ${{ matrix.minecraftVersion }}
+      - name: Upload to Modrinth
+        run: ./gradlew clean publishModrinth
+        env:
+          MODRINTH_TOKEN: "9a917a97a11c6d16e857e2b9afecd308a16d8455"
