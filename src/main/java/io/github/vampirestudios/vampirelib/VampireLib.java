@@ -45,7 +45,7 @@ public class VampireLib implements ModInitializer {
     public static String MOD_ID = "vampirelib";
     public static String MOD_NAME = "VampireLib";
     public static final Logger LOGGER = LogManager.getLogger(MOD_NAME);
-    public static String MOD_VERSION = "2.2.0+build.2 for 20w45a";
+    public static String MOD_VERSION = "2.2.0+build.4 for 20w49a";
     public static final Map<String, Identifier> DEV_UUID = new HashMap<String, Identifier>(){{
         //CatCore
         this.put("5bb676ef-ecee-4258-ae1f-53e163839585", new Identifier(MOD_ID, "textures/misc/cat_cape.png"));
@@ -55,6 +55,8 @@ public class VampireLib implements ModInitializer {
         this.put("ab6a4eb9-b02a-4909-a71e-65a8dbe5ee54", new Identifier(MOD_ID, "textures/misc/turtle.png"));
         //SkyladySelena
         this.put("641cb212-8d44-4a2c-aa47-8396918fa336", new Identifier(MOD_ID, "textures/misc/selena_cape.png"));
+        //AgentM
+        this.put("b5701a2d-9593-4224-a61e-cabb3887cfc7", new Identifier(MOD_ID, "textures/misc/"));
     }};
 
     @Override

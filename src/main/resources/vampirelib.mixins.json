@@ -3,7 +3,6 @@
   "package": "io.github.vampirestudios.vampirelib.mixins",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-    "BackgroundRendererMixin",
     "BiomeEffectsAccessor",
     "DynamicRegistryManagerMixin",
     "HandledScreenMixin",
@@ -18,21 +17,20 @@
     "ScreenMixin",
     "ServerPlayerEntityDamageMixin",
     "ServerWorldAccessor",
-//    "ServerWorldMixin",
     "SpawnDensityAccessor",
     "SpawnSettingsAccessor",
+    "block.MixinBookOnLectern",
     "block.StructureBlockBlockEntityMixin",
-    "client.PlayerListEntryMixin",
     "entity.EntityMixin",
     "item.ItemMixin",
-    "item.MixinBookOnLectern",
-    "item.MixinItem"
+    "item.MixinBookOnLectern"
   ],
   "client": [
     "client.MixinClientPlayerEntity",
-    //    "client.MixinClientPlayNetworkHandler",
-    "client.MixinItemRendererOld",
     "client.SpriteAccessor",
+//    "client.MixinItemRendererOld",
+//    "client.MixinClientPlayNetworkHandler",
+    "client.PlayerListEntryMixin",
     "client.TextRendererMixin"
   ],
   "injectors": {
