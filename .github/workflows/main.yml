@@ -2,7 +2,7 @@ name: On Push
 
 on:
   push:
-    branches: [ master ]
+    branches: [ master, dev/1.17-snapshots ]
 
 jobs:
   build_run_publish_everywhere:
