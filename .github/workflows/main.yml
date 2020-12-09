@@ -12,8 +12,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        minecraftVersion:
-          - latest
+        minecraftVersion: 
+          - 20w49a
     steps:
       - uses: actions/checkout@v2
         with:
@@ -37,7 +37,7 @@ jobs:
       fail-fast: false
       matrix:
         minecraftVersion:
-          - latest
+          - 20w49a
     steps:
       - uses: actions/checkout@v2
         with:
@@ -59,7 +59,7 @@ jobs:
       fail-fast: false
       matrix:
         minecraftVersion:
-          - latest
+          - 20w49a
     steps:
       - uses: actions/checkout@v2
         with:
@@ -80,7 +80,7 @@ jobs:
       fail-fast: false
       matrix:
         minecraftVersion:
-          - latest
+          - 20w49a
     steps:
       - uses: actions/checkout@v2
         with:
