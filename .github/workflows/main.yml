@@ -25,10 +25,10 @@ jobs:
       - name: Upload to Bintray and CurseForge
         run: ./gradlew clean github curseforge publishModrinth
         env:
-          GH_TOKEN: "27f956895e58febf98b10bde06b2dfe406ee239e"
-          TRAVIS_BRANCH: "dev/1.17-snapshots"
-          MODRINTH_TOKEN: "9a917a97a11c6d16e857e2b9afecd308a16d8455"
-          CURSEFORGE_TOKEN: "6fb8684d-02f1-4cc6-8d58-a099f96f083d"
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          TRAVIS_BRANCH: ${{ secrets.TRAVIS_BRANCH }}
+          MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
+          CURSEFORGE_TOKEN: ${{ secrets.CURSEFORGE_TOKEN }}
   build_run_publish_github:
     name: Run tests for ${{ matrix.minecraftVersion }} and Release
     runs-on: ubuntu-latest
@@ -49,8 +49,8 @@ jobs:
       - name: Upload to Github
         run: ./gradlew clean github
         env:
-          GH_TOKEN: "27f956895e58febf98b10bde06b2dfe406ee239e"
-          TRAVIS_BRANCH: "dev/1.17-snapshots"
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          TRAVIS_BRANCH: ${{ secrets.TRAVIS_BRANCH }}
   build_run_publish_curseforge:
     name: Run tests for ${{ matrix.minecraftVersion }} and Release
     runs-on: ubuntu-latest
@@ -71,7 +71,7 @@ jobs:
       - name: Upload to Curseforge
         run: ./gradlew clean curseforge
         env:
-          CURSEFORGE_TOKEN: "6fb8684d-02f1-4cc6-8d58-a099f96f083d"  
+          CURSEFORGE_TOKEN: ${{ secrets.CURSEFORGE_TOKEN }}
   build_run_publish_modrinth:
     name: Run tests for ${{ matrix.minecraftVersion }} and Release
     runs-on: ubuntu-latest
@@ -92,4 +92,4 @@ jobs:
       - name: Upload to Modrinth
         run: ./gradlew clean publishModrinth
         env:
-          MODRINTH_TOKEN: "9a917a97a11c6d16e857e2b9afecd308a16d8455"
+          MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
