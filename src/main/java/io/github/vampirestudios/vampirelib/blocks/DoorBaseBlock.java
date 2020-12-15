@@ -31,8 +31,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.BlockView;
 
 public class DoorBaseBlock extends DoorBlock {
-    public DoorBaseBlock(Settings block$Settings_1) {
-        super(block$Settings_1);
+    public DoorBaseBlock(Settings settings) {
+        super(settings);
     }
 
     @Override

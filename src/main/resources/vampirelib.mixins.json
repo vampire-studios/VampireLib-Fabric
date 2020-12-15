@@ -4,6 +4,7 @@
   "compatibilityLevel": "JAVA_8",
   "mixins": [
     "BiomeEffectsAccessor",
+    "BlockEntityTypeMixin",
     "DynamicRegistryManagerMixin",
     "HandledScreenMixin",
     "MixinItemEntity",
@@ -18,6 +19,7 @@
     "ServerPlayerEntityDamageMixin",
     "ServerWorldAccessor",
     "SpawnDensityAccessor",
+    "SpawnEggItemAccessor",
     "SpawnSettingsAccessor",
     "block.MixinBookOnLectern",
     "block.StructureBlockBlockEntityMixin",
@@ -27,10 +29,9 @@
   ],
   "client": [
     "client.MixinClientPlayerEntity",
-    "client.SpriteAccessor",
-//    "client.MixinItemRendererOld",
-//    "client.MixinClientPlayNetworkHandler",
     "client.PlayerListEntryMixin",
+    "client.SpriteAccessor",
+    "client.BoatEntityRendererMixin",
     "client.TextRendererMixin"
   ],
   "injectors": {

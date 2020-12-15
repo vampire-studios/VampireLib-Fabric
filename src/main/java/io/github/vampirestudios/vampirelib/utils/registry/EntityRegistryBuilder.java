@@ -24,6 +24,7 @@
 
 package io.github.vampirestudios.vampirelib.utils.registry;
 
+import io.github.vampirestudios.vampirelib.mixins.SpawnEggItemAccessor;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.EntityType;
@@ -116,7 +117,8 @@ public class EntityRegistryBuilder<E extends Entity> {
         EntityType<E> entityType = Registry.register(Registry.ENTITY_TYPE, name, entityBuilder.build(name.getPath()));
 
         if (hasEgg) {
-            RegistryHelper.createRegistryHelper(name.getNamespace()).registerItem(new SpawnEggItem((EntityType<? extends MobEntity>) entityType, primaryColor, secondaryColor, new Item.Settings().group(ItemGroup.MISC)), String.format("%s_spawn_egg", name.getPath()));
+            Item spawnEggItem = RegistryHelper.createRegistryHelper(name.getNamespace()).registerItem(String.format("%s_spawn_egg", name.getPath()), new SpawnEggItem((EntityType<? extends MobEntity>) entityType, primaryColor, secondaryColor, new Item.Settings().group(ItemGroup.MISC)));
+            SpawnEggItemAccessor.getSPAWN_EGGS().put((EntityType<? extends MobEntity>) entityType, (SpawnEggItem) spawnEggItem);
         }
         
         return entityType;
