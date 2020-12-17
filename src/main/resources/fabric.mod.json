@@ -20,7 +20,8 @@
       "io.github.vampirestudios.vampirelib.VampireLib"
     ],
     "client": [
-      "io.github.vampirestudios.vampirelib.client.network.BoatSpawnNetworkHandler::register"
+      "io.github.vampirestudios.vampirelib.client.network.BoatSpawnNetworkHandler::register",
+      "io.github.vampirestudios.vampirelib.client.VampireLibClient"
     ]
   },
   "mixins": [

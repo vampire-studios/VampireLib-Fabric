@@ -67,6 +67,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.Registry;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -584,18 +585,59 @@ public class WoodRegistry {
                             }
                         }
 
-                        if(woodRegistry.boatItem != null) {
+                        if (woodRegistry.boatItem != null) {
                             ArtificeGenerationHelper.generateSimpleItemModel(clientResourcePackBuilder, Utils.appendToPath(name, "_boat"));
                         }
 
-                        if(woodRegistry.ladder != null) {
+                        if (woodRegistry.ladder != null) {
                             ArtificeGenerationHelper.generateFacingBlockState(clientResourcePackBuilder, Utils.appendToPath(name, "_ladder"));
                             ArtificeGenerationHelper.generateLadderBlockModel(clientResourcePackBuilder, Utils.appendToPath(name, "_ladder"));
                             ArtificeGenerationHelper.generateSimpleItemModel(clientResourcePackBuilder, Utils.appendToPath(name, "_ladder"), Utils.appendAndPrependToPath(name, "block/", "_ladder"));
                         }
 
-                        if(woodRegistry.sign != null) {
+                        if (woodRegistry.sign != null) {
                             ArtificeGenerationHelper.generateSimpleItemModel(clientResourcePackBuilder, Utils.appendToPath(name, "_sign"));
+                        }
+
+                        if (woodRegistry.slab != null) {
+                            ArtificeGenerationHelper.generateSlabBlockState(clientResourcePackBuilder, Utils.appendToPath(name, "_slab"), Utils.appendToPath(name, "_planks"));
+                            ArtificeGenerationHelper.generateSlabBlockModels(clientResourcePackBuilder, Utils.appendToPath(name, "_slab"), Utils.appendAndPrependToPath(name, "block/", "_planks"));
+                            ArtificeGenerationHelper.generateBlockItemModel(clientResourcePackBuilder, Utils.appendToPath(name, "_slab"));
+                        }
+
+                        if (woodRegistry.stairs != null) {
+                            ArtificeGenerationHelper.generateStairsBlockState(clientResourcePackBuilder, Utils.appendToPath(name, "_stairs"));
+                            ArtificeGenerationHelper.generateStairsBlockModels(clientResourcePackBuilder, Utils.appendToPath(name, "_stairs"), Utils.appendAndPrependToPath(name, "block/", "_planks"));
+                            ArtificeGenerationHelper.generateBlockItemModel(clientResourcePackBuilder, Utils.appendToPath(name, "_stairs"));
+                        }
+
+                        if (woodRegistry.fence != null) {
+                            ArtificeGenerationHelper.generateFenceBlockState(clientResourcePackBuilder, Utils.appendToPath(name, "_fence"));
+                            ArtificeGenerationHelper.generateFenceBlockModels(clientResourcePackBuilder, Utils.appendToPath(name, "_fence"), Utils.appendAndPrependToPath(name, "block/", "_planks"));
+                            ArtificeGenerationHelper.generateBlockItemModel(clientResourcePackBuilder, Utils.appendToPath(name, "_fence"), Utils.appendToPath(name, "_fence_inventory"));
+                        }
+
+                        if (woodRegistry.fenceGate != null) {
+                            ArtificeGenerationHelper.generateFenceGateBlockState(clientResourcePackBuilder, Utils.appendToPath(name, "_fence_gate"));
+                            ArtificeGenerationHelper.generateFenceGateBlockModels(clientResourcePackBuilder, Utils.appendToPath(name, "_fence_gate"), Utils.appendAndPrependToPath(name, "block/", "_planks"));
+                            ArtificeGenerationHelper.generateBlockItemModel(clientResourcePackBuilder, Utils.appendToPath(name, "_fence_gate"));
+                        }
+
+                        if (woodRegistry.door != null) {
+                            ArtificeGenerationHelper.generateDoorBlockState(clientResourcePackBuilder, Utils.appendToPath(name, "_door"));
+                            ArtificeGenerationHelper.generateDoorBlockModels(clientResourcePackBuilder, Utils.appendToPath(name, "_door"), Utils.appendAndPrependToPath(name, "block/", "_door_top"), Utils.appendAndPrependToPath(name, "block/", "_door_bottom"));
+                            ArtificeGenerationHelper.generateSimpleItemModel(clientResourcePackBuilder, Utils.appendToPath(name, "_door"));
+                        }
+
+                        if (woodRegistry.trapdoor != null) {
+                            ArtificeGenerationHelper.generateTrapdoorBlockState(clientResourcePackBuilder, Utils.appendToPath(name, "_trapdoor"));
+                            ArtificeGenerationHelper.generateTrapdoorBlockModels(clientResourcePackBuilder, Utils.appendToPath(name, "_trapdoor"), Utils.appendAndPrependToPath(name, "block/", "_trapdoor"));
+                            ArtificeGenerationHelper.generateBlockItemModel(clientResourcePackBuilder, Utils.appendToPath(name, "_trapdoor"), Utils.appendToPath(name, "_trapdoor_bottom"));
+                        }
+                        try {
+                            clientResourcePackBuilder.dumpResources("test", "assets");
+                        } catch (IOException e) {
+                            e.printStackTrace();
                         }
                     });
                 }
@@ -619,7 +661,15 @@ public class WoodRegistry {
                     EntityRendererRegistry.INSTANCE.register(woodRegistry.boatEntity, BoatEntityRenderer::new);
                 }
             }
-            WoodTypeRegistry.registerModded(new WoodType(name.getPath(), woodRegistry.leaves, woodRegistry.log), 0.2F, 0.2F);
+            Artifice.registerDataPack(name, serverResourcePackBuilder -> {
+                if(woodRegistry.fence != null) {
+                    serverResourcePackBuilder.addBlockTag(new Identifier("fences"), tagBuilder -> {
+                        tagBuilder.replace(false);
+                        tagBuilder.values(Utils.appendToPath(name, "_fence"));
+                    });
+                }
+            });
+            WoodTypeRegistry.registerModded(new WoodType(name.toString(), woodRegistry.leaves, woodRegistry.log), 0.2F, 0.2F);
             return woodRegistry;
         }
     }

@@ -1,11 +1,7 @@
 package io.github.vampirestudios.vampirelib.client;
 
 import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.fabric.impl.client.rendering.ColorProviderRegistryImpl;
 import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.client.color.block.BlockColorProvider;
-import net.minecraft.client.color.item.ItemColorProvider;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +12,7 @@ public class VampireLibClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-        COLORED_LEAVES.forEach(coloredLeaves -> {
+        /*COLORED_LEAVES.forEach(coloredLeaves -> {
             if(!coloredLeaves.customColor) {
                 ColorProviderRegistryImpl.BLOCK.register((block, world, pos, layer) -> {
                     BlockColorProvider provider = ColorProviderRegistryImpl.BLOCK.get(Blocks.OAK_LEAVES);
@@ -30,7 +26,7 @@ public class VampireLibClient implements ClientModInitializer {
                 ColorProviderRegistryImpl.BLOCK.register((block, world, pos, layer) -> coloredLeaves.color, coloredLeaves.leavesBlock);
                 ColorProviderRegistryImpl.ITEM.register((item, layer) -> coloredLeaves.color, coloredLeaves.leavesBlock);
             }
-        });
+        });*/
     }
 
     public static class ColoredLeaves {

@@ -28,7 +28,6 @@ import com.mojang.serialization.Lifecycle;
 import io.github.vampirestudios.vampirelib.modules.ModuleManager;
 import io.github.vampirestudios.vampirelib.utils.Rands;
 import io.github.vampirestudios.vampirelib.utils.registry.BlockChiseler;
-import io.github.vampirestudios.vampirelib.utils.registry.WoodRegistry;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
@@ -46,7 +45,7 @@ public class VampireLib implements ModInitializer {
     public static String MOD_ID = "vampirelib";
     public static String MOD_NAME = "VampireLib";
     public static final Logger LOGGER = LogManager.getLogger(MOD_NAME);
-    public static String MOD_VERSION = "2.3.0+build.1 for 20w49a";
+    public static String MOD_VERSION = "2.3.0+build.2 for 20w49a";
     public static final Map<String, Identifier> DEV_UUID = new HashMap<String, Identifier>(){{
         //CatCore
         this.put("5bb676ef-ecee-4258-ae1f-53e163839585", new Identifier(MOD_ID, "textures/misc/cat_cape.png"));
@@ -64,16 +63,6 @@ public class VampireLib implements ModInitializer {
     public void onInitialize() {
         LOGGER.info((Rands.chance(15) ? "Your are" : (Rands.chance(15) ? "You're" : "You are")) + " running " + MOD_NAME + " v" + MOD_VERSION);
         BlockChiseler.setup();
-
-        WoodRegistry.of(new Identifier(MOD_ID, "blossom"))
-                .shouldGenerateAssets().nonFlammable()
-                .log().strippedLog().wood().strippedWood().planks()
-                .door().trapdoor().bookshelf().boat().ladder()
-                .saplings("white_blossom", "purple_blossom", "pink_blossom")
-                .leaves("white_blossom", "purple_blossom", "pink_blossom").build();
-
-        WoodRegistry.of(new Identifier(MOD_ID, "simple_wood_type"))
-                .shouldGenerateAssets().defaultBlocks().build();
     }
 
 }
