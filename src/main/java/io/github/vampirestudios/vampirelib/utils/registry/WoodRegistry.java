@@ -669,7 +669,7 @@ public class WoodRegistry {
                     });
                 }
             });
-            WoodTypeRegistry.registerModded(new WoodType(name.toString(), woodRegistry.leaves, woodRegistry.log), 0.2F, 0.2F);
+//            WoodTypeRegistry.registerModded(new WoodType(name.toString(), woodRegistry.leaves, woodRegistry.log), 0.2F, 0.2F);
             return woodRegistry;
         }
     }
