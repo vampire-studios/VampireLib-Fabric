@@ -28,10 +28,12 @@
     "item.MixinBookOnLectern"
   ],
   "client": [
+    "client.BoatEntityRendererMixin",
     "client.MixinClientPlayerEntity",
     "client.PlayerListEntryMixin",
     "client.SpriteAccessor",
-    "client.BoatEntityRendererMixin",
+    "client.EntityModelLayersAccessor",
+    "client.EntityModelsMixin",
     "client.TextRendererMixin"
   ],
   "injectors": {

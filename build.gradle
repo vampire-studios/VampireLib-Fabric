@@ -77,12 +77,12 @@ import com.modrinth.minotaur.TaskModrinthUpload
 
 task publishModrinth (type: TaskModrinthUpload){
 	token = modrinthToken // Use an environment property!
-	projectId = "tyCNRhS8"
+	projectId = 'tyCNRhS8'
 	releaseType = "beta"
 	versionNumber = "${archivesBaseName}-${version}"
-	uploadFile = jar // This is the java jar task
+	uploadFile = remapJar // This is the java jar task
 	changelog = 'A lot have changed, check github for more exact stuff'
-	addGameVersion('20w49a')
+	addGameVersion('20w51a')
 	addLoader('fabric')
 }
 

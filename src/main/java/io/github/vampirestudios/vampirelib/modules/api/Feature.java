@@ -30,7 +30,7 @@ import net.minecraft.util.Identifier;
 
 public abstract class Feature {
 
-    private static boolean enabled = true;
+    private boolean enabled = true;
     public Identifier name;
     public String description;
     public EnvType envType;
@@ -45,7 +45,7 @@ public abstract class Feature {
         this(name, description, EnvType.SERVER);
     }
 
-    public static boolean isEnabled() {
+    public boolean isEnabled() {
         return enabled;
     }
 

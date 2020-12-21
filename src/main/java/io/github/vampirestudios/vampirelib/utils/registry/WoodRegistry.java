@@ -26,11 +26,14 @@ package io.github.vampirestudios.vampirelib.utils.registry;
 
 import com.google.common.collect.ImmutableMap;
 import com.swordglowsblue.artifice.api.Artifice;
+import io.github.vampirestudios.vampirelib.api.EntityModelLayerHelper;
 import io.github.vampirestudios.vampirelib.api.SpriteIdentifierRegistry;
 import io.github.vampirestudios.vampirelib.blocks.*;
 import io.github.vampirestudios.vampirelib.boat.CustomBoatEntity;
 import io.github.vampirestudios.vampirelib.boat.CustomBoatInfo;
 import io.github.vampirestudios.vampirelib.client.VampireLibClient;
+import io.github.vampirestudios.vampirelib.client.renderer.CustomBoatEntityRenderer;
+import io.github.vampirestudios.vampirelib.init.VEntityModelLayers;
 import io.github.vampirestudios.vampirelib.items.CustomBoatItem;
 import io.github.vampirestudios.vampirelib.utils.ArtificeGenerationHelper;
 import io.github.vampirestudios.vampirelib.utils.Utils;
@@ -50,7 +53,8 @@ import net.minecraft.block.entity.SignBlockEntity;
 import net.minecraft.block.sapling.SaplingGenerator;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.TexturedRenderLayers;
-import net.minecraft.client.render.entity.BoatEntityRenderer;
+import net.minecraft.client.render.entity.model.BoatEntityModel;
+import net.minecraft.client.render.entity.model.EntityModelLayer;
 import net.minecraft.client.util.SpriteIdentifier;
 import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.EntityType;
@@ -658,7 +662,9 @@ public class WoodRegistry {
                     Registry.register(Registry.BLOCK_ENTITY_TYPE, Utils.appendToPath(name, "_sign"), FabricBlockEntityTypeBuilder.create(SignBlockEntity::new, woodRegistry.sign, woodRegistry.wallSign).build(null));
                 }
                 if(woodRegistry.boatItem != null) {
-                    EntityRendererRegistry.INSTANCE.register(woodRegistry.boatEntity, BoatEntityRenderer::new);
+                    EntityModelLayer entityModelLayer = VEntityModelLayers.createBoat(name);
+                    EntityModelLayerHelper.registerModelLayer(entityModelLayer, BoatEntityModel::getTexturedModelData);
+                    EntityRendererRegistry.INSTANCE.register(woodRegistry.boatEntity, ctx -> new CustomBoatEntityRenderer(entityModelLayer, ctx));
                 }
             }
             Artifice.registerDataPack(name, serverResourcePackBuilder -> {
