@@ -24,6 +24,7 @@
 
 package io.github.vampirestudios.vampirelib.blocks;
 
+import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.DoorBlock;
 import net.minecraft.item.ItemStack;
@@ -31,8 +32,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.BlockView;
 
 public class DoorBaseBlock extends DoorBlock {
-    public DoorBaseBlock(Settings block$Settings_1) {
-        super(block$Settings_1);
+    public DoorBaseBlock(AbstractBlock.Settings settings) {
+        super(settings);
     }
 
     @Override

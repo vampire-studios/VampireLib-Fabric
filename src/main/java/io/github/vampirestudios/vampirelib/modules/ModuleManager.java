@@ -45,9 +45,9 @@ import java.util.Objects;
 
 public class ModuleManager {
 
-    public static final Registry<Module> MODULES = new SimpleRegistry<>(RegistryKey.ofRegistry(new Identifier("vampirelib:modules")), Lifecycle.stable());
-    public static final Registry<Module> SERVER_MODULES = new SimpleRegistry<>(RegistryKey.ofRegistry(new Identifier("vampirelib:server_modules")), Lifecycle.stable());
-    public static final Registry<Module> CLIENT_MODULES = new SimpleRegistry<>(RegistryKey.ofRegistry(new Identifier("vampirelib:client_modules")), Lifecycle.stable());
+    @Deprecated public static final Registry<Module> MODULES = new SimpleRegistry<>(RegistryKey.ofRegistry(new Identifier("vampirelib:modules")), Lifecycle.stable());
+    @Deprecated public static final Registry<Module> SERVER_MODULES = new SimpleRegistry<>(RegistryKey.ofRegistry(new Identifier("vampirelib:server_modules")), Lifecycle.stable());
+    @Deprecated public static final Registry<Module> CLIENT_MODULES = new SimpleRegistry<>(RegistryKey.ofRegistry(new Identifier("vampirelib:client_modules")), Lifecycle.stable());
     public static final Registry<NonFeatureModule> NON_FEATURE_MODULES = new SimpleRegistry<>(RegistryKey.ofRegistry(new Identifier("vampirelib:non_feature_modules")), Lifecycle.stable());
     public static final Registry<NonFeatureModule> CLIENT_NON_FEATURE_MODULES = new SimpleRegistry<>(RegistryKey.ofRegistry(new Identifier("vampirelib:client_non_feature_modules")), Lifecycle.stable());
     public static final Registry<NonFeatureModule> SERVER_NON_FEATURE_MODULES = new SimpleRegistry<>(RegistryKey.ofRegistry(new Identifier("vampirelib:server_non_feature_modules")), Lifecycle.stable());
@@ -61,6 +61,7 @@ public class ModuleManager {
         return VampireLib.MODULE_MANAGERS.get(modIdentifier);
     }
 
+    @Deprecated
     public void registerModule(Module module) {
         if (!MODULES.getOrEmpty(module.getRegistryName()).isPresent()) {
             Registry.register(MODULES, module.getRegistryName(), module);
@@ -88,12 +89,14 @@ public class ModuleManager {
         ModuleConfig.load(module, WordUtils.capitalize(module.getRegistryName().getNamespace()), "server");
     }
 
+    @Deprecated
     public void registerServerModule(Module module) {
         if (!SERVER_MODULES.getOrEmpty(module.getRegistryName()).isPresent()) {
             Registry.register(SERVER_MODULES, module.getRegistryName(), module);
         }
     }
 
+    @Deprecated
     public void registerClientModule(Module module) {
         if (!CLIENT_MODULES.getOrEmpty(module.getRegistryName()).isPresent()) {
             Registry.register(CLIENT_MODULES, module.getRegistryName(), module);

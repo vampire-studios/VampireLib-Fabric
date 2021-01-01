@@ -22,29 +22,42 @@
  * SOFTWARE.
  */
 
-package io.github.vampirestudios.vampirelib.callbacks;
+package io.github.vampirestudios.vampirelib.boat;
 
-import net.fabricmc.fabric.api.event.Event;
-import net.fabricmc.fabric.api.event.EventFactory;
-import net.minecraft.client.render.BackgroundRenderer;
-import net.minecraft.client.render.Camera;
-import net.minecraft.util.ActionResult;
+import net.minecraft.entity.vehicle.BoatEntity;
+import net.minecraft.item.Item;
+import net.minecraft.util.Identifier;
 
-@FunctionalInterface
-public interface FogRenderCallback {
+public class CustomBoatInfo {
+    private Item item;
+    private Item planks;
+    private Identifier skin;
+    private BoatEntity.Type vanilla;
 
-    Event<FogRenderCallback> EVENT = EventFactory
-        .createArrayBacked(FogRenderCallback.class, (listeners) -> (type, info, partial, distance) -> {
-            for (FogRenderCallback handler : listeners) {
-                ActionResult result = handler.onRender(type, info, partial, distance);
-                if (result != ActionResult.PASS) {
-                    return result;
-                }
-            }
+    public CustomBoatInfo(Item item, Item planks, Identifier skin) {
+        this(item, planks, skin, BoatEntity.Type.OAK);
+    }
 
-            return ActionResult.PASS;
-        });
+    public CustomBoatInfo(Item item, Item planks, Identifier skin, BoatEntity.Type vanilla) {
+        this.item = item;
+        this.planks = planks;
+        this.skin = skin;
+        this.vanilla = vanilla;
+    }
 
-    ActionResult onRender(BackgroundRenderer.FogType type, Camera info, float partial, float distance);
+    public Item asItem() {
+        return item;
+    }
 
+    public Item asPlanks() {
+        return planks;
+    }
+
+    public Identifier getSkin() {
+        return skin;
+    }
+
+    public BoatEntity.Type getVanillaType() {
+        return vanilla;
+    }
 }

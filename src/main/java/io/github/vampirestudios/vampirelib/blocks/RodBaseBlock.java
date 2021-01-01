@@ -24,11 +24,7 @@
 
 package io.github.vampirestudios.vampirelib.blocks;
 
-import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.FacingBlock;
-import net.minecraft.block.Material;
+import net.minecraft.block.*;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.state.StateManager;
 import net.minecraft.util.BlockMirror;
@@ -47,13 +43,13 @@ public class RodBaseBlock extends FacingBlock {
 
     @SuppressWarnings("unused")
     public RodBaseBlock(boolean emitsLight) {
-        super(emitsLight ? FabricBlockSettings.of(Material.STONE).strength(0.3F, 1.0F).lightLevel(13) : FabricBlockSettings.of(Material.STONE));
+        super(emitsLight ? AbstractBlock.Settings.of(Material.STONE).strength(0.3F, 1.0F).luminance(value -> 13) : AbstractBlock.Settings.of(Material.STONE));
         this.setDefaultState(this.getDefaultState().with(FACING, Direction.UP));
     }
 
     @SuppressWarnings("unused")
     public RodBaseBlock(Material material, boolean emitsLight) {
-        super(emitsLight ? FabricBlockSettings.of(material).hardness(0.3F).lightLevel(13) : FabricBlockSettings.of(material));
+        super(emitsLight ? AbstractBlock.Settings.of(material).strength(0.3F).luminance(value -> 13) : AbstractBlock.Settings.of(material));
         this.setDefaultState(this.getDefaultState().with(FACING, Direction.UP));
     }
 

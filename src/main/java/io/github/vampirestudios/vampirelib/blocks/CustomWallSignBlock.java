@@ -22,22 +22,23 @@
  * SOFTWARE.
  */
 
-package io.github.vampirestudios.vampirelib.callbacks;
+package io.github.vampirestudios.vampirelib.blocks;
 
-import net.fabricmc.fabric.api.event.Event;
-import net.fabricmc.fabric.api.event.EventFactory;
+import io.github.vampirestudios.vampirelib.api.CustomSign;
+import net.minecraft.block.WallSignBlock;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.SignType;
 
-@FunctionalInterface
-public interface FogDensityCallback {
+public class CustomWallSignBlock extends WallSignBlock implements CustomSign {
+    private final Identifier texture;
 
-    Event<FogDensityCallback> EVENT = EventFactory
-        .createArrayBacked(FogDensityCallback.class, (listeners) -> () -> {
-            for (FogDensityCallback handler : listeners) {
-                return handler.onRender();
-            }
-            return 0.0F;
-        });
+    public CustomWallSignBlock(Identifier texture, Settings settings) {
+        super(settings, SignType.OAK);
+        this.texture = texture;
+    }
 
-    float onRender();
-
+    @Override
+    public Identifier getTexture() {
+        return texture;
+    }
 }

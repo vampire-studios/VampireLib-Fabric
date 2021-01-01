@@ -25,12 +25,10 @@
 package io.github.vampirestudios.vampirelib;
 
 import com.mojang.serialization.Lifecycle;
-import io.github.vampirestudios.vampirelib.callbacks.FogColorCallback;
 import io.github.vampirestudios.vampirelib.modules.ModuleManager;
 import io.github.vampirestudios.vampirelib.utils.Rands;
 import io.github.vampirestudios.vampirelib.utils.registry.BlockChiseler;
 import net.fabricmc.api.ModInitializer;
-import net.minecraft.client.util.math.Vector3f;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
@@ -47,7 +45,7 @@ public class VampireLib implements ModInitializer {
     public static String MOD_ID = "vampirelib";
     public static String MOD_NAME = "VampireLib";
     public static final Logger LOGGER = LogManager.getLogger(MOD_NAME);
-    public static String MOD_VERSION = "2.1.0+build.1 for 1.16.3";
+    public static String MOD_VERSION = "2.2.0+build.1 for 1.16.4";
     public static final Map<String, Identifier> DEV_UUID = new HashMap<String, Identifier>(){{
         //CatCore
         this.put("5bb676ef-ecee-4258-ae1f-53e163839585", new Identifier(MOD_ID, "textures/misc/cat_cape.png"));
@@ -57,14 +55,14 @@ public class VampireLib implements ModInitializer {
         this.put("ab6a4eb9-b02a-4909-a71e-65a8dbe5ee54", new Identifier(MOD_ID, "textures/misc/turtle.png"));
         //SkyladySelena
         this.put("641cb212-8d44-4a2c-aa47-8396918fa336", new Identifier(MOD_ID, "textures/misc/selena_cape.png"));
+        //AgentM
+        this.put("b5701a2d-9593-4224-a61e-cabb3887cfc7", new Identifier(MOD_ID, "textures/misc/agent_m_cape_v1.png"));
     }};
 
     @Override
     public void onInitialize() {
         LOGGER.info((Rands.chance(15) ? "Your are" : (Rands.chance(15) ? "You're" : "You are")) + " running " + MOD_NAME + " v" + MOD_VERSION);
         BlockChiseler.setup();
-
-        FogColorCallback.EVENT.register((info, partialTicks, red, green, blue) -> new Vector3f(red * 1, green, blue * 1));
     }
 
 }

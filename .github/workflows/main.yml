@@ -13,7 +13,7 @@ jobs:
       fail-fast: false
       matrix:
         minecraftVersion:
-          - latest
+          - 1.16.4
     steps:
       - uses: actions/checkout@v2
         with:
@@ -37,7 +37,7 @@ jobs:
       fail-fast: false
       matrix:
         minecraftVersion:
-          - latest
+          - 1.16.4
     steps:
       - uses: actions/checkout@v2
         with:
@@ -59,7 +59,7 @@ jobs:
       fail-fast: false
       matrix:
         minecraftVersion:
-          - latest
+          - 1.16.4
     steps:
       - uses: actions/checkout@v2
         with:
@@ -80,7 +80,7 @@ jobs:
       fail-fast: false
       matrix:
         minecraftVersion:
-          - latest
+          - 1.16.4
     steps:
       - uses: actions/checkout@v2
         with:

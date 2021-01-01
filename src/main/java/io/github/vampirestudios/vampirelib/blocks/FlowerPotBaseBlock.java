@@ -24,7 +24,7 @@
 
 package io.github.vampirestudios.vampirelib.blocks;
 
-import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
+import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.FlowerPotBlock;
 import net.minecraft.block.Material;
@@ -32,7 +32,7 @@ import net.minecraft.block.Material;
 public class FlowerPotBaseBlock extends FlowerPotBlock {
 
     public FlowerPotBaseBlock(Block block_1) {
-        super(block_1, FabricBlockSettings.of(Material.AGGREGATE).breakInstantly());
+        super(block_1, AbstractBlock.Settings.of(Material.AGGREGATE).breakInstantly());
     }
 
 }

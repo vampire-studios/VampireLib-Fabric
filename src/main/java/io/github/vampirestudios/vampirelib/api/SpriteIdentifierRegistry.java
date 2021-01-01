@@ -22,48 +22,28 @@
  * SOFTWARE.
  */
 
-package io.github.vampirestudios.vampirelib;
+package io.github.vampirestudios.vampirelib.api;
 
-import io.github.vampirestudios.vampirelib.api.ItemDamageBarInfo;
-import net.minecraft.item.ItemStack;
+import net.minecraft.client.util.SpriteIdentifier;
 
-public class ManaBarInfo implements ItemDamageBarInfo {
-	@Override
-	public boolean isVisible(ItemStack stack) {
-		// Let's make this only visible if anything is stored
-		return getFillFactor(stack) > 0;
-	}
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
-	@Override
-	public float getFillFactor(ItemStack stack) {
-		return ((StorageItem) stack.getItem()).getFillLevel(stack);
-	}
+public class SpriteIdentifierRegistry {
+    public static final SpriteIdentifierRegistry INSTANCE = new SpriteIdentifierRegistry();
+    private final List<SpriteIdentifier> identifiers;
 
-	@Override
-	public int getColor(ItemStack stack) {
-		// Purple mana!
-		return 0x660099;
-	}
+    private SpriteIdentifierRegistry() {
+        identifiers = new ArrayList<>();
+    }
 
-	@Override
-	public int getCount(ItemStack stack) {
-		return 0;
-	}
+    public void addIdentifier(SpriteIdentifier sprite) {
+        this.identifiers.add(sprite);
+    }
 
-	@Override
-	public boolean isVisible(ItemStack stack, int index) {
-		// Let's make this only visible if anything is stored
-		return getFillFactor(stack) > 0;
-	}
-
-	@Override
-	public float getFillFactor(ItemStack stack, int index) {
-		return ((StorageItem) stack.getItem()).getFillLevel(stack);
-	}
-
-	@Override
-	public int getColor(ItemStack stack, int index) {
-		// Purple mana!
-		return 0x660099;
-	}
+    public Collection<SpriteIdentifier> getIdentifiers() {
+        return Collections.unmodifiableList(identifiers);
+    }
 }

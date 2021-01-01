@@ -22,30 +22,20 @@
  * SOFTWARE.
  */
 
-package io.github.vampirestudios.vampirelib;
+package io.github.vampirestudios.vampirelib.mixins;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Hand;
-import net.minecraft.util.TypedActionResult;
-import net.minecraft.world.World;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.mob.MobEntity;
+import net.minecraft.item.SpawnEggItem;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.gen.Accessor;
 
-/**
- * An item that causes a cooldown when it is used.
- */
-public class CooldownItem extends Item {
-	// Cooldown duration in ticks when this item is being used
-	private final int duration;
+import java.util.Map;
 
-	public CooldownItem(Settings settings, int duration) {
-		super(settings);
-		this.duration = duration;
-	}
-
-	@Override
-	public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
-		user.getItemCooldownManager().set(this, duration);
-		return TypedActionResult.success(user.getStackInHand(hand));
-	}
+@Mixin(SpawnEggItem.class)
+public interface SpawnEggItemAccessor {
+    @Accessor
+    static Map<EntityType<? extends MobEntity>, SpawnEggItem> getSPAWN_EGGS() {
+        throw new UnsupportedOperationException();
+    }
 }

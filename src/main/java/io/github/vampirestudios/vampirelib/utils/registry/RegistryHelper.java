@@ -82,18 +82,28 @@ public class RegistryHelper {
                 .strength(2.0F).sounds(BlockSoundGroup.WOOD)), name);
     }
 
-    public Block registerBlockWithoutItem(Block block, String name) {
+    public Block registerLog(String name, MaterialColor materialColor) {
+        return registerBlock(new PillarBlock(AbstractBlock.Settings.of(Material.WOOD, (blockState) -> materialColor)
+                .strength(2.0F).sounds(BlockSoundGroup.WOOD)), name);
+    }
+
+    public Block registerBlockWithoutItem(String name, Block block) {
         Registry.register(Registry.BLOCK, new Identifier(modId, name), block);
         return block;
     }
 
-    public Item registerItem(Item item, String name) {
+    public Item registerItem(String name, Item item) {
         return Registry.register(Registry.ITEM, new Identifier(modId, name), item);
     }
 
     public <T extends BlockEntity> BlockEntityType<T> registerBlockEntity(BlockEntityType.Builder<T> builder, String name) {
         BlockEntityType<T> blockEntityType = builder.build(null);
         return Registry.register(Registry.BLOCK_ENTITY_TYPE, new Identifier(modId, name), blockEntityType);
+    }
+
+    public <T extends Entity> EntityType<T> registerEntity(EntityType.Builder<T> builder, String name) {
+        EntityType<T> blockEntityType = builder.build(null);
+        return Registry.register(Registry.ENTITY_TYPE, new Identifier(modId, name), blockEntityType);
     }
 
     public Block registerCompatBlock(String modName, String blockName, Block block, ItemGroup itemGroup) {
@@ -114,7 +124,7 @@ public class RegistryHelper {
 
     public Item registerCompatItem(String modName, String itemName, Item.Settings settings, ItemGroup itemGroup) {
         if (!FabricLoader.getInstance().isModLoaded(modName)) {
-            return registerItem(new Item(settings.group(itemGroup)), itemName);
+            return registerItem(itemName, new Item(settings.group(itemGroup)));
         } else {
             return null;
         }
@@ -128,8 +138,8 @@ public class RegistryHelper {
         return Registry.register(Registry.SOUND_EVENT, new Identifier(modId, name), soundEvent);
     }
 
-    public Item registerSpawnEgg(String name, EntityType<? extends Entity> entity, int primaryColor, int secondaryColor) {
-        return registerItem(new SpawnEggItem(entity, primaryColor, secondaryColor, new Item.Settings().group(ItemGroup.MISC)), name + "_spawn_egg");
+    public Item registerSpawnEgg(String name, EntityType<?> entity, int primaryColor, int secondaryColor) {
+        return registerItem(name + "_spawn_egg", new SpawnEggItem(entity, primaryColor, secondaryColor, new Item.Settings().group(ItemGroup.MISC)));
     }
 
     public Potion registerPotion(String name, Potion potion) {

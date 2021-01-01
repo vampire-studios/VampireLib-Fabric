@@ -30,9 +30,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.ItemCooldownManager;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
+import net.minecraft.item.*;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -49,7 +47,7 @@ public abstract class MixinPlayerEntity extends LivingEntity {
 	 */
 	@Redirect(method = "damageShield", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;getItem()Lnet/minecraft/item/Item;"))
 	private Item damageFabricShields(ItemStack itemStack) {
-		if (itemStack.getItem() == Items.SHIELD || ShieldRegistry.INSTANCE.isShield(itemStack.getItem())) {
+		if (itemStack.getItem() instanceof ShieldItem || ShieldRegistry.INSTANCE.isShield(itemStack.getItem())) {
 			return Items.SHIELD;
 		}
 
@@ -61,7 +59,7 @@ public abstract class MixinPlayerEntity extends LivingEntity {
 	 */
 	@Redirect(method = "checkFallFlying", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;getItem()Lnet/minecraft/item/Item;"))
 	private Item checkFallFlyingFabric(ItemStack itemStack) {
-		if (itemStack.getItem() == Items.ELYTRA || ElytraRegistry.INSTANCE.isElytra(itemStack.getItem())) {
+		if (itemStack.getItem() instanceof ElytraItem || ElytraRegistry.INSTANCE.isElytra(itemStack.getItem())) {
 			return Items.ELYTRA;
 		}
 
@@ -73,8 +71,8 @@ public abstract class MixinPlayerEntity extends LivingEntity {
 	 */
 	@Redirect(method = "disableShield", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/ItemCooldownManager;set(Lnet/minecraft/item/Item;I)V"))
 	private void setCooldownForShields(ItemCooldownManager cooldownManager, Item item, int duration) {
-		if (this.activeItemStack.getItem() == Items.SHIELD) {
-			cooldownManager.set(Items.SHIELD, duration);
+		if (this.activeItemStack.getItem() instanceof ShieldItem) {
+			cooldownManager.set(item, duration);
 		} else if (ShieldRegistry.INSTANCE.isShield(this.activeItemStack.getItem())) {
 			cooldownManager.set(this.activeItemStack.getItem(), 100);
 		}

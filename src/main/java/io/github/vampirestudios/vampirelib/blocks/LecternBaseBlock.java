@@ -24,6 +24,7 @@
 
 package io.github.vampirestudios.vampirelib.blocks;
 
+import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.LecternBlock;
@@ -46,7 +47,7 @@ import net.minecraft.world.World;
 public class LecternBaseBlock extends LecternBlock {
 
     public LecternBaseBlock() {
-        super(Settings.copy(Blocks.LECTERN));
+        super(AbstractBlock.Settings.copy(Blocks.LECTERN));
     }
 
     @Override

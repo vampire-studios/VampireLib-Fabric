@@ -31,8 +31,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
 
 public class TrapdoorBaseBlock extends TrapdoorBlock implements Climbable {
-    public TrapdoorBaseBlock(Settings block$Settings_1) {
-        super(block$Settings_1);
+    public TrapdoorBaseBlock(Settings settings) {
+        super(settings);
     }
 
     /**

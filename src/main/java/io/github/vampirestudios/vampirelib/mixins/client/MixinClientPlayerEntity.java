@@ -28,6 +28,7 @@ import io.github.vampirestudios.vampirelib.api.ElytraRegistry;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.item.ElytraItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -47,7 +48,7 @@ public abstract class MixinClientPlayerEntity extends LivingEntity {
 	 */
 	@Redirect(method = "tickMovement", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;getItem()Lnet/minecraft/item/Item;"))
 	private Item damageFabricShields(ItemStack itemStack) {
-		if (itemStack.getItem() == Items.ELYTRA || ElytraRegistry.INSTANCE.isElytra(itemStack.getItem())) {
+		if (itemStack.getItem() instanceof ElytraItem || ElytraRegistry.INSTANCE.isElytra(itemStack.getItem())) {
 			return Items.ELYTRA;
 		}
 

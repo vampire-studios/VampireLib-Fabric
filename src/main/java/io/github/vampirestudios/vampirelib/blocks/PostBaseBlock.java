@@ -24,10 +24,7 @@
 
 package io.github.vampirestudios.vampirelib.blocks;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.ShapeContext;
-import net.minecraft.block.Waterloggable;
+import net.minecraft.block.*;
 import net.minecraft.entity.ai.pathing.NavigationType;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
@@ -62,7 +59,7 @@ public class PostBaseBlock extends Block implements Waterloggable {
         Z_SHAPE = Block.createCuboidShape(6f, 6f, 0f, 10f, 10f, 16f);
     }
 
-    public PostBaseBlock(Settings settings) {
+    public PostBaseBlock(AbstractBlock.Settings settings) {
         super(settings);
         this.setDefaultState(this.getDefaultState().with(AXIS, Direction.Axis.Y).with(WATERLOGGED, false));
     }
