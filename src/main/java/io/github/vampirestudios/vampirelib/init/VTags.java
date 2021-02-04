@@ -22,8 +22,6 @@
  * SOFTWARE.
  */
 
-
-
 package io.github.vampirestudios.vampirelib.init;
 
 import io.github.vampirestudios.vampirelib.VampireLib;

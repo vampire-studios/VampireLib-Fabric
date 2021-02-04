@@ -21,7 +21,6 @@
     "SpawnDensityAccessor",
     "SpawnEggItemAccessor",
     "SpawnSettingsAccessor",
-    "block.MixinBookOnLectern",
     "block.StructureBlockBlockEntityMixin",
     "entity.EntityMixin",
     "item.ItemMixin",

@@ -24,6 +24,7 @@
 
 package io.github.vampirestudios.vampirelib.mixins.item;
 
+import io.github.vampirestudios.vampirelib.blocks.LecternBaseBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.LecternBlock;
 import net.minecraft.item.ItemUsageContext;
@@ -46,7 +47,9 @@ public abstract class MixinBookOnLectern {
         BlockPos blockPos = usageContext.getBlockPos();
         BlockState blockState = world.getBlockState(blockPos);
         if (blockState.getBlock() instanceof LecternBlock) {
-            cir.setReturnValue(LecternBlock.putBookIfAbsent(world, blockPos, blockState, usageContext.getStack()) ? ActionResult.SUCCESS : ActionResult.PASS);
+            cir.setReturnValue(LecternBlock.putBookIfAbsent(usageContext.getPlayer(), world, blockPos, blockState, usageContext.getStack()) ? ActionResult.SUCCESS : ActionResult.PASS);
+        } else if (blockState.getBlock() instanceof LecternBaseBlock && !(blockState.getBlock() instanceof LecternBlock)) {
+            cir.setReturnValue(LecternBaseBlock.putBookIfAbsent(usageContext.getPlayer(), world, blockPos, blockState, usageContext.getStack()) ? ActionResult.SUCCESS : ActionResult.PASS);
         } else {
             cir.setReturnValue(ActionResult.PASS);
         }

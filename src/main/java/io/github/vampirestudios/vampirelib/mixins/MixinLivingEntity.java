@@ -53,7 +53,7 @@ public abstract class MixinLivingEntity {
 	/**
 	 * Sets the preferred equipment slot for modded shields to offhand.
 	 */
-	@Inject(method = "method_32326", at = @At("HEAD"), cancellable = true)
+	@Inject(method = "getPreferredEquipmentSlot", at = @At("HEAD"), cancellable = true)
 	private static void addPreferredShieldsSlot(ItemStack stack, CallbackInfoReturnable<EquipmentSlot> info) {
 		if (ShieldRegistry.INSTANCE.isShield(stack.getItem())) {
 			info.setReturnValue(EquipmentSlot.OFFHAND);

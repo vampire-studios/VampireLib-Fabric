@@ -41,6 +41,7 @@ import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
+import net.minecraft.world.event.GameEvent;
 
 public class LecternBaseBlock extends LecternBlock {
 
@@ -53,10 +54,10 @@ public class LecternBaseBlock extends LecternBlock {
         return new LecternBlockEntity(blockPos, blockState);
     }
 
-    public static boolean putBookIfAbsent(World world, BlockPos pos, BlockState state, ItemStack stack) {
+    public static boolean putBookIfAbsent(PlayerEntity playerEntity, World world, BlockPos pos, BlockState state, ItemStack stack) {
         if (!state.get(HAS_BOOK)) {
             if (!world.isClient) {
-                putBook(world, pos, state, stack);
+                putBook(playerEntity, world, pos, state, stack);
             }
             return true;
         } else {
@@ -64,13 +65,14 @@ public class LecternBaseBlock extends LecternBlock {
         }
     }
 
-    private static void putBook(World world, BlockPos pos, BlockState state, ItemStack stack) {
+    private static void putBook(PlayerEntity playerEntity, World world, BlockPos pos, BlockState state, ItemStack stack) {
         BlockEntity be = world.getBlockEntity(pos);
         if (be instanceof LecternBlockEntity) {
             LecternBlockEntity lecternBe = (LecternBlockEntity)be;
             lecternBe.setBook(stack.split(1));
             setHasBook(world, pos, state, true);
             world.playSound(null, pos, SoundEvents.ITEM_BOOK_PUT, SoundCategory.BLOCKS, 1.0F, 1.0F);
+            world.emitGameEvent(playerEntity, GameEvent.BLOCK_CHANGE, pos);
         }
     }
 

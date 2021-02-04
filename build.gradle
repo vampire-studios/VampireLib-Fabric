@@ -42,8 +42,8 @@ dependencies {
 	modImplementation "com.github.cottonmc:Jankson-Fabric:1.16-SNAPSHOT"
 	include "com.github.cottonmc:Jankson-Fabric:1.16-SNAPSHOT"
 
-	modImplementation ("com.github.arthurbambou:artifice:1.17-SNAPSHOT") { exclude group: "net.fabricmc.fabric-api" }
-	include ("com.github.arthurbambou:artifice:1.17-SNAPSHOT") { exclude group: "net.fabricmc.fabric-api" }
+	modImplementation ("com.lettuce.fudge:artifice:0.15.0+20w49a") { exclude group: "net.fabricmc.fabric-api" }
+	include ("com.lettuce.fudge:artifice:0.15.0+20w49a") { exclude group: "net.fabricmc.fabric-api" }
 }
 
 processResources {
