@@ -48,7 +48,7 @@ public class MixinSpawnHelper {
 
 	@Redirect(
 			at = @At(value = "INVOKE", target = "Lnet/minecraft/world/ServerWorldAccess;spawnEntityAndPassengers(Lnet/minecraft/entity/Entity;)V"),
-			method = "populateEntities(Lnet/minecraft/world/ServerWorldAccess;Lnet/minecraft/world/biome/Biome;IILjava/util/Random;)V"
+			method = "populateEntities(Lnet/minecraft/world/ServerWorldAccess;Lnet/minecraft/world/biome/Biome;Lnet/minecraft/util/math/ChunkPos;Ljava/util/Random;)V"
 			)
 	private static void entitySpawnEventChunk(ServerWorldAccess self, Entity entity) {
 		EntitySpawnImpl.spawnEntityV(self, entity);

@@ -71,10 +71,10 @@ public class CustomBoatEntity extends BoatEntity {
     }
 
     @Override
-    protected void writeCustomDataToTag(CompoundTag tag) {}
+    protected void writeCustomDataToNbt(CompoundTag tag) {}
 
     @Override
-    protected void readCustomDataFromTag(CompoundTag tag) {}
+    protected void readCustomDataFromNbt(CompoundTag tag) {}
 
     private boolean isOnLand() {
         return getPaddleSoundEvent() == SoundEvents.ENTITY_BOAT_PADDLE_LAND;

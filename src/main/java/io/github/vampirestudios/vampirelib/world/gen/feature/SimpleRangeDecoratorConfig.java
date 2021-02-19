@@ -24,13 +24,14 @@
 
 package io.github.vampirestudios.vampirelib.world.gen.feature;
 
+import net.minecraft.world.gen.YOffset;
 import net.minecraft.world.gen.decorator.RangeDecoratorConfig;
 
 public class SimpleRangeDecoratorConfig extends RangeDecoratorConfig {
 
     // count = veins per chunk
     public SimpleRangeDecoratorConfig(int min, int max) {
-        super(min, min, max);
+        super(YOffset.fixed(min), YOffset.fixed(max));
     }
 
 }
