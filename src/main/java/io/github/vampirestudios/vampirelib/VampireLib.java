@@ -50,13 +50,17 @@ public class VampireLib implements ModInitializer {
         //CatCore
         this.put("5bb676ef-ecee-4258-ae1f-53e163839585", new Identifier(MOD_ID, "textures/misc/cat_cape.png"));
         //OliviaTheVampire
-        this.put("b344687b-ec74-479a-9540-1aa8ccb13e92", new Identifier(MOD_ID, "textures/misc/zombified_piglin_cape.png"));
+        this.put("b344687b-ec74-479a-9540-1aa8ccb13e92", new Identifier(MOD_ID, "textures/misc/1_16.png"));
         //Tridentflayer
         this.put("ab6a4eb9-b02a-4909-a71e-65a8dbe5ee54", new Identifier(MOD_ID, "textures/misc/turtle.png"));
         //SkyladySelena
         this.put("641cb212-8d44-4a2c-aa47-8396918fa336", new Identifier(MOD_ID, "textures/misc/selena_cape.png"));
         //AgentM
         this.put("b5701a2d-9593-4224-a61e-cabb3887cfc7", new Identifier(MOD_ID, "textures/misc/agent_m_cape_v1.png"));
+        //Avaier
+        this.put("978fdd1b-c1d6-4483-9287-eb796833c52f", new Identifier(MOD_ID, "textures/misc/avaier_dinosaur.png"));
+        //Toothless
+        this.put("978fdd1b-c1d6-4483-9287-eb796833c52f", new Identifier(MOD_ID, "textures/misc/avaier_dinosaur.png"));
     }};
 
     @Override
