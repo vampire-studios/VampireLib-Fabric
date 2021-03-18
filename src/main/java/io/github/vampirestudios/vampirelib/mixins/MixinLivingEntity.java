@@ -24,18 +24,13 @@
 
 package io.github.vampirestudios.vampirelib.mixins;
 
-import io.github.vampirestudios.vampirelib.api.ElytraRegistry;
-import io.github.vampirestudios.vampirelib.api.ShieldRegistry;
 import io.github.vampirestudios.vampirelib.callbacks.EntityHealthChangeCallback;
-import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(LivingEntity.class)
 public abstract class MixinLivingEntity {
@@ -47,19 +42,6 @@ public abstract class MixinLivingEntity {
 		ActionResult result = EntityHealthChangeCallback.EVENT.invoker().health(((LivingEntity) (Object) this), health);
 		if (result == ActionResult.FAIL) {
 			ci.cancel();
-		}
-	}
-
-	/**
-	 * Sets the preferred equipment slot for modded shields to offhand.
-	 */
-	@Inject(method = "getPreferredEquipmentSlot", at = @At("HEAD"), cancellable = true)
-	private static void addPreferredShieldsSlot(ItemStack stack, CallbackInfoReturnable<EquipmentSlot> info) {
-		if (ShieldRegistry.INSTANCE.isShield(stack.getItem())) {
-			info.setReturnValue(EquipmentSlot.OFFHAND);
-		}
-		if (ElytraRegistry.INSTANCE.isElytra(stack.getItem())) {
-			info.setReturnValue(EquipmentSlot.CHEST);
 		}
 	}
 

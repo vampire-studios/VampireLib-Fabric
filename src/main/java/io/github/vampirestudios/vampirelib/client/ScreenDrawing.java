@@ -61,7 +61,7 @@ public class ScreenDrawing {
         //RenderSystem.disableTexture2D();
         RenderSystem.blendFuncSeparate(GlStateManager.SrcFactor.SRC_ALPHA, GlStateManager.DstFactor.ONE_MINUS_SRC_ALPHA,
                 GlStateManager.SrcFactor.ONE, GlStateManager.DstFactor.ZERO);
-        RenderSystem.color4f(r, g, b, 1.0f);
+        RenderSystem.setShaderColor(r, g, b, 1.0f);
         buffer.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE); //I thought GL_QUADS was deprecated but okay, sure.
         buffer.vertex(left, top + height, z).texture(u1, v2).next();
         buffer.vertex(left + width, top + height, z).texture(u2, v2).next();
@@ -89,7 +89,7 @@ public class ScreenDrawing {
         RenderSystem.disableTexture();
         RenderSystem.blendFuncSeparate(GlStateManager.SrcFactor.SRC_ALPHA, GlStateManager.DstFactor.ONE_MINUS_SRC_ALPHA,
                 GlStateManager.SrcFactor.ONE, GlStateManager.DstFactor.ZERO);
-        RenderSystem.color4f(r, g, b, a);
+        RenderSystem.setShaderColor(r, g, b, a);
         buffer.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION); //I thought GL_QUADS was deprecated but okay, sure.
         buffer.vertex(left, top + height, 0.0D).next();
         buffer.vertex(left + width, top + height, 0.0D).next();

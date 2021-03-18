@@ -24,21 +24,13 @@
 
 package io.github.vampirestudios.vampirelib.blocks;
 
-import io.github.vampirestudios.vampirelib.api.CustomSign;
 import net.minecraft.block.WallSignBlock;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.SignType;
 
-public class CustomWallSignBlock extends WallSignBlock implements CustomSign {
-    private final Identifier texture;
+public class CustomWallSignBlock extends WallSignBlock {
 
-    public CustomWallSignBlock(Identifier texture, Settings settings) {
-        super(settings, SignType.OAK);
-        this.texture = texture;
+    public CustomWallSignBlock(SignType signType, Settings settings) {
+        super(settings, signType);
     }
 
-    @Override
-    public Identifier getTexture() {
-        return texture;
-    }
 }

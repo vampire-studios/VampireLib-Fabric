@@ -157,7 +157,7 @@ public class GuiUtils
     public static void drawContinuousTexturedBox(int x, int y, int u, int v, int width, int height, int textureWidth, int textureHeight,
             int topBorder, int bottomBorder, int leftBorder, int rightBorder, float zLevel)
     {
-        RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.enableBlend();
         RenderSystem.blendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
 
@@ -289,7 +289,6 @@ public class GuiUtils
             maxTextWidth = pre.getMaxWidth();
             font = pre.getFontRenderer();
 
-            RenderSystem.disableRescaleNormal();
             RenderSystem.disableDepthTest();
             int tooltipTextWidth = 0;
 
@@ -412,7 +411,6 @@ public class GuiUtils
             RenderTooltipCallback.PostText.EVENT.invoker().postText(postText);
 
             RenderSystem.enableDepthTest();
-            RenderSystem.enableRescaleNormal();
         }
     }
 
@@ -431,7 +429,7 @@ public class GuiUtils
         RenderSystem.disableTexture();
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
-        RenderSystem.shadeModel(GL11.GL_SMOOTH);
+//        RenderSystem.shadeModel(GL11.GL_SMOOTH);
 
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder buffer = tessellator.getBuffer();
@@ -442,7 +440,7 @@ public class GuiUtils
         buffer.vertex(mat, right, bottom, zLevel).color(  endRed,   endGreen,   endBlue,   endAlpha).next();
         tessellator.draw();
 
-        RenderSystem.shadeModel(GL11.GL_FLAT);
+//        RenderSystem.shadeModel(GL11.GL_FLAT);
         RenderSystem.disableBlend();
         RenderSystem.enableTexture();
     }

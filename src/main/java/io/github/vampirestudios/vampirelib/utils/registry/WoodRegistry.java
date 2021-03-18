@@ -26,8 +26,6 @@ package io.github.vampirestudios.vampirelib.utils.registry;
 
 import com.google.common.collect.ImmutableMap;
 import com.swordglowsblue.artifice.api.Artifice;
-import io.github.vampirestudios.vampirelib.api.EntityModelLayerHelper;
-import io.github.vampirestudios.vampirelib.api.SpriteIdentifierRegistry;
 import io.github.vampirestudios.vampirelib.blocks.*;
 import io.github.vampirestudios.vampirelib.boat.CustomBoatEntity;
 import io.github.vampirestudios.vampirelib.boat.CustomBoatInfo;
@@ -41,21 +39,18 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.fabric.api.client.rendereregistry.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
-import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.fabricmc.fabric.api.registry.FlammableBlockRegistry;
 import net.fabricmc.fabric.api.registry.FuelRegistry;
 import net.fabricmc.fabric.api.tool.attribute.v1.FabricToolTags;
 import net.fabricmc.fabric.impl.blockrenderlayer.BlockRenderLayerMapImpl;
+import net.fabricmc.fabric.impl.client.renderer.registry.EntityModelLayerImpl;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.*;
-import net.minecraft.block.entity.SignBlockEntity;
 import net.minecraft.block.sapling.SaplingGenerator;
 import net.minecraft.client.render.RenderLayer;
-import net.minecraft.client.render.TexturedRenderLayers;
 import net.minecraft.client.render.entity.model.BoatEntityModel;
 import net.minecraft.client.render.entity.model.EntityModelLayer;
-import net.minecraft.client.util.SpriteIdentifier;
 import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnGroup;
@@ -63,7 +58,6 @@ import net.minecraft.entity.vehicle.BoatEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.SignItem;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.ActionResult;
@@ -95,10 +89,10 @@ public class WoodRegistry {
     private Block button;
     private Block pressurePlate;
     private Block ladder;
-    private Block sign;
-    private Block wallSign;
+//    private Block sign;
+//    private Block wallSign;
 
-    private Item signItem;
+//    private Item signItem;
     private Item boatItem;
 
     private EntityType<CustomBoatEntity> boatEntity;
@@ -195,7 +189,7 @@ public class WoodRegistry {
         return ladder;
     }
 
-    public Block getSign() {
+    /*public Block getSign() {
         return sign;
     }
 
@@ -205,7 +199,7 @@ public class WoodRegistry {
 
     public Item getSignItem() {
         return signItem;
-    }
+    }*/
 
     public Item getBoatItem() {
         return boatItem;
@@ -442,12 +436,15 @@ public class WoodRegistry {
             return this;
         }
 
-        public Builder sign() {
-            woodRegistry.sign = registryHelper.registerBlockWithoutItem(name.getPath() + "_sign", new CustomSignBlock(Utils.prependToPath(name, "entity/sign/"), FabricBlockSettings.copy(Blocks.OAK_SIGN)));
-            woodRegistry.wallSign = registryHelper.registerBlockWithoutItem(name.getPath() + "_wall_sign", new CustomWallSignBlock(Utils.prependToPath(name, "entity/sign/"), FabricBlockSettings.copy(Blocks.OAK_WALL_SIGN)));
+        /*public Builder sign() {
+            BlockEntityType<SignBlockEntity> signBlockEntityBlockEntityType = Registry.register(Registry.BLOCK_ENTITY_TYPE, Utils.appendToPath(name, "_base"), BlockEntityType.Builder.create(SignBlockEntity::new).build(null));
+            SignType signType = SignType.register(new SignType(name.getPath()));
+            woodRegistry.sign = registryHelper.registerBlockWithoutItem(name.getPath() + "_sign", new CustomSignBlock(signType, FabricBlockSettings.copy(Blocks.OAK_SIGN)));
+            woodRegistry.wallSign = registryHelper.registerBlockWithoutItem(name.getPath() + "_wall_sign", new CustomWallSignBlock(signType, FabricBlockSettings.copy(Blocks.OAK_WALL_SIGN)));
             woodRegistry.signItem = registryHelper.registerItem(name.getPath() + "_sign", new SignItem(new Item.Settings().maxCount(16).group(ItemGroup.DECORATIONS), woodRegistry.sign, woodRegistry.wallSign));
+            ((IBlockEntityType) signBlockEntityBlockEntityType).vl_addBlocks(woodRegistry.sign, woodRegistry.wallSign);
             return this;
-        }
+        }*/
 
         public Builder boat() {
             woodRegistry.boatItem = registryHelper.registerItem(name.getPath() + "_boat", new CustomBoatItem(() -> woodRegistry.boatEntity, new Item.Settings().maxCount(1).group(ItemGroup.TRANSPORTATION)));
@@ -599,9 +596,9 @@ public class WoodRegistry {
                             ArtificeGenerationHelper.generateSimpleItemModel(clientResourcePackBuilder, Utils.appendToPath(name, "_ladder"), Utils.appendAndPrependToPath(name, "block/", "_ladder"));
                         }
 
-                        if (woodRegistry.sign != null) {
-                            ArtificeGenerationHelper.generateSimpleItemModel(clientResourcePackBuilder, Utils.appendToPath(name, "_sign"));
-                        }
+//                        if (woodRegistry.sign != null) {
+//                            ArtificeGenerationHelper.generateSimpleItemModel(clientResourcePackBuilder, Utils.appendToPath(name, "_sign"));
+//                        }
 
                         if (woodRegistry.slab != null) {
                             ArtificeGenerationHelper.generateSlabBlockState(clientResourcePackBuilder, Utils.appendToPath(name, "_slab"), Utils.appendToPath(name, "_planks"));
@@ -657,13 +654,18 @@ public class WoodRegistry {
                 if(woodRegistry.trapdoor != null) {
                     BlockRenderLayerMapImpl.INSTANCE.putBlock(woodRegistry.sapling, RenderLayer.getCutout());
                 }
-                if(woodRegistry.sign != null) {
-                    SpriteIdentifierRegistry.INSTANCE.addIdentifier(new SpriteIdentifier(TexturedRenderLayers.SIGNS_ATLAS_TEXTURE, ((CustomSignBlock)woodRegistry.sign).getTexture()));
-                    Registry.register(Registry.BLOCK_ENTITY_TYPE, Utils.appendToPath(name, "_sign"), FabricBlockEntityTypeBuilder.create(SignBlockEntity::new, woodRegistry.sign, woodRegistry.wallSign).build(null));
-                }
+//                if(woodRegistry.sign != null) {
+//                    Map<SignType, SpriteIdentifier> textures = new HashMap<>(TexturedRenderLayersAccessor.getWOOD_TYPE_TEXTURES());
+//                    SignType.stream().forEach(signType -> {
+//                        if(signType.getName().equals(name.getPath())) {
+//                            textures.put(signType, new SpriteIdentifier(SIGNS_ATLAS_TEXTURE, Utils.prependToPath(name, "entity/signs/")));
+//                        }
+//                    });
+//                    TexturedRenderLayersAccessor.setWOOD_TYPE_TEXTURES(textures);
+//                }
                 if(woodRegistry.boatItem != null) {
                     EntityModelLayer entityModelLayer = VEntityModelLayers.createBoat(name);
-                    EntityModelLayerHelper.registerModelLayer(entityModelLayer, BoatEntityModel::getTexturedModelData);
+                    EntityModelLayerImpl.PROVIDERS.put(entityModelLayer, BoatEntityModel::getTexturedModelData);
                     EntityRendererRegistry.INSTANCE.register(woodRegistry.boatEntity, ctx -> new CustomBoatEntityRenderer(entityModelLayer, ctx));
                 }
             }

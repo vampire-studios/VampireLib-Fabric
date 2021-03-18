@@ -35,10 +35,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(BoatEntityRenderer.class)
 public class BoatEntityRendererMixin {
-    @Inject(method = "getTexture", at = @At("HEAD"))
+    @Inject(method = "getTexture", at = @At("HEAD"), cancellable = true)
     private void injectCustomTexture(BoatEntity boat, CallbackInfoReturnable<Identifier> cir) {
         if (boat instanceof CustomBoatEntity) {
-            System.out.println(((CustomBoatEntity) boat).getBoatSkin());
             cir.setReturnValue(((CustomBoatEntity) boat).getBoatSkin());
         }
     }

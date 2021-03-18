@@ -24,10 +24,6 @@
 
 package io.github.vampirestudios.vampirelib.impl;
 
-import io.github.vampirestudios.vampirelib.api.ItemCooldownOverlayInfo;
-import io.github.vampirestudios.vampirelib.api.ItemDamageBarInfo;
-import io.github.vampirestudios.vampirelib.api.ItemLabelInfo;
-import io.github.vampirestudios.vampirelib.api.ItemOverlayRenderer;
 import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;

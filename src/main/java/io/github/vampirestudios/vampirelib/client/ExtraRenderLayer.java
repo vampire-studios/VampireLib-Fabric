@@ -26,11 +26,11 @@ package io.github.vampirestudios.vampirelib.client;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
-
 import net.minecraft.client.render.*;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.Util;
 
-// import net.minecraft.client.render.entity.feature.SpiderEyesFeatureRenderer;
+import java.util.function.Function;
 
 public class ExtraRenderLayer {
   protected static final RenderPhase.Transparency GLOWING_TRANSPARENCY = new RenderPhase.Transparency(
@@ -43,10 +43,13 @@ public class ExtraRenderLayer {
       });
 
   public static RenderLayer getGlowing(Identifier string) {
-    return RenderLayer.of("entity_glowing", VertexFormats.POSITION_COLOR_TEXTURE_OVERLAY_LIGHT_NORMAL, VertexFormat.DrawMode.QUADS, 256,
-        RenderLayer.MultiPhaseParameters.builder()
-            .texture(new RenderPhase.Texture(string, false, false)).transparency(GLOWING_TRANSPARENCY)
-            .build(true));
+      Function<Identifier, RenderLayer> field_29636 = Util.method_34866((identifier) -> {
+          RenderPhase.Texture texture = new RenderPhase.Texture(identifier, false, false);
+          return RenderLayer.of("glowing", VertexFormats.POSITION_COLOR_TEXTURE_OVERLAY_LIGHT_NORMAL, VertexFormat.DrawMode.QUADS, 256, false, true,
+                  RenderLayer.MultiPhaseParameters.builder().method_34578(new RenderPhase.class_5942(GameRenderer::method_34515)).method_34577(texture)
+                          .transparency(GLOWING_TRANSPARENCY).writeMaskState(new RenderPhase.WriteMaskState(true, false)).build(false));
+      });
+      return field_29636.apply(string);
   }
 
 }

@@ -59,9 +59,9 @@ public class VampireLibClient implements ClientModInitializer {
 
     public static class ColoredLeaves {
 
-        private Block leavesBlock;
-        private boolean customColor;
-        private int color;
+        private final Block leavesBlock;
+        private final boolean customColor;
+        private final int color;
 
         public ColoredLeaves(Block leavesBlock, boolean customColor, int color) {
             this.leavesBlock = leavesBlock;
