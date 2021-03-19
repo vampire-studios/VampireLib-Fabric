@@ -87,12 +87,12 @@ task publishModrinth (type: TaskModrinthUpload){
 	versionNumber = "${archivesBaseName}-${version}"
 	uploadFile = remapJar // This is the java jar task
 	changelog = 'A lot have changed, check github for more exact stuff'
-	addGameVersion('20w51a')
+	addGameVersion('21w11a')
 	addLoader('fabric')
 }
 
 curseforge {
-	apiKey = curseforgeToken ?: "a key"
+	apiKey = project.curseforgeKey
 	project {
 		id = '324329'
 		changelog = 'A lot have changed, check github for more exact stuff'

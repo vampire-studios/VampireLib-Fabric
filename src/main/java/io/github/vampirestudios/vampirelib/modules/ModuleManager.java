@@ -26,10 +26,7 @@ package io.github.vampirestudios.vampirelib.modules;
 
 import com.mojang.serialization.Lifecycle;
 import io.github.vampirestudios.vampirelib.VampireLib;
-import io.github.vampirestudios.vampirelib.modules.api.Feature;
-import io.github.vampirestudios.vampirelib.modules.api.Module;
 import io.github.vampirestudios.vampirelib.modules.api.NonFeatureModule;
-import io.github.vampirestudios.vampirelib.modules.api.SubModule;
 import io.github.vampirestudios.vampirelib.modules.utils.ConsoleUtils;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -38,20 +35,14 @@ import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.util.registry.SimpleRegistry;
 import org.apache.commons.lang3.text.WordUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.util.Objects;
 
 public class ModuleManager {
 
-    @Deprecated public static final Registry<Module> MODULES = new SimpleRegistry<>(RegistryKey.ofRegistry(new Identifier("vampirelib:modules")), Lifecycle.stable());
-    @Deprecated public static final Registry<Module> SERVER_MODULES = new SimpleRegistry<>(RegistryKey.ofRegistry(new Identifier("vampirelib:server_modules")), Lifecycle.stable());
-    @Deprecated public static final Registry<Module> CLIENT_MODULES = new SimpleRegistry<>(RegistryKey.ofRegistry(new Identifier("vampirelib:client_modules")), Lifecycle.stable());
     public static final Registry<NonFeatureModule> NON_FEATURE_MODULES = new SimpleRegistry<>(RegistryKey.ofRegistry(new Identifier("vampirelib:non_feature_modules")), Lifecycle.stable());
     public static final Registry<NonFeatureModule> CLIENT_NON_FEATURE_MODULES = new SimpleRegistry<>(RegistryKey.ofRegistry(new Identifier("vampirelib:client_non_feature_modules")), Lifecycle.stable());
     public static final Registry<NonFeatureModule> SERVER_NON_FEATURE_MODULES = new SimpleRegistry<>(RegistryKey.ofRegistry(new Identifier("vampirelib:server_non_feature_modules")), Lifecycle.stable());
-    private static final Logger LOGGER = LogManager.getFormatterLogger("[VampireLib: Module Loader]");
 
     public static ModuleManager createModuleManager(Identifier modIdentifier) {
         return Registry.register(VampireLib.MODULE_MANAGERS, modIdentifier, new ModuleManager());
@@ -59,13 +50,6 @@ public class ModuleManager {
 
     public static ModuleManager getModuleManager(Identifier modIdentifier) {
         return VampireLib.MODULE_MANAGERS.get(modIdentifier);
-    }
-
-    @Deprecated
-    public void registerModule(Module module) {
-        if (!MODULES.getOrEmpty(module.getRegistryName()).isPresent()) {
-            Registry.register(MODULES, module.getRegistryName(), module);
-        }
     }
 
     public void registerNonFeatureModule(NonFeatureModule module) {
@@ -89,47 +73,7 @@ public class ModuleManager {
         ModuleConfig.load(module, WordUtils.capitalize(module.getRegistryName().getNamespace()), "server");
     }
 
-    @Deprecated
-    public void registerServerModule(Module module) {
-        if (!SERVER_MODULES.getOrEmpty(module.getRegistryName()).isPresent()) {
-            Registry.register(SERVER_MODULES, module.getRegistryName(), module);
-        }
-    }
-
-    @Deprecated
-    public void registerClientModule(Module module) {
-        if (!CLIENT_MODULES.getOrEmpty(module.getRegistryName()).isPresent()) {
-            Registry.register(CLIENT_MODULES, module.getRegistryName(), module);
-        }
-    }
-
     public void init(String modId) {
-        SERVER_MODULES.forEach(module -> {
-            if (module.getRegistryName().getNamespace().equals(modId)) {
-                module.init();
-                module.getServerFeatures().forEach(Feature::init);
-                module.getServerSubModules().forEach(SubModule::init);
-                module.getServerSubModules().forEach(subModule -> subModule.getServerFeatures().forEach(Feature::init));
-                module.getFeatures().forEach(Feature::init);
-                module.getSubModules().forEach(SubModule::init);
-                module.getSubModules().forEach(subModule -> subModule.getFeatures().forEach(Feature::init));
-                module.getNonFeatureModules().forEach(NonFeatureModule::init);
-                module.getServerNonFeatureModules().forEach(NonFeatureModule::init);
-            }
-        });
-        MODULES.forEach(module -> {
-            if (module.getRegistryName().getNamespace().equals(modId)) {
-                module.init();
-                module.getServerFeatures().forEach(Feature::init);
-                module.getServerSubModules().forEach(SubModule::init);
-                module.getServerSubModules().forEach(subModule -> subModule.getServerFeatures().forEach(Feature::init));
-                module.getFeatures().forEach(Feature::init);
-                module.getSubModules().forEach(SubModule::init);
-                module.getSubModules().forEach(subModule -> subModule.getFeatures().forEach(Feature::init));
-                module.getNonFeatureModules().forEach(NonFeatureModule::init);
-                module.getServerNonFeatureModules().forEach(NonFeatureModule::init);
-            }
-        });
         NON_FEATURE_MODULES.forEach(nonFeatureModule -> {
             if (nonFeatureModule.getRegistryName().getNamespace().equals(modId)) {
                 nonFeatureModule.init();
@@ -139,38 +83,11 @@ public class ModuleManager {
             if (nonFeatureModule.getRegistryName().getNamespace().equals(modId)) nonFeatureModule.init();
         });
 
-        ConsoleUtils.logServerModules();
         ConsoleUtils.logServerNonFeatureModules();
     }
 
     @Environment(EnvType.CLIENT)
     public void initClient(String modId) {
-        CLIENT_MODULES.forEach(module -> {
-            if (module.getRegistryName().getNamespace().equals(modId)) {
-                module.initClient();
-                module.getClientFeatures().forEach(Feature::initClient);
-                module.getClientSubModules().forEach(SubModule::initClient);
-                module.getClientSubModules().forEach(subModule -> subModule.getClientFeatures().forEach(Feature::initClient));
-                module.getFeatures().forEach(Feature::initClient);
-                module.getSubModules().forEach(SubModule::initClient);
-                module.getSubModules().forEach(subModule -> subModule.getFeatures().forEach(Feature::initClient));
-                module.getNonFeatureModules().forEach(NonFeatureModule::initClient);
-                module.getClientNonFeatureModules().forEach(NonFeatureModule::initClient);
-            }
-        });
-        MODULES.forEach(module -> {
-            if (module.getRegistryName().getNamespace().equals(modId)) {
-                module.initClient();
-                module.getClientFeatures().forEach(Feature::initClient);
-                module.getClientSubModules().forEach(SubModule::initClient);
-                module.getClientSubModules().forEach(subModule -> subModule.getClientFeatures().forEach(Feature::initClient));
-                module.getFeatures().forEach(Feature::initClient);
-                module.getSubModules().forEach(SubModule::initClient);
-                module.getSubModules().forEach(subModule -> subModule.getFeatures().forEach(Feature::initClient));
-                module.getNonFeatureModules().forEach(NonFeatureModule::initClient);
-                module.getClientNonFeatureModules().forEach(NonFeatureModule::initClient);
-            }
-        });
         NON_FEATURE_MODULES.forEach(nonFeatureModule -> {
             if (nonFeatureModule.getRegistryName().getNamespace().equals(modId)) nonFeatureModule.initClient();
         });
@@ -178,20 +95,7 @@ public class ModuleManager {
             if (nonFeatureModule.getRegistryName().getNamespace().equals(modId)) nonFeatureModule.initClient();
         });
 
-        ConsoleUtils.logClientModules();
         ConsoleUtils.logClientNonFeatureModules();
-    }
-
-    public boolean doesModuleExist(Module module) {
-        return MODULES.containsId(module.getRegistryName());
-    }
-
-    public boolean isModuleEnabled(Identifier name) {
-        if (MODULES.containsId(name)) {
-            Module module = MODULES.get(name);
-            return Objects.requireNonNull(module).isEnabled();
-        }
-        return false;
     }
 
     public boolean doesNonFeatureModuleExist(NonFeatureModule module) {

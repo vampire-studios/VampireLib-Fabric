@@ -33,30 +33,16 @@ import java.util.List;
 
 public abstract class Module {
 
-    private String description;
-    private boolean hasConfig;
+    private final String description;
     private boolean enabled = true;
-    private Identifier registryName;
-    private List<Feature> features = new ArrayList<>();
-    private List<Feature> serverFeatures = new ArrayList<>();
-    private List<Feature> clientFeatures = new ArrayList<>();
-    private List<SubModule> subModules = new ArrayList<>();
-    private List<SubModule> serverSubModules = new ArrayList<>();
-    private List<SubModule> clientSubModules = new ArrayList<>();
-    private List<NonFeatureModule> nonFeatureModules = new ArrayList<>();
-    private List<NonFeatureModule> serverNonFeatureModules = new ArrayList<>();
-    private List<NonFeatureModule> clientNonFeatureModules = new ArrayList<>();
-
-    public Module(Identifier name, String description, boolean hasConfig) {
-        this.registryName = name;
-        this.description = description;
-        this.hasConfig = hasConfig;
-    }
+    private final Identifier registryName;
+    private final List<NonFeatureModule> nonFeatureModules = new ArrayList<>();
+    private final List<NonFeatureModule> serverNonFeatureModules = new ArrayList<>();
+    private final List<NonFeatureModule> clientNonFeatureModules = new ArrayList<>();
 
     public Module(Identifier name, String description) {
         this.registryName = name;
         this.description = description;
-        this.hasConfig = false;
     }
 
     public String getDescription() {
@@ -84,36 +70,6 @@ public abstract class Module {
         return registryName;
     }
 
-    public <T extends Feature> T registerFeature(T feature) {
-        this.features.add(feature);
-        return feature;
-    }
-
-    public <T extends Feature> T registerClientFeature(T feature) {
-        this.clientFeatures.add(feature);
-        return feature;
-    }
-
-    public <T extends Feature> T registerServerFeature(T feature) {
-        this.serverFeatures.add(feature);
-        return feature;
-    }
-
-    public <T extends SubModule> T registerSubModule(T subModule) {
-        this.subModules.add(subModule);
-        return subModule;
-    }
-
-    public <T extends SubModule> T registerClientSubModule(T subModule) {
-        this.clientSubModules.add(subModule);
-        return subModule;
-    }
-
-    public <T extends SubModule> T registerServerSubModule(T subModule) {
-        this.serverSubModules.add(subModule);
-        return subModule;
-    }
-
     public <T extends NonFeatureModule> T registerNonFeatureModule(T subModule) {
         this.nonFeatureModules.add(subModule);
         return subModule;
@@ -129,36 +85,12 @@ public abstract class Module {
         return subModule;
     }
 
-    public List<Feature> getFeatures() {
-        return features;
-    }
-
-    public List<SubModule> getSubModules() {
-        return subModules;
-    }
-
     public List<NonFeatureModule> getNonFeatureModules() {
         return nonFeatureModules;
     }
 
-    public List<Feature> getServerFeatures() {
-        return serverFeatures;
-    }
-
-    public List<SubModule> getServerSubModules() {
-        return serverSubModules;
-    }
-
     public List<NonFeatureModule> getServerNonFeatureModules() {
         return serverNonFeatureModules;
-    }
-
-    public List<Feature> getClientFeatures() {
-        return clientFeatures;
-    }
-
-    public List<SubModule> getClientSubModules() {
-        return clientSubModules;
     }
 
     public List<NonFeatureModule> getClientNonFeatureModules() {

@@ -33,8 +33,8 @@ import net.minecraft.util.Identifier;
 public abstract class NonFeatureModule {
 
     private boolean enabled = true;
-    private Identifier registryName;
-    private String name;
+    private final Identifier registryName;
+    private final String name;
 
     public NonFeatureModule(Identifier registryName, String name) {
         this.registryName = registryName;

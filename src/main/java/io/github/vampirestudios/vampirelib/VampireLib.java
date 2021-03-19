@@ -60,7 +60,11 @@ public class VampireLib implements ModInitializer {
         //Avaier
         this.put("978fdd1b-c1d6-4483-9287-eb796833c52f", new Identifier(MOD_ID, "textures/misc/avaier_dinosaur.png"));
         //Toothless
-        this.put("978fdd1b-c1d6-4483-9287-eb796833c52f", new Identifier(MOD_ID, "textures/misc/avaier_dinosaur.png"));
+//        this.put("978fdd1b-c1d6-4483-9287-eb796833c52f", new Identifier(MOD_ID, "textures/misc/avaier_dinosaur.png"));
+        //Tirdul
+        this.put("dcb06728-b65a-44ca-97eb-2d92d647f70f", new Identifier(MOD_ID, "textures/misc/turtle.png"));
+        //Phoenixfirewingz
+        this.put("97404a0d-02be-4d80-b1b8-10e2d8c748ea", new Identifier(MOD_ID, "textures/misc/1_16.png"));
     }};
 
     @Override
