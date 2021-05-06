@@ -33,7 +33,7 @@ import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.vehicle.BoatEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.Packet;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.sound.SoundEvents;
@@ -71,10 +71,10 @@ public class CustomBoatEntity extends BoatEntity {
     }
 
     @Override
-    protected void writeCustomDataToNbt(CompoundTag tag) {}
+    protected void writeCustomDataToNbt(NbtCompound tag) {}
 
     @Override
-    protected void readCustomDataFromNbt(CompoundTag tag) {}
+    protected void readCustomDataFromNbt(NbtCompound tag) {}
 
     private boolean isOnLand() {
         return getPaddleSoundEvent() == SoundEvents.ENTITY_BOAT_PADDLE_LAND;
@@ -131,8 +131,8 @@ public class CustomBoatEntity extends BoatEntity {
         buf.writeDouble(this.getX());
         buf.writeDouble(this.getY());
         buf.writeDouble(this.getZ());
-        buf.writeByte(MathHelper.floor(this.pitch * 256.0F / 360.0F));
-        buf.writeByte(MathHelper.floor(this.yaw * 256.0F / 360.0F));
+        buf.writeByte(MathHelper.floor(this.getYaw() * 256.0F / 360.0F));
+        buf.writeByte(MathHelper.floor(this.getPitch() * 256.0F / 360.0F));
 
         return ServerSidePacketRegistry.INSTANCE.toPacket(new Identifier(VampireLib.MOD_ID, "spawn_boat"), buf);
     }

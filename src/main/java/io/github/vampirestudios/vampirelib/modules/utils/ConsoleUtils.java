@@ -24,43 +24,60 @@
 
 package io.github.vampirestudios.vampirelib.modules.utils;
 
-import io.github.vampirestudios.vampirelib.modules.ModuleManager;
-import io.github.vampirestudios.vampirelib.modules.api.NonFeatureModule;
+import io.github.vampirestudios.vampirelib.modules.FeatureManager;
+import io.github.vampirestudios.vampirelib.modules.api.ClientFeature;
+import io.github.vampirestudios.vampirelib.modules.api.CommonFeature;
+import io.github.vampirestudios.vampirelib.modules.api.ServerFeature;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import static io.github.vampirestudios.vampirelib.modules.ModuleManager.NON_FEATURE_MODULES;
+import static io.github.vampirestudios.vampirelib.modules.FeatureManager.*;
 
 public class ConsoleUtils {
 
     protected static Logger LOGGER = LogManager.getFormatterLogger("[VampireLib: Console Utils]");
 
-    public static void logServerNonFeatureModules() {
+    public static void logCommonFeatures() {
         String moduleText;
-        if (NON_FEATURE_MODULES.stream().count() > 1) {
-            moduleText = "Loading %d non-feature-modules:";
+        if (COMMON_FEATURES.stream().count() > 1) {
+            moduleText = "Loading %d Common Features:";
         } else {
-            moduleText = "Loading %d non-feature-module:";
+            moduleText = "Loading %d Common Feature:";
         }
 
-        LOGGER.info("[" + ModuleManager.class.getSimpleName() + "] " + moduleText, NON_FEATURE_MODULES.stream().count());
+        LOGGER.info("[" + FeatureManager.class.getSimpleName() + "] " + moduleText, COMMON_FEATURES.stream().count());
 
-        for (NonFeatureModule nonFeatureModule : NON_FEATURE_MODULES) {
-            LOGGER.info(String.format(" - %s(%s) - Enabled: %s", nonFeatureModule.getRegistryName(), nonFeatureModule.getName(), nonFeatureModule.isEnabled() ? "true" : "false"));
+        for (CommonFeature feature : COMMON_FEATURES) {
+            LOGGER.info(String.format(" - %s(%s) - Enabled: %s", feature.getRegistryName(), feature.getName(), feature.isEnabled() ? "true" : "false"));
         }
     }
 
-    public static void logClientNonFeatureModules() {
+    public static void logClientFeatures() {
         String moduleText;
-        if (NON_FEATURE_MODULES.stream().count() > 1) {
-            moduleText = "Loading %d client non-feature-modules:";
+        if (CLIENT_FEATURES.stream().count() > 1) {
+            moduleText = "Loading %d Client Features:";
         } else {
-            moduleText = "Loading %d client non-feature-module:";
+            moduleText = "Loading %d Client Feature:";
         }
 
-        LOGGER.info("[" + ModuleManager.class.getSimpleName() + "] " + moduleText, NON_FEATURE_MODULES.stream().count());
+        LOGGER.info("[" + FeatureManager.class.getSimpleName() + "] " + moduleText, CLIENT_FEATURES.stream().count());
 
-        for (NonFeatureModule candidate : NON_FEATURE_MODULES) {
+        for (ClientFeature candidate : CLIENT_FEATURES) {
+            LOGGER.info(String.format(" - %s(%s) - Enabled: %s", candidate.getRegistryName(), candidate.getName(), candidate.isEnabled() ? "true" : "false"));
+        }
+    }
+
+    public static void logServerFeatures() {
+        String moduleText;
+        if (SERVER_FEATURES.stream().count() > 1) {
+            moduleText = "Loading %d Server Features:";
+        } else {
+            moduleText = "Loading %d Server Feature:";
+        }
+
+        LOGGER.info("[" + FeatureManager.class.getSimpleName() + "] " + moduleText, SERVER_FEATURES.stream().count());
+
+        for (ServerFeature candidate : SERVER_FEATURES) {
             LOGGER.info(String.format(" - %s(%s) - Enabled: %s", candidate.getRegistryName(), candidate.getName(), candidate.isEnabled() ? "true" : "false"));
         }
     }

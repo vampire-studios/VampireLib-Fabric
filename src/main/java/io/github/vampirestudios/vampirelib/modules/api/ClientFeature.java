@@ -24,65 +24,17 @@
 
 package io.github.vampirestudios.vampirelib.modules.api;
 
-import blue.endless.jankson.JsonObject;
-import blue.endless.jankson.JsonPrimitive;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.util.Identifier;
 
-public abstract class NonFeatureModule {
+public abstract class ClientFeature extends Feature {
 
-    private boolean enabled = true;
-    private final Identifier registryName;
-    private final String name;
-
-    public NonFeatureModule(Identifier registryName, String name) {
-        this.registryName = registryName;
-        this.name = name;
-    }
-
-    public void init() {
-
+    public ClientFeature(Identifier registryName, String name) {
+        super(registryName, name);
     }
 
     @Environment(EnvType.CLIENT)
-    public void initClient() {
-
-    }
-
-    public final boolean isEnabled() {
-        return enabled;
-    }
-
-    public final void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
-
-    public final void setEnabled(JsonObject obj) {
-        setEnabled(obj.getBoolean("enabled", true));
-    }
-
-    public Identifier getRegistryName() {
-        return registryName;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void configure(JsonObject obj) {
-    }
-
-    public final JsonObject getConfig() {
-        JsonObject obj = new JsonObject();
-        obj.put("enabled", new JsonPrimitive(isEnabled()));
-        obj.put("registryName", new JsonPrimitive(getRegistryName().toString()));
-        obj.put("name", new JsonPrimitive(getName()));
-        writeToConfig(obj);
-        return obj;
-    }
-
-    public void writeToConfig(JsonObject obj) {
-    }
+    public abstract void initClient();
 
 }

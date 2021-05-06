@@ -43,10 +43,10 @@ public class ExtraRenderLayer {
       });
 
   public static RenderLayer getGlowing(Identifier string) {
-      Function<Identifier, RenderLayer> field_29636 = Util.method_34866((identifier) -> {
+      Function<Identifier, RenderLayer> field_29636 = Util.memoize((identifier) -> {
           RenderPhase.Texture texture = new RenderPhase.Texture(identifier, false, false);
           return RenderLayer.of("glowing", VertexFormats.POSITION_COLOR_TEXTURE_OVERLAY_LIGHT_NORMAL, VertexFormat.DrawMode.QUADS, 256, false, true,
-                  RenderLayer.MultiPhaseParameters.builder().method_34578(new RenderPhase.class_5942(GameRenderer::method_34515)).method_34577(texture)
+                  RenderLayer.MultiPhaseParameters.builder().shader(new RenderPhase.Shader(GameRenderer::getRenderTypeEyesShader)).texture(texture)
                           .transparency(GLOWING_TRANSPARENCY).writeMaskState(new RenderPhase.WriteMaskState(true, false)).build(false));
       });
       return field_29636.apply(string);

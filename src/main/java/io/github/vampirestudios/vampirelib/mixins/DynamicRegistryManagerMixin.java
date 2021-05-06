@@ -45,7 +45,7 @@ import java.util.List;
 public class DynamicRegistryManagerMixin {
 	@Inject(method = "net/minecraft/util/registry/DynamicRegistryManager.method_30531()Lcom/google/common/collect/ImmutableMap;", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/registry/DynamicRegistryManager;register(Lcom/google/common/collect/ImmutableMap$Builder;Lnet/minecraft/util/registry/RegistryKey;Lcom/mojang/serialization/Codec;)V", ordinal = 0), locals = LocalCapture.CAPTURE_FAILHARD)
 	private static void registerCustomDynamicRegistries(CallbackInfoReturnable<ImmutableMap<RegistryKey<? extends Registry<?>>, DynamicRegistryManager.Info<?>>> ci, ImmutableMap.Builder<RegistryKey<? extends Registry<?>>, DynamicRegistryManager.Info<?>> builder) {
-		List<DynamicRegistryProvider> providers = FabricLoader.getInstance().getEntrypoints("dynamic-registry-provider", DynamicRegistryProvider.class);
+		List<DynamicRegistryProvider> providers = FabricLoader.getInstance().getEntrypoints("vampirelib:dynamic-registry-provider", DynamicRegistryProvider.class);
 		for (DynamicRegistryProvider provider : providers) {
 			provider.addDynamicRegistries((customDynamicRegistry) -> {
 				addRegistry(customDynamicRegistry);
