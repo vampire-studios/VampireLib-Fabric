@@ -321,15 +321,13 @@ public class WoodRegistry {
             return this;
         }
 
-        public Builder leaves(int color) {
+        public Builder nonColoredLeaves() {
             woodRegistry.leaves = registryHelper.registerBlock(new LeavesBaseBlock(), name.getPath() + "_leaves",
                     ItemGroup.DECORATIONS);
-            VampireLibClient.ColoredLeaves coloredLeaves = new VampireLibClient.ColoredLeaves(woodRegistry.leaves, true, color);
-            VampireLibClient.COLORED_LEAVES.add(coloredLeaves);
             return this;
         }
 
-        public Builder leaves(String nameIn) {
+        public Builder nonColoredLeaves(String nameIn) {
             woodRegistry.leaves = registryHelper.registerBlock(new LeavesBaseBlock(), nameIn + "_leaves",
                     ItemGroup.DECORATIONS);
             VampireLibClient.ColoredLeaves coloredLeaves = new VampireLibClient.ColoredLeaves(woodRegistry.leaves, false, 0xFFF);
@@ -337,7 +335,7 @@ public class WoodRegistry {
             return this;
         }
 
-        public Builder leaves(String... nameIn) {
+        public Builder nonColoredLeaves(String... nameIn) {
             for(String leavesName : nameIn) {
                 woodRegistry.leaves = registryHelper.registerBlock(new LeavesBaseBlock(), leavesName + "_leaves",
                         ItemGroup.DECORATIONS);
@@ -348,7 +346,34 @@ public class WoodRegistry {
             return this;
         }
 
-        public Builder leaves(String nameIn, int color) {
+        public Builder coloredLeaves(int color) {
+            woodRegistry.leaves = registryHelper.registerBlock(new LeavesBaseBlock(), name.getPath() + "_leaves",
+                    ItemGroup.DECORATIONS);
+            VampireLibClient.ColoredLeaves coloredLeaves = new VampireLibClient.ColoredLeaves(woodRegistry.leaves, true, color);
+            VampireLibClient.COLORED_LEAVES.add(coloredLeaves);
+            return this;
+        }
+
+        public Builder coloredLeaves(String nameIn) {
+            woodRegistry.leaves = registryHelper.registerBlock(new LeavesBaseBlock(), nameIn + "_leaves",
+                    ItemGroup.DECORATIONS);
+            VampireLibClient.ColoredLeaves coloredLeaves = new VampireLibClient.ColoredLeaves(woodRegistry.leaves, false, 0xFFF);
+            VampireLibClient.COLORED_LEAVES.add(coloredLeaves);
+            return this;
+        }
+
+        public Builder coloredLeaves(String... nameIn) {
+            for(String leavesName : nameIn) {
+                woodRegistry.leaves = registryHelper.registerBlock(new LeavesBaseBlock(), leavesName + "_leaves",
+                        ItemGroup.DECORATIONS);
+                VampireLibClient.ColoredLeaves coloredLeaves = new VampireLibClient.ColoredLeaves(woodRegistry.leaves, false, 0xFFF);
+                VampireLibClient.COLORED_LEAVES.add(coloredLeaves);
+                leaves.add(leavesName + "_leaves");
+            }
+            return this;
+        }
+
+        public Builder coloredLeaves(String nameIn, int color) {
             woodRegistry.leaves = registryHelper.registerBlock(new LeavesBaseBlock(), nameIn + "_leaves",
                     ItemGroup.DECORATIONS);
             VampireLibClient.ColoredLeaves coloredLeaves = new VampireLibClient.ColoredLeaves(woodRegistry.leaves, true, color);
@@ -356,7 +381,18 @@ public class WoodRegistry {
             return this;
         }
 
-        public Builder leaves(ColoredLeavesBlock... coloredLeavesBlocks) {
+        public Builder coloredLeaves(int color, String... nameIn) {
+            for(String leavesName : nameIn) {
+                woodRegistry.leaves = registryHelper.registerBlock(new LeavesBaseBlock(), leavesName + "_leaves",
+                        ItemGroup.DECORATIONS);
+                VampireLibClient.ColoredLeaves coloredLeaves = new VampireLibClient.ColoredLeaves(woodRegistry.leaves, false, color);
+                VampireLibClient.COLORED_LEAVES.add(coloredLeaves);
+                leaves.add(leavesName + "_leaves");
+            }
+            return this;
+        }
+
+        public Builder coloredLeaves(ColoredLeavesBlock... coloredLeavesBlocks) {
             for(ColoredLeavesBlock coloredLeavesBlock : coloredLeavesBlocks) {
                 woodRegistry.leaves = registryHelper.registerBlock(new LeavesBaseBlock(), coloredLeavesBlock.name + "_leaves",
                         ItemGroup.DECORATIONS);
