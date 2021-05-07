@@ -79,21 +79,12 @@ public class FeatureManager {
         COMMON_FEATURES.forEach(feature -> {
             if (feature.getRegistryName().getNamespace().equals(modId)) feature.initCommon();
         });
-        CLIENT_FEATURES.forEach(feature -> {
-            if (feature.getRegistryName().getNamespace().equals(modId)) feature.initClient();
-        });
-        SERVER_FEATURES.forEach(feature -> {
-            if (feature.getRegistryName().getNamespace().equals(modId)) feature.initServer();
-        });
 
         ConsoleUtils.logCommonFeatures();
     }
 
     @Environment(EnvType.CLIENT)
     public void initClient(String modId) {
-        COMMON_FEATURES.forEach(feature -> {
-            if (feature.getRegistryName().getNamespace().equals(modId)) feature.initCommon();
-        });
         CLIENT_FEATURES.forEach(feature -> {
             if (feature.getRegistryName().getNamespace().equals(modId)) feature.initClient();
         });
@@ -103,9 +94,6 @@ public class FeatureManager {
 
     @Environment(EnvType.SERVER)
     public void initServer(String modId) {
-        COMMON_FEATURES.forEach(feature -> {
-            if (feature.getRegistryName().getNamespace().equals(modId)) feature.initCommon();
-        });
         SERVER_FEATURES.forEach(feature -> {
             if (feature.getRegistryName().getNamespace().equals(modId)) feature.initServer();
         });
