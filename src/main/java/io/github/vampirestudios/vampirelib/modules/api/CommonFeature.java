@@ -32,8 +32,6 @@ public abstract class CommonFeature extends Feature {
         super(registryName, name);
     }
 
-    public void initCommon() {
-
-    }
+    public abstract void initCommon();
 
 }
