@@ -1,20 +1,12 @@
 plugins {
-	id 'fabric-loom' version '0.6-SNAPSHOT'
+	id 'fabric-loom' version '0.8-SNAPSHOT'
 	id 'maven-publish'
 	id 'net.minecrell.licenser' version '0.4.1'
 	id "co.riiid.gradle" version "0.4.2"
-	id "com.matthewprenger.cursegradle" version "1.4.0"
-	id "com.wynprice.cursemaven" version "2.1.0"
-	id "com.modrinth.minotaur" version "1.1.0"
 }
 
-def gittoken = System.getenv('GH_TOKEN')
-def buildbranch = System.getenv('TRAVIS_BRANCH')
-def modrinthToken = System.getenv('MODRINTH_TOKEN')
-def curseforgeToken = System.getenv('CURSEFORGE_TOKEN')
-
-sourceCompatibility = JavaVersion.VERSION_1_8
-targetCompatibility = JavaVersion.VERSION_1_8
+sourceCompatibility = JavaVersion.VERSION_16
+targetCompatibility = JavaVersion.VERSION_16
 
 archivesBaseName = project.archives_base_name
 version = project.mod_version + "+" + "build." + project.build_number + "-" + project.minecraft_version
@@ -27,18 +19,17 @@ minecraft {
 repositories {
 	mavenCentral()
 	mavenLocal()
+	jcenter()
 	maven{ url="https://jitpack.io" }
-	maven{ url="https://minecraft.curseforge.com/api/maven" }
 	maven{ url="https://maven.fabricmc.net" }
-	maven{ url="https://dl.bintray.com/natanfudge/libs"}
 }
 
 dependencies {
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
 
-	modCompile "net.fabricmc:fabric-loader:${project.loader_version}"
-	modCompile "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
 	modImplementation "com.github.cottonmc:Jankson-Fabric:1.16-SNAPSHOT"
 	include "com.github.cottonmc:Jankson-Fabric:1.16-SNAPSHOT"
@@ -54,78 +45,24 @@ dependencies {
 processResources {
 	inputs.property "version", project.version
 
-	from(sourceSets.main.resources.srcDirs) {
-		include "fabric.mod.json"
+	filesMatching("fabric.mod.json") {
 		expand "version": project.version
 	}
-
-	from(sourceSets.main.resources.srcDirs) {
-		exclude "fabric.mod.json"
-	}
 }
 
-github {
-	owner = 'vampire-studios'
-	repo = 'VampireLib-Fabric'
-	token = gittoken ?: "a key"
-	tagName = "[" + minecraft_version + "] ${archivesBaseName}-${version}"
-	name = "[" + minecraft_version + "] ${archivesBaseName}-${version}"
-	targetCommitish = buildbranch
-	prerelease = true
-	assets = [
-			"build/libs/${archivesBaseName}-${version}.jar",
-			"build/libs/${archivesBaseName}-${version}-sources.jar"
-	]
+tasks.withType(JavaCompile).configureEach {
+	it.options.encoding = "UTF-8"
+	it.options.release = 16
 }
 
-import com.modrinth.minotaur.TaskModrinthUpload
-
-task publishModrinth (type: TaskModrinthUpload){
-	token = modrinthToken // Use an environment property!
-	projectId = 'tyCNRhS8'
-	releaseType = "beta"
-	versionNumber = "${archivesBaseName}-${version}"
-	uploadFile = remapJar // This is the java jar task
-	changelog = 'A lot have changed, check github for more exact stuff'
-	addGameVersion('21w11a')
-	addLoader('fabric')
-}
-
-curseforge {
-	apiKey = project.curseforgeKey
-	project {
-		id = '324329'
-		changelog = 'A lot have changed, check github for more exact stuff'
-		releaseType = 'release'
-		gameVersionStrings.clear()
-		gameVersionStrings.add("1.17")
-		gameVersionStrings.add("Fabric")
-		mainArtifact(file("build/libs/${archivesBaseName}-${version}.jar")) {
-			displayName = "[" + minecraft_version + "] " + version
-			relations {
-				requiredDependency "fabric-api"
-			}
-		}
-		afterEvaluate {
-			uploadTask.dependsOn("remapJar")
-		}
-	}
-	options{
-		forgeGradleIntegration = false
-	}
-}
-
-tasks.withType(JavaCompile) {
-	options.encoding = "UTF-8"
-}
-
-task sourcesJar(type: Jar, dependsOn: classes) {
-	archiveClassifier.set("sources")
-	from sourceSets.main.allSource
+java {
+	withSourcesJar()
 }
 
 jar {
-	from "LICENSE"
+	from("LICENSE") {
+		rename { "${it}_${project.archivesBaseName}"}
+	}
 }
 
 publishing {
@@ -141,7 +78,7 @@ publishing {
 	}
 	repositories {
 		maven {
-			url file("D:\\Development\\Work\\VampireStudiosMaven\\")
+			url file("F:\\Development\\Work\\VampireStudiosMaven\\")
 		}
 	}
 }

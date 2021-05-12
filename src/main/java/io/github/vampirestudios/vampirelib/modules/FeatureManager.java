@@ -24,7 +24,6 @@
 
 package io.github.vampirestudios.vampirelib.modules;
 
-import com.mojang.serialization.Lifecycle;
 import io.github.vampirestudios.vampirelib.VampireLib;
 import io.github.vampirestudios.vampirelib.modules.api.ClientFeature;
 import io.github.vampirestudios.vampirelib.modules.api.CommonFeature;
@@ -32,19 +31,18 @@ import io.github.vampirestudios.vampirelib.modules.api.ServerFeature;
 import io.github.vampirestudios.vampirelib.modules.utils.ConsoleUtils;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
-import net.minecraft.util.registry.RegistryKey;
-import net.minecraft.util.registry.SimpleRegistry;
 import org.apache.commons.lang3.text.WordUtils;
 
 import java.util.Objects;
 
 public class FeatureManager {
 
-    public static final Registry<CommonFeature> COMMON_FEATURES = new SimpleRegistry<>(RegistryKey.ofRegistry(new Identifier("vampirelib:common_features")), Lifecycle.stable());
-    public static final Registry<ClientFeature> CLIENT_FEATURES = new SimpleRegistry<>(RegistryKey.ofRegistry(new Identifier("vampirelib:client_features")), Lifecycle.stable());
-    public static final Registry<ServerFeature> SERVER_FEATURES = new SimpleRegistry<>(RegistryKey.ofRegistry(new Identifier("vampirelib:server_features")), Lifecycle.stable());
+    public static final Registry<CommonFeature> COMMON_FEATURES = FabricRegistryBuilder.createSimple(CommonFeature.class, new Identifier("vampirelib:common_features")).buildAndRegister();
+    public static final Registry<ClientFeature> CLIENT_FEATURES = FabricRegistryBuilder.createSimple(ClientFeature.class, new Identifier("vampirelib:client_features")).buildAndRegister();
+    public static final Registry<ServerFeature> SERVER_FEATURES = FabricRegistryBuilder.createSimple(ServerFeature.class, new Identifier("vampirelib:server_features")).buildAndRegister();
 
     public static FeatureManager createFeatureManager(Identifier modIdentifier) {
         return Registry.register(VampireLib.FEATURE_MANAGERS, modIdentifier, new FeatureManager());
