@@ -19,7 +19,6 @@ minecraft {
 repositories {
 	mavenCentral()
 	mavenLocal()
-	jcenter()
 	maven{ url="https://jitpack.io" }
 	maven{ url="https://maven.fabricmc.net" }
 }
@@ -34,10 +33,10 @@ dependencies {
 	modImplementation "com.github.cottonmc:Jankson-Fabric:1.16-SNAPSHOT"
 	include "com.github.cottonmc:Jankson-Fabric:1.16-SNAPSHOT"
 
-	modImplementation ("com.lettuce.fudge:artifice:0.15.8+21w19a") {
+	modImplementation ("com.lettuce.fudge:artifice:0.15.9+21w19a") {
 		exclude group: "net.fabricmc.fabric-api"
 	}
-	include ("com.lettuce.fudge:artifice:0.15.8+21w19a") {
+	include ("com.lettuce.fudge:artifice:0.15.9+21w19a") {
 		exclude group: "net.fabricmc.fabric-api"
 	}
 }

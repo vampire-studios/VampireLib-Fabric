@@ -43,7 +43,7 @@ public class VampireLib implements ModInitializer {
     public static String MOD_ID = "vampirelib";
     public static String MOD_NAME = "VampireLib";
     public static final Logger LOGGER = LogManager.getLogger(MOD_NAME);
-    public static String MOD_VERSION = "3.0.1+build.3 for 21w19a";
+    public static String MOD_VERSION = "3.0.1+build.4 for 21w19a";
     public static final Map<String, Identifier> DEV_UUID = new HashMap<>() {{
 		//CatCore
 		this.put("5bb676ef-ecee-4258-ae1f-53e163839585", new Identifier(MOD_ID, "textures/misc/cat_cape.png"));
