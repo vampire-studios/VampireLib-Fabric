@@ -3,7 +3,6 @@
   "package": "io.github.vampirestudios.vampirelib.mixins",
   "compatibilityLevel": "JAVA_16",
   "mixins": [
-    "BiomeEffectsAccessor",
     "DynamicRegistryManagerMixin",
     "HandledScreenMixin",
     "MixinItemEntity",
@@ -11,7 +10,6 @@
     "MixinMobSpawnerLogic",
     "MixinServerPlayerEntity",
     "MixinSpawnHelper",
-    "ScreenMixin",
     "ServerPlayerEntityDamageMixin",
     "SpawnEggItemAccessor",
     "block.BlockEntityTypeMixin",
