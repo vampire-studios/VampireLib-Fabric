@@ -3,14 +3,7 @@ plugins {
 	id 'maven-publish'
 	id 'net.minecrell.licenser' version '0.4.1'
 	id "co.riiid.gradle" version "0.4.2"
-	id "com.matthewprenger.cursegradle" version "1.4.0"
-	id 'com.jfrog.bintray' version '1.8.4'
-	id "com.modrinth.minotaur" version "1.1.0"
 }
-
-def gittoken = System.getenv('GH_TOKEN')
-def modrinthToken = System.getenv('MODRINTH_TOKEN')
-def curseforgeToken = System.getenv('CURSEFORGE_TOKEN')
 
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
@@ -27,7 +20,6 @@ repositories {
 	mavenCentral()
 	mavenLocal()
 	maven{ url="https://jitpack.io" }
-	maven{ url="https://minecraft.curseforge.com/api/maven" }
 	maven{ url="https://maven.fabricmc.net" }
 	maven { url "https://raw.githubusercontent.com/vampire-studios/VampireStudiosMaven/main/" }
 }
@@ -35,14 +27,19 @@ repositories {
 dependencies {
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
+
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
 	modImplementation "com.github.cottonmc:Jankson-Fabric:1.16-SNAPSHOT"
 	include "com.github.cottonmc:Jankson-Fabric:1.16-SNAPSHOT"
 
-	modImplementation ("io.github.vampirestudios:artifice:0.15.10+21w20a") { exclude group: "net.fabricmc.fabric-api" }
-	include ("io.github.vampirestudios:artifice:0.15.10+21w20a") { exclude group: "net.fabricmc.fabric-api" }
+	modImplementation ("io.github.vampirestudios:artifice:0.15.10+1.16.5") {
+		exclude group: "net.fabricmc.fabric-api"
+	}
+	include ("io.github.vampirestudios:artifice:0.15.10+1.16.5") {
+		exclude group: "net.fabricmc.fabric-api"
+	}
 }
 
 processResources {
@@ -55,10 +52,6 @@ processResources {
 
 tasks.withType(JavaCompile).configureEach {
 	it.options.encoding = "UTF-8"
-	def targetVersion = 8
-	if (JavaVersion.current().isJava9Compatible()) {
-		it.options.release = targetVersion
-	}
 }
 
 jar {
@@ -72,111 +65,20 @@ task sourcesJar(type: Jar, dependsOn: classes) {
 	from sourceSets.main.allSource
 }
 
-bintray {
-	user = project.hasProperty('bintray_user') ? project.property('bintray_user') : System.getenv('BINTRAY_USER')
-	key = project.hasProperty('bintray_api_key') ? project.property('bintray_api_key') : System.getenv('BINTRAY_KEY')
-	publications = ["mavenJava"]
-	publish = true //[Default: false] Whether version should be auto published after an upload
-	pkg {
-		userOrg = "vampirestudios"
-		repo = "Minecraft-Libs"
-		name = archivesBaseName
-		desc = "Vampire Studios' Library Mod"
-		websiteUrl = "https://github.com/vampire-studios/VampireLib-Fabric"
-		issueTrackerUrl = "https://github.com/vampire-studios/VampireLib-Fabric/issues"
-		licenses = ["MIT"]
-		githubRepo = "vampire-studios/VampireLib-Fabric"
-		vcsUrl = "https://github.com/vampire-studios/VampireLib-Fabric.git"
-		version {
-			name = version
-			released = new Date()
-		}
-	}
-
-}
-
-// configure the maven publication
 publishing {
 	publications {
-		gpr(MavenPublication) {
-			from(components.java)
+		mavenJava(MavenPublication) {
+			artifact(remapJar) {
+				builtBy remapJar
+			}
+			artifact(sourcesJar) {
+				builtBy remapSourcesJar
+			}
 		}
 	}
-
 	repositories {
 		maven {
-			name = "GitHubPackages"
-			url = uri("https://maven.pkg.github.com/vampire-studios/VampireLib-Fabric")
-			credentials {
-				username = project.findProperty("gpr.user") ?: System.getenv("USERNAME")
-				password = project.findProperty("gpr.key") ?: System.getenv("TOKEN")
-			}
+			url file("F:\\Development\\Work\\VampireStudiosMaven\\")
 		}
 	}
-}
-
-curseforge {
-	apiKey = curseforgeToken ?: "a key"
-	project {
-		id = '324329'
-		changelog = 'A lot have changed, check github for more exact stuff'
-		releaseType = 'release'
-		gameVersionStrings.clear()
-		gameVersionStrings.add("1.16.5")
-		gameVersionStrings.add("Fabric")
-		mainArtifact(file("build/libs/${archivesBaseName}-${version}.jar")) {
-			displayName = "[" + minecraft_version + "] " + version
-			relations {
-				requiredDependency "fabric-api"
-			}
-		}
-		afterEvaluate {
-			uploadTask.dependsOn("remapJar")
-		}
-	}
-	options{
-		forgeGradleIntegration = false
-	}
-}
-
-bintrayUpload.dependsOn build
-
-processResources {
-	inputs.property "version", project.version
-
-	from(sourceSets.main.resources.srcDirs) {
-		include "fabric.mod.json"
-		expand "version": project.version
-	}
-
-	from(sourceSets.main.resources.srcDirs) {
-		exclude "fabric.mod.json"
-	}
-}
-
-github {
-	owner = 'vampire-studios'
-	repo = 'VampireLib-Fabric'
-	token = gittoken ?: "a key"
-	tagName = "[" + minecraft_version + "] ${archivesBaseName}-${version}"
-	name = "[" + minecraft_version + "] ${archivesBaseName}-${version}"
-	prerelease = true
-	assets = [
-			"build/libs/${archivesBaseName}-${version}.jar",
-			"build/libs/${archivesBaseName}-${version}-sources.jar"
-	]
-}
-
-
-import com.modrinth.minotaur.TaskModrinthUpload
-
-task publishModrinth (type: TaskModrinthUpload){
-	token = modrinthToken // Use an environment property!
-	projectId = 'tyCNRhS8'
-	releaseType = "beta"
-	versionNumber = "${archivesBaseName}-${version}"
-	uploadFile = remapJar // This is the java jar task
-	changelog = 'A lot have changed, check github for more exact stuff'
-	addGameVersion('1.16.5')
-	addLoader('fabric')
 }
