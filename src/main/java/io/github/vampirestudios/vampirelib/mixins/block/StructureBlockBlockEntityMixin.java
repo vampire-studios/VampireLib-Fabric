@@ -39,7 +39,12 @@ public abstract class StructureBlockBlockEntityMixin extends BlockEntity {
     }
 
     @ModifyConstant(method = "fromTag", constant = @Constant(intValue = 48))
-    public int maxLimit(int old) {
+    public int fromNbt(int old) {
+        return 2048;
+    }
+
+    @ModifyConstant(method = "detectStructureSize", constant = @Constant(intValue = 80))
+    public int detectStructureSize(int old) {
         return 2048;
     }
 

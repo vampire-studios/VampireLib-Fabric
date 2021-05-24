@@ -24,50 +24,54 @@
 
 package io.github.vampirestudios.vampirelib.modules.api;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import blue.endless.jankson.JsonObject;
+import blue.endless.jankson.JsonPrimitive;
 import net.minecraft.util.Identifier;
 
 public abstract class Feature {
 
     private boolean enabled = true;
-    public Identifier name;
-    public String description;
-    public EnvType envType;
+    private final Identifier registryName;
+    private final String name;
 
-    public Feature(Identifier name, String description, EnvType envType) {
+    public Feature(Identifier registryName, String name) {
+        this.registryName = registryName;
         this.name = name;
-        this.description = description;
-        this.envType = envType;
     }
 
-    public Feature(Identifier name, String description) {
-        this(name, description, EnvType.SERVER);
-    }
-
-    public boolean isEnabled() {
+    public final boolean isEnabled() {
         return enabled;
     }
 
-    public void setEnabled(boolean enabledIn) {
-        enabled = enabledIn;
+    public final void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 
-    public void init() {
-
+    public final void setEnabled(JsonObject obj) {
+        setEnabled(obj.getBoolean("enabled", true));
     }
 
-    @Environment(EnvType.CLIENT)
-    public void initClient() {
-
+    public Identifier getRegistryName() {
+        return registryName;
     }
 
-    public void configEntries() {
-
+    public String getName() {
+        return name;
     }
 
-    public EnvType getEnvType() {
-        return envType;
+    public void configure(JsonObject obj) {
+    }
+
+    public final JsonObject getConfig() {
+        JsonObject obj = new JsonObject();
+        obj.put("enabled", new JsonPrimitive(isEnabled()));
+        obj.put("registryName", new JsonPrimitive(getRegistryName().toString()));
+        obj.put("name", new JsonPrimitive(getName()));
+        writeToConfig(obj);
+        return obj;
+    }
+
+    public void writeToConfig(JsonObject obj) {
     }
 
 }

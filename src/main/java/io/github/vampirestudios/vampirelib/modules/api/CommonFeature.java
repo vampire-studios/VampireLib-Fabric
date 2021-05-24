@@ -22,26 +22,18 @@
  * SOFTWARE.
  */
 
-package io.github.vampirestudios.vampirelib.mixins;
+package io.github.vampirestudios.vampirelib.modules.api;
 
-import io.github.vampirestudios.vampirelib.utils.EntitySpawnImpl;
-import net.minecraft.entity.Entity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.world.MobSpawnerLogic;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
+import net.minecraft.util.Identifier;
 
-/**
- * @author Valoeghese
- */
-@Mixin(MobSpawnerLogic.class)
-public class MixinMobSpawnerLogic {
-	@Redirect(
-		at = @At(value = "INVOKE", target = "Lnet/minecraft/server/world/ServerWorld;shouldCreateNewEntityWithPassenger(Lnet/minecraft/entity/Entity;)Z"),
-		method = "update()V"
-	)
-	private boolean entitySpawnEventSpawner(ServerWorld self, Entity entity) {
-		return EntitySpawnImpl.spawnEntityZ(self, entity);
-	}
+public abstract class CommonFeature extends Feature {
+
+    public CommonFeature(Identifier registryName, String name) {
+        super(registryName, name);
+    }
+
+    public void initCommon() {
+
+    }
+
 }

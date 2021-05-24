@@ -22,26 +22,23 @@
  * SOFTWARE.
  */
 
-package io.github.vampirestudios.vampirelib.mixins;
+package io.github.vampirestudios.vampirelib.mixins.block;
 
-import io.github.vampirestudios.vampirelib.utils.EntitySpawnImpl;
-import net.minecraft.entity.Entity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.world.MobSpawnerLogic;
+import net.minecraft.network.packet.c2s.play.UpdateStructureBlockC2SPacket;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.Constant;
+import org.spongepowered.asm.mixin.injection.ModifyConstant;
 
-/**
- * @author Valoeghese
- */
-@Mixin(MobSpawnerLogic.class)
-public class MixinMobSpawnerLogic {
-	@Redirect(
-		at = @At(value = "INVOKE", target = "Lnet/minecraft/server/world/ServerWorld;shouldCreateNewEntityWithPassenger(Lnet/minecraft/entity/Entity;)Z"),
-		method = "update()V"
-	)
-	private boolean entitySpawnEventSpawner(ServerWorld self, Entity entity) {
-		return EntitySpawnImpl.spawnEntityZ(self, entity);
-	}
+@Mixin(UpdateStructureBlockC2SPacket.class)
+public abstract class UpdateStructureBlockC2SPacketMixin {
+
+    @ModifyConstant(method = "read(Lnet/minecraft/network/PacketByteBuf;)V", constant = @Constant(intValue = 48))
+    public int readNbt(int old) {
+        return 2048;
+    }
+
+    @ModifyConstant(method = "read(Lnet/minecraft/network/PacketByteBuf;)V", constant = @Constant(intValue = 12))
+    public int readNbt2(int old) {
+        return 128;
+    }
 }

@@ -24,15 +24,13 @@
 
 package io.github.vampirestudios.vampirelib;
 
-import com.mojang.serialization.Lifecycle;
-import io.github.vampirestudios.vampirelib.modules.ModuleManager;
+import io.github.vampirestudios.vampirelib.modules.FeatureManager;
 import io.github.vampirestudios.vampirelib.utils.Rands;
 import io.github.vampirestudios.vampirelib.utils.registry.BlockChiseler;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
-import net.minecraft.util.registry.RegistryKey;
-import net.minecraft.util.registry.SimpleRegistry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -41,11 +39,11 @@ import java.util.Map;
 
 public class VampireLib implements ModInitializer {
 
-    public static final Registry<ModuleManager> MODULE_MANAGERS = new SimpleRegistry<>(RegistryKey.ofRegistry(new Identifier("vampirelib:module_managers")), Lifecycle.stable());
+    public static final Registry<FeatureManager> FEATURE_MANAGERS = FabricRegistryBuilder.createSimple(FeatureManager.class, new Identifier("vampirelib:feature_managers")).buildAndRegister();
     public static String MOD_ID = "vampirelib";
     public static String MOD_NAME = "VampireLib";
     public static final Logger LOGGER = LogManager.getLogger(MOD_NAME);
-    public static String MOD_VERSION = "2.2.0+build.1 for 1.16.4";
+    public static String MOD_VERSION = "3.0.0+build.1 for 1.16.5";
     public static final Map<String, Identifier> DEV_UUID = new HashMap<String, Identifier>(){{
         //CatCore
         this.put("5bb676ef-ecee-4258-ae1f-53e163839585", new Identifier(MOD_ID, "textures/misc/cat_cape.png"));

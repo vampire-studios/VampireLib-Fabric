@@ -29,7 +29,10 @@ import blue.endless.jankson.JsonGrammar;
 import blue.endless.jankson.JsonObject;
 import blue.endless.jankson.api.SyntaxError;
 import io.github.vampirestudios.vampirelib.VampireLib;
-import io.github.vampirestudios.vampirelib.modules.api.NonFeatureModule;
+import io.github.vampirestudios.vampirelib.modules.api.ClientFeature;
+import io.github.vampirestudios.vampirelib.modules.api.CommonFeature;
+import io.github.vampirestudios.vampirelib.modules.api.Feature;
+import io.github.vampirestudios.vampirelib.modules.api.ServerFeature;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -37,7 +40,7 @@ import java.nio.charset.StandardCharsets;
 public class ModuleConfig {
     private static final Jankson JANKSON = Jankson.builder().build();
 
-    public static void load(NonFeatureModule module, String modName, String configType) {
+    public static void load(Feature module, String modName, String configType) {
         File configFile = new File(String.format("config/%s-%s.json5", module.getRegistryName().getNamespace(), configType));
         JsonObject config = new JsonObject();
         if (configFile.exists()) {
@@ -65,19 +68,19 @@ public class ModuleConfig {
 
     public static void loadFrom(JsonObject obj, String configType) {
         if (configType.equals("server")) {
-            for (NonFeatureModule module : ModuleManager.SERVER_NON_FEATURE_MODULES) {
+            for (ServerFeature module : FeatureManager.SERVER_FEATURES) {
                 JsonObject moduleConfig = getObjectOrEmpty(module.getRegistryName().toString(), obj);
                 module.setEnabled(moduleConfig);
                 module.configure(moduleConfig);
             }
         } else if (configType.equals("client")) {
-            for (NonFeatureModule module : ModuleManager.CLIENT_NON_FEATURE_MODULES) {
+            for (ClientFeature module : FeatureManager.CLIENT_FEATURES) {
                 JsonObject moduleConfig = getObjectOrEmpty(module.getRegistryName().toString(), obj);
                 module.setEnabled(moduleConfig);
                 module.configure(moduleConfig);
             }
         } else {
-            for (NonFeatureModule module : ModuleManager.NON_FEATURE_MODULES) {
+            for (CommonFeature module : FeatureManager.COMMON_FEATURES) {
                 JsonObject moduleConfig = getObjectOrEmpty(module.getRegistryName().toString(), obj);
                 module.setEnabled(moduleConfig);
                 module.configure(moduleConfig);
@@ -87,17 +90,17 @@ public class ModuleConfig {
 
     public static void saveTo(JsonObject obj, String configType) {
         if (configType.equals("server")) {
-            for (NonFeatureModule module : ModuleManager.SERVER_NON_FEATURE_MODULES) {
+            for (ServerFeature module : FeatureManager.SERVER_FEATURES) {
                 JsonObject moduleConfig = module.getConfig();
                 obj.put(module.getRegistryName().toString(), moduleConfig);
             }
         } else if (configType.equals("client")) {
-            for (NonFeatureModule module : ModuleManager.CLIENT_NON_FEATURE_MODULES) {
+            for (ClientFeature module : FeatureManager.CLIENT_FEATURES) {
                 JsonObject moduleConfig = module.getConfig();
                 obj.put(module.getRegistryName().toString(), moduleConfig);
             }
         } else {
-            for (NonFeatureModule module : ModuleManager.NON_FEATURE_MODULES) {
+            for (CommonFeature module : FeatureManager.COMMON_FEATURES) {
                 JsonObject moduleConfig = module.getConfig();
                 obj.put(module.getRegistryName().toString(), moduleConfig);
             }

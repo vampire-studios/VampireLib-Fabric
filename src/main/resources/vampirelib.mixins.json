@@ -23,6 +23,7 @@
     "SpawnEggItemAccessor",
     "SpawnSettingsAccessor",
     "block.StructureBlockBlockEntityMixin",
+    "block.UpdateStructureBlockC2SPacketMixin",
     "client.SignBlockEntityRendererMixin",
     "entity.EntityMixin",
     "item.ItemMixin",
