@@ -31,6 +31,7 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.item.*;
 import net.minecraft.potion.Potion;
 import net.minecraft.sound.BlockSoundGroup;
@@ -72,13 +73,12 @@ public class RegistryHelper {
 
     public Block registerNetherStem(String name, MaterialColor materialColor) {
         return registerBlock(new PillarBlock(AbstractBlock.Settings.of(Material.WOOD, (blockState) -> materialColor)
-                        .strength(1.0F).sounds(BlockSoundGroup.NETHER_STEM)), name,
-                ItemGroup.BUILDING_BLOCKS);
+                .strength(1.0F).sounds(BlockSoundGroup.NETHER_STEM)), name, ItemGroup.BUILDING_BLOCKS);
     }
 
-    public Block registerLog(String name, MaterialColor materialColor, MaterialColor materialColor2) {
+    public Block registerLog(String name, MaterialColor topMaterialColor, MaterialColor sideMaterialColor) {
         return registerBlock(new PillarBlock(AbstractBlock.Settings.of(Material.WOOD, (blockState) ->
-                blockState.get(PillarBlock.AXIS) == Direction.Axis.Y ? materialColor : materialColor2)
+                blockState.get(PillarBlock.AXIS) == Direction.Axis.Y ? topMaterialColor : sideMaterialColor)
                 .strength(2.0F).sounds(BlockSoundGroup.WOOD)), name);
     }
 
@@ -138,7 +138,7 @@ public class RegistryHelper {
         return Registry.register(Registry.SOUND_EVENT, new Identifier(modId, name), soundEvent);
     }
 
-    public Item registerSpawnEgg(String name, EntityType<?> entity, int primaryColor, int secondaryColor) {
+    public Item registerSpawnEgg(String name, EntityType<? extends MobEntity> entity, int primaryColor, int secondaryColor) {
         return registerItem(name + "_spawn_egg", new SpawnEggItem(entity, primaryColor, secondaryColor, new Item.Settings().group(ItemGroup.MISC)));
     }
 

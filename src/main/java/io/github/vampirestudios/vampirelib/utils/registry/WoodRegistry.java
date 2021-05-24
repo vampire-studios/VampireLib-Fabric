@@ -26,7 +26,6 @@ package io.github.vampirestudios.vampirelib.utils.registry;
 
 import com.google.common.collect.ImmutableMap;
 import com.swordglowsblue.artifice.api.Artifice;
-import io.github.vampirestudios.vampirelib.api.SpriteIdentifierRegistry;
 import io.github.vampirestudios.vampirelib.blocks.*;
 import io.github.vampirestudios.vampirelib.boat.CustomBoatEntity;
 import io.github.vampirestudios.vampirelib.boat.CustomBoatInfo;
@@ -46,12 +45,8 @@ import net.fabricmc.fabric.api.tool.attribute.v1.FabricToolTags;
 import net.fabricmc.fabric.impl.blockrenderlayer.BlockRenderLayerMapImpl;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.*;
-import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.block.entity.SignBlockEntity;
 import net.minecraft.block.sapling.SaplingGenerator;
 import net.minecraft.client.render.RenderLayer;
-import net.minecraft.client.render.TexturedRenderLayers;
-import net.minecraft.client.util.SpriteIdentifier;
 import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnGroup;
@@ -59,7 +54,6 @@ import net.minecraft.entity.vehicle.BoatEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.SignItem;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.ActionResult;
@@ -91,10 +85,10 @@ public class WoodRegistry {
     private Block button;
     private Block pressurePlate;
     private Block ladder;
-    private Block sign;
-    private Block wallSign;
+//    private Block sign;
+//    private Block wallSign;
 
-    private Item signItem;
+    //    private Item signItem;
     private Item boatItem;
 
     private EntityType<CustomBoatEntity> boatEntity;
@@ -191,7 +185,7 @@ public class WoodRegistry {
         return ladder;
     }
 
-    public Block getSign() {
+    /*public Block getSign() {
         return sign;
     }
 
@@ -201,7 +195,7 @@ public class WoodRegistry {
 
     public Item getSignItem() {
         return signItem;
-    }
+    }*/
 
     public Item getBoatItem() {
         return boatItem;
@@ -323,15 +317,13 @@ public class WoodRegistry {
             return this;
         }
 
-        public Builder leaves(int color) {
+        public Builder nonColoredLeaves() {
             woodRegistry.leaves = registryHelper.registerBlock(new LeavesBaseBlock(), name.getPath() + "_leaves",
                     ItemGroup.DECORATIONS);
-            VampireLibClient.ColoredLeaves coloredLeaves = new VampireLibClient.ColoredLeaves(woodRegistry.leaves, true, color);
-            VampireLibClient.COLORED_LEAVES.add(coloredLeaves);
             return this;
         }
 
-        public Builder leaves(String nameIn) {
+        public Builder nonColoredLeaves(String nameIn) {
             woodRegistry.leaves = registryHelper.registerBlock(new LeavesBaseBlock(), nameIn + "_leaves",
                     ItemGroup.DECORATIONS);
             VampireLibClient.ColoredLeaves coloredLeaves = new VampireLibClient.ColoredLeaves(woodRegistry.leaves, false, 0xFFF);
@@ -339,7 +331,7 @@ public class WoodRegistry {
             return this;
         }
 
-        public Builder leaves(String... nameIn) {
+        public Builder nonColoredLeaves(String... nameIn) {
             for(String leavesName : nameIn) {
                 woodRegistry.leaves = registryHelper.registerBlock(new LeavesBaseBlock(), leavesName + "_leaves",
                         ItemGroup.DECORATIONS);
@@ -350,7 +342,34 @@ public class WoodRegistry {
             return this;
         }
 
-        public Builder leaves(String nameIn, int color) {
+        public Builder coloredLeaves(int color) {
+            woodRegistry.leaves = registryHelper.registerBlock(new LeavesBaseBlock(), name.getPath() + "_leaves",
+                    ItemGroup.DECORATIONS);
+            VampireLibClient.ColoredLeaves coloredLeaves = new VampireLibClient.ColoredLeaves(woodRegistry.leaves, true, color);
+            VampireLibClient.COLORED_LEAVES.add(coloredLeaves);
+            return this;
+        }
+
+        public Builder coloredLeaves(String nameIn) {
+            woodRegistry.leaves = registryHelper.registerBlock(new LeavesBaseBlock(), nameIn + "_leaves",
+                    ItemGroup.DECORATIONS);
+            VampireLibClient.ColoredLeaves coloredLeaves = new VampireLibClient.ColoredLeaves(woodRegistry.leaves, false, 0xFFF);
+            VampireLibClient.COLORED_LEAVES.add(coloredLeaves);
+            return this;
+        }
+
+        public Builder coloredLeaves(String... nameIn) {
+            for(String leavesName : nameIn) {
+                woodRegistry.leaves = registryHelper.registerBlock(new LeavesBaseBlock(), leavesName + "_leaves",
+                        ItemGroup.DECORATIONS);
+                VampireLibClient.ColoredLeaves coloredLeaves = new VampireLibClient.ColoredLeaves(woodRegistry.leaves, false, 0xFFF);
+                VampireLibClient.COLORED_LEAVES.add(coloredLeaves);
+                leaves.add(leavesName + "_leaves");
+            }
+            return this;
+        }
+
+        public Builder coloredLeaves(String nameIn, int color) {
             woodRegistry.leaves = registryHelper.registerBlock(new LeavesBaseBlock(), nameIn + "_leaves",
                     ItemGroup.DECORATIONS);
             VampireLibClient.ColoredLeaves coloredLeaves = new VampireLibClient.ColoredLeaves(woodRegistry.leaves, true, color);
@@ -358,7 +377,18 @@ public class WoodRegistry {
             return this;
         }
 
-        public Builder leaves(ColoredLeavesBlock... coloredLeavesBlocks) {
+        public Builder coloredLeaves(int color, String... nameIn) {
+            for(String leavesName : nameIn) {
+                woodRegistry.leaves = registryHelper.registerBlock(new LeavesBaseBlock(), leavesName + "_leaves",
+                        ItemGroup.DECORATIONS);
+                VampireLibClient.ColoredLeaves coloredLeaves = new VampireLibClient.ColoredLeaves(woodRegistry.leaves, false, color);
+                VampireLibClient.COLORED_LEAVES.add(coloredLeaves);
+                leaves.add(leavesName + "_leaves");
+            }
+            return this;
+        }
+
+        public Builder coloredLeaves(ColoredLeavesBlock... coloredLeavesBlocks) {
             for(ColoredLeavesBlock coloredLeavesBlock : coloredLeavesBlocks) {
                 woodRegistry.leaves = registryHelper.registerBlock(new LeavesBaseBlock(), coloredLeavesBlock.name + "_leaves",
                         ItemGroup.DECORATIONS);
@@ -438,12 +468,15 @@ public class WoodRegistry {
             return this;
         }
 
-        public Builder sign() {
-            woodRegistry.sign = registryHelper.registerBlockWithoutItem(name.getPath() + "_sign", new CustomSignBlock(Utils.prependToPath(name, "entity/sign/"), FabricBlockSettings.copy(Blocks.OAK_SIGN)));
-            woodRegistry.wallSign = registryHelper.registerBlockWithoutItem(name.getPath() + "_wall_sign", new CustomWallSignBlock(Utils.prependToPath(name, "entity/sign/"), FabricBlockSettings.copy(Blocks.OAK_WALL_SIGN)));
+        /*public Builder sign() {
+            BlockEntityType<SignBlockEntity> signBlockEntityBlockEntityType = Registry.register(Registry.BLOCK_ENTITY_TYPE, Utils.appendToPath(name, "_base"), BlockEntityType.Builder.create(SignBlockEntity::new).build(null));
+            SignType signType = SignType.register(new SignType(name.getPath()));
+            woodRegistry.sign = registryHelper.registerBlockWithoutItem(name.getPath() + "_sign", new CustomSignBlock(signType, FabricBlockSettings.copy(Blocks.OAK_SIGN)));
+            woodRegistry.wallSign = registryHelper.registerBlockWithoutItem(name.getPath() + "_wall_sign", new CustomWallSignBlock(signType, FabricBlockSettings.copy(Blocks.OAK_WALL_SIGN)));
             woodRegistry.signItem = registryHelper.registerItem(name.getPath() + "_sign", new SignItem(new Item.Settings().maxCount(16).group(ItemGroup.DECORATIONS), woodRegistry.sign, woodRegistry.wallSign));
+            ((IBlockEntityType) signBlockEntityBlockEntityType).vl_addBlocks(woodRegistry.sign, woodRegistry.wallSign);
             return this;
-        }
+        }*/
 
         public Builder boat() {
             woodRegistry.boatItem = registryHelper.registerItem(name.getPath() + "_boat", new CustomBoatItem(() -> woodRegistry.boatEntity, new Item.Settings().maxCount(1).group(ItemGroup.TRANSPORTATION)));
@@ -595,9 +628,9 @@ public class WoodRegistry {
                             ArtificeGenerationHelper.generateSimpleItemModel(clientResourcePackBuilder, Utils.appendToPath(name, "_ladder"), Utils.appendAndPrependToPath(name, "block/", "_ladder"));
                         }
 
-                        if (woodRegistry.sign != null) {
-                            ArtificeGenerationHelper.generateSimpleItemModel(clientResourcePackBuilder, Utils.appendToPath(name, "_sign"));
-                        }
+//                        if (woodRegistry.sign != null) {
+//                            ArtificeGenerationHelper.generateSimpleItemModel(clientResourcePackBuilder, Utils.appendToPath(name, "_sign"));
+//                        }
 
                         if (woodRegistry.slab != null) {
                             ArtificeGenerationHelper.generateSlabBlockState(clientResourcePackBuilder, Utils.appendToPath(name, "_slab"), Utils.appendToPath(name, "_planks"));
@@ -653,12 +686,17 @@ public class WoodRegistry {
                 if(woodRegistry.trapdoor != null) {
                     BlockRenderLayerMapImpl.INSTANCE.putBlock(woodRegistry.sapling, RenderLayer.getCutout());
                 }
-                if(woodRegistry.sign != null) {
-                    SpriteIdentifierRegistry.INSTANCE.addIdentifier(new SpriteIdentifier(TexturedRenderLayers.SIGNS_ATLAS_TEXTURE, ((CustomSignBlock)woodRegistry.sign).getTexture()));
-                    Registry.register(Registry.BLOCK_ENTITY_TYPE, Utils.appendToPath(name, "_sign"), BlockEntityType.Builder.create(SignBlockEntity::new, woodRegistry.sign, woodRegistry.wallSign).build(null));
-                }
+//                if(woodRegistry.sign != null) {
+//                    Map<SignType, SpriteIdentifier> textures = new HashMap<>(TexturedRenderLayersAccessor.getWOOD_TYPE_TEXTURES());
+//                    SignType.stream().forEach(signType -> {
+//                        if(signType.getName().equals(name.getPath())) {
+//                            textures.put(signType, new SpriteIdentifier(SIGNS_ATLAS_TEXTURE, Utils.prependToPath(name, "entity/signs/")));
+//                        }
+//                    });
+//                    TexturedRenderLayersAccessor.setWOOD_TYPE_TEXTURES(textures);
+//                }
                 if(woodRegistry.boatItem != null) {
-                    EntityRendererRegistry.INSTANCE.register(woodRegistry.boatEntity, (entityRenderDispatcher, context) -> new CustomBoatEntityRenderer(entityRenderDispatcher));
+                    EntityRendererRegistry.INSTANCE.register(woodRegistry.boatEntity, (manager, context) -> new CustomBoatEntityRenderer(manager));
                 }
             }
             Artifice.registerDataPack(name, serverResourcePackBuilder -> {
@@ -669,6 +707,7 @@ public class WoodRegistry {
                     });
                 }
             });
+//            WoodTypeRegistry.registerModded(new WoodType(name.toString(), woodRegistry.leaves, woodRegistry.log), 0.2F, 0.2F);
             return woodRegistry;
         }
     }

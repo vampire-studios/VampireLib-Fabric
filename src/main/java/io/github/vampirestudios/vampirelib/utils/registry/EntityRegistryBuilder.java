@@ -118,10 +118,10 @@ public class EntityRegistryBuilder<E extends Entity> {
         EntityType<E> entityType = Registry.register(Registry.ENTITY_TYPE, name, entityBuilder.build(name.getPath()));
 
         if (hasEgg) {
-            Item spawnEggItem = RegistryHelper.createRegistryHelper(name.getNamespace()).registerItem(String.format("%s_spawn_egg", name.getPath()), new SpawnEggItem(entityType, primaryColor, secondaryColor, new Item.Settings().group(ItemGroup.MISC)));
+            Item spawnEggItem = RegistryHelper.createRegistryHelper(name.getNamespace()).registerItem(String.format("%s_spawn_egg", name.getPath()), new SpawnEggItem((EntityType<? extends MobEntity>) entityType, primaryColor, secondaryColor, new Item.Settings().group(ItemGroup.MISC)));
             SpawnEggItemAccessor.getSPAWN_EGGS().put((EntityType<? extends MobEntity>) entityType, (SpawnEggItem) spawnEggItem);
         }
-        
+
         return entityType;
     }
 
