@@ -24,30 +24,21 @@
 
 package io.github.vampirestudios.vampirelib.mixins.block;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.block.entity.StructureBlockBlockEntity;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.network.packet.c2s.play.UpdateStructureBlockC2SPacket;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.ModifyConstant;
 
-@Mixin(StructureBlockBlockEntity.class)
-public abstract class StructureBlockBlockEntityMixin extends BlockEntity {
+@Mixin(UpdateStructureBlockC2SPacket.class)
+public abstract class UpdateStructureBlockC2SPacketMixin {
 
-    public StructureBlockBlockEntityMixin(BlockEntityType<?> blockEntityType, BlockPos blockPos, BlockState blockState) {
-        super(blockEntityType, blockPos, blockState);
-    }
-
-    @ModifyConstant(method = "readNbt", constant = @Constant(intValue = 48))
+    @ModifyConstant(method = "<init>(Lnet/minecraft/network/PacketByteBuf;)V", constant = @Constant(intValue = 48))
     public int readNbt(int old) {
         return 2048;
     }
 
-    @ModifyConstant(method = "detectStructureSize", constant = @Constant(intValue = 80))
-    public int detectStructureSize(int old) {
-        return 2048;
+    @ModifyConstant(method = "<init>(Lnet/minecraft/network/PacketByteBuf;)V", constant = @Constant(intValue = 12))
+    public int readNbt2(int old) {
+        return 128;
     }
-
 }

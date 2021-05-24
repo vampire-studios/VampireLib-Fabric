@@ -21,6 +21,7 @@ repositories {
 	mavenLocal()
 	maven{ url="https://jitpack.io" }
 	maven{ url="https://maven.fabricmc.net" }
+	maven { url "https://raw.githubusercontent.com/vampire-studios/VampireStudiosMaven/main/" }
 }
 
 dependencies {
@@ -33,10 +34,10 @@ dependencies {
 	modImplementation "com.github.cottonmc:Jankson-Fabric:1.16-SNAPSHOT"
 	include "com.github.cottonmc:Jankson-Fabric:1.16-SNAPSHOT"
 
-	modImplementation ("com.lettuce.fudge:artifice:0.15.9+21w19a") {
+	modImplementation ("io.github.vampirestudios:artifice:0.15.10+21w20a") {
 		exclude group: "net.fabricmc.fabric-api"
 	}
-	include ("com.lettuce.fudge:artifice:0.15.9+21w19a") {
+	include ("io.github.vampirestudios:artifice:0.15.10+21w20a") {
 		exclude group: "net.fabricmc.fabric-api"
 	}
 }
