@@ -347,14 +347,6 @@ public class ArtificeGenerationHelper {
                     }
                 }
             }
-            state.variant("facing=east,half=bottom,shape=straight", var -> {
-                var.model(Utils.prependToPath(name, "block/"));
-            });
-            state.variant("facing=west,half=bottom,shape=straight", var -> {
-                var.model(Utils.prependToPath(name, "block/"));
-                var.rotationY(180);
-                var.uvlock(true);
-            });
         });
     }
 
