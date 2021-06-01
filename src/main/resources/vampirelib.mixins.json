@@ -14,7 +14,7 @@
     "SpawnEggItemAccessor",
     "block.BlockEntityTypeMixin",
     "block.StructureBlockBlockEntityMixin",
-    "block.UpdateStructureBlockC2SPacketMixin",
+//    "block.UpdateStructureBlockC2SPacketMixin",
     "entity.EntityMixin",
     "item.ItemMixin",
     "item.MixinBookOnLectern"
