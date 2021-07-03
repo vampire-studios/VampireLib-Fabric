@@ -14,14 +14,12 @@
     "SpawnEggItemAccessor",
     "block.BlockEntityTypeMixin",
     "block.StructureBlockBlockEntityMixin",
-//    "block.UpdateStructureBlockC2SPacketMixin",
     "entity.EntityMixin",
     "item.ItemMixin",
     "item.MixinBookOnLectern"
   ],
   "client": [
     "client.BoatEntityRendererMixin",
-    "client.PlayerListEntryMixin",
     "client.SpriteAccessor",
     "client.TextRendererMixin"
   ],
