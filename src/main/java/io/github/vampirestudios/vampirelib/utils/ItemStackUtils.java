@@ -682,16 +682,16 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.collection.DefaultedList;
 
-import io.github.vampirestudios.vampirelib.api.IItemGroupItem;
+import io.github.vampirestudios.vampirelib.mixins.ItemInvokerMixin;
 
 public class ItemStackUtils {
 
     /**
-     * Searches for a specific item in a {@link DefaultedList} of {@link ItemStack} and returns its index
+     * Searches for a specific item in a {@link DefaultedList} of {@link ItemStack} and returns its index.
      *
-     * @param item  - The item to search for
-     * @param items - The list of ItemStacks
-     * @return - The index of the specified item in the list, if no item was found returns -1
+     * @param item  The item to search for.
+     * @param items The list of {@link ItemStack}s.
+     * @return The index of the specified item in the list, or -1 if it was not in the list.
      */
     public static int findIndexOfItem(Item item, DefaultedList<ItemStack> items) {
         for (int i = 0; i < items.size(); i++) {
@@ -703,17 +703,33 @@ public class ItemStackUtils {
     }
 
     /**
+     * Used in {@link Item#appendStacks(ItemGroup, DefaultedList)} and {@link net.minecraft.block.Block#appendStacks(ItemGroup, DefaultedList)} to fill an item after a specific item for a group.
+     *
+     * @param item       The item to fill.
+     * @param targetItem The item to fill after.
+     * @param group      The group to fill it in.
+     * @param items      The {@link DefaultedList} of item stacks to search for the target item and inject the item in.
+     */
+    public static void fillAfterItemForGroup(Item item, Item targetItem, ItemGroup group, DefaultedList<ItemStack> items) {
+        if (isInGroup(item, group)) {
+            int targetIndex = findIndexOfItem(targetItem, items);
+            if (targetIndex != -1) {
+                items.add(targetIndex + 1, new ItemStack(item));
+            } else {
+                items.add(new ItemStack(item));
+            }
+        }
+    }
+
+    /**
      * Searches for if an {@link Item} is present in an {@link ItemGroup} and returns if it is
      *
-     * @param item  - The item searched
-     * @param group - The group searched
+     * @param item  The {@link Item} to check.
+     * @param group The {@link ItemGroup} to check.
      * @return - Whether or not the item is present in the group
      */
     public static boolean isInGroup(Item item, ItemGroup group) {
-        if (((IItemGroupItem) item).getCreativeTabs().stream().anyMatch(tab -> tab == group))
-            return true;
-        ItemGroup itemgroup = item.getGroup();
-        return itemgroup != null && (group == ItemGroup.SEARCH || group == itemgroup);
+        return ((ItemInvokerMixin) item).getGroup() == group;
     }
 
 }

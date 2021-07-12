@@ -696,24 +696,17 @@ import io.github.vampirestudios.vampirelib.utils.ItemStackUtils;
  *
  * @see IItemGroupFiller
  */
-public final class TargetedItemGroupFiller implements IItemGroupFiller {
-    private final Supplier<Item> targetItem;
-    private final Map<ItemGroup, OffsetValue> offsetMap = Maps.newHashMap();
-
-    public TargetedItemGroupFiller(Supplier<Item> targetItem) {
-        this.targetItem = targetItem;
-    }
+public final record TargetedItemGroupFiller(Supplier<Item> targetItem) implements IItemGroupFiller {
+    private static final Map<ItemGroup, OffsetValue> offsetMap = Maps.newHashMap();
 
     @Override
     public void fillItem(Item item, ItemGroup group, DefaultedList<ItemStack> items) {
         if (ItemStackUtils.isInGroup(item, group)) {
-            OffsetValue offset = this.offsetMap
-                .computeIfAbsent(group, (key) -> new OffsetValue());
+            OffsetValue offset = offsetMap.computeIfAbsent(group, (key) -> new OffsetValue());
             if (offset.itemsProcessed.contains(item)) {
                 offset.reset();
             }
-            int index =
-                ItemStackUtils.findIndexOfItem(this.targetItem.get(), items);
+            int index = ItemStackUtils.findIndexOfItem(targetItem().get(), items);
             if (index != -1) {
                 items.add(index + offset.offset, new ItemStack(item));
                 offset.itemsProcessed.add(item);

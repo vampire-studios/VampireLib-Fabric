@@ -675,14 +675,16 @@
  * <https://www.gnu.org/licenses/why-not-lgpl.html>.
  */
 
-package io.github.vampirestudios.vampirelib.mixins.item;
+package io.github.vampirestudios.vampirelib.mixins;
 
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.gen.Accessor;
 
 import net.minecraft.item.Item;
-
-import io.github.vampirestudios.vampirelib.api.IItemGroupItem;
+import net.minecraft.item.ItemGroup;
 
 @Mixin(Item.class)
-public class ItemMixin implements IItemGroupItem {
+public interface ItemInvokerMixin {
+	@Accessor
+	ItemGroup getGroup();
 }

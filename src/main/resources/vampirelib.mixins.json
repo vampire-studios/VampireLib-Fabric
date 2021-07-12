@@ -5,6 +5,7 @@
   "mixins": [
     "DynamicRegistryManagerMixin",
     "HandledScreenMixin",
+    "ItemInvokerMixin",
     "MixinItemEntity",
     "MixinLivingEntity",
     "MixinMobSpawnerLogic",
@@ -15,7 +16,6 @@
     "block.BlockEntityTypeMixin",
     "block.StructureBlockBlockEntityMixin",
     "entity.EntityMixin",
-    "item.ItemMixin",
     "item.MixinBookOnLectern"
   ],
   "client": [

@@ -698,17 +698,17 @@ public class CompatBlock extends Block {
     }
 
     @Override
-    public void addStacksForDisplay(ItemGroup group, DefaultedList<ItemStack> list) {
+    public void appendStacks(ItemGroup group, DefaultedList<ItemStack> stacks) {
         if (ItemStackUtils.isInGroup(this.asItem(), group)) {
             if (FabricLoader.getInstance().isModLoaded(this.modName)) {
-                int targetIndex = ItemStackUtils.findIndexOfItem(modBlock.asItem(), list);
+                int targetIndex = ItemStackUtils.findIndexOfItem(modBlock.asItem(), stacks);
                 if (targetIndex != -1) {
-                    list.add(targetIndex + 1, new ItemStack(this));
+                    stacks.add(targetIndex + 1, new ItemStack(this));
                 } else {
-                    super.addStacksForDisplay(group, list);
+                    super.appendStacks(group, stacks);
                 }
             } else {
-                super.addStacksForDisplay(group, list);
+                super.appendStacks(group, stacks);
             }
         }
     }
