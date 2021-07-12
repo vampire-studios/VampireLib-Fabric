@@ -677,8 +677,8 @@
 
 package io.github.vampirestudios.vampirelib.modules.api;
 
-import blue.endless.jankson.JsonObject;
-import blue.endless.jankson.JsonPrimitive;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 
 import net.minecraft.util.Identifier;
 
@@ -701,10 +701,6 @@ public abstract class Feature {
         this.enabled = enabled;
     }
 
-    public final void setEnabled(JsonObject obj) {
-        setEnabled(obj.getBoolean("enabled", true));
-    }
-
     public Identifier getRegistryName() {
         return registryName;
     }
@@ -718,9 +714,9 @@ public abstract class Feature {
 
     public final JsonObject getConfig() {
         JsonObject obj = new JsonObject();
-        obj.put("enabled", new JsonPrimitive(isEnabled()));
-        obj.put("registryName", new JsonPrimitive(getRegistryName().toString()));
-        obj.put("name", new JsonPrimitive(getName()));
+        obj.add("enabled", new JsonPrimitive(isEnabled()));
+        obj.add("registryName", new JsonPrimitive(getRegistryName().toString()));
+        obj.add("name", new JsonPrimitive(getName()));
         writeToConfig(obj);
         return obj;
     }
