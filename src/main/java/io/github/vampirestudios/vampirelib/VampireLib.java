@@ -696,7 +696,7 @@ public class VampireLib implements ModInitializer {
     public static String MOD_ID = "vampirelib";
     public static String MOD_NAME = "VampireLib";
     public static final Logger LOGGER = LogManager.getLogger(MOD_NAME);
-    public static String MOD_VERSION = "3.1.0+build.2 for 1.17.1";
+    public static String MOD_VERSION = "3.2.0+build.1-experimental for 1.18";
 
     @Override
     public void onInitialize() {
