@@ -1,0 +1,35 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:mountain_edge",
+    "minecraft:mountains",
+    "minecraft:gravelly_mountains",
+    "minecraft:modified_gravelly_mountains",
+    "minecraft:snowy_taiga_mountains",
+    "minecraft:taiga_mountains",
+    "minecraft:wooded_mountains",
+    "minecraft:modified_jungle",
+    "minecraft:shattered_savanna",
+    "minecraft:shattered_savanna_plateau",
+    {
+      "id": "minecraft:grove",
+      "required": false
+    },
+    {
+      "id": "minecraft:meadow",
+      "required": false
+    },
+    {
+      "id": "minecraft:lofty_peaks",
+      "required": false
+    },
+    {
+      "id": "minecraft:snowy_slopes",
+      "required": false
+    },
+    {
+      "id": "minecraft:snowcapped_peaks",
+      "required": false
+    }
+  ]
+}

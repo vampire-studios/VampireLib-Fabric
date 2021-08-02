@@ -1,0 +1,7 @@
+{
+  "replace": false,
+  "values": [
+    "#vampirelib:fences/nether_brick",
+    "#vampirelib:fences/wooden"
+  ]
+}

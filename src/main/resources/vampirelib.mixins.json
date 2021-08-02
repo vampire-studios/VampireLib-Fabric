@@ -15,6 +15,7 @@
     "SpawnEggItemAccessor",
     "block.BlockEntityTypeMixin",
     "block.StructureBlockBlockEntityMixin",
+    "client.TextureAtlasMixin",
     "entity.EntityMixin",
     "item.MixinBookOnLectern"
   ],

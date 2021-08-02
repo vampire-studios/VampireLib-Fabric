@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "#vampirelib:crops/beetroot",
+    "#vampirelib:crops/carrot",
+    "#vampirelib:crops/nether_wart",
+    "#vampirelib:crops/potato",
+    "#vampirelib:crops/wheat"
+  ]
+}
