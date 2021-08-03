@@ -686,7 +686,7 @@ import net.minecraft.util.collection.DefaultedList;
  * Interface implemented on classes for special filling of {@link Item}s in {@link ItemGroup}s.
  */
 @FunctionalInterface
-public interface IItemGroupFiller {
+public interface ItemGroupAppender {
     /**
      * Fills an {@link Item} for an {@link ItemGroup} given a {@link DefaultedList} of the {@link ItemStack}s for that {@link ItemGroup}.
      *
@@ -694,5 +694,5 @@ public interface IItemGroupFiller {
      * @param group The {@link ItemGroup} to fill into.
      * @param items A {@link DefaultedList} of the {@link ItemStack}s for the {@link ItemGroup}.
      */
-    void fillItem(Item item, ItemGroup group, DefaultedList<ItemStack> items);
+    void appendStacks(Item item, ItemGroup group, DefaultedList<ItemStack> items);
 }

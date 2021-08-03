@@ -680,6 +680,8 @@ package io.github.vampirestudios.vampirelib;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import net.minecraft.recipe.RecipeSerializer;
+import net.minecraft.recipe.RecipeType;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
@@ -687,6 +689,10 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
 
 import io.github.vampirestudios.vampirelib.modules.FeatureManager;
+import io.github.vampirestudios.vampirelib.recipe.brewing.BrewingRecipe;
+import io.github.vampirestudios.vampirelib.recipe.brewing.ContainerBrewingRecipe;
+import io.github.vampirestudios.vampirelib.recipe.brewing.IBrewingRecipe;
+import io.github.vampirestudios.vampirelib.recipe.brewing.MixingBrewingRecipe;
 import io.github.vampirestudios.vampirelib.utils.Rands;
 import io.github.vampirestudios.vampirelib.utils.registry.BlockChiseler;
 
@@ -697,6 +703,12 @@ public class VampireLib implements ModInitializer {
     public static String MOD_NAME = "VampireLib";
     public static final Logger LOGGER = LogManager.getLogger(MOD_NAME);
     public static String MOD_VERSION = "3.1.0+build.2 for 1.17.1";
+
+    public static final RecipeType<IBrewingRecipe> BREWING = new RecipeType<>() {};
+
+    public static final RecipeSerializer<?> BREWING_SERIALIZER = Registry.register(Registry.RECIPE_SERIALIZER, new Identifier(MOD_ID, "brewing"), BrewingRecipe.Serializer::new);
+    public static final RecipeSerializer<?> CONTAINER_BREWING_SERIALIZER = Registry.register(Registry.RECIPE_SERIALIZER, new Identifier(MOD_ID, "container_brewing"), ContainerBrewingRecipe.Serializer::new);
+    public static final RecipeSerializer<?> MIXING_BREWING_SERIALIZER = Registry.register(Registry.RECIPE_SERIALIZER, new Identifier(MOD_ID, "mixing_brewing"), MixingBrewingRecipe.Serializer::new);
 
     @Override
     public void onInitialize() {

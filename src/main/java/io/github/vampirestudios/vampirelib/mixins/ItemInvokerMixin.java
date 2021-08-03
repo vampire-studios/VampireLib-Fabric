@@ -679,6 +679,7 @@ package io.github.vampirestudios.vampirelib.mixins;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
+import org.spongepowered.asm.mixin.gen.Invoker;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
@@ -687,4 +688,6 @@ import net.minecraft.item.ItemGroup;
 public interface ItemInvokerMixin {
 	@Accessor
 	ItemGroup getGroup();
+    @Invoker
+    boolean callIsIn(ItemGroup group);
 }

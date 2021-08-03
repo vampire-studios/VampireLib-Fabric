@@ -703,33 +703,14 @@ public class ItemStackUtils {
     }
 
     /**
-     * Used in {@link Item#appendStacks(ItemGroup, DefaultedList)} and {@link net.minecraft.block.Block#appendStacks(ItemGroup, DefaultedList)} to fill an item after a specific item for a group.
-     *
-     * @param item       The item to fill.
-     * @param targetItem The item to fill after.
-     * @param group      The group to fill it in.
-     * @param items      The {@link DefaultedList} of item stacks to search for the target item and inject the item in.
-     */
-    public static void fillAfterItemForGroup(Item item, Item targetItem, ItemGroup group, DefaultedList<ItemStack> items) {
-        if (isInGroup(item, group)) {
-            int targetIndex = findIndexOfItem(targetItem, items);
-            if (targetIndex != -1) {
-                items.add(targetIndex + 1, new ItemStack(item));
-            } else {
-                items.add(new ItemStack(item));
-            }
-        }
-    }
-
-    /**
      * Searches for if an {@link Item} is present in an {@link ItemGroup} and returns if it is
      *
      * @param item  The {@link Item} to check.
      * @param group The {@link ItemGroup} to check.
-     * @return - Whether or not the item is present in the group
+     * @return - Whether the item is present in the group or not
      */
     public static boolean isInGroup(Item item, ItemGroup group) {
-        return ((ItemInvokerMixin) item).getGroup() == group;
+        return ((ItemInvokerMixin) item).callIsIn(group);
     }
 
 }
