@@ -70,7 +70,7 @@ public class BrewingRecipeHelper {
     public static boolean isValidIngredient(World level, ItemStack stack) {
         if (stack.isEmpty()) return false;
 
-        for (IBrewingRecipe recipe : level.getRecipeManager().getAllOfType(VampireLib.BREWING)) {
+        for (IBrewingRecipe recipe : level.getRecipeManager().listAllOfType(VampireLib.BREWING)) {
             if (recipe.isReagent(stack)) return true;
         }
         return false;
@@ -82,7 +82,7 @@ public class BrewingRecipeHelper {
      */
     public static boolean isValidInput(World level, ItemStack stack) {
         if (stack.getCount() != 1) return false;
-        for (IBrewingRecipe recipe : level.getRecipeManager().getAllOfType(VampireLib.BREWING)) {
+        for (IBrewingRecipe recipe : level.getRecipeManager().listAllOfType(VampireLib.BREWING)) {
             if (recipe.isBase(stack)) return true;
         }
         return false;

@@ -1,0 +1,12 @@
+{
+  "type": "vampirelib:brewing",
+  "base": {
+    "item": "minecraft:ice"
+  },
+  "reagent": {
+    "item": "minecraft:lava_bucket"
+  },
+  "result": {
+    "item": "minecraft:obsidian"
+  }
+}

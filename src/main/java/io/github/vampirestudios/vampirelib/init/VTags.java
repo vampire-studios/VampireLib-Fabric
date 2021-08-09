@@ -946,6 +946,7 @@ public class VTags {
         public static final Tag<Item> ORES_NETHERITE_SCRAP = registerItemTag("ores/netherite_scrap");
         public static final Tag<Item> ORES_QUARTZ = registerItemTag("ores/quartz");
         public static final Tag<Item> ORES_REDSTONE = registerItemTag("ores/redstone");
+        public static final Tag<Item> POTION_CONTAINERS = registerItemTag("potion_containers");
         /**
          * Ores which on average result in one resource worth of materials
          */

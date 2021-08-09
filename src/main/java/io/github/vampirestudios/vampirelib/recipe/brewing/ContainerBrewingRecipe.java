@@ -20,7 +20,6 @@
 package io.github.vampirestudios.vampirelib.recipe.brewing;
 
 import com.google.gson.JsonObject;
-import net.minecraftforge.common.ForgeMod;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -33,6 +32,8 @@ import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
 import net.minecraft.util.registry.Registry;
+
+import io.github.vampirestudios.vampirelib.VampireLib;
 
 public record ContainerBrewingRecipe(@NotNull Identifier id,
                                      @NotNull Item base,
@@ -55,7 +56,7 @@ public record ContainerBrewingRecipe(@NotNull Identifier id,
 
     @Override
     public RecipeSerializer<?> getSerializer() {
-        return ForgeMod.CONTAINER_BREWING_SERIALIZER.get();
+        return VampireLib.CONTAINER_BREWING_SERIALIZER;
     }
 
     @Override

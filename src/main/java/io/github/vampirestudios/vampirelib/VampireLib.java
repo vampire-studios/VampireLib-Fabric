@@ -693,6 +693,8 @@ import io.github.vampirestudios.vampirelib.recipe.brewing.BrewingRecipe;
 import io.github.vampirestudios.vampirelib.recipe.brewing.ContainerBrewingRecipe;
 import io.github.vampirestudios.vampirelib.recipe.brewing.IBrewingRecipe;
 import io.github.vampirestudios.vampirelib.recipe.brewing.MixingBrewingRecipe;
+import io.github.vampirestudios.vampirelib.recipe.crafting.BlacksmithingRecipe;
+import io.github.vampirestudios.vampirelib.recipe.crafting.GrindingRecipe;
 import io.github.vampirestudios.vampirelib.utils.Rands;
 import io.github.vampirestudios.vampirelib.utils.registry.BlockChiseler;
 
@@ -705,15 +707,21 @@ public class VampireLib implements ModInitializer {
     public static String MOD_VERSION = "3.1.0+build.2 for 1.17.1";
 
     public static final RecipeType<IBrewingRecipe> BREWING = new RecipeType<>() {};
+    public static final RecipeType<GrindingRecipe> GRINDING = new RecipeType<>() {};
+    public static final RecipeType<BlacksmithingRecipe> BLACKSMITHING = new RecipeType<>() {};
 
-    public static final RecipeSerializer<?> BREWING_SERIALIZER = Registry.register(Registry.RECIPE_SERIALIZER, new Identifier(MOD_ID, "brewing"), BrewingRecipe.Serializer::new);
-    public static final RecipeSerializer<?> CONTAINER_BREWING_SERIALIZER = Registry.register(Registry.RECIPE_SERIALIZER, new Identifier(MOD_ID, "container_brewing"), ContainerBrewingRecipe.Serializer::new);
-    public static final RecipeSerializer<?> MIXING_BREWING_SERIALIZER = Registry.register(Registry.RECIPE_SERIALIZER, new Identifier(MOD_ID, "mixing_brewing"), MixingBrewingRecipe.Serializer::new);
+    public static final RecipeSerializer<BrewingRecipe> BREWING_SERIALIZER = Registry.register(Registry.RECIPE_SERIALIZER, new Identifier(MOD_ID, "brewing"), new BrewingRecipe.Serializer());
+    public static final RecipeSerializer<ContainerBrewingRecipe> CONTAINER_BREWING_SERIALIZER = Registry.register(Registry.RECIPE_SERIALIZER, new Identifier(MOD_ID, "container_brewing"), new ContainerBrewingRecipe.Serializer());
+    public static final RecipeSerializer<MixingBrewingRecipe> MIXING_BREWING_SERIALIZER = Registry.register(Registry.RECIPE_SERIALIZER, new Identifier(MOD_ID, "mixing_brewing"), new MixingBrewingRecipe.Serializer());
 
     @Override
     public void onInitialize() {
         LOGGER.info((Rands.chance(15) ? "Your are" : (Rands.chance(15) ? "You're" : "You are")) + " running " + MOD_NAME + " v" + MOD_VERSION);
         BlockChiseler.setup();
+
+        Registry.register(Registry.RECIPE_TYPE, new Identifier(MOD_ID, "brewing"), BREWING);
+        Registry.register(Registry.RECIPE_TYPE, new Identifier(MOD_ID, "grinding"), GRINDING);
+        Registry.register(Registry.RECIPE_TYPE, new Identifier(MOD_ID, "blacksmithing"), BLACKSMITHING);
     }
 
 }

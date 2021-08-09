@@ -3,6 +3,8 @@
   "package": "io.github.vampirestudios.vampirelib.mixins",
   "compatibilityLevel": "JAVA_16",
   "mixins": [
+    "BrewingStandBlockEntityMixin",
+    "BrewingStandScreenHandlerPotionSlotMixin",
     "DynamicRegistryManagerMixin",
     "HandledScreenMixin",
     "ItemInvokerMixin",

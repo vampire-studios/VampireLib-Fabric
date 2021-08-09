@@ -5,6 +5,8 @@ import net.minecraft.recipe.Recipe;
 import net.minecraft.recipe.RecipeType;
 import net.minecraft.world.World;
 
+import io.github.vampirestudios.vampirelib.VampireLib;
+
 public interface IBrewingRecipe extends Recipe<IBrewingContainer> {
     @Override
     default boolean matches(final IBrewingContainer container, final World level) {
@@ -19,7 +21,7 @@ public interface IBrewingRecipe extends Recipe<IBrewingContainer> {
     @Override
     default RecipeType<?> getType()
     {
-        return ForgeMod.BREWING;
+        return VampireLib.BREWING;
     }
 
     boolean isReagent(final ItemStack reagent);

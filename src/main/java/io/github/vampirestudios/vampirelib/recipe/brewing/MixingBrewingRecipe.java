@@ -1,9 +1,6 @@
 package io.github.vampirestudios.vampirelib.recipe.brewing;
 
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
-import net.minecraftforge.common.ForgeMod;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -13,7 +10,6 @@ import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionUtil;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.RecipeSerializer;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
