@@ -28,8 +28,6 @@ import net.minecraft.resource.ResourceManager;
 import net.minecraft.tag.RequiredTagList;
 import net.minecraft.tag.TagManagerLoader;
 
-import net.fabricmc.fabric.impl.tag.extension.TagFactoryImpl;
-
 @Mixin(TagManagerLoader.class)
 public abstract class MixinTagManagerLoader {
 	// RequiredTagListRegistry.forEach in reload.

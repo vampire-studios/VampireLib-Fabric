@@ -686,8 +686,7 @@ import net.minecraft.world.dimension.DimensionOptions;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.gen.chunk.ChunkGeneratorSettings;
 
-import net.fabricmc.fabric.api.tag.TagFactory;
-import net.fabricmc.fabric.api.tag.TagRegistry;
+import net.fabricmc.fabric.api.tag.ExpandedTagFactory;
 
 import io.github.vampirestudios.vampirelib.VampireLib;
 
@@ -810,7 +809,7 @@ public class VTags {
         public static final Tag<Block> NEEDS_NETHERITE_TOOL = registerBlockTag("needs_netherite_tool");
 
         public static Tag<Block> registerBlockTag(String id) {
-            return TagFactory.BLOCK.create(new Identifier(VampireLib.MOD_ID, id));
+            return ExpandedTagFactory.BLOCK.create(new Identifier(VampireLib.MOD_ID, id));
         }
     }
 
@@ -997,7 +996,7 @@ public class VTags {
         public static final Tag<Item> STRING = registerItemTag("string");
 
         public static Tag<Item> registerItemTag(String id) {
-            return TagRegistry.item(new Identifier(VampireLib.MOD_ID, id));
+            return ExpandedTagFactory.ITEM.create(new Identifier(VampireLib.MOD_ID, id));
         }
     }
 
@@ -1042,7 +1041,7 @@ public class VTags {
         public static final Tag<Biome> END = tag("end");
 
         private static Tag<Biome> tag(String name) {
-            return TagFactory.BIOME.create(new Identifier(VampireLib.MOD_ID, name));
+            return ExpandedTagFactory.BIOME_EXPANDED.create(new Identifier(VampireLib.MOD_ID, name));
         }
     }
 
@@ -1056,7 +1055,7 @@ public class VTags {
         public static final Tag<ChunkGeneratorSettings> OVERWORLD = tag("overworld");
 
         private static Tag<ChunkGeneratorSettings> tag(String name) {
-            return TagFactory.NOISE_SETTINGS.create(new Identifier(VampireLib.MOD_ID, name));
+            return ExpandedTagFactory.NOISE_SETTINGS.create(new Identifier(VampireLib.MOD_ID, name));
         }
     }
 
@@ -1067,7 +1066,7 @@ public class VTags {
         public static final Tag<DimensionType> OVERWORLD_CAVES = tag("overworld/caves");
 
         private static Tag<DimensionType> tag(String name) {
-            return TagFactory.DIMENSION_TYPE.create(new Identifier(VampireLib.MOD_ID, name));
+            return ExpandedTagFactory.DIMENSION_TYPE.create(new Identifier(VampireLib.MOD_ID, name));
         }
     }
 
@@ -1077,7 +1076,7 @@ public class VTags {
         public static final Tag<DimensionOptions> OVERWORLD = tag("overworld");
 
         private static Tag<DimensionOptions> tag(String name) {
-            return TagFactory.DIMENSIONS.create(new Identifier(VampireLib.MOD_ID, name));
+            return ExpandedTagFactory.DIMENSIONS.create(new Identifier(VampireLib.MOD_ID, name));
         }
     }
 

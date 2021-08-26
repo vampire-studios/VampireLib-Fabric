@@ -27,8 +27,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import net.minecraft.tag.RequiredTagList;
 import net.minecraft.tag.RequiredTagListRegistry;
 
-import net.fabricmc.fabric.impl.tag.extension.TagFactoryImpl;
-
 @Mixin(RequiredTagListRegistry.class)
 public class MixinRequiredTagListRegistry {
 	@Inject(method = "getBuiltinTags", at = @At("TAIL"), cancellable = true)

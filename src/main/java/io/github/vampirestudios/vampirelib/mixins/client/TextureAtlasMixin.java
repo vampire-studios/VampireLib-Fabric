@@ -30,7 +30,7 @@ public class TextureAtlasMixin {
 	@Inject(method = "loadSprite", at = @At("HEAD"), cancellable = true)
 	private void raa_loadSprite(ResourceManager resourceManager, Sprite.Info spriteInfo, int atlasWidth, int atlasHeight, int maxLevel, int posX, int posY, CallbackInfoReturnable<Sprite> info) {
 		//Planning on making banners and shields work with glow ink sack
-		if (!FabricLoader.getInstance().isModLoaded("optifabric") && FabricLoader.getInstance().isModLoaded("bclib") && !this.id.equals(TexturedRenderLayers.BANNER_PATTERNS_ATLAS_TEXTURE) && !this.id.equals(TexturedRenderLayers.SHIELD_PATTERNS_ATLAS_TEXTURE)) {
+		if (!FabricLoader.getInstance().isModLoaded("optifabric") && !FabricLoader.getInstance().isModLoaded("bclib") && !this.id.equals(TexturedRenderLayers.BANNER_PATTERNS_ATLAS_TEXTURE)/* && !this.id.equals(TexturedRenderLayers.SHIELD_PATTERNS_ATLAS_TEXTURE)*/) {
 			Identifier location = spriteInfo.getId();
 			Identifier emissiveLocation = new Identifier(location.getNamespace(), "textures/" + location.getPath() + "_e.png");
 			if (resourceManager.containsResource(emissiveLocation)) {

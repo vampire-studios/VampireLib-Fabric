@@ -29,8 +29,6 @@ import net.minecraft.resource.ServerResourceManager;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.registry.DynamicRegistryManager;
 
-import net.fabricmc.fabric.impl.tag.extension.TagFactoryImpl;
-
 @Mixin(MinecraftServer.class)
 public abstract class MixinMinecraftServer {
 	@Shadow

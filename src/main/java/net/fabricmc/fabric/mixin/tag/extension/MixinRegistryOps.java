@@ -27,8 +27,6 @@ import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.dynamic.RegistryOps;
 import net.minecraft.util.registry.DynamicRegistryManager;
 
-import net.fabricmc.fabric.impl.tag.extension.TagFactoryImpl;
-
 /**
  * This mixin loads dynamic registry tags right after datapack entries loaded.
  * Needs a higher priority so it will be called before biome modifications.
