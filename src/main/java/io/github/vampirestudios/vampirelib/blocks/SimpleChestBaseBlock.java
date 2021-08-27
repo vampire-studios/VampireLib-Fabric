@@ -677,16 +677,16 @@
 
 package io.github.vampirestudios.vampirelib.blocks;
 
-import net.minecraft.block.Blocks;
-import net.minecraft.block.ChestBlock;
-import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.ChestBlock;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 
 public class SimpleChestBaseBlock extends ChestBlock {
-    public final Identifier type;
+    public final ResourceLocation type;
 
-    public SimpleChestBaseBlock(Identifier type) {
-        super(Settings.copy(Blocks.CHEST), () -> BlockEntityType.CHEST);
+    public SimpleChestBaseBlock(ResourceLocation type) {
+        super(Properties.copy(Blocks.CHEST), () -> BlockEntityType.CHEST);
         this.type = type;
     }
 }

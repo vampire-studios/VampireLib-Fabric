@@ -681,19 +681,17 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.server.network.ServerPlayerEntity;
-
 import io.github.vampirestudios.vampirelib.callbacks.PlayerDamageListener;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.damagesource.DamageSource;
 
-@Mixin(ServerPlayerEntity.class)
+@Mixin(ServerPlayer.class)
 public class ServerPlayerEntityDamageMixin {
 
     @Inject(method = "damage", at = @At("HEAD"), cancellable = true)
     private void onDamage(DamageSource source, float amount, CallbackInfoReturnable<Boolean> ci) {
-        ServerPlayerEntity player = (ServerPlayerEntity) (Object) this;
-        if (player.world.isClient) {
+        ServerPlayer player = (ServerPlayer) (Object) this;
+        if (player.level.isClientSide) {
             return;
         }
         boolean cancel = PlayerDamageListener.EVENT.invoker().onDamage(player, source, amount);

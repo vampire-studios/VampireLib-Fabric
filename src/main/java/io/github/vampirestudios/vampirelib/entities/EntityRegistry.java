@@ -679,10 +679,9 @@ package io.github.vampirestudios.vampirelib.entities;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.level.Level;
 
 public class EntityRegistry {
     private static final Map<Class<? extends EntityType>, EntityConstructor> entityConstructorMap = new HashMap<>();
@@ -691,13 +690,13 @@ public class EntityRegistry {
         entityConstructorMap.put(entityType.getClass(), entityConstructor);
     }
 
-    public static Entity construct(EntityType entityType, World world, double x, double y, double z, int data) {
+    public static Entity construct(EntityType entityType, Level world, double x, double y, double z, int data) {
         EntityConstructor entityConstructor = entityConstructorMap.get(entityType.getClass());
         if (entityConstructor == null) return null;
         return entityConstructor.create(world, x, y, z, data);
     }
 
     public interface EntityConstructor<T extends Entity> {
-        T create(World world, double x, double y, double z, int data);
+        T create(Level world, double x, double y, double z, int data);
     }
 }

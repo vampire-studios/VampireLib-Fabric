@@ -680,90 +680,88 @@ package io.github.vampirestudios.vampirelib.items;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
-
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.predicate.entity.EntityPredicates;
-import net.minecraft.stat.Stats;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.TypedActionResult;
-import net.minecraft.util.hit.HitResult;
-import net.minecraft.util.math.Box;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.RaycastContext;
-import net.minecraft.world.World;
-
+import net.minecraft.stats.Stats;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntitySelector;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
 import io.github.vampirestudios.vampirelib.boat.CustomBoatEntity;
 
 public class CustomBoatItem extends Item {
-    private static final Predicate<Entity> RIDERS = EntityPredicates.EXCEPT_SPECTATOR.and(Entity::collides);
+    private static final Predicate<Entity> RIDERS = EntitySelector.NO_SPECTATORS.and(Entity::isPickable);
     private final Supplier<EntityType<CustomBoatEntity>> boatSupplier;
 
-    public CustomBoatItem(Supplier<EntityType<CustomBoatEntity>> boatSupplier, Item.Settings settings) {
+    public CustomBoatItem(Supplier<EntityType<CustomBoatEntity>> boatSupplier, Item.Properties settings) {
         super(settings);
 
         this.boatSupplier = boatSupplier;
     }
 
     @Override
-    public TypedActionResult<ItemStack> use(World world, PlayerEntity player, Hand hand) {
-        ItemStack stack = player.getStackInHand(hand);
-        HitResult hit = raycast(world, player, RaycastContext.FluidHandling.ANY);
+    public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
+        ItemStack stack = player.getItemInHand(hand);
+        HitResult hit = getPlayerPOVHitResult(world, player, ClipContext.Fluid.ANY);
 
         if (hit.getType() != HitResult.Type.BLOCK) {
-            return new TypedActionResult<>(ActionResult.PASS, stack);
+            return new InteractionResultHolder<>(InteractionResult.PASS, stack);
         }
 
-        Vec3d rotation = player.getRotationVec(1.0F);
+        Vec3 rotation = player.getViewVector(1.0F);
 
-        List<Entity> entities = world.getOtherEntities(player, player.getBoundingBox().stretch(rotation.multiply(5.0D)).expand(1.0D), RIDERS);
+        List<Entity> entities = world.getEntities(player, player.getBoundingBox().expandTowards(rotation.scale(5.0D)).inflate(1.0D), RIDERS);
 
         if (!entities.isEmpty()) {
-            Vec3d playerCameraPos = player.getCameraPosVec(1.0F);
+            Vec3 playerCameraPos = player.getEyePosition(1.0F);
 
             for (Entity entity : entities) {
-                Box box = entity.getBoundingBox().expand(entity.getTargetingMargin());
+                AABB box = entity.getBoundingBox().inflate(entity.getPickRadius());
                 if (box.contains(playerCameraPos)) {
-                    return new TypedActionResult<>(ActionResult.PASS, stack);
+                    return new InteractionResultHolder<>(InteractionResult.PASS, stack);
                 }
             }
         }
 
-        CustomBoatEntity boat = createBoat(world, hit.getPos().x, hit.getPos().y, hit.getPos().z);
+        CustomBoatEntity boat = createBoat(world, hit.getLocation().x, hit.getLocation().y, hit.getLocation().z);
 
-        boat.setYaw(player.getYaw());
+        boat.setYRot(player.getYRot());
 
-        if (!world.isSpaceEmpty(boat, boat.getBoundingBox().expand(-0.1D))) {
-            return new TypedActionResult<>(ActionResult.FAIL, stack);
+        if (!world.noCollision(boat, boat.getBoundingBox().inflate(-0.1D))) {
+            return new InteractionResultHolder<>(InteractionResult.FAIL, stack);
         }
 
-        if (!world.isClient) {
-            world.spawnEntity(boat);
+        if (!world.isClientSide) {
+            world.addFreshEntity(boat);
         }
 
-        if (!player.getAbilities().creativeMode) {
-            stack.decrement(1);
+        if (!player.getAbilities().instabuild) {
+            stack.shrink(1);
         }
 
-        player.incrementStat(Stats.USED.getOrCreateStat(this));
+        player.awardStat(Stats.ITEM_USED.get(this));
 
-        return new TypedActionResult<>(ActionResult.SUCCESS, stack);
+        return new InteractionResultHolder<>(InteractionResult.SUCCESS, stack);
     }
 
 
-    private CustomBoatEntity createBoat(World world, double x, double y, double z) {
+    private CustomBoatEntity createBoat(Level world, double x, double y, double z) {
         CustomBoatEntity entity = boatSupplier.get().create(world);
         if (entity != null) {
-            entity.setPos(x, y, z);
-            entity.updatePosition(x, y, z);
-            entity.setVelocity(Vec3d.ZERO);
-            entity.prevX = x;
-            entity.prevY = y;
-            entity.prevZ = z;
+            entity.setPosRaw(x, y, z);
+            entity.absMoveTo(x, y, z);
+            entity.setDeltaMovement(Vec3.ZERO);
+            entity.xo = x;
+            entity.yo = y;
+            entity.zo = z;
         }
         return entity;
     }

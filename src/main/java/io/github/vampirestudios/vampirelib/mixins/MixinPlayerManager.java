@@ -684,28 +684,26 @@ import org.spongepowered.asm.mixin.injection.Slice;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
-
-import net.minecraft.network.ClientConnection;
-import net.minecraft.server.PlayerManager;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.network.ServerPlayerInteractionManager;
-import net.minecraft.util.math.BlockPos;
-
 import io.github.vampirestudios.vampirelib.callbacks.PlayerJoinCallback;
 import io.github.vampirestudios.vampirelib.callbacks.PlayerRespawnCallback;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.Connection;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.ServerPlayerGameMode;
+import net.minecraft.server.players.PlayerList;
 
-@Mixin(PlayerManager.class)
+@Mixin(PlayerList.class)
 public abstract class MixinPlayerManager {
     /**
      * This injection point has been chosen to allow repositioning of the player by dimension and location before respawn packets are sent to the client.
      */
     @Inject(method = "respawnPlayer(Lnet/minecraft/server/network/ServerPlayerEntity;Z)Lnet/minecraft/server/network/ServerPlayerEntity;", slice = @Slice(from = @At(value = "INVOKE", target = "Lnet/minecraft/server/world/ServerWorld;doesNotCollide(Lnet/minecraft/entity/Entity;)Z")), at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;getLevelProperties()Lnet/minecraft/world/level/LevelProperties;"), locals = LocalCapture.CAPTURE_FAILHARD)
-    private void fabric_onPlayerRespawnFireEvent(ServerPlayerEntity oldPlayer, boolean alive, CallbackInfoReturnable<ServerPlayerEntity> cir, BlockPos spawnPos, boolean forcedSpawn, ServerPlayerInteractionManager manager, ServerPlayerEntity clone) {
+    private void fabric_onPlayerRespawnFireEvent(ServerPlayer oldPlayer, boolean alive, CallbackInfoReturnable<ServerPlayer> cir, BlockPos spawnPos, boolean forcedSpawn, ServerPlayerGameMode manager, ServerPlayer clone) {
         PlayerRespawnCallback.EVENT.invoker().onRespawn(clone, oldPlayer, alive);
     }
 
     @Inject(at = @At("RETURN"), method = "onPlayerConnect")
-    private void onPlayerConnect(ClientConnection connection, ServerPlayerEntity player, CallbackInfo ci) {
+    private void onPlayerConnect(Connection connection, ServerPlayer player, CallbackInfo ci) {
         PlayerJoinCallback.EVENT.invoker().onPlayerJoin(player);
     }
 }

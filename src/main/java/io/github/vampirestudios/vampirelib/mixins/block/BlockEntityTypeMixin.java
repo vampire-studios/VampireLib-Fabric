@@ -680,16 +680,13 @@ package io.github.vampirestudios.vampirelib.mixins.block;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Set;
-
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import com.google.common.collect.ImmutableSet;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Mutable;
 import org.spongepowered.asm.mixin.Shadow;
-
-import net.minecraft.block.Block;
-import net.minecraft.block.entity.BlockEntityType;
-
 import io.github.vampirestudios.vampirelib.blocks.entity.IBlockEntityType;
 
 @Mixin(BlockEntityType.class)

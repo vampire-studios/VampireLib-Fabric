@@ -679,28 +679,27 @@ package io.github.vampirestudios.vampirelib.utils;
 
 import com.swordglowsblue.artifice.api.ArtificeResourcePack;
 import com.swordglowsblue.artifice.api.resource.StringResource;
-
-import net.minecraft.block.enums.BlockHalf;
-import net.minecraft.block.enums.SlabType;
-import net.minecraft.block.enums.StairShape;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.Direction;
+import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.state.properties.Half;
+import net.minecraft.world.level.block.state.properties.SlabType;
+import net.minecraft.world.level.block.state.properties.StairsShape;
 
 public class ArtificeGenerationHelper {
 
-    public static void generateBasicBlockState(ArtificeResourcePack.ClientResourcePackBuilder clientResourcePackBuilder, Identifier name) {
+    public static void generateBasicBlockState(ArtificeResourcePack.ClientResourcePackBuilder clientResourcePackBuilder, ResourceLocation name) {
         clientResourcePackBuilder.addBlockState(name, blockStateBuilder ->
             blockStateBuilder.variant("", variant ->
                 variant.model(Utils.prependToPath(name, "block/"))));
     }
 
-    public static void generateBasicBlockState(ArtificeResourcePack.ClientResourcePackBuilder clientResourcePackBuilder, Identifier name, Identifier modelId) {
+    public static void generateBasicBlockState(ArtificeResourcePack.ClientResourcePackBuilder clientResourcePackBuilder, ResourceLocation name, ResourceLocation modelId) {
         clientResourcePackBuilder.addBlockState(name, blockStateBuilder ->
             blockStateBuilder.variant("", variant ->
                 variant.model(Utils.prependToPath(modelId, "block/"))));
     }
 
-    public static void generatePillarBlockState(ArtificeResourcePack.ClientResourcePackBuilder clientResourcePackBuilder, Identifier name) {
+    public static void generatePillarBlockState(ArtificeResourcePack.ClientResourcePackBuilder clientResourcePackBuilder, ResourceLocation name) {
         clientResourcePackBuilder.addBlockState(name, blockStateBuilder -> {
             blockStateBuilder.variant("axis=y", variant ->
                 variant.model(Utils.prependToPath(name, "block/")));
@@ -716,7 +715,7 @@ public class ArtificeGenerationHelper {
         });
     }
 
-    public static void generatePillarBlockState(ArtificeResourcePack.ClientResourcePackBuilder clientResourcePackBuilder, Identifier name, Identifier modelId) {
+    public static void generatePillarBlockState(ArtificeResourcePack.ClientResourcePackBuilder clientResourcePackBuilder, ResourceLocation name, ResourceLocation modelId) {
         clientResourcePackBuilder.addBlockState(name, blockStateBuilder -> {
             blockStateBuilder.variant("axis=y", variant ->
                 variant.model(Utils.prependToPath(modelId, "block/")));
@@ -732,11 +731,11 @@ public class ArtificeGenerationHelper {
         });
     }
 
-    public static void generateHorizonalFacingBlockState(ArtificeResourcePack.ClientResourcePackBuilder clientResourcePackBuilder, Identifier name) {
+    public static void generateHorizonalFacingBlockState(ArtificeResourcePack.ClientResourcePackBuilder clientResourcePackBuilder, ResourceLocation name) {
 
     }
 
-    public static void generateFacingBlockState(ArtificeResourcePack.ClientResourcePackBuilder clientResourcePackBuilder, Identifier name) {
+    public static void generateFacingBlockState(ArtificeResourcePack.ClientResourcePackBuilder clientResourcePackBuilder, ResourceLocation name) {
         clientResourcePackBuilder.addBlockState(name, blockStateBuilder -> {
             blockStateBuilder.variant("facing=north", variant ->
                 variant.model(Utils.prependToPath(name, "block/")));
@@ -749,81 +748,81 @@ public class ArtificeGenerationHelper {
         });
     }
 
-    public static void generateAllBlockModel(ArtificeResourcePack.ClientResourcePackBuilder clientResourcePackBuilder, Identifier name) {
+    public static void generateAllBlockModel(ArtificeResourcePack.ClientResourcePackBuilder clientResourcePackBuilder, ResourceLocation name) {
         clientResourcePackBuilder.addBlockModel(name, modelBuilder -> {
-            modelBuilder.parent(new Identifier("block/cube_all"));
+            modelBuilder.parent(new ResourceLocation("block/cube_all"));
             modelBuilder.texture("all", Utils.prependToPath(name, "block/"));
         });
     }
 
-    public static void generateAllBlockModel(ArtificeResourcePack.ClientResourcePackBuilder clientResourcePackBuilder, Identifier name, Identifier texture) {
+    public static void generateAllBlockModel(ArtificeResourcePack.ClientResourcePackBuilder clientResourcePackBuilder, ResourceLocation name, ResourceLocation texture) {
         clientResourcePackBuilder.addBlockModel(name, modelBuilder -> {
-            modelBuilder.parent(new Identifier("block/cube_all"));
+            modelBuilder.parent(new ResourceLocation("block/cube_all"));
             modelBuilder.texture("all", Utils.prependToPath(texture, "block/"));
         });
     }
 
-    public static void generateCrossBlockModel(ArtificeResourcePack.ClientResourcePackBuilder clientResourcePackBuilder, Identifier name) {
+    public static void generateCrossBlockModel(ArtificeResourcePack.ClientResourcePackBuilder clientResourcePackBuilder, ResourceLocation name) {
         clientResourcePackBuilder.addBlockModel(name, modelBuilder -> {
-            modelBuilder.parent(new Identifier("block/cross"));
+            modelBuilder.parent(new ResourceLocation("block/cross"));
             modelBuilder.texture("cross", Utils.prependToPath(name, "block/"));
         });
     }
 
-    public static void generateCrossBlockModel(ArtificeResourcePack.ClientResourcePackBuilder clientResourcePackBuilder, Identifier name, Identifier texture) {
+    public static void generateCrossBlockModel(ArtificeResourcePack.ClientResourcePackBuilder clientResourcePackBuilder, ResourceLocation name, ResourceLocation texture) {
         clientResourcePackBuilder.addBlockModel(name, modelBuilder -> {
-            modelBuilder.parent(new Identifier("block/cross"));
+            modelBuilder.parent(new ResourceLocation("block/cross"));
             modelBuilder.texture("cross", Utils.prependToPath(texture, "block/"));
         });
     }
 
-    public static void generateColumnBlockModel(ArtificeResourcePack.ClientResourcePackBuilder clientResourcePackBuilder, Identifier name, Identifier endTexture, Identifier sideTexture) {
+    public static void generateColumnBlockModel(ArtificeResourcePack.ClientResourcePackBuilder clientResourcePackBuilder, ResourceLocation name, ResourceLocation endTexture, ResourceLocation sideTexture) {
         clientResourcePackBuilder.addBlockModel(name, modelBuilder -> {
-            modelBuilder.parent(new Identifier("block/cube_column"));
+            modelBuilder.parent(new ResourceLocation("block/cube_column"));
             modelBuilder.texture("end", Utils.prependToPath(endTexture, "block/"));
             modelBuilder.texture("side", Utils.prependToPath(sideTexture, "block/"));
         });
     }
 
-    public static void generateTopBottomBlockModel(ArtificeResourcePack.ClientResourcePackBuilder clientResourcePackBuilder, Identifier name, Identifier topTexture, Identifier bottomTexture, Identifier sideTexture) {
+    public static void generateTopBottomBlockModel(ArtificeResourcePack.ClientResourcePackBuilder clientResourcePackBuilder, ResourceLocation name, ResourceLocation topTexture, ResourceLocation bottomTexture, ResourceLocation sideTexture) {
         clientResourcePackBuilder.addBlockModel(name, modelBuilder -> {
-            modelBuilder.parent(new Identifier("block/cube_top_bottom"));
+            modelBuilder.parent(new ResourceLocation("block/cube_top_bottom"));
             modelBuilder.texture("top", topTexture);
             modelBuilder.texture("bottom", bottomTexture);
             modelBuilder.texture("side", sideTexture);
         });
     }
 
-    public static void generateLadderBlockModel(ArtificeResourcePack.ClientResourcePackBuilder clientResourcePackBuilder, Identifier name) {
+    public static void generateLadderBlockModel(ArtificeResourcePack.ClientResourcePackBuilder clientResourcePackBuilder, ResourceLocation name) {
         clientResourcePackBuilder.addBlockModel(name, modelBuilder -> {
-            modelBuilder.parent(new Identifier("block/ladder"));
+            modelBuilder.parent(new ResourceLocation("block/ladder"));
             modelBuilder.texture("texture", Utils.prependToPath(name, "block/"));
         });
     }
 
-    public static void generateBlockItemModel(ArtificeResourcePack.ClientResourcePackBuilder clientResourcePackBuilder, Identifier name) {
+    public static void generateBlockItemModel(ArtificeResourcePack.ClientResourcePackBuilder clientResourcePackBuilder, ResourceLocation name) {
         clientResourcePackBuilder.addItemModel(name, modelBuilder -> modelBuilder.parent(Utils.prependToPath(name, "block/")));
     }
 
-    public static void generateBlockItemModel(ArtificeResourcePack.ClientResourcePackBuilder clientResourcePackBuilder, Identifier name, Identifier modelId) {
+    public static void generateBlockItemModel(ArtificeResourcePack.ClientResourcePackBuilder clientResourcePackBuilder, ResourceLocation name, ResourceLocation modelId) {
         clientResourcePackBuilder.addItemModel(name, modelBuilder -> modelBuilder.parent(Utils.prependToPath(modelId, "block/")));
     }
 
-    public static void generateSimpleItemModel(ArtificeResourcePack.ClientResourcePackBuilder clientResourcePackBuilder, Identifier name) {
-        clientResourcePackBuilder.addItemModel(name, modelBuilder -> modelBuilder.parent(new Identifier("item/generated")).texture("layer0", Utils.prependToPath(name, "item/")));
+    public static void generateSimpleItemModel(ArtificeResourcePack.ClientResourcePackBuilder clientResourcePackBuilder, ResourceLocation name) {
+        clientResourcePackBuilder.addItemModel(name, modelBuilder -> modelBuilder.parent(new ResourceLocation("item/generated")).texture("layer0", Utils.prependToPath(name, "item/")));
     }
 
-    public static void generateSimpleItemModel(ArtificeResourcePack.ClientResourcePackBuilder clientResourcePackBuilder, Identifier name, Identifier texture) {
-        clientResourcePackBuilder.addItemModel(name, modelBuilder -> modelBuilder.parent(new Identifier("item/generated")).texture("layer0", texture));
+    public static void generateSimpleItemModel(ArtificeResourcePack.ClientResourcePackBuilder clientResourcePackBuilder, ResourceLocation name, ResourceLocation texture) {
+        clientResourcePackBuilder.addItemModel(name, modelBuilder -> modelBuilder.parent(new ResourceLocation("item/generated")).texture("layer0", texture));
     }
 
-    public static void generateStairsBlockState(ArtificeResourcePack.ClientResourcePackBuilder pack, Identifier name) {
+    public static void generateStairsBlockState(ArtificeResourcePack.ClientResourcePackBuilder pack, ResourceLocation name) {
         pack.addBlockState(name, state -> {
             for (Direction d : Direction.values()) {
                 if (!(d.equals(Direction.DOWN) || d.equals(Direction.UP))) {
-                    for (BlockHalf h : BlockHalf.values()) {
-                        for (StairShape s : StairShape.values()) {
-                            String varname = "facing=" + d.asString() + ",half=" + h.asString() + ",shape=" + s.asString();
+                    for (Half h : Half.values()) {
+                        for (StairsShape s : StairsShape.values()) {
+                            String varname = "facing=" + d.getSerializedName() + ",half=" + h.getSerializedName() + ",shape=" + s.getSerializedName();
                             state.variant(varname, var -> {
                                 var.uvlock(true);
                                 int y = 0;
@@ -994,7 +993,7 @@ public class ArtificeGenerationHelper {
                                         }
                                         break;
                                 }
-                                if (h.equals(BlockHalf.TOP)) var.rotationX(180);
+                                if (h.equals(Half.TOP)) var.rotationX(180);
                                 var.rotationY(y);
                             });
                         }
@@ -1004,23 +1003,23 @@ public class ArtificeGenerationHelper {
         });
     }
 
-    public static void generateStairsBlockModels(ArtificeResourcePack.ClientResourcePackBuilder pack, Identifier name, Identifier texture) {
+    public static void generateStairsBlockModels(ArtificeResourcePack.ClientResourcePackBuilder pack, ResourceLocation name, ResourceLocation texture) {
         pack.addBlockModel(Utils.appendToPath(name, "_inner"), model -> {
-            model.parent(new Identifier("block/stairs_inner"));
+            model.parent(new ResourceLocation("block/stairs_inner"));
             model.texture("particle", texture);
             model.texture("side", texture);
             model.texture("top", texture);
             model.texture("bottom", texture);
         });
         pack.addBlockModel(Utils.appendToPath(name, "_outer"), model -> {
-            model.parent(new Identifier("block/stairs_inner"));
+            model.parent(new ResourceLocation("block/stairs_inner"));
             model.texture("particle", texture);
             model.texture("side", texture);
             model.texture("top", texture);
             model.texture("bottom", texture);
         });
         pack.addBlockModel(name, model -> {
-            model.parent(new Identifier("block/stairs"));
+            model.parent(new ResourceLocation("block/stairs"));
             model.texture("particle", texture);
             model.texture("side", texture);
             model.texture("top", texture);
@@ -1028,10 +1027,10 @@ public class ArtificeGenerationHelper {
         });
     }
 
-    public static void generateSlabBlockState(ArtificeResourcePack.ClientResourcePackBuilder pack, Identifier name, Identifier doubleBlockName) {
+    public static void generateSlabBlockState(ArtificeResourcePack.ClientResourcePackBuilder pack, ResourceLocation name, ResourceLocation doubleBlockName) {
         pack.addBlockState(name, state -> {
             for (SlabType t : SlabType.values()) {
-                state.variant("type=" + t.asString(), var -> {
+                state.variant("type=" + t.getSerializedName(), var -> {
                     switch (t) {
                         case BOTTOM:
                             var.model(Utils.prependToPath(name, "block/"));
@@ -1048,16 +1047,16 @@ public class ArtificeGenerationHelper {
         });
     }
 
-    public static void generateSlabBlockModels(ArtificeResourcePack.ClientResourcePackBuilder pack, Identifier name, Identifier texture) {
+    public static void generateSlabBlockModels(ArtificeResourcePack.ClientResourcePackBuilder pack, ResourceLocation name, ResourceLocation texture) {
         pack.addBlockModel(Utils.appendToPath(name, "_top"), model -> {
-            model.parent(new Identifier("block/slab_top"));
+            model.parent(new ResourceLocation("block/slab_top"));
             model.texture("particle", texture);
             model.texture("side", texture);
             model.texture("top", texture);
             model.texture("bottom", texture);
         });
         pack.addBlockModel(name, model -> {
-            model.parent(new Identifier("block/slab"));
+            model.parent(new ResourceLocation("block/slab"));
             model.texture("particle", texture);
             model.texture("side", texture);
             model.texture("top", texture);
@@ -1065,7 +1064,7 @@ public class ArtificeGenerationHelper {
         });
     }
 
-    public static void generateFenceBlockState(ArtificeResourcePack.ClientResourcePackBuilder pack, Identifier name) {
+    public static void generateFenceBlockState(ArtificeResourcePack.ClientResourcePackBuilder pack, ResourceLocation name) {
         pack.addBlockState(name, state -> {
             state.multipartCase(caze -> {
                 caze.apply(var -> {
@@ -1075,7 +1074,7 @@ public class ArtificeGenerationHelper {
             for (Direction d : Direction.values()) {
                 if (d != Direction.UP && d != Direction.DOWN) {
                     state.multipartCase(caze -> {
-                        caze.when(d.asString(), "true");
+                        caze.when(d.getSerializedName(), "true");
                         caze.apply(var -> {
                             var.model(Utils.appendAndPrependToPath(name, "block/", "_side"));
                             var.uvlock(true);
@@ -1097,26 +1096,26 @@ public class ArtificeGenerationHelper {
         });
     }
 
-    public static void generateFenceBlockModels(ArtificeResourcePack.ClientResourcePackBuilder pack, Identifier name, Identifier texture) {
+    public static void generateFenceBlockModels(ArtificeResourcePack.ClientResourcePackBuilder pack, ResourceLocation name, ResourceLocation texture) {
         pack.addBlockModel(Utils.appendToPath(name, "_inventory"), model -> {
-            model.parent(new Identifier("block/fence_inventory"));
+            model.parent(new ResourceLocation("block/fence_inventory"));
             model.texture("texture", texture);
         });
         pack.addBlockModel(Utils.appendToPath(name, "_post"), model -> {
-            model.parent(new Identifier("block/fence_post"));
+            model.parent(new ResourceLocation("block/fence_post"));
             model.texture("texture", texture);
         });
         pack.addBlockModel(Utils.appendToPath(name, "_side"), model -> {
-            model.parent(new Identifier("block/fence_side"));
+            model.parent(new ResourceLocation("block/fence_side"));
             model.texture("texture", texture);
         });
     }
 
-    public static void generateFenceGateBlockState(ArtificeResourcePack.ClientResourcePackBuilder pack, Identifier name) {
+    public static void generateFenceGateBlockState(ArtificeResourcePack.ClientResourcePackBuilder pack, ResourceLocation name) {
         pack.addBlockState(name, state -> {
             for (Direction d : Direction.values()) {
                 if (d != Direction.UP && d != Direction.DOWN) {
-                    state.variant("facing=" + d.asString() + ",in_wall=false,open=false", var -> {
+                    state.variant("facing=" + d.getSerializedName() + ",in_wall=false,open=false", var -> {
                         var.model(Utils.prependToPath(name, "block/"));
                         var.uvlock(true);
                         switch (d) {
@@ -1131,7 +1130,7 @@ public class ArtificeGenerationHelper {
                                 break;
                         }
                     });
-                    state.variant("facing=" + d.asString() + ",in_wall=true,open=false", var -> {
+                    state.variant("facing=" + d.getSerializedName() + ",in_wall=true,open=false", var -> {
                         var.model(Utils.appendAndPrependToPath(name, "block/", "_wall"));
                         var.uvlock(true);
                         switch (d) {
@@ -1146,7 +1145,7 @@ public class ArtificeGenerationHelper {
                                 break;
                         }
                     });
-                    state.variant("facing=" + d.asString() + ",in_wall=false,open=true", var -> {
+                    state.variant("facing=" + d.getSerializedName() + ",in_wall=false,open=true", var -> {
                         var.model(Utils.appendAndPrependToPath(name, "block/", "_open"));
                         var.uvlock(true);
                         switch (d) {
@@ -1161,7 +1160,7 @@ public class ArtificeGenerationHelper {
                                 break;
                         }
                     });
-                    state.variant("facing=" + d.asString() + ",in_wall=true,open=true", var -> {
+                    state.variant("facing=" + d.getSerializedName() + ",in_wall=true,open=true", var -> {
                         var.model(Utils.appendAndPrependToPath(name, "block/", "_wall_open"));
                         var.uvlock(true);
                         switch (d) {
@@ -1181,45 +1180,45 @@ public class ArtificeGenerationHelper {
         });
     }
 
-    public static void generateFenceGateBlockModels(ArtificeResourcePack.ClientResourcePackBuilder pack, Identifier name, Identifier texture) {
+    public static void generateFenceGateBlockModels(ArtificeResourcePack.ClientResourcePackBuilder pack, ResourceLocation name, ResourceLocation texture) {
         pack.addBlockModel(Utils.appendToPath(name, "_open"), model -> {
-            model.parent(new Identifier("block/template_fence_gate_open"));
+            model.parent(new ResourceLocation("block/template_fence_gate_open"));
             model.texture("texture", texture);
         });
         pack.addBlockModel(Utils.appendToPath(name, "_wall"), model -> {
-            model.parent(new Identifier("block/template_fence_gate_wall"));
+            model.parent(new ResourceLocation("block/template_fence_gate_wall"));
             model.texture("texture", texture);
         });
         pack.addBlockModel(Utils.appendToPath(name, "_wall_open"), model -> {
-            model.parent(new Identifier("block/template_fence_gate_wall_open"));
+            model.parent(new ResourceLocation("block/template_fence_gate_wall_open"));
             model.texture("texture", texture);
         });
         pack.addBlockModel(name, model -> {
-            model.parent(new Identifier("block/template_fence_gate"));
+            model.parent(new ResourceLocation("block/template_fence_gate"));
             model.texture("texture", texture);
         });
     }
 
-    public static void generateDoorBlockModels(ArtificeResourcePack.ClientResourcePackBuilder pack, Identifier name, Identifier topTexture, Identifier bottomTexture) {
+    public static void generateDoorBlockModels(ArtificeResourcePack.ClientResourcePackBuilder pack, ResourceLocation name, ResourceLocation topTexture, ResourceLocation bottomTexture) {
         pack.addBlockModel(Utils.appendToPath(name, "_bottom"), model -> {
-            model.parent(new Identifier("block/door_bottom"));
+            model.parent(new ResourceLocation("block/door_bottom"));
             model.texture("texture", bottomTexture);
         });
         pack.addBlockModel(Utils.appendToPath(name, "_bottom_hinge"), model -> {
-            model.parent(new Identifier("block/door_bottom_rh"));
+            model.parent(new ResourceLocation("block/door_bottom_rh"));
             model.texture("texture", bottomTexture);
         });
         pack.addBlockModel(Utils.appendToPath(name, "_top"), model -> {
-            model.parent(new Identifier("block/door_top"));
+            model.parent(new ResourceLocation("block/door_top"));
             model.texture("texture", topTexture);
         });
         pack.addBlockModel(Utils.appendToPath(name, "_top_hinge"), model -> {
-            model.parent(new Identifier("block/door_top_rh"));
+            model.parent(new ResourceLocation("block/door_top_rh"));
             model.texture("texture", topTexture);
         });
     }
 
-    public static void generateDoorBlockState(ArtificeResourcePack.ClientResourcePackBuilder clientResourcePackBuilder, Identifier name) {
+    public static void generateDoorBlockState(ArtificeResourcePack.ClientResourcePackBuilder clientResourcePackBuilder, ResourceLocation name) {
         String DOOR_JSON_TEMPLATE = "{\n" +
             "    \"variants\": {\n" +
             "        \"facing=east,half=lower,hinge=left,open=false\":  { \"model\": \"$namespace$:block/$$_bottom\" },\n" +
@@ -1259,7 +1258,7 @@ public class ArtificeGenerationHelper {
         clientResourcePackBuilder.add(Utils.appendAndPrependToPath(name, "blockstates/", ".json"), new StringResource(DOOR_JSON_TEMPLATE.replace("$namespace$", name.getNamespace()).replace("$$", name.getPath())));
     }
 
-    public static void generateTrapdoorBlockState(ArtificeResourcePack.ClientResourcePackBuilder clientResourcePackBuilder, Identifier name) {
+    public static void generateTrapdoorBlockState(ArtificeResourcePack.ClientResourcePackBuilder clientResourcePackBuilder, ResourceLocation name) {
         String TRAPDOOR_JSON_TEMPLATE = "{\n" +
             "    \"variants\": {\n" +
             "        \"facing=north,half=bottom,open=false\": { \"model\": \"$namespace$:block/$$_bottom\" },\n" +
@@ -1283,17 +1282,17 @@ public class ArtificeGenerationHelper {
         clientResourcePackBuilder.add(Utils.appendAndPrependToPath(name, "blockstates/", ".json"), new StringResource(TRAPDOOR_JSON_TEMPLATE.replace("$namespace$", name.getNamespace()).replace("$$", name.getPath())));
     }
 
-    public static void generateTrapdoorBlockModels(ArtificeResourcePack.ClientResourcePackBuilder pack, Identifier name, Identifier texture) {
+    public static void generateTrapdoorBlockModels(ArtificeResourcePack.ClientResourcePackBuilder pack, ResourceLocation name, ResourceLocation texture) {
         pack.addBlockModel(Utils.appendToPath(name, "_bottom"), model -> {
-            model.parent(new Identifier("block/template_orientable_trapdoor_bottom"));
+            model.parent(new ResourceLocation("block/template_orientable_trapdoor_bottom"));
             model.texture("texture", texture);
         });
         pack.addBlockModel(Utils.appendToPath(name, "_open"), model -> {
-            model.parent(new Identifier("block/template_orientable_trapdoor_open"));
+            model.parent(new ResourceLocation("block/template_orientable_trapdoor_open"));
             model.texture("texture", texture);
         });
         pack.addBlockModel(Utils.appendToPath(name, "_top"), model -> {
-            model.parent(new Identifier("block/template_orientable_trapdoor_top"));
+            model.parent(new ResourceLocation("block/template_orientable_trapdoor_top"));
             model.texture("texture", texture);
         });
     }

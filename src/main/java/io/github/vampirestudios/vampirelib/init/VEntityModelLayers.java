@@ -677,15 +677,14 @@
 
 package io.github.vampirestudios.vampirelib.init;
 
-import net.minecraft.client.render.entity.model.EntityModelLayer;
-import net.minecraft.util.Identifier;
-
 import io.github.vampirestudios.vampirelib.utils.Utils;
+import net.minecraft.client.model.geom.ModelLayerLocation;
+import net.minecraft.resources.ResourceLocation;
 
 public class VEntityModelLayers {
 
-    public static EntityModelLayer createBoat(Identifier type) {
-        return new EntityModelLayer(Utils.appendToPath(type, "boat/"), "main");
+    public static ModelLayerLocation createBoat(ResourceLocation type) {
+        return new ModelLayerLocation(Utils.appendToPath(type, "boat/"), "main");
     }
 
 }

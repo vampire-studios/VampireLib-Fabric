@@ -679,20 +679,17 @@ package io.github.vampirestudios.vampirelib;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
-
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
-
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceLocation;
 import io.github.vampirestudios.vampirelib.modules.FeatureManager;
 import io.github.vampirestudios.vampirelib.utils.Rands;
 import io.github.vampirestudios.vampirelib.utils.registry.BlockChiseler;
 
 public class VampireLib implements ModInitializer {
 
-    public static final Registry<FeatureManager> FEATURE_MANAGERS = FabricRegistryBuilder.createSimple(FeatureManager.class, new Identifier("vampirelib:feature_managers")).buildAndRegister();
+    public static final Registry<FeatureManager> FEATURE_MANAGERS = FabricRegistryBuilder.createSimple(FeatureManager.class, new ResourceLocation("vampirelib:feature_managers")).buildAndRegister();
     public static String MOD_ID = "vampirelib";
     public static String MOD_NAME = "VampireLib";
     public static final Logger LOGGER = LogManager.getLogger(MOD_NAME);

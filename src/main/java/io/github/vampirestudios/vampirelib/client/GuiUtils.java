@@ -679,26 +679,23 @@ package io.github.vampirestudios.vampirelib.client;
 
 import java.util.ArrayList;
 import java.util.List;
-
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.network.chat.FormattedText;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.FormattedCharSequence;
+import net.minecraft.world.item.ItemStack;
 import org.lwjgl.opengl.GL11;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.gui.DrawableHelper;
-import net.minecraft.client.render.BufferBuilder;
-import net.minecraft.client.render.Tessellator;
-import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.render.VertexFormat;
-import net.minecraft.client.render.VertexFormats;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.item.ItemStack;
-import net.minecraft.text.OrderedText;
-import net.minecraft.text.StringVisitable;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.Matrix4f;
-
+import com.mojang.blaze3d.vertex.BufferBuilder;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.Tesselator;
+import com.mojang.blaze3d.vertex.VertexFormat;
+import com.mojang.math.Matrix4f;
 import io.github.vampirestudios.vampirelib.client.callbacks.RenderTooltipCallback;
 
 /**
@@ -761,7 +758,7 @@ public class GuiUtils {
      * @param borderSize    the size of the box's borders
      * @param zLevel        the zLevel to draw at
      */
-    public static void drawContinuousTexturedBox(Identifier res, int x, int y, int u, int v, int width, int height, int textureWidth, int textureHeight,
+    public static void drawContinuousTexturedBox(ResourceLocation res, int x, int y, int u, int v, int width, int height, int textureWidth, int textureHeight,
                                                  int borderSize, float zLevel) {
         drawContinuousTexturedBox(res, x, y, u, v, width, height, textureWidth, textureHeight, borderSize, borderSize, borderSize, borderSize, zLevel);
     }
@@ -786,9 +783,9 @@ public class GuiUtils {
      * @param rightBorder   the size of the box's right border
      * @param zLevel        the zLevel to draw at
      */
-    public static void drawContinuousTexturedBox(Identifier res, int x, int y, int u, int v, int width, int height, int textureWidth, int textureHeight,
+    public static void drawContinuousTexturedBox(ResourceLocation res, int x, int y, int u, int v, int width, int height, int textureWidth, int textureHeight,
                                                  int topBorder, int bottomBorder, int leftBorder, int rightBorder, float zLevel) {
-        MinecraftClient.getInstance().getTextureManager().bindTexture(res);
+        Minecraft.getInstance().getTextureManager().bindForSetup(res);
         drawContinuousTexturedBox(x, y, u, v, width, height, textureWidth, textureHeight, topBorder, bottomBorder, leftBorder, rightBorder, zLevel);
     }
 
@@ -860,14 +857,14 @@ public class GuiUtils {
         final float uScale = 1f / 0x100;
         final float vScale = 1f / 0x100;
 
-        Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder wr = tessellator.getBuffer();
-        wr.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
-        wr.vertex(x, y + height, zLevel).texture(u * uScale, ((v + height) * vScale)).next();
-        wr.vertex(x + width, y + height, zLevel).texture((u + width) * uScale, ((v + height) * vScale)).next();
-        wr.vertex(x + width, y, zLevel).texture((u + width) * uScale, (v * vScale)).next();
-        wr.vertex(x, y, zLevel).texture(u * uScale, (v * vScale)).next();
-        tessellator.draw();
+        Tesselator tessellator = Tesselator.getInstance();
+        BufferBuilder wr = tessellator.getBuilder();
+        wr.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
+        wr.vertex(x, y + height, zLevel).uv(u * uScale, ((v + height) * vScale)).endVertex();
+        wr.vertex(x + width, y + height, zLevel).uv((u + width) * uScale, ((v + height) * vScale)).endVertex();
+        wr.vertex(x + width, y, zLevel).uv((u + width) * uScale, (v * vScale)).endVertex();
+        wr.vertex(x, y, zLevel).uv(u * uScale, (v * vScale)).endVertex();
+        tessellator.end();
     }
 
     /**
@@ -886,7 +883,7 @@ public class GuiUtils {
         cachedTooltipStack = ItemStack.EMPTY;
     }
 
-    public static void drawHoveringText(MatrixStack mStack, List<? extends StringVisitable> textLines, int mouseX, int mouseY, int screenWidth, int screenHeight, int maxTextWidth, TextRenderer font) {
+    public static void drawHoveringText(PoseStack mStack, List<? extends FormattedText> textLines, int mouseX, int mouseY, int screenWidth, int screenHeight, int maxTextWidth, Font font) {
         drawHoveringText(mStack, textLines, mouseX, mouseY, screenWidth, screenHeight, maxTextWidth, DEFAULT_BACKGROUND_COLOR, DEFAULT_BORDER_COLOR_START, DEFAULT_BORDER_COLOR_END, font);
     }
 
@@ -909,24 +906,24 @@ public class GuiUtils {
      *                         between the start and end values.
      * @param font             the font for drawing the text in the tooltip box
      */
-    public static void drawHoveringText(MatrixStack mStack, List<? extends StringVisitable> textLines, int mouseX, int mouseY, int screenWidth, int screenHeight,
-                                        int maxTextWidth, int backgroundColor, int borderColorStart, int borderColorEnd, TextRenderer font) {
+    public static void drawHoveringText(PoseStack mStack, List<? extends FormattedText> textLines, int mouseX, int mouseY, int screenWidth, int screenHeight,
+                                        int maxTextWidth, int backgroundColor, int borderColorStart, int borderColorEnd, Font font) {
         drawHoveringText(cachedTooltipStack, mStack, textLines, mouseX, mouseY, screenWidth, screenHeight, maxTextWidth, backgroundColor, borderColorStart, borderColorEnd, font);
     }
 
-    public static void drawHoveringText(final ItemStack stack, MatrixStack mStack, List<? extends StringVisitable> textLines, int mouseX, int mouseY, int screenWidth, int screenHeight, int maxTextWidth, TextRenderer font) {
+    public static void drawHoveringText(final ItemStack stack, PoseStack mStack, List<? extends FormattedText> textLines, int mouseX, int mouseY, int screenWidth, int screenHeight, int maxTextWidth, Font font) {
         drawHoveringText(stack, mStack, textLines, mouseX, mouseY, screenWidth, screenHeight, maxTextWidth, DEFAULT_BACKGROUND_COLOR, DEFAULT_BORDER_COLOR_START, DEFAULT_BORDER_COLOR_END, font);
     }
 
     /**
      * Use this version if calling from somewhere where ItemStack context is available.
      *
-     * @see #drawHoveringText(MatrixStack, List, int, int, int, int, int, int, int, int, TextRenderer)
+     * @see #drawHoveringText(PoseStack, List, int, int, int, int, int, int, int, int, Font)
      */
     //TODO, Validate rendering is the same as the original
-    public static void drawHoveringText(final ItemStack stack, MatrixStack mStack, List<? extends StringVisitable> textLines, int mouseX, int mouseY, int screenWidth, int screenHeight,
-                                        int maxTextWidth, int backgroundColor, int borderColorStart, int borderColorEnd, TextRenderer font) {
-        List<OrderedText> textList = new ArrayList<>();
+    public static void drawHoveringText(final ItemStack stack, PoseStack mStack, List<? extends FormattedText> textLines, int mouseX, int mouseY, int screenWidth, int screenHeight,
+                                        int maxTextWidth, int backgroundColor, int borderColorStart, int borderColorEnd, Font font) {
+        List<FormattedCharSequence> textList = new ArrayList<>();
         if (!textLines.isEmpty()) {
             TooltipRenderer.Pre pre = new TooltipRenderer.Pre(stack, textList, mStack, mouseX, mouseY, screenWidth, screenHeight, maxTextWidth, font);
             RenderTooltipCallback.Pre.EVENT.invoker().preRender(pre);
@@ -940,8 +937,8 @@ public class GuiUtils {
             RenderSystem.disableDepthTest();
             int tooltipTextWidth = 0;
 
-            for (StringVisitable textLine : textLines) {
-                int textLineWidth = font.getWidth(textLine);
+            for (FormattedText textLine : textLines) {
+                int textLineWidth = font.width(textLine);
                 if (textLineWidth > tooltipTextWidth)
                     tooltipTextWidth = textLineWidth;
             }
@@ -969,15 +966,15 @@ public class GuiUtils {
 
             if (needsWrap) {
                 int wrappedTooltipWidth = 0;
-                List<OrderedText> wrappedTextLines = new ArrayList<>();
+                List<FormattedCharSequence> wrappedTextLines = new ArrayList<>();
                 for (int i = 0; i < textLines.size(); i++) {
-                    StringVisitable textLine = textLines.get(i);
-                    List<OrderedText> wrappedLine = font.wrapLines(textLine, tooltipTextWidth);
+                    FormattedText textLine = textLines.get(i);
+                    List<FormattedCharSequence> wrappedLine = font.split(textLine, tooltipTextWidth);
                     if (i == 0)
                         titleLinesCount = wrappedLine.size();
 
-                    for (OrderedText line : wrappedLine) {
-                        int lineWidth = font.getWidth(line);
+                    for (FormattedCharSequence line : wrappedLine) {
+                        int lineWidth = font.width(line);
                         if (lineWidth > wrappedTooltipWidth)
                             wrappedTooltipWidth = lineWidth;
                         wrappedTextLines.add(line);
@@ -1012,8 +1009,8 @@ public class GuiUtils {
             borderColorStart = colorEvent.getBorderStart();
             borderColorEnd = colorEvent.getBorderEnd();
 
-            mStack.push();
-            Matrix4f mat = mStack.peek().getModel();
+            mStack.pushPose();
+            Matrix4f mat = mStack.last().pose();
             //TODO, lots of unnessesary GL calls here, we can buffer all these together.
             drawGradientRect(mat, zLevel, tooltipX - 3, tooltipY - 4, tooltipX + tooltipTextWidth + 3, tooltipY - 3, backgroundColor, backgroundColor);
             drawGradientRect(mat, zLevel, tooltipX - 3, tooltipY + tooltipHeight + 3, tooltipX + tooltipTextWidth + 3, tooltipY + tooltipHeight + 4, backgroundColor, backgroundColor);
@@ -1028,16 +1025,16 @@ public class GuiUtils {
             TooltipRenderer.PostBackground postBackground = new TooltipRenderer.PostBackground(stack, textList, mStack, tooltipX, tooltipY, font, tooltipTextWidth, tooltipHeight);
             RenderTooltipCallback.PostBackground.EVENT.invoker().postBackground(postBackground);
 
-            VertexConsumerProvider.Immediate renderType = VertexConsumerProvider.immediate(Tessellator.getInstance().getBuffer());
+            MultiBufferSource.BufferSource renderType = MultiBufferSource.immediate(Tesselator.getInstance().getBuilder());
             mStack.translate(0.0D, 0.0D, zLevel);
 
             int tooltipTop = tooltipY;
 
             for (int lineNumber = 0; lineNumber < textLines.size();
                  ++lineNumber) {
-                OrderedText line = textList.get(lineNumber);
+                FormattedCharSequence line = textList.get(lineNumber);
                 if (line != null)
-                    font.draw(line, (float) tooltipX, (float) tooltipY, -1, true, mat, renderType, false, 0, 15728880);
+                    font.drawInBatch(line, (float) tooltipX, (float) tooltipY, -1, true, mat, renderType, false, 0, 15728880);
 
                 if (lineNumber + 1 == titleLinesCount)
                     tooltipY += 2;
@@ -1045,8 +1042,8 @@ public class GuiUtils {
                 tooltipY += 10;
             }
 
-            renderType.draw();
-            mStack.pop();
+            renderType.endBatch();
+            mStack.popPose();
 
             TooltipRenderer.PostText postText = new TooltipRenderer.PostText(stack, textList, mStack, tooltipX, tooltipTop, font, tooltipTextWidth, tooltipHeight);
             RenderTooltipCallback.PostText.EVENT.invoker().postText(postText);
@@ -1071,25 +1068,25 @@ public class GuiUtils {
         RenderSystem.defaultBlendFunc();
 //        RenderSystem.shadeModel(GL11.GL_SMOOTH);
 
-        Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder buffer = tessellator.getBuffer();
-        buffer.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR);
-        buffer.vertex(mat, right, top, zLevel).color(startRed, startGreen, startBlue, startAlpha).next();
-        buffer.vertex(mat, left, top, zLevel).color(startRed, startGreen, startBlue, startAlpha).next();
-        buffer.vertex(mat, left, bottom, zLevel).color(endRed, endGreen, endBlue, endAlpha).next();
-        buffer.vertex(mat, right, bottom, zLevel).color(endRed, endGreen, endBlue, endAlpha).next();
-        tessellator.draw();
+        Tesselator tessellator = Tesselator.getInstance();
+        BufferBuilder buffer = tessellator.getBuilder();
+        buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
+        buffer.vertex(mat, right, top, zLevel).color(startRed, startGreen, startBlue, startAlpha).endVertex();
+        buffer.vertex(mat, left, top, zLevel).color(startRed, startGreen, startBlue, startAlpha).endVertex();
+        buffer.vertex(mat, left, bottom, zLevel).color(endRed, endGreen, endBlue, endAlpha).endVertex();
+        buffer.vertex(mat, right, bottom, zLevel).color(endRed, endGreen, endBlue, endAlpha).endVertex();
+        tessellator.end();
 
 //        RenderSystem.shadeModel(GL11.GL_FLAT);
         RenderSystem.disableBlend();
         RenderSystem.enableTexture();
     }
 
-    public static void drawInscribedRect(MatrixStack mStack, int x, int y, int boundsWidth, int boundsHeight, int rectWidth, int rectHeight) {
+    public static void drawInscribedRect(PoseStack mStack, int x, int y, int boundsWidth, int boundsHeight, int rectWidth, int rectHeight) {
         drawInscribedRect(mStack, x, y, boundsWidth, boundsHeight, rectWidth, rectHeight, true, true);
     }
 
-    public static void drawInscribedRect(MatrixStack mStack, int x, int y, int boundsWidth, int boundsHeight, int rectWidth, int rectHeight, boolean centerX, boolean centerY) {
+    public static void drawInscribedRect(PoseStack mStack, int x, int y, int boundsWidth, int boundsHeight, int rectWidth, int rectHeight, boolean centerX, boolean centerY) {
         if (rectWidth * boundsHeight > rectHeight * boundsWidth) {
             int h = boundsHeight;
             boundsHeight = (int) (boundsWidth * ((double) rectHeight / rectWidth));
@@ -1100,6 +1097,6 @@ public class GuiUtils {
             if (centerX) x += (w - boundsWidth) / 2;
         }
 
-        DrawableHelper.drawTexture(mStack, x, y, boundsWidth, boundsHeight, 0.0f, 0.0f, rectWidth, rectHeight, rectWidth, rectHeight);
+        GuiComponent.blit(mStack, x, y, boundsWidth, boundsHeight, 0.0f, 0.0f, rectWidth, rectHeight, rectWidth, rectHeight);
     }
 }

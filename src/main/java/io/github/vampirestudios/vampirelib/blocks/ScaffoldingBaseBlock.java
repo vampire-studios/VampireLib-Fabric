@@ -677,11 +677,11 @@
 
 package io.github.vampirestudios.vampirelib.blocks;
 
-import net.minecraft.block.ScaffoldingBlock;
+import net.minecraft.world.level.block.ScaffoldingBlock;
 
 public class ScaffoldingBaseBlock extends ScaffoldingBlock {
 
-    public ScaffoldingBaseBlock(Settings block$Settings_1) {
+    public ScaffoldingBaseBlock(Properties block$Settings_1) {
         super(block$Settings_1);
     }
 

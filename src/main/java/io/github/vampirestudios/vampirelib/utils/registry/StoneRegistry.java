@@ -677,17 +677,16 @@
 
 package io.github.vampirestudios.vampirelib.utils.registry;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.util.Identifier;
-
 import io.github.vampirestudios.vampirelib.blocks.SlabBaseBlock;
 import io.github.vampirestudios.vampirelib.blocks.StairsBaseBlock;
 import io.github.vampirestudios.vampirelib.blocks.WallBaseBlock;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 
 public class StoneRegistry {
 
-    public Identifier name;
+    public ResourceLocation name;
 
     public Block raw;
     public Block slab;
@@ -719,11 +718,11 @@ public class StoneRegistry {
     public Block mossyBricksStairs;
     public Block mossyBricksSlab;
 
-    public StoneRegistry(Identifier name) {
+    public StoneRegistry(ResourceLocation name) {
         this.name = name;
     }
 
-    public static StoneRegistry.Builder of(Identifier name) {
+    public static StoneRegistry.Builder of(ResourceLocation name) {
         return new Builder().of(name);
     }
 
@@ -825,11 +824,11 @@ public class StoneRegistry {
 
     public static class Builder {
 
-        public Identifier name;
+        public ResourceLocation name;
         private StoneRegistry stoneRegistry;
         private RegistryHelper registryHelper;
 
-        public Builder of(Identifier name) {
+        public Builder of(ResourceLocation name) {
             this.name = name;
             stoneRegistry = new StoneRegistry(name);
             registryHelper = RegistryHelper.createRegistryHelper(name.getNamespace());
@@ -858,7 +857,7 @@ public class StoneRegistry {
         }
 
         public Builder stairs() {
-            stoneRegistry.stairs = registryHelper.registerBlock(new StairsBaseBlock(stoneRegistry.raw.getDefaultState()),
+            stoneRegistry.stairs = registryHelper.registerBlock(new StairsBaseBlock(stoneRegistry.raw.defaultBlockState()),
                 name.getPath() + "_stairs");
             return this;
         }
@@ -902,7 +901,7 @@ public class StoneRegistry {
         }
 
         public Builder cobblestoneStairs() {
-            stoneRegistry.cobblestoneStairs = registryHelper.registerBlock(new StairsBaseBlock(stoneRegistry.cobblestone.getDefaultState()),
+            stoneRegistry.cobblestoneStairs = registryHelper.registerBlock(new StairsBaseBlock(stoneRegistry.cobblestone.defaultBlockState()),
                 name.getPath() + "_cobblestone_stairs");
             return this;
         }
@@ -951,7 +950,7 @@ public class StoneRegistry {
         }
 
         public Builder polishedStairs() {
-            stoneRegistry.polishedStairs = registryHelper.registerBlock(new StairsBaseBlock(stoneRegistry.polished.getDefaultState()),
+            stoneRegistry.polishedStairs = registryHelper.registerBlock(new StairsBaseBlock(stoneRegistry.polished.defaultBlockState()),
                 "polished_" + name.getPath() + "_stairs");
             return this;
         }
@@ -995,7 +994,7 @@ public class StoneRegistry {
         }
 
         public Builder brickStairs() {
-            stoneRegistry.brickStairs = registryHelper.registerBlock(new StairsBaseBlock(stoneRegistry.bricks.getDefaultState()),
+            stoneRegistry.brickStairs = registryHelper.registerBlock(new StairsBaseBlock(stoneRegistry.bricks.defaultBlockState()),
                 name.getPath() + "_brick_stairs");
             return this;
         }
@@ -1039,7 +1038,7 @@ public class StoneRegistry {
         }
 
         public Builder crackedBricksStairs() {
-            stoneRegistry.crackedBricksStairs = registryHelper.registerBlock(new StairsBaseBlock(stoneRegistry.cobblestone.getDefaultState()),
+            stoneRegistry.crackedBricksStairs = registryHelper.registerBlock(new StairsBaseBlock(stoneRegistry.cobblestone.defaultBlockState()),
                 "cracked_" + name.getPath() + "_bricks_stairs");
             return this;
         }
@@ -1083,7 +1082,7 @@ public class StoneRegistry {
         }
 
         public Builder mossyBricksStairs() {
-            stoneRegistry.mossyBricksStairs = registryHelper.registerBlock(new StairsBaseBlock(stoneRegistry.cobblestone.getDefaultState()),
+            stoneRegistry.mossyBricksStairs = registryHelper.registerBlock(new StairsBaseBlock(stoneRegistry.cobblestone.defaultBlockState()),
                 "mossy_" + name.getPath() + "_bricks_stairs");
             return this;
         }

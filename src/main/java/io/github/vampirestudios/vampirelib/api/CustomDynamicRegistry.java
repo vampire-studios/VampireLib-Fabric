@@ -678,40 +678,38 @@
 package io.github.vampirestudios.vampirelib.api;
 
 import java.util.function.Supplier;
-
+import net.minecraft.core.MappedRegistry;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceKey;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.Lifecycle;
 
-import net.minecraft.util.registry.Registry;
-import net.minecraft.util.registry.RegistryKey;
-import net.minecraft.util.registry.SimpleRegistry;
-
 /**
- * A nicer wrapper around {@link net.minecraft.util.registry.DynamicRegistryManager}.
+ * A nicer wrapper around {@link net.minecraft.core.RegistryAccess}.
  *
  * @param <T> the type that the registry holds
  */
 public class CustomDynamicRegistry<T> {
-    private final SimpleRegistry<T> registry;
+    private final MappedRegistry<T> registry;
     private final Supplier<T> defaultValueSupplier;
     private final Codec<T> codec;
 
-    public CustomDynamicRegistry(SimpleRegistry<T> registry, Supplier<T> defaultValueSupplier, Codec<T> codec) {
+    public CustomDynamicRegistry(MappedRegistry<T> registry, Supplier<T> defaultValueSupplier, Codec<T> codec) {
         this.registry = registry;
         this.defaultValueSupplier = defaultValueSupplier;
         this.codec = codec;
     }
 
-    public SimpleRegistry<T> getRegistry() {
+    public MappedRegistry<T> getRegistry() {
         return this.registry;
     }
 
-    public RegistryKey<? extends Registry<T>> getRegistryRef() {
-        return this.registry.getKey();
+    public ResourceKey<? extends Registry<T>> getRegistryRef() {
+        return this.registry.key();
     }
 
     public Lifecycle getLifecycle() {
-        return this.registry.getLifecycle();
+        return this.registry.elementsLifecycle();
     }
 
     public Supplier<T> getDefaultValueSupplier() {

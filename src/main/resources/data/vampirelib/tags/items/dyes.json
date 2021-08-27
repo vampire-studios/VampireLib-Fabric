@@ -1,0 +1,21 @@
+{
+  "replace": false,
+  "values": [
+    "#vampirelib:dyes/white",
+    "#vampirelib:dyes/orange",
+    "#vampirelib:dyes/magenta",
+    "#vampirelib:dyes/light_blue",
+    "#vampirelib:dyes/yellow",
+    "#vampirelib:dyes/lime",
+    "#vampirelib:dyes/pink",
+    "#vampirelib:dyes/gray",
+    "#vampirelib:dyes/light_gray",
+    "#vampirelib:dyes/cyan",
+    "#vampirelib:dyes/purple",
+    "#vampirelib:dyes/blue",
+    "#vampirelib:dyes/brown",
+    "#vampirelib:dyes/green",
+    "#vampirelib:dyes/red",
+    "#vampirelib:dyes/black"
+  ]
+}

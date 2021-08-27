@@ -677,14 +677,16 @@
 
 package io.github.vampirestudios.vampirelib.mixins;
 
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
-
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
+import org.spongepowered.asm.mixin.gen.Invoker;
 
 @Mixin(Item.class)
 public interface ItemInvokerMixin {
 	@Accessor
-	ItemGroup getGroup();
+	CreativeModeTab getGroup();
+    @Invoker
+    boolean callIsIn(CreativeModeTab group);
 }

@@ -677,26 +677,25 @@
 
 package io.github.vampirestudios.vampirelib.utils.registry;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityDimensions;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.SpawnGroup;
-import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.SpawnEggItem;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
-
 import io.github.vampirestudios.vampirelib.mixins.SpawnEggItemAccessor;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.SpawnEggItem;
 
 public class EntityRegistryBuilder<E extends Entity> {
 
-    private static Identifier name;
+    private static ResourceLocation name;
 
     private EntityType.EntityFactory<E> entityFactory;
 
-    private SpawnGroup category;
+    private MobCategory category;
 
     private int trackingDistance;
     private int updateIntervalTicks;
@@ -709,7 +708,7 @@ public class EntityRegistryBuilder<E extends Entity> {
 
     private EntityDimensions dimensions;
 
-    public static <E extends Entity> EntityRegistryBuilder<E> createBuilder(Identifier nameIn) {
+    public static <E extends Entity> EntityRegistryBuilder<E> createBuilder(ResourceLocation nameIn) {
         name = nameIn;
         return new EntityRegistryBuilder<>();
     }
@@ -720,12 +719,12 @@ public class EntityRegistryBuilder<E extends Entity> {
     }
 
     @Deprecated
-    public EntityRegistryBuilder<E> category(SpawnGroup category) {
+    public EntityRegistryBuilder<E> category(MobCategory category) {
         this.category = category;
         return this;
     }
 
-    public EntityRegistryBuilder<E> group(SpawnGroup category) {
+    public EntityRegistryBuilder<E> group(MobCategory category) {
         this.category = category;
         return this;
     }
@@ -759,9 +758,9 @@ public class EntityRegistryBuilder<E extends Entity> {
     }
 
     public EntityType<E> build() {
-        EntityType.Builder<E> entityBuilder = EntityType.Builder.create(this.entityFactory, this.category).setDimensions(this.dimensions.height, this.dimensions.width);
+        EntityType.Builder<E> entityBuilder = EntityType.Builder.of(this.entityFactory, this.category).sized(this.dimensions.height, this.dimensions.width);
         if (fireImmune) {
-            entityBuilder.makeFireImmune();
+            entityBuilder.fireImmune();
         }
         if (this.alwaysUpdateVelocity && this.updateIntervalTicks != 0 & this.trackingDistance != 0) {
 //            FabricEntityTypeBuilder.create(this.category, this.entityFactory).dimensions(this.dimensions)
@@ -771,8 +770,8 @@ public class EntityRegistryBuilder<E extends Entity> {
         EntityType<E> entityType = Registry.register(Registry.ENTITY_TYPE, name, entityBuilder.build(name.getPath()));
 
         if (hasEgg) {
-            Item spawnEggItem = RegistryHelper.createRegistryHelper(name.getNamespace()).registerItem(String.format("%s_spawn_egg", name.getPath()), new SpawnEggItem((EntityType<? extends MobEntity>) entityType, primaryColor, secondaryColor, new Item.Settings().group(ItemGroup.MISC)));
-            SpawnEggItemAccessor.getSPAWN_EGGS().put((EntityType<? extends MobEntity>) entityType, (SpawnEggItem) spawnEggItem);
+            Item spawnEggItem = RegistryHelper.createRegistryHelper(name.getNamespace()).registerItem(String.format("%s_spawn_egg", name.getPath()), new SpawnEggItem((EntityType<? extends Mob>) entityType, primaryColor, secondaryColor, new Item.Properties().tab(CreativeModeTab.TAB_MISC)));
+            SpawnEggItemAccessor.getSPAWN_EGGS().put((EntityType<? extends Mob>) entityType, (SpawnEggItem) spawnEggItem);
         }
 
         return entityType;

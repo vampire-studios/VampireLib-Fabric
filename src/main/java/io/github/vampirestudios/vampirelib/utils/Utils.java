@@ -679,8 +679,7 @@ package io.github.vampirestudios.vampirelib.utils;
 
 import java.util.Locale;
 import java.util.Map;
-
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.ResourceLocation;
 
 public class Utils {
 
@@ -696,16 +695,16 @@ public class Utils {
         return name.toLowerCase(Locale.ENGLISH);
     }
 
-    public static Identifier appendToPath(Identifier identifier, String suffix) {
-        return new Identifier(identifier.getNamespace(), identifier.getPath() + suffix);
+    public static ResourceLocation appendToPath(ResourceLocation identifier, String suffix) {
+        return new ResourceLocation(identifier.getNamespace(), identifier.getPath() + suffix);
     }
 
-    public static Identifier prependToPath(Identifier identifier, String prefix) {
-        return new Identifier(identifier.getNamespace(), prefix + identifier.getPath());
+    public static ResourceLocation prependToPath(ResourceLocation identifier, String prefix) {
+        return new ResourceLocation(identifier.getNamespace(), prefix + identifier.getPath());
     }
 
-    public static Identifier appendAndPrependToPath(Identifier identifier, String prefix, String suffix) {
-        return new Identifier(identifier.getNamespace(), prefix + identifier.getPath() + suffix);
+    public static ResourceLocation appendAndPrependToPath(ResourceLocation identifier, String prefix, String suffix) {
+        return new ResourceLocation(identifier.getNamespace(), prefix + identifier.getPath() + suffix);
     }
 
     public static double dist(double x1, double y1, double x2, double y2) {

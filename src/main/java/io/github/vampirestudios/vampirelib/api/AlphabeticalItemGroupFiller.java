@@ -679,12 +679,12 @@ package io.github.vampirestudios.vampirelib.api;
 
 import java.util.function.Predicate;
 
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.collection.DefaultedList;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.core.NonNullList;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 
 import io.github.vampirestudios.vampirelib.utils.ItemStackUtils;
 
@@ -695,8 +695,7 @@ import io.github.vampirestudios.vampirelib.utils.ItemStackUtils;
  * @author SmellyModder (Luke Tonon)
  * @see IItemGroupFiller
  */
-public record AlphabeticalItemGroupFiller(Predicate<Item> shouldInclude)
-	implements IItemGroupFiller {
+public record AlphabeticalItemGroupFiller(Predicate<Item> shouldInclude) implements IItemGroupFiller {
 
 	/**
 	 * Creates an {@link AlphabeticalItemGroupFiller} that fills items alphabetically for items that are an instance of a class. (e.g. Having a modded spawn egg filled alphabetically into the vanilla's spawn eggs)
@@ -710,15 +709,15 @@ public record AlphabeticalItemGroupFiller(Predicate<Item> shouldInclude)
 	}
 
 	@Override
-	public void fillItem(Item item, ItemGroup group, DefaultedList<ItemStack> items) {
+	public void fillItem(Item item, CreativeModeTab group, NonNullList<ItemStack> items) {
 		if (ItemStackUtils.isInGroup(item, group)) {
-			Identifier location = Registry.ITEM.getId(item);
+			ResourceLocation location = Registry.ITEM.getKey(item);
 			String itemName = location.getPath();
 			int insert = -1;
 			for (int i = 0; i < items.size(); i++) {
 				Item next = items.get(i).getItem();
 				if (this.shouldInclude.test(next)) {
-					Identifier nextName = Registry.ITEM.getId(next);
+                    ResourceLocation nextName = Registry.ITEM.getKey(next);
 					if (itemName.compareTo(nextName.getPath()) > 0) {
 						insert = i + 1;
 					} else if (insert == -1) {

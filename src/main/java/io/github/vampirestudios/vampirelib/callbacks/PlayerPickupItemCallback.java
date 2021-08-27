@@ -677,12 +677,11 @@
 
 package io.github.vampirestudios.vampirelib.callbacks;
 
-import net.minecraft.entity.ItemEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.ActionResult;
-
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
 
 /**
  * Callback for the player picking up an item entity.
@@ -697,16 +696,16 @@ public interface PlayerPickupItemCallback {
     Event<PlayerPickupItemCallback> EVENT = EventFactory.createArrayBacked(PlayerPickupItemCallback.class,
         (listeners) -> (player, entity) -> {
             for (PlayerPickupItemCallback event : listeners) {
-                ActionResult result = event.interact(player, entity);
+                InteractionResult result = event.interact(player, entity);
 
-                if (result != ActionResult.PASS) {
+                if (result != InteractionResult.PASS) {
                     return result;
                 }
             }
 
-            return ActionResult.PASS;
+            return InteractionResult.PASS;
         }
     );
 
-    ActionResult interact(PlayerEntity player, ItemEntity pickupEntity);
+    InteractionResult interact(Player player, ItemEntity pickupEntity);
 }

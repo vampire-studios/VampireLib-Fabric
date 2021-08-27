@@ -677,35 +677,35 @@
 
 package io.github.vampirestudios.vampirelib.blocks;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.LecternBlock;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.entity.LecternBlockEntity;
-import net.minecraft.entity.ItemEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.stat.Stats;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.world.World;
-import net.minecraft.world.event.GameEvent;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.stats.Stats;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.LecternBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.LecternBlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.phys.BlockHitResult;
 
 public class LecternBaseBlock extends LecternBlock {
 
     public LecternBaseBlock() {
-        super(Settings.copy(Blocks.LECTERN));
+        super(Properties.copy(Blocks.LECTERN));
     }
 
-    public static boolean putBookIfAbsent(PlayerEntity playerEntity, World world, BlockPos pos, BlockState state, ItemStack stack) {
-        if (!state.get(HAS_BOOK)) {
-            if (!world.isClient) {
-                putBook(playerEntity, world, pos, state, stack);
+    public static boolean tryPlaceBook(Player playerEntity, Level world, BlockPos pos, BlockState state, ItemStack stack) {
+        if (!state.getValue(HAS_BOOK)) {
+            if (!world.isClientSide) {
+                placeBook(playerEntity, world, pos, state, stack);
             }
             return true;
         } else {
@@ -713,77 +713,77 @@ public class LecternBaseBlock extends LecternBlock {
         }
     }
 
-    private static void putBook(PlayerEntity playerEntity, World world, BlockPos pos, BlockState state, ItemStack stack) {
+    private static void placeBook(Player playerEntity, Level world, BlockPos pos, BlockState state, ItemStack stack) {
         BlockEntity be = world.getBlockEntity(pos);
         if (be instanceof LecternBlockEntity) {
             LecternBlockEntity lecternBe = (LecternBlockEntity) be;
             lecternBe.setBook(stack.split(1));
-            setHasBook(world, pos, state, true);
-            world.playSound(null, pos, SoundEvents.ITEM_BOOK_PUT, SoundCategory.BLOCKS, 1.0F, 1.0F);
-            world.emitGameEvent(playerEntity, GameEvent.BLOCK_CHANGE, pos);
+            resetBookState(world, pos, state, true);
+            world.playSound(null, pos, SoundEvents.BOOK_PUT, SoundSource.BLOCKS, 1.0F, 1.0F);
+            world.gameEvent(playerEntity, GameEvent.BLOCK_CHANGE, pos);
         }
     }
 
     @Override
-    public BlockEntity createBlockEntity(BlockPos blockPos, BlockState blockState) {
+    public BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState) {
         return new LecternBlockEntity(blockPos, blockState);
     }
 
     @Override
-    public void onStateReplaced(BlockState state1, World world, BlockPos pos, BlockState state2, boolean boolean_1) {
+    public void onRemove(BlockState state1, Level world, BlockPos pos, BlockState state2, boolean boolean_1) {
         if (state1.getBlock() != state2.getBlock()) {
-            if (state1.get(HAS_BOOK)) {
-                this.dropBook(state1, world, pos);
+            if (state1.getValue(HAS_BOOK)) {
+                this.popBook(state1, world, pos);
             }
-            if (state1.get(POWERED)) {
-                world.updateNeighborsAlways(pos.down(1), this);
+            if (state1.getValue(POWERED)) {
+                world.updateNeighborsAt(pos.below(1), this);
             }
-            super.onStateReplaced(state1, world, pos, state2, boolean_1);
+            super.onRemove(state1, world, pos, state2, boolean_1);
         }
     }
 
-    private void dropBook(BlockState state, World world, BlockPos pos) {
+    private void popBook(BlockState state, Level world, BlockPos pos) {
         BlockEntity be = world.getBlockEntity(pos);
         if (be instanceof LecternBlockEntity) {
             LecternBlockEntity lecternBe = (LecternBlockEntity) be;
-            Direction direction_1 = state.get(FACING);
+            Direction direction_1 = state.getValue(FACING);
             ItemStack stack = lecternBe.getBook().copy();
-            float float_1 = 0.25F * (float) direction_1.getOffsetX();
-            float float_2 = 0.25F * (float) direction_1.getOffsetZ();
+            float float_1 = 0.25F * (float) direction_1.getStepX();
+            float float_2 = 0.25F * (float) direction_1.getStepZ();
             ItemEntity itemEntity_1 = new ItemEntity(world, (double) pos.getX() + 0.5D + (double) float_1, pos.getY() + 1, (double) pos.getZ() + 0.5D + (double) float_2, stack);
-            itemEntity_1.setToDefaultPickupDelay();
-            world.spawnEntity(itemEntity_1);
-            lecternBe.clear();
+            itemEntity_1.setDefaultPickUpDelay();
+            world.addFreshEntity(itemEntity_1);
+            lecternBe.clearContent();
         }
     }
 
-    public int getComparatorOutput(BlockState state, World world, BlockPos pos) {
-        if (state.get(HAS_BOOK)) {
+    public int getAnalogOutputSignal(BlockState state, Level world, BlockPos pos) {
+        if (state.getValue(HAS_BOOK)) {
             BlockEntity be = world.getBlockEntity(pos);
             if (be instanceof LecternBlockEntity) {
-                return ((LecternBlockEntity) be).getComparatorOutput();
+                return ((LecternBlockEntity) be).getRedstoneSignal();
             }
         }
         return 0;
     }
 
     @Override
-    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hitResult) {
-        if (state.get(HAS_BOOK)) {
-            if (!world.isClient) {
+    public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
+        if (state.getValue(HAS_BOOK)) {
+            if (!world.isClientSide) {
                 this.openContainer(world, pos, player);
             }
-            return ActionResult.SUCCESS;
+            return InteractionResult.SUCCESS;
         } else {
-            return ActionResult.FAIL;
+            return InteractionResult.FAIL;
         }
     }
 
-    private void openContainer(World world, BlockPos pos, PlayerEntity player) {
+    private void openContainer(Level world, BlockPos pos, Player player) {
         BlockEntity be = world.getBlockEntity(pos);
         if (be instanceof LecternBlockEntity) {
-            player.openHandledScreen((LecternBlockEntity) be);
-            player.incrementStat(Stats.INTERACT_WITH_LECTERN);
+            player.openMenu((LecternBlockEntity) be);
+            player.awardStat(Stats.INTERACT_WITH_LECTERN);
         }
     }
 

@@ -677,20 +677,20 @@
 
 package io.github.vampirestudios.vampirelib.blocks;
 
-import net.minecraft.block.AbstractBlock;
-import net.minecraft.block.Material;
-import net.minecraft.block.TorchBlock;
-import net.minecraft.particle.DefaultParticleType;
-import net.minecraft.particle.ParticleTypes;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.particles.SimpleParticleType;
+import net.minecraft.world.level.block.TorchBlock;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.material.Material;
 
 public class TorchBaseBlock extends TorchBlock {
 
     public TorchBaseBlock() {
-        super(AbstractBlock.Settings.of(Material.WOOD), ParticleTypes.FLAME);
+        super(BlockBehaviour.Properties.of(Material.WOOD), ParticleTypes.FLAME);
     }
 
-    public TorchBaseBlock(DefaultParticleType particleType) {
-        super(AbstractBlock.Settings.of(Material.WOOD), particleType);
+    public TorchBaseBlock(SimpleParticleType particleType) {
+        super(BlockBehaviour.Properties.of(Material.WOOD), particleType);
     }
 
 }

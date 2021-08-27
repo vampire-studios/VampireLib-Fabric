@@ -1,0 +1,7 @@
+{
+  "replace": false,
+  "values": [
+    "#vampirelib:overworld/caves",
+    "minecraft:overworld"
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "replace": false,
+  "values": [
+    "#vampirelib:ores/coal",
+    "#vampirelib:ores/copper",
+    "#vampirelib:ores/diamond",
+    "#vampirelib:ores/emerald",
+    "#vampirelib:ores/gold",
+    "#vampirelib:ores/iron",
+    "#vampirelib:ores/lapis",
+    "#vampirelib:ores/redstone",
+    "#vampirelib:ores/quartz",
+    "#vampirelib:ores/netherite_scrap"
+  ]
+}

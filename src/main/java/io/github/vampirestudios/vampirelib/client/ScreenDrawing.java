@@ -681,26 +681,25 @@ import org.lwjgl.opengl.GL11;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
-
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.render.BufferBuilder;
-import net.minecraft.client.render.Tessellator;
-import net.minecraft.client.render.VertexFormat;
-import net.minecraft.client.render.VertexFormats;
-import net.minecraft.util.Identifier;
+import com.mojang.blaze3d.vertex.BufferBuilder;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import com.mojang.blaze3d.vertex.Tesselator;
+import com.mojang.blaze3d.vertex.VertexFormat;
+import net.minecraft.client.Minecraft;
+import net.minecraft.resources.ResourceLocation;
 
 public class ScreenDrawing {
 
-    public static void rect(Identifier texture, int left, int top, int width, int height, int color) {
+    public static void rect(ResourceLocation texture, int left, int top, int width, int height, int color) {
         rect(texture, left, top, width, height, 0, 0, 1, 1, color, 0);
     }
 
-    public static void rect(Identifier texture, int left, int top, int width, int height, float u1, float v1, float u2, float v2, int color) {
+    public static void rect(ResourceLocation texture, int left, int top, int width, int height, float u1, float v1, float u2, float v2, int color) {
         rect(texture, left, top, width, height, u1, v1, u2, v2, color, 0);
     }
 
-    public static void rect(Identifier texture, int left, int top, int width, int height, float u1, float v1, float u2, float v2, int color, int z) {
-        MinecraftClient.getInstance().getTextureManager().bindTexture(texture);
+    public static void rect(ResourceLocation texture, int left, int top, int width, int height, float u1, float v1, float u2, float v2, int color, int z) {
+        Minecraft.getInstance().getTextureManager().bindForSetup(texture);
 
         //float scale = 0.00390625F;
 
@@ -710,19 +709,19 @@ public class ScreenDrawing {
         float r = (color >> 16 & 255) / 255.0F;
         float g = (color >> 8 & 255) / 255.0F;
         float b = (color & 255) / 255.0F;
-        Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder buffer = tessellator.getBuffer();
+        Tesselator tessellator = Tesselator.getInstance();
+        BufferBuilder buffer = tessellator.getBuilder();
         RenderSystem.enableBlend();
         //RenderSystem.disableTexture2D();
-        RenderSystem.blendFuncSeparate(GlStateManager.SrcFactor.SRC_ALPHA, GlStateManager.DstFactor.ONE_MINUS_SRC_ALPHA,
-            GlStateManager.SrcFactor.ONE, GlStateManager.DstFactor.ZERO);
+        RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA,
+            GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
         RenderSystem.setShaderColor(r, g, b, 1.0f);
-        buffer.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE); //I thought GL_QUADS was deprecated but okay, sure.
-        buffer.vertex(left, top + height, z).texture(u1, v2).next();
-        buffer.vertex(left + width, top + height, z).texture(u2, v2).next();
-        buffer.vertex(left + width, top, z).texture(u2, v1).next();
-        buffer.vertex(left, top, z).texture(u1, v1).next();
-        tessellator.draw();
+        buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX); //I thought GL_QUADS was deprecated but okay, sure.
+        buffer.vertex(left, top + height, z).uv(u1, v2).endVertex();
+        buffer.vertex(left + width, top + height, z).uv(u2, v2).endVertex();
+        buffer.vertex(left + width, top, z).uv(u2, v1).endVertex();
+        buffer.vertex(left, top, z).uv(u1, v1).endVertex();
+        tessellator.end();
         //RenderSystem.enableTexture2D();
         RenderSystem.disableBlend();
     }
@@ -738,19 +737,19 @@ public class ScreenDrawing {
         float r = (color >> 16 & 255) / 255.0F;
         float g = (color >> 8 & 255) / 255.0F;
         float b = (color & 255) / 255.0F;
-        Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder buffer = tessellator.getBuffer();
+        Tesselator tessellator = Tesselator.getInstance();
+        BufferBuilder buffer = tessellator.getBuilder();
         RenderSystem.enableBlend();
         RenderSystem.disableTexture();
-        RenderSystem.blendFuncSeparate(GlStateManager.SrcFactor.SRC_ALPHA, GlStateManager.DstFactor.ONE_MINUS_SRC_ALPHA,
-            GlStateManager.SrcFactor.ONE, GlStateManager.DstFactor.ZERO);
+        RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA,
+            GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
         RenderSystem.setShaderColor(r, g, b, a);
-        buffer.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION); //I thought GL_QUADS was deprecated but okay, sure.
-        buffer.vertex(left, top + height, 0.0D).next();
-        buffer.vertex(left + width, top + height, 0.0D).next();
-        buffer.vertex(left + width, top, 0.0D).next();
-        buffer.vertex(left, top, 0.0D).next();
-        tessellator.draw();
+        buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION); //I thought GL_QUADS was deprecated but okay, sure.
+        buffer.vertex(left, top + height, 0.0D).endVertex();
+        buffer.vertex(left + width, top + height, 0.0D).endVertex();
+        buffer.vertex(left + width, top, 0.0D).endVertex();
+        buffer.vertex(left, top, 0.0D).endVertex();
+        tessellator.end();
         RenderSystem.enableTexture();
         RenderSystem.disableBlend();
     }
@@ -768,14 +767,14 @@ public class ScreenDrawing {
 
     public static void colorFill(int x, int y, int width, int height, double z, float r, float g, float b) {
         GL11.glDisable(GL11.GL_TEXTURE_2D);
-        Tessellator tess = Tessellator.getInstance();
-        BufferBuilder buffer = tess.getBuffer();
-        buffer.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR);
-        buffer.vertex(x, y + height, z).color(r, g, b, 1.0f).next();
-        buffer.vertex(x + width, y + height, z).color(r, g, b, 1.0f).next();
-        buffer.vertex(x + width, y, z).color(r, g, b, 1.0f).next();
-        buffer.vertex(x, y, z).color(r, g, b, 1.0f).next();
-        tess.draw();
+        Tesselator tess = Tesselator.getInstance();
+        BufferBuilder buffer = tess.getBuilder();
+        buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
+        buffer.vertex(x, y + height, z).color(r, g, b, 1.0f).endVertex();
+        buffer.vertex(x + width, y + height, z).color(r, g, b, 1.0f).endVertex();
+        buffer.vertex(x + width, y, z).color(r, g, b, 1.0f).endVertex();
+        buffer.vertex(x, y, z).color(r, g, b, 1.0f).endVertex();
+        tess.end();
         GL11.glEnable(GL11.GL_TEXTURE_2D);
     }
 
@@ -787,18 +786,18 @@ public class ScreenDrawing {
     }
 
 
-    public static void textureFill(int x, int y, int width, int height, Identifier tex, float u1, float v1, float u2, float v2) {
+    public static void textureFill(int x, int y, int width, int height, ResourceLocation tex, float u1, float v1, float u2, float v2) {
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        MinecraftClient.getInstance().getTextureManager().bindTexture(tex);
+        Minecraft.getInstance().getTextureManager().bindForSetup(tex);
 
-        Tessellator tess = Tessellator.getInstance();
-        BufferBuilder buffer = tess.getBuffer();
-        buffer.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
-        buffer.vertex(x, y + height, 0.0f).texture(u1, v2).next();
-        buffer.vertex(x + width, y + height, 0.0f).texture(u2, v2).next();
-        buffer.vertex(x + width, y, 0.0f).texture(u2, v1).next();
-        buffer.vertex(x, y, 0.0f).texture(u1, v1).next();
-        tess.draw();
+        Tesselator tess = Tesselator.getInstance();
+        BufferBuilder buffer = tess.getBuilder();
+        buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
+        buffer.vertex(x, y + height, 0.0f).uv(u1, v2).endVertex();
+        buffer.vertex(x + width, y + height, 0.0f).uv(u2, v2).endVertex();
+        buffer.vertex(x + width, y, 0.0f).uv(u2, v1).endVertex();
+        buffer.vertex(x, y, 0.0f).uv(u1, v1).endVertex();
+        tess.end();
     }
 
 
@@ -807,7 +806,7 @@ public class ScreenDrawing {
      *
      * <p>Assumes the texture is 256px
      */
-    public static void textureFillGui(int x, int y, int width, int height, Identifier tex) {
+    public static void textureFillGui(int x, int y, int width, int height, ResourceLocation tex) {
         textureFillGui(x, y, width, height, tex, 0, 0);
     }
 
@@ -824,7 +823,7 @@ public class ScreenDrawing {
      * @param tex_x  the x-offset into the texture
      * @param tex_y  the y-offset into the texture
      */
-    public static void textureFillGui(int x, int y, int width, int height, Identifier tex, int tex_x, int tex_y) {
+    public static void textureFillGui(int x, int y, int width, int height, ResourceLocation tex, int tex_x, int tex_y) {
         float px = 1 / 256f;
         float u1 = tex_x * px;
         float v1 = tex_y * px;
@@ -833,7 +832,7 @@ public class ScreenDrawing {
         textureFill(x, y, width, height, tex, u1, v1, u2, v2);
     }
 
-    public static void textureFillGui(int x, int y, int width, int height, Identifier tex, int tex_x, int tex_y, int tex_width, int tex_height) {
+    public static void textureFillGui(int x, int y, int width, int height, ResourceLocation tex, int tex_x, int tex_y, int tex_width, int tex_height) {
         float px = 1 / 256f;
         float u1 = tex_x * px;
         float v1 = tex_y * px;

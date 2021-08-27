@@ -686,27 +686,25 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedDeque;
-
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.state.property.Property;
-import net.minecraft.tag.Tag;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Identifier;
-
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.Tag;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.Property;
 
 public class BlockChiseler {
 
-    public static Map<Identifier, ChiselEntry> chiselRegistry = new HashMap<>();
+    public static Map<ResourceLocation, ChiselEntry> chiselRegistry = new HashMap<>();
     public static Map<Tag<Item>, Set<ChiselEntry>> toolTagsToEntries = new HashMap<>();
     public static Map<Item, Set<ChiselEntry>> itemsToEntries = new HashMap<>();
 
-    public static void create(Identifier identifier, Tag<Item> toolTag, Collection<Block> chiselBlocks) {
+    public static void create(ResourceLocation identifier, Tag<Item> toolTag, Collection<Block> chiselBlocks) {
         ChiselEntry chiselEntry = new ChiselEntry(chiselBlocks);
         chiselRegistry.put(identifier, chiselEntry);
         if (toolTagsToEntries.containsKey(toolTag)) {
@@ -716,7 +714,7 @@ public class BlockChiseler {
         }
     }
 
-    public static void create(Identifier identifier, Item item, Collection<Block> chiselBlocks) {
+    public static void create(ResourceLocation identifier, Item item, Collection<Block> chiselBlocks) {
         ChiselEntry chiselEntry = new ChiselEntry(chiselBlocks);
         chiselRegistry.put(identifier, chiselEntry);
         if (itemsToEntries.containsKey(item)) {
@@ -726,7 +724,7 @@ public class BlockChiseler {
         }
     }
 
-    public static void add(Identifier identifier, Collection<Block> carvedBlocks) {
+    public static void add(ResourceLocation identifier, Collection<Block> carvedBlocks) {
         if (chiselRegistry.containsKey(identifier)) {
             chiselRegistry.get(identifier).chiselDeque.addAll(carvedBlocks);
         } else
@@ -735,25 +733,25 @@ public class BlockChiseler {
 
     public static void setup() {
         UseBlockCallback.EVENT.register((player, world, hand, hitResult) -> {
-            if (!world.isClient()) {
+            if (!world.isClientSide()) {
                 BlockState hitBlockState = world.getBlockState(hitResult.getBlockPos());
-                ItemStack heldStack = player.getStackInHand(hand);
+                ItemStack heldStack = player.getItemInHand(hand);
                 for (Map.Entry<Tag<Item>, Set<ChiselEntry>> toolToEntries : toolTagsToEntries.entrySet()) {
                     if (!toolToEntries.getKey().contains(heldStack.getItem()))
                         continue;
                     for (ChiselEntry chiselEntry : toolToEntries.getValue()) {
                         Block newBlock;
-                        if (player.isSneaking())
+                        if (player.isShiftKeyDown())
                             newBlock = chiselEntry.getPreviousBlock(hitBlockState.getBlock());
                         else
                             newBlock = chiselEntry.getNextBlock(hitBlockState.getBlock());
                         if (newBlock == null) continue;
 
-                        world.playSound(null, hitResult.getBlockPos(), SoundEvents.BLOCK_PUMPKIN_CARVE, SoundCategory.BLOCKS, 1.0F, 1.0F);
-                        world.setBlockState(hitResult.getBlockPos(), copyTo(hitBlockState, newBlock.getDefaultState()));
-                        if (heldStack.getItem().isDamageable())
-                            heldStack.damage(1, player, playerEntity -> player.sendToolBreakStatus(hand));
-                        return ActionResult.SUCCESS;
+                        world.playSound(null, hitResult.getBlockPos(), SoundEvents.PUMPKIN_CARVE, SoundSource.BLOCKS, 1.0F, 1.0F);
+                        world.setBlockAndUpdate(hitResult.getBlockPos(), copyTo(hitBlockState, newBlock.defaultBlockState()));
+                        if (heldStack.getItem().canBeDepleted())
+                            heldStack.hurtAndBreak(1, player, playerEntity -> player.broadcastBreakEvent(hand));
+                        return InteractionResult.SUCCESS;
                     }
                 }
                 for (Map.Entry<Item, Set<ChiselEntry>> itemsToEntry : itemsToEntries.entrySet()) {
@@ -761,30 +759,30 @@ public class BlockChiseler {
                         continue;
                     for (ChiselEntry chiselEntry : itemsToEntry.getValue()) {
                         Block newBlock;
-                        if (player.isSneaking())
+                        if (player.isShiftKeyDown())
                             newBlock = chiselEntry.getPreviousBlock(hitBlockState.getBlock());
                         else
                             newBlock = chiselEntry.getNextBlock(hitBlockState.getBlock());
                         if (newBlock == null) continue;
 
-                        world.playSound(null, hitResult.getBlockPos(), SoundEvents.BLOCK_PUMPKIN_CARVE, SoundCategory.BLOCKS, 1.0F, 1.0F);
-                        world.setBlockState(hitResult.getBlockPos(), copyTo(hitBlockState, newBlock.getDefaultState()));
-                        if (heldStack.getItem().isDamageable())
-                            heldStack.damage(1, player, playerEntity -> player.sendToolBreakStatus(hand));
-                        return ActionResult.SUCCESS;
+                        world.playSound(null, hitResult.getBlockPos(), SoundEvents.PUMPKIN_CARVE, SoundSource.BLOCKS, 1.0F, 1.0F);
+                        world.setBlockAndUpdate(hitResult.getBlockPos(), copyTo(hitBlockState, newBlock.defaultBlockState()));
+                        if (heldStack.getItem().canBeDepleted())
+                            heldStack.hurtAndBreak(1, player, playerEntity -> player.broadcastBreakEvent(hand));
+                        return InteractionResult.SUCCESS;
                     }
                 }
             }
-            return ActionResult.PASS;
+            return InteractionResult.PASS;
         });
     }
 
     private static BlockState copyTo(BlockState from, BlockState to) {
-        Collection<Property<?>> fromProperties = from.getEntries().keySet();
-        Collection<Property<?>> toProperties = to.getEntries().keySet();
+        Collection<Property<?>> fromProperties = from.getValues().keySet();
+        Collection<Property<?>> toProperties = to.getValues().keySet();
         for (Property property : fromProperties) {
             if (toProperties.contains(property)) {
-                to = to.with(property, from.get(property));
+                to = to.setValue(property, from.getValue(property));
             }
         }
         return to;

@@ -677,24 +677,23 @@
 
 package io.github.vampirestudios.vampirelib.client;
 
+import com.mojang.blaze3d.vertex.PoseStack;
 import java.util.Collections;
 import java.util.List;
-
-import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.item.ItemStack;
-import net.minecraft.text.OrderedText;
+import net.minecraft.client.gui.Font;
+import net.minecraft.util.FormattedCharSequence;
+import net.minecraft.world.item.ItemStack;
 
 public class TooltipRenderer {
 
     protected final ItemStack stack;
-    protected final List<? extends OrderedText> lines;
-    protected final MatrixStack matrixStack;
+    protected final List<? extends FormattedCharSequence> lines;
+    protected final PoseStack matrixStack;
     protected int x;
     protected int y;
-    protected TextRenderer fr;
+    protected Font fr;
 
-    public TooltipRenderer(ItemStack stack, List<? extends OrderedText> lines, MatrixStack matrixStack, int x, int y, TextRenderer fr) {
+    public TooltipRenderer(ItemStack stack, List<? extends FormattedCharSequence> lines, PoseStack matrixStack, int x, int y, Font fr) {
         this.stack = stack;
         this.lines = Collections.unmodifiableList(lines); // Leave editing to ItemTooltipEvent
         this.matrixStack = matrixStack;
@@ -713,14 +712,14 @@ public class TooltipRenderer {
     /**
      * The lines to be drawn. May change between {@link TooltipRenderer.Pre} and {@link TooltipRenderer.Post}.
      */
-    public List<? extends OrderedText> getLines() {
+    public List<? extends FormattedCharSequence> getLines() {
         return lines;
     }
 
     /**
      * @return The MatrixStack of the current rendering context
      */
-    public MatrixStack getMatrixStack() {
+    public PoseStack getMatrixStack() {
         return matrixStack;
     }
 
@@ -739,9 +738,9 @@ public class TooltipRenderer {
     }
 
     /**
-     * @return The {@link TextRenderer} instance the current render is using.
+     * @return The {@link Font} instance the current render is using.
      */
-    public TextRenderer getFontRenderer() {
+    public Font getFontRenderer() {
         return fr;
     }
 
@@ -753,7 +752,7 @@ public class TooltipRenderer {
         private int screenHeight;
         private int maxWidth;
 
-        public Pre(ItemStack stack, List<? extends OrderedText> lines, MatrixStack matrixStack, int x, int y, int screenWidth, int screenHeight, int maxWidth, TextRenderer fr) {
+        public Pre(ItemStack stack, List<? extends FormattedCharSequence> lines, PoseStack matrixStack, int x, int y, int screenWidth, int screenHeight, int maxWidth, Font fr) {
             super(stack, lines, matrixStack, x, y, fr);
             this.screenWidth = screenWidth;
             this.screenHeight = screenHeight;
@@ -791,9 +790,9 @@ public class TooltipRenderer {
         }
 
         /**
-         * Sets the {@link TextRenderer} to be used to render text.
+         * Sets the {@link Font} to be used to render text.
          */
-        public void setFontRenderer(TextRenderer fr) {
+        public void setFontRenderer(Font fr) {
             this.fr = fr;
         }
 
@@ -825,7 +824,7 @@ public class TooltipRenderer {
         private final int width;
         private final int height;
 
-        public Post(ItemStack stack, List<? extends OrderedText> textLines, MatrixStack matrixStack, int x, int y, TextRenderer fr, int width, int height) {
+        public Post(ItemStack stack, List<? extends FormattedCharSequence> textLines, PoseStack matrixStack, int x, int y, Font fr, int width, int height) {
             super(stack, textLines, matrixStack, x, y, fr);
             this.width = width;
             this.height = height;
@@ -850,7 +849,7 @@ public class TooltipRenderer {
      * This event is fired directly after the tooltip background is drawn, but before any text is drawn.
      */
     public static class PostBackground extends Post {
-        public PostBackground(ItemStack stack, List<? extends OrderedText> textLines, MatrixStack matrixStack, int x, int y, TextRenderer fr, int width, int height) {
+        public PostBackground(ItemStack stack, List<? extends FormattedCharSequence> textLines, PoseStack matrixStack, int x, int y, Font fr, int width, int height) {
             super(stack, textLines, matrixStack, x, y, fr, width, height);
         }
     }
@@ -859,7 +858,7 @@ public class TooltipRenderer {
      * This event is fired directly after the tooltip text is drawn, but before the GL state is reset.
      */
     public static class PostText extends Post {
-        public PostText(ItemStack stack, List<? extends OrderedText> textLines, MatrixStack matrixStack, int x, int y, TextRenderer fr, int width, int height) {
+        public PostText(ItemStack stack, List<? extends FormattedCharSequence> textLines, PoseStack matrixStack, int x, int y, Font fr, int width, int height) {
             super(stack, textLines, matrixStack, x, y, fr, width, height);
         }
     }
@@ -875,7 +874,7 @@ public class TooltipRenderer {
         private int borderStart;
         private int borderEnd;
 
-        public Color(ItemStack stack, List<? extends OrderedText> textLines, MatrixStack matrixStack, int x, int y, TextRenderer fr, int background, int borderStart, int borderEnd) {
+        public Color(ItemStack stack, List<? extends FormattedCharSequence> textLines, PoseStack matrixStack, int x, int y, Font fr, int background, int borderStart, int borderEnd) {
             super(stack, textLines, matrixStack, x, y, fr);
             this.originalBackground = background;
             this.originalBorderStart = borderStart;

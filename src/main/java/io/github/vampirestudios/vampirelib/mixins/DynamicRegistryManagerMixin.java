@@ -686,21 +686,18 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
-
-import net.minecraft.util.registry.BuiltinRegistries;
-import net.minecraft.util.registry.DynamicRegistryManager;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.util.registry.RegistryKey;
-
 import net.fabricmc.loader.api.FabricLoader;
-
+import net.minecraft.core.Registry;
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.data.BuiltinRegistries;
+import net.minecraft.resources.ResourceKey;
 import io.github.vampirestudios.vampirelib.api.CustomDynamicRegistry;
 import io.github.vampirestudios.vampirelib.api.DynamicRegistryProvider;
 
-@Mixin(DynamicRegistryManager.class)
+@Mixin(RegistryAccess.class)
 public class DynamicRegistryManagerMixin {
     @Inject(method = "net/minecraft/util/registry/DynamicRegistryManager.method_30531()Lcom/google/common/collect/ImmutableMap;", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/registry/DynamicRegistryManager;register(Lcom/google/common/collect/ImmutableMap$Builder;Lnet/minecraft/util/registry/RegistryKey;Lcom/mojang/serialization/Codec;)V", ordinal = 0), locals = LocalCapture.CAPTURE_FAILHARD)
-    private static void registerCustomDynamicRegistries(CallbackInfoReturnable<ImmutableMap<RegistryKey<? extends Registry<?>>, DynamicRegistryManager.Info<?>>> ci, ImmutableMap.Builder<RegistryKey<? extends Registry<?>>, DynamicRegistryManager.Info<?>> builder) {
+    private static void registerCustomDynamicRegistries(CallbackInfoReturnable<ImmutableMap<ResourceKey<? extends Registry<?>>, RegistryAccess.RegistryData<?>>> ci, ImmutableMap.Builder<ResourceKey<? extends Registry<?>>, RegistryAccess.RegistryData<?>> builder) {
         List<DynamicRegistryProvider> providers = FabricLoader.getInstance().getEntrypoints("vampirelib:dynamic-registry-provider", DynamicRegistryProvider.class);
         for (DynamicRegistryProvider provider : providers) {
             provider.addDynamicRegistries((customDynamicRegistry) -> {
@@ -711,12 +708,12 @@ public class DynamicRegistryManagerMixin {
     }
 
     @Unique
-    private static <T> DynamicRegistryManager.Info<T> getInfo(CustomDynamicRegistry<T> customDynamicRegistry) {
-        return new DynamicRegistryManager.Info<>(customDynamicRegistry.getRegistryRef(), customDynamicRegistry.getCodec(), null);
+    private static <T> RegistryAccess.RegistryData<T> getInfo(CustomDynamicRegistry<T> customDynamicRegistry) {
+        return new RegistryAccess.RegistryData<>(customDynamicRegistry.getRegistryRef(), customDynamicRegistry.getCodec(), null);
     }
 
     @Unique
     private static <T> void addRegistry(CustomDynamicRegistry<T> customDynamicRegistry) {
-        BuiltinRegistries.addRegistry(customDynamicRegistry.getRegistryRef(), customDynamicRegistry.getRegistry(), customDynamicRegistry.getDefaultValueSupplier(), customDynamicRegistry.getLifecycle());
+        BuiltinRegistries.internalRegister(customDynamicRegistry.getRegistryRef(), customDynamicRegistry.getRegistry(), customDynamicRegistry.getDefaultValueSupplier(), customDynamicRegistry.getLifecycle());
     }
 }

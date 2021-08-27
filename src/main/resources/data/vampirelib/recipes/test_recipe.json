@@ -1,0 +1,12 @@
+{
+  "type": "vampirelib:brewing",
+  "base": {
+    "item": "minecraft:bowl"
+  },
+  "reagent": {
+    "item": "minecraft:brown_mushroom"
+  },
+  "result": {
+    "item": "minecraft:mushroom_stew"
+  }
+}

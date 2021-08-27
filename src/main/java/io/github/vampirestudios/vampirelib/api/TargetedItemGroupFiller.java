@@ -684,10 +684,10 @@ import java.util.function.Supplier;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.collection.DefaultedList;
+import net.minecraft.core.NonNullList;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 
 import io.github.vampirestudios.vampirelib.utils.ItemStackUtils;
 
@@ -697,10 +697,10 @@ import io.github.vampirestudios.vampirelib.utils.ItemStackUtils;
  * @see IItemGroupFiller
  */
 public final record TargetedItemGroupFiller(Supplier<Item> targetItem) implements IItemGroupFiller {
-    private static final Map<ItemGroup, OffsetValue> offsetMap = Maps.newHashMap();
+    private static final Map<CreativeModeTab, OffsetValue> offsetMap = Maps.newHashMap();
 
     @Override
-    public void fillItem(Item item, ItemGroup group, DefaultedList<ItemStack> items) {
+    public void fillItem(Item item, CreativeModeTab group, NonNullList<ItemStack> items) {
         if (ItemStackUtils.isInGroup(item, group)) {
             OffsetValue offset = offsetMap.computeIfAbsent(group, (key) -> new OffsetValue());
             if (offset.itemsProcessed.contains(item)) {

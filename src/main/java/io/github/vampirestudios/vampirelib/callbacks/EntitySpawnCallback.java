@@ -678,16 +678,13 @@
 package io.github.vampirestudios.vampirelib.callbacks;
 
 import java.util.concurrent.atomic.AtomicReference;
-
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.SpawnReason;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.ServerWorldAccess;
-
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
-
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.phys.Vec3;
 import io.github.vampirestudios.vampirelib.utils.EntitySpawnImpl;
 
 /**
@@ -726,7 +723,7 @@ public final class EntitySpawnCallback {
          * <li>{@code FAIL} cancel spawning the entity.
          * </ul>
          */
-        ActionResult onEntitySpawnPre(final Entity original, AtomicReference<Entity> entity, ServerWorldAccess world, SpawnReason reason);
+        InteractionResult onEntitySpawnPre(final Entity original, AtomicReference<Entity> entity, ServerLevelAccessor world, MobSpawnType reason);
     }
 
     /**
@@ -742,6 +739,6 @@ public final class EntitySpawnCallback {
          * @param pos    the position at which the entity spawned.
          * @param reason the cause for the entity spawn.
          */
-        void onEntitySpawnPost(Entity entity, ServerWorldAccess world, Vec3d pos, SpawnReason reason);
+        void onEntitySpawnPost(Entity entity, ServerLevelAccessor world, Vec3 pos, MobSpawnType reason);
     }
 }

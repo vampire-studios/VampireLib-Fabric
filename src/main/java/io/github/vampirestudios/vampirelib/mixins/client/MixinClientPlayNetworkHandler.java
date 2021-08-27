@@ -685,16 +685,14 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
-
-import net.minecraft.client.network.ClientPlayNetworkHandler;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.network.packet.s2c.play.EntitySpawnS2CPacket;
-
 import io.github.vampirestudios.vampirelib.entities.EntityRegistry;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.multiplayer.ClientPacketListener;
+import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 
-@Mixin(ClientPlayNetworkHandler.class)
+@Mixin(ClientPacketListener.class)
 public class MixinClientPlayNetworkHandler {
     private static double vampireLib$x;
     private static double vampireLib$y;
@@ -702,15 +700,15 @@ public class MixinClientPlayNetworkHandler {
     private static EntityType<?> vampireLib$entityType;
     private static int vampireLib$entityData;
     @Shadow
-    private ClientWorld world;
+    private ClientLevel world;
 
     @Inject(method = "onEntitySpawn", at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/network/packet/s2c/play/EntitySpawnS2CPacket;getEntityTypeId()Lnet/minecraft/entity/EntityType;"), locals = LocalCapture.CAPTURE_FAILHARD)
-    public void onEntitySpawn(EntitySpawnS2CPacket packet, CallbackInfo callbackInfo, double xIn, double yIn, double zIn, EntityType<?> entityTypeIn) {
+    public void onEntitySpawn(ClientboundAddEntityPacket packet, CallbackInfo callbackInfo, double xIn, double yIn, double zIn, EntityType<?> entityTypeIn) {
         vampireLib$x = xIn;
         vampireLib$y = yIn;
         vampireLib$z = zIn;
         vampireLib$entityType = entityTypeIn;
-        vampireLib$entityData = packet.getEntityData();
+        vampireLib$entityData = packet.getData();
     }
 
     @ModifyVariable(

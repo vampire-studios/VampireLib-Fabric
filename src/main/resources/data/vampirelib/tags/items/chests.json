@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "#vampirelib:chests/ender",
+    "#vampirelib:chests/trapped",
+    "#vampirelib:chests/wooden"
+  ]
+}

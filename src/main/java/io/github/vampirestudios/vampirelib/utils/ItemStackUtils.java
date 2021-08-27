@@ -677,23 +677,22 @@
 
 package io.github.vampirestudios.vampirelib.utils;
 
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.collection.DefaultedList;
-
 import io.github.vampirestudios.vampirelib.mixins.ItemInvokerMixin;
+import net.minecraft.core.NonNullList;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 
 public class ItemStackUtils {
 
     /**
-     * Searches for a specific item in a {@link DefaultedList} of {@link ItemStack} and returns its index.
+     * Searches for a specific item in a {@link NonNullList} of {@link ItemStack} and returns its index.
      *
      * @param item  The item to search for.
      * @param items The list of {@link ItemStack}s.
      * @return The index of the specified item in the list, or -1 if it was not in the list.
      */
-    public static int findIndexOfItem(Item item, DefaultedList<ItemStack> items) {
+    public static int findIndexOfItem(Item item, NonNullList<ItemStack> items) {
         for (int i = 0; i < items.size(); i++) {
             if (items.get(i).getItem() == item) {
                 return i;
@@ -703,33 +702,14 @@ public class ItemStackUtils {
     }
 
     /**
-     * Used in {@link Item#appendStacks(ItemGroup, DefaultedList)} and {@link net.minecraft.block.Block#appendStacks(ItemGroup, DefaultedList)} to fill an item after a specific item for a group.
-     *
-     * @param item       The item to fill.
-     * @param targetItem The item to fill after.
-     * @param group      The group to fill it in.
-     * @param items      The {@link DefaultedList} of item stacks to search for the target item and inject the item in.
-     */
-    public static void fillAfterItemForGroup(Item item, Item targetItem, ItemGroup group, DefaultedList<ItemStack> items) {
-        if (isInGroup(item, group)) {
-            int targetIndex = findIndexOfItem(targetItem, items);
-            if (targetIndex != -1) {
-                items.add(targetIndex + 1, new ItemStack(item));
-            } else {
-                items.add(new ItemStack(item));
-            }
-        }
-    }
-
-    /**
-     * Searches for if an {@link Item} is present in an {@link ItemGroup} and returns if it is
+     * Searches for if an {@link Item} is present in an {@link CreativeModeTab} and returns if it is
      *
      * @param item  The {@link Item} to check.
-     * @param group The {@link ItemGroup} to check.
-     * @return - Whether or not the item is present in the group
+     * @param group The {@link CreativeModeTab} to check.
+     * @return - Whether the item is present in the group or not
      */
-    public static boolean isInGroup(Item item, ItemGroup group) {
-        return ((ItemInvokerMixin) item).getGroup() == group;
+    public static boolean isInGroup(Item item, CreativeModeTab group) {
+        return ((ItemInvokerMixin) item).callIsIn(group);
     }
 
 }

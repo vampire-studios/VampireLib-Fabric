@@ -677,10 +677,9 @@
 
 package io.github.vampirestudios.vampirelib.callbacks;
 
-import net.minecraft.client.font.TextRenderer;
-
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
+import net.minecraft.client.gui.Font;
 
 @FunctionalInterface
 public interface TextRendererInitCallback {
@@ -694,6 +693,6 @@ public interface TextRendererInitCallback {
             }
         });
 
-    void onInit(TextRenderer textRenderer);
+    void onInit(Font textRenderer);
 
 }

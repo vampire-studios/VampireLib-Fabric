@@ -677,18 +677,17 @@
 
 package io.github.vampirestudios.vampirelib.utils.registry;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.FenceBlock;
-import net.minecraft.block.FenceGateBlock;
-import net.minecraft.block.PressurePlateBlock;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.util.Identifier;
-
 import io.github.vampirestudios.vampirelib.blocks.ButtonBaseBlock;
 import io.github.vampirestudios.vampirelib.blocks.PressurePlateBaseBlock;
 import io.github.vampirestudios.vampirelib.blocks.SlabBaseBlock;
 import io.github.vampirestudios.vampirelib.blocks.StairsBaseBlock;
 import io.github.vampirestudios.vampirelib.blocks.WallBaseBlock;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.FenceBlock;
+import net.minecraft.world.level.block.FenceGateBlock;
+import net.minecraft.world.level.block.PressurePlateBlock;
 
 public class BlockRegistryBuilder {
 
@@ -705,7 +704,7 @@ public class BlockRegistryBuilder {
     /**
      * Name that will be used as a base for all of the blocks
      */
-    private static Identifier name;
+    private static ResourceLocation name;
 
     /**
      * A private static instance of a registry helper with the modid thats put in the name
@@ -717,7 +716,7 @@ public class BlockRegistryBuilder {
      * @param blockIn the base block which will be used for some blocks
      * @return a new instance of this class
      */
-    public static BlockRegistryBuilder getInstance(Identifier nameIn, Block blockIn) {
+    public static BlockRegistryBuilder getInstance(ResourceLocation nameIn, Block blockIn) {
         name = nameIn;
         baseBlock = blockIn;
         registryHelper = RegistryHelper.createRegistryHelper(name.getNamespace());
@@ -731,7 +730,7 @@ public class BlockRegistryBuilder {
      */
     public BlockRegistryBuilder slab() {
         Block slab = new SlabBaseBlock(Block.Settings.copy(baseBlock));
-        registryHelper.registerBlock(slab, name.getPath() + "_slab", ItemGroup.BUILDING_BLOCKS);
+        registryHelper.registerBlock(slab, name.getPath() + "_slab", CreativeModeTab.TAB_BUILDING_BLOCKS);
         return this;
     }
 
@@ -741,8 +740,8 @@ public class BlockRegistryBuilder {
      * @return an instance of this class
      */
     public BlockRegistryBuilder stair() {
-        Block stair = new StairsBaseBlock(baseBlock.getDefaultState());
-        registryHelper.registerBlock(stair, name.getPath() + "_stairs", ItemGroup.BUILDING_BLOCKS);
+        Block stair = new StairsBaseBlock(baseBlock.defaultBlockState());
+        registryHelper.registerBlock(stair, name.getPath() + "_stairs", CreativeModeTab.TAB_BUILDING_BLOCKS);
         return this;
     }
 
@@ -763,7 +762,7 @@ public class BlockRegistryBuilder {
      * @return an instance of this class
      */
     public BlockRegistryBuilder fenceGate() {
-        registryHelper.registerBlock(new FenceGateBlock(Block.Settings.copy(baseBlock)), name.getPath() + "_fence_gate", ItemGroup.REDSTONE);
+        registryHelper.registerBlock(new FenceGateBlock(Block.Settings.copy(baseBlock)), name.getPath() + "_fence_gate", CreativeModeTab.TAB_REDSTONE);
         return this;
     }
 
@@ -774,7 +773,7 @@ public class BlockRegistryBuilder {
      */
     public BlockRegistryBuilder wall() {
         Block wall = new WallBaseBlock(Block.Settings.copy(baseBlock));
-        registryHelper.registerBlock(wall, name.getPath() + "_wall", ItemGroup.DECORATIONS);
+        registryHelper.registerBlock(wall, name.getPath() + "_wall", CreativeModeTab.TAB_DECORATIONS);
         return this;
     }
 
@@ -785,7 +784,7 @@ public class BlockRegistryBuilder {
      */
     public BlockRegistryBuilder button(boolean wooden) {
         Block button = new ButtonBaseBlock(wooden, Block.Settings.copy(baseBlock));
-        registryHelper.registerBlock(button, name.getPath() + "_button", ItemGroup.REDSTONE);
+        registryHelper.registerBlock(button, name.getPath() + "_button", CreativeModeTab.TAB_REDSTONE);
         return this;
     }
 
@@ -794,9 +793,9 @@ public class BlockRegistryBuilder {
      *
      * @return an instance of this class
      */
-    public BlockRegistryBuilder pressurePlate(PressurePlateBlock.ActivationRule type) {
+    public BlockRegistryBuilder pressurePlate(PressurePlateBlock.Sensitivity type) {
         registryHelper.registerBlock(new PressurePlateBaseBlock(Block.Settings.copy(baseBlock), type),
-            name.getPath() + "_pressure_plate", ItemGroup.REDSTONE);
+            name.getPath() + "_pressure_plate", CreativeModeTab.TAB_REDSTONE);
         return this;
     }
 

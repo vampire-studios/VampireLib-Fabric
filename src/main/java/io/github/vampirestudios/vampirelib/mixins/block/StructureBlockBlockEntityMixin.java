@@ -677,17 +677,16 @@
 
 package io.github.vampirestudios.vampirelib.mixins.block;
 
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.entity.StructureBlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.ModifyConstant;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.block.entity.StructureBlockBlockEntity;
-import net.minecraft.util.math.BlockPos;
-
-@Mixin(StructureBlockBlockEntity.class)
+@Mixin(StructureBlockEntity.class)
 public abstract class StructureBlockBlockEntityMixin extends BlockEntity {
 
     public StructureBlockBlockEntityMixin(BlockEntityType<?> blockEntityType, BlockPos blockPos, BlockState blockState) {
