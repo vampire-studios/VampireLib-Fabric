@@ -682,12 +682,12 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 
 public class WoodType {
-    public static final WoodType SPRUCE = WoodTypeRegistry.registerVanilla(new WoodType("spruce", Blocks.SPRUCE_LEAVES, Blocks.SPRUCE_LOG));
-    public static final WoodType OAK = WoodTypeRegistry.registerVanilla(new WoodType("oak", Blocks.OAK_LEAVES, Blocks.OAK_LOG));
-    public static final WoodType BIRCH = WoodTypeRegistry.registerVanilla(new WoodType("birch", Blocks.BIRCH_LEAVES, Blocks.BIRCH_LOG));
-    public static final WoodType JUNGLE = WoodTypeRegistry.registerVanilla(new WoodType("jungle", Blocks.JUNGLE_LEAVES, Blocks.JUNGLE_LOG));
-    public static final WoodType ACACIA = WoodTypeRegistry.registerVanilla(new WoodType("acacia", Blocks.ACACIA_LEAVES, Blocks.ACACIA_LOG));
-    public static final WoodType DARK_OAK = WoodTypeRegistry.registerVanilla(new WoodType("dark_oak", Blocks.DARK_OAK_LEAVES, Blocks.DARK_OAK_LOG));
+    public static final WoodType SPRUCE = WoodRegistry.registerVanilla(new WoodType("spruce", Blocks.SPRUCE_LEAVES, Blocks.SPRUCE_LOG));
+    public static final WoodType OAK = WoodRegistry.registerVanilla(new WoodType("oak", Blocks.OAK_LEAVES, Blocks.OAK_LOG));
+    public static final WoodType BIRCH = WoodRegistry.registerVanilla(new WoodType("birch", Blocks.BIRCH_LEAVES, Blocks.BIRCH_LOG));
+    public static final WoodType JUNGLE = WoodRegistry.registerVanilla(new WoodType("jungle", Blocks.JUNGLE_LEAVES, Blocks.JUNGLE_LOG));
+    public static final WoodType ACACIA = WoodRegistry.registerVanilla(new WoodType("acacia", Blocks.ACACIA_LEAVES, Blocks.ACACIA_LOG));
+    public static final WoodType DARK_OAK = WoodRegistry.registerVanilla(new WoodType("dark_oak", Blocks.DARK_OAK_LEAVES, Blocks.DARK_OAK_LOG));
     public static final WoodType[] VANILLA = new WoodType[] {OAK, SPRUCE, BIRCH, JUNGLE, ACACIA, DARK_OAK};
     private final Block leaves;
     private final Block log;

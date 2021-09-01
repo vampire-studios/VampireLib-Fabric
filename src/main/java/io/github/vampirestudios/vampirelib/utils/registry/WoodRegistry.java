@@ -683,17 +683,7 @@ import java.util.List;
 
 import com.google.common.collect.ImmutableMap;
 import com.swordglowsblue.artifice.api.Artifice;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.fabric.api.client.rendereregistry.v1.EntityRendererRegistry;
-import net.fabricmc.fabric.api.event.player.UseBlockCallback;
-import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
-import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
-import net.fabricmc.fabric.api.registry.FlammableBlockRegistry;
-import net.fabricmc.fabric.api.registry.FuelRegistry;
-import net.fabricmc.fabric.api.tool.attribute.v1.FabricToolTags;
-import net.fabricmc.fabric.impl.blockrenderlayer.BlockRenderLayerMapImpl;
-import net.fabricmc.fabric.impl.client.renderer.registry.EntityModelLayerImpl;
-import net.fabricmc.loader.api.FabricLoader;
+
 import net.minecraft.client.model.BoatModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.renderer.RenderType;
@@ -720,6 +710,19 @@ import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.block.grower.AbstractTreeGrower;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
+
+import net.fabricmc.api.EnvType;
+import net.fabricmc.fabric.api.client.rendereregistry.v1.EntityRendererRegistry;
+import net.fabricmc.fabric.api.event.player.UseBlockCallback;
+import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
+import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
+import net.fabricmc.fabric.api.registry.FlammableBlockRegistry;
+import net.fabricmc.fabric.api.registry.FuelRegistry;
+import net.fabricmc.fabric.api.tool.attribute.v1.FabricToolTags;
+import net.fabricmc.fabric.impl.blockrenderlayer.BlockRenderLayerMapImpl;
+import net.fabricmc.fabric.impl.client.renderer.registry.EntityModelLayerImpl;
+import net.fabricmc.loader.api.FabricLoader;
+
 import io.github.vampirestudios.vampirelib.blocks.ButtonBaseBlock;
 import io.github.vampirestudios.vampirelib.blocks.CustomLadderBlock;
 import io.github.vampirestudios.vampirelib.blocks.DoorBaseBlock;
@@ -911,6 +914,221 @@ public class WoodRegistry {
             return this;
         }
 
+        public Builder log() {
+            String logName = mushroomLike ? name.getPath() + "_stem" : this.name.getPath() + "_log";
+            BlockBehaviour.Properties blockSettings = mushroomLike ? FabricBlockSettings.copyOf(Blocks.WARPED_STEM) : FabricBlockSettings.copyOf(Blocks.OAK_LOG);
+            woodRegistry.log = registryHelper.blocks().registerBlock(new RotatedPillarBlock(blockSettings), logName, CreativeModeTab.TAB_BUILDING_BLOCKS);
+            return this;
+        }
+
+        public Builder wood() {
+            String woodName = mushroomLike ? name.getPath() + "_hyphae" : name.getPath() + "_wood";
+            BlockBehaviour.Properties blockSettings = mushroomLike ? FabricBlockSettings.copyOf(Blocks.WARPED_HYPHAE) : FabricBlockSettings.copyOf(Blocks.OAK_WOOD);
+            woodRegistry.wood = registryHelper.blocks().registerBlock(new RotatedPillarBlock(blockSettings), woodName, CreativeModeTab.TAB_BUILDING_BLOCKS);
+            return this;
+        }
+
+        public Builder strippedLog() {
+            String logName = mushroomLike ? name.getPath() + "_stem" : name.getPath() + "_log";
+            BlockBehaviour.Properties blockSettings = mushroomLike ? FabricBlockSettings.copyOf(Blocks.STRIPPED_WARPED_STEM) : FabricBlockSettings.copyOf(Blocks.STRIPPED_OAK_LOG);
+            woodRegistry.strippedLog = registryHelper.blocks().registerBlock(new RotatedPillarBlock(blockSettings), "stripped_" + logName, CreativeModeTab.TAB_BUILDING_BLOCKS);
+            return this;
+        }
+
+        public Builder strippedWood() {
+            String woodName = mushroomLike ? name.getPath() + "_hyphae" : name.getPath() + "_wood";
+            BlockBehaviour.Properties blockSettings = mushroomLike ? FabricBlockSettings.copyOf(Blocks.STRIPPED_WARPED_HYPHAE) : FabricBlockSettings.copyOf(Blocks.STRIPPED_OAK_WOOD);
+            woodRegistry.strippedWood = registryHelper.blocks().registerBlock(new RotatedPillarBlock(blockSettings), "stripped_" + woodName, CreativeModeTab.TAB_BUILDING_BLOCKS);
+            return this;
+        }
+
+        public Builder stairs() {
+            woodRegistry.stairs = registryHelper.blocks().registerBlock(new StairsBaseBlock(woodRegistry.planks.defaultBlockState()),
+                name.getPath() + "_stairs", CreativeModeTab.TAB_BUILDING_BLOCKS);
+            return this;
+        }
+
+        public Builder slab() {
+            woodRegistry.slab = registryHelper.blocks().registerBlock(new SlabBaseBlock(BlockBehaviour.Properties.copy(woodRegistry.planks)),
+                name.getPath() + "_slab", CreativeModeTab.TAB_BUILDING_BLOCKS);
+            return this;
+        }
+
+        public Builder planks() {
+            woodRegistry.planks = registryHelper.blocks().registerBlock(new Block(FabricBlockSettings.copyOf(Blocks.OAK_PLANKS)),
+                name.getPath() + "_planks", CreativeModeTab.TAB_BUILDING_BLOCKS);
+            return this;
+        }
+
+        public Builder wartBlock() {
+            woodRegistry.leaves = registryHelper.blocks().registerBlock(new Block(FabricBlockSettings.copyOf(Blocks.NETHER_WART_BLOCK)),
+                name.getPath() + "_wart_block", CreativeModeTab.TAB_DECORATIONS);
+            return this;
+        }
+
+        public Builder leaves() {
+            woodRegistry.leaves = registryHelper.blocks().registerBlock(new LeavesBaseBlock(), name.getPath() + "_leaves",
+                CreativeModeTab.TAB_DECORATIONS);
+            return this;
+        }
+
+        public Builder leaves(String nameIn) {
+            woodRegistry.leaves = registryHelper.blocks().registerBlock(new LeavesBaseBlock(), nameIn + "_leaves",
+                CreativeModeTab.TAB_DECORATIONS);
+            return this;
+        }
+
+        public Builder leaves(String... nameIn) {
+            for (String leavesName : nameIn) {
+                woodRegistry.leaves = registryHelper.blocks().registerBlock(new LeavesBaseBlock(), leavesName + "_leaves",
+                    CreativeModeTab.TAB_DECORATIONS);
+                leaves.add(leavesName + "_leaves");
+            }
+            return this;
+        }
+
+        public Builder coloredLeaves(int color) {
+            woodRegistry.leaves = registryHelper.blocks().registerBlock(new LeavesBaseBlock(), name.getPath() + "_leaves",
+                CreativeModeTab.TAB_DECORATIONS);
+            VampireLibClient.ColoredLeaves coloredLeaves = new VampireLibClient.ColoredLeaves(woodRegistry.leaves, true, color);
+            VampireLibClient.COLORED_LEAVES.add(coloredLeaves);
+            return this;
+        }
+
+        public Builder coloredLeaves(String nameIn) {
+            woodRegistry.leaves = registryHelper.blocks().registerBlock(new LeavesBaseBlock(), nameIn + "_leaves",
+                CreativeModeTab.TAB_DECORATIONS);
+            VampireLibClient.ColoredLeaves coloredLeaves = new VampireLibClient.ColoredLeaves(woodRegistry.leaves, false, 0xFFF);
+            VampireLibClient.COLORED_LEAVES.add(coloredLeaves);
+            return this;
+        }
+
+        public Builder coloredLeaves(String... nameIn) {
+            for (String leavesName : nameIn) {
+                woodRegistry.leaves = registryHelper.blocks().registerBlock(new LeavesBaseBlock(), leavesName + "_leaves",
+                    CreativeModeTab.TAB_DECORATIONS);
+                VampireLibClient.ColoredLeaves coloredLeaves = new VampireLibClient.ColoredLeaves(woodRegistry.leaves, false, 0xFFF);
+                VampireLibClient.COLORED_LEAVES.add(coloredLeaves);
+                leaves.add(leavesName + "_leaves");
+            }
+            return this;
+        }
+
+        public Builder coloredLeaves(String nameIn, int color) {
+            woodRegistry.leaves = registryHelper.blocks().registerBlock(new LeavesBaseBlock(), nameIn + "_leaves",
+                CreativeModeTab.TAB_DECORATIONS);
+            VampireLibClient.ColoredLeaves coloredLeaves = new VampireLibClient.ColoredLeaves(woodRegistry.leaves, true, color);
+            VampireLibClient.COLORED_LEAVES.add(coloredLeaves);
+            return this;
+        }
+
+        public Builder coloredLeaves(int color, String... nameIn) {
+            for (String leavesName : nameIn) {
+                woodRegistry.leaves = registryHelper.blocks().registerBlock(new LeavesBaseBlock(), leavesName + "_leaves",
+                    CreativeModeTab.TAB_DECORATIONS);
+                VampireLibClient.ColoredLeaves coloredLeaves = new VampireLibClient.ColoredLeaves(woodRegistry.leaves, false, color);
+                VampireLibClient.COLORED_LEAVES.add(coloredLeaves);
+                leaves.add(leavesName + "_leaves");
+            }
+            return this;
+        }
+
+        public Builder coloredLeaves(ColoredLeavesBlock... coloredLeavesBlocks) {
+            for (ColoredLeavesBlock coloredLeavesBlock : coloredLeavesBlocks) {
+                woodRegistry.leaves = registryHelper.blocks().registerBlock(new LeavesBaseBlock(), coloredLeavesBlock.name + "_leaves",
+                    CreativeModeTab.TAB_DECORATIONS);
+                VampireLibClient.ColoredLeaves coloredLeaves = new VampireLibClient.ColoredLeaves(woodRegistry.leaves, true, coloredLeavesBlock.color);
+                VampireLibClient.COLORED_LEAVES.add(coloredLeaves);
+                leaves.add(coloredLeavesBlock.name + "_leaves");
+            }
+            return this;
+        }
+
+        public Builder sapling() {
+            woodRegistry.sapling = registryHelper.blocks().registerBlock(new SaplingBaseBlock(woodRegistry.saplingGenerator),
+                name.getPath() + "_sapling", CreativeModeTab.TAB_DECORATIONS);
+            return this;
+        }
+
+        public Builder sapling(String nameIn) {
+            woodRegistry.sapling = registryHelper.blocks().registerBlock(new SaplingBaseBlock(woodRegistry.saplingGenerator),
+                nameIn + "_sapling", CreativeModeTab.TAB_DECORATIONS);
+            return this;
+        }
+
+        public Builder saplings(String... names) {
+            for (String saplingName : names) {
+                woodRegistry.sapling = registryHelper.blocks().registerBlock(new SaplingBaseBlock(woodRegistry.saplingGenerator),
+                    saplingName + "_sapling", CreativeModeTab.TAB_DECORATIONS);
+                saplings.add(saplingName + "_sapling");
+            }
+            return this;
+        }
+
+        public Builder fence() {
+            woodRegistry.fence = registryHelper.blocks().registerBlock(new FenceBlock(BlockBehaviour.Properties.copy(woodRegistry.planks)),
+                name.getPath() + "_fence", CreativeModeTab.TAB_DECORATIONS);
+            return this;
+        }
+
+        public Builder fenceGate() {
+            woodRegistry.fenceGate = registryHelper.blocks().registerBlock(new FenceGateBlock(BlockBehaviour.Properties.copy(woodRegistry.planks)),
+                name.getPath() + "_fence_gate", CreativeModeTab.TAB_REDSTONE);
+            return this;
+        }
+
+        public Builder bookshelf() {
+            woodRegistry.bookshelf = registryHelper.blocks().registerBlock(new Block(BlockBehaviour.Properties.copy(woodRegistry.planks)),
+                name.getPath() + "_bookshelf", CreativeModeTab.TAB_BUILDING_BLOCKS);
+            return this;
+        }
+
+        public Builder door() {
+            woodRegistry.door = registryHelper.blocks().registerBlock(new DoorBaseBlock(BlockBehaviour.Properties.copy(woodRegistry.planks)),
+                name.getPath() + "_door", CreativeModeTab.TAB_REDSTONE);
+            return this;
+        }
+
+        public Builder trapdoor() {
+            woodRegistry.trapdoor = registryHelper.blocks().registerBlock(new TrapdoorBaseBlock(BlockBehaviour.Properties.copy(woodRegistry.planks)),
+                name.getPath() + "_trapdoor", CreativeModeTab.TAB_REDSTONE);
+            return this;
+        }
+
+        public Builder button() {
+            woodRegistry.button = registryHelper.blocks().registerBlock(new ButtonBaseBlock(true, BlockBehaviour.Properties.copy(woodRegistry.planks)),
+                name.getPath() + "_button", CreativeModeTab.TAB_REDSTONE);
+            return this;
+        }
+
+        public Builder pressurePlate(PressurePlateBlock.Sensitivity type) {
+            woodRegistry.pressurePlate = registryHelper.blocks().registerBlock(new PressurePlateBaseBlock(BlockBehaviour.Properties.copy(woodRegistry.planks), type),
+                name.getPath() + "_pressure_plate", CreativeModeTab.TAB_REDSTONE);
+            return this;
+        }
+
+        public Builder ladder() {
+            woodRegistry.ladder = registryHelper.blocks().registerBlock(new CustomLadderBlock(),
+                name.getPath() + "_ladder", CreativeModeTab.TAB_DECORATIONS);
+            return this;
+        }
+
+        /*public Builder sign() {
+            BlockEntityType<SignBlockEntity> signBlockEntityBlockEntityType = Registry.register(Registry.BLOCK_ENTITY_TYPE, Utils.appendToPath(name, "_base"), BlockEntityType.Builder.create(SignBlockEntity::new).build(null));
+            SignType signType = SignType.register(new SignType(name.getPath()));
+            woodRegistry.sign = registryHelper.registerBlockWithoutItem(name.getPath() + "_sign", new CustomSignBlock(signType, FabricBlockSettings.copy(Blocks.OAK_SIGN)));
+            woodRegistry.wallSign = registryHelper.registerBlockWithoutItem(name.getPath() + "_wall_sign", new CustomWallSignBlock(signType, FabricBlockSettings.copy(Blocks.OAK_WALL_SIGN)));
+            woodRegistry.signItem = registryHelper.registerItem(name.getPath() + "_sign", new SignItem(new Item.Settings().maxCount(16).group(ItemGroup.DECORATIONS), woodRegistry.sign, woodRegistry.wallSign));
+            ((IBlockEntityType) signBlockEntityBlockEntityType).vl_addBlocks(woodRegistry.sign, woodRegistry.wallSign);
+            return this;
+        }*/
+
+        public Builder boat() {
+            woodRegistry.boatItem = registryHelper.items().registerItem(name.getPath() + "_boat", new CustomBoatItem(() -> woodRegistry.boatEntity, new Item.Properties().stacksTo(1).tab(CreativeModeTab.TAB_TRANSPORTATION)));
+            woodRegistry.boatEntity = Registry.register(Registry.ENTITY_TYPE, Utils.appendToPath(name, "_boat"), FabricEntityTypeBuilder.<CustomBoatEntity>create(MobCategory.MISC, (entity, world) -> new CustomBoatEntity(entity, world, new CustomBoatInfo(woodRegistry.boatItem, woodRegistry.planks.asItem(), Utils.appendAndPrependToPath(name, "textures/entity/boat/", ".png"), boatType))).dimensions(EntityDimensions.fixed(1.375F, 0.5625F)).build());
+            return this;
+        }
+
         public Builder nonFlammable() {
             this.flammable = false;
             return this;
@@ -928,233 +1146,6 @@ public class WoodRegistry {
 
         public Builder defaultBlocks() {
             return this.log().strippedLog().wood().strippedWood().planks().leaves().sapling().door().trapdoor().boat();
-        }
-
-        public Builder log() {
-            String logName = mushroomLike ? name.getPath() + "_stem" : this.name.getPath() + "_log";
-            BlockBehaviour.Properties blockSettings = mushroomLike ? FabricBlockSettings.copyOf(Blocks.WARPED_STEM) : FabricBlockSettings.copyOf(Blocks.OAK_LOG);
-            woodRegistry.log = registryHelper.registerBlock(new RotatedPillarBlock(blockSettings), logName, CreativeModeTab.TAB_BUILDING_BLOCKS);
-            return this;
-        }
-
-        public Builder wood() {
-            String woodName = mushroomLike ? name.getPath() + "_hyphae" : name.getPath() + "_wood";
-            BlockBehaviour.Properties blockSettings = mushroomLike ? FabricBlockSettings.copyOf(Blocks.WARPED_HYPHAE) : FabricBlockSettings.copyOf(Blocks.OAK_WOOD);
-            woodRegistry.wood = registryHelper.registerBlock(new RotatedPillarBlock(blockSettings), woodName, CreativeModeTab.TAB_BUILDING_BLOCKS);
-            return this;
-        }
-
-        public Builder strippedLog() {
-            String logName = mushroomLike ? name.getPath() + "_stem" : name.getPath() + "_log";
-            BlockBehaviour.Properties blockSettings = mushroomLike ? FabricBlockSettings.copyOf(Blocks.STRIPPED_WARPED_STEM) : FabricBlockSettings.copyOf(Blocks.STRIPPED_OAK_LOG);
-            woodRegistry.strippedLog = registryHelper.registerBlock(new RotatedPillarBlock(blockSettings), "stripped_" + logName, CreativeModeTab.TAB_BUILDING_BLOCKS);
-            return this;
-        }
-
-        public Builder strippedWood() {
-            String woodName = mushroomLike ? name.getPath() + "_hyphae" : name.getPath() + "_wood";
-            BlockBehaviour.Properties blockSettings = mushroomLike ? FabricBlockSettings.copyOf(Blocks.STRIPPED_WARPED_HYPHAE) : FabricBlockSettings.copyOf(Blocks.STRIPPED_OAK_WOOD);
-            woodRegistry.strippedWood = registryHelper.registerBlock(new RotatedPillarBlock(blockSettings), "stripped_" + woodName, CreativeModeTab.TAB_BUILDING_BLOCKS);
-            return this;
-        }
-
-        public Builder stairs() {
-            woodRegistry.stairs = registryHelper.registerBlock(new StairsBaseBlock(woodRegistry.planks.defaultBlockState()),
-                name.getPath() + "_stairs", CreativeModeTab.TAB_BUILDING_BLOCKS);
-            return this;
-        }
-
-        public Builder slab() {
-            woodRegistry.slab = registryHelper.registerBlock(new SlabBaseBlock(BlockBehaviour.Properties.copy(woodRegistry.planks)),
-                name.getPath() + "_slab", CreativeModeTab.TAB_BUILDING_BLOCKS);
-            return this;
-        }
-
-        public Builder planks() {
-            woodRegistry.planks = registryHelper.registerBlock(new Block(FabricBlockSettings.copyOf(Blocks.OAK_PLANKS)),
-                name.getPath() + "_planks", CreativeModeTab.TAB_BUILDING_BLOCKS);
-            return this;
-        }
-
-        public Builder wartBlock() {
-            woodRegistry.leaves = registryHelper.registerBlock(new Block(FabricBlockSettings.copyOf(Blocks.NETHER_WART_BLOCK)),
-                name.getPath() + "_wart_block", CreativeModeTab.TAB_DECORATIONS);
-            return this;
-        }
-
-        public Builder leaves() {
-            woodRegistry.leaves = registryHelper.registerBlock(new LeavesBaseBlock(), name.getPath() + "_leaves",
-                CreativeModeTab.TAB_DECORATIONS);
-            VampireLibClient.ColoredLeaves coloredLeaves = new VampireLibClient.ColoredLeaves(woodRegistry.leaves, false, 0xFFF);
-            VampireLibClient.COLORED_LEAVES.add(coloredLeaves);
-            return this;
-        }
-
-        public Builder nonColoredLeaves() {
-            woodRegistry.leaves = registryHelper.registerBlock(new LeavesBaseBlock(), name.getPath() + "_leaves",
-                CreativeModeTab.TAB_DECORATIONS);
-            return this;
-        }
-
-        public Builder nonColoredLeaves(String nameIn) {
-            woodRegistry.leaves = registryHelper.registerBlock(new LeavesBaseBlock(), nameIn + "_leaves",
-                CreativeModeTab.TAB_DECORATIONS);
-            VampireLibClient.ColoredLeaves coloredLeaves = new VampireLibClient.ColoredLeaves(woodRegistry.leaves, false, 0xFFF);
-            VampireLibClient.COLORED_LEAVES.add(coloredLeaves);
-            return this;
-        }
-
-        public Builder nonColoredLeaves(String... nameIn) {
-            for (String leavesName : nameIn) {
-                woodRegistry.leaves = registryHelper.registerBlock(new LeavesBaseBlock(), leavesName + "_leaves",
-                    CreativeModeTab.TAB_DECORATIONS);
-                VampireLibClient.ColoredLeaves coloredLeaves = new VampireLibClient.ColoredLeaves(woodRegistry.leaves, false, 0xFFF);
-                VampireLibClient.COLORED_LEAVES.add(coloredLeaves);
-                leaves.add(leavesName + "_leaves");
-            }
-            return this;
-        }
-
-        public Builder coloredLeaves(int color) {
-            woodRegistry.leaves = registryHelper.registerBlock(new LeavesBaseBlock(), name.getPath() + "_leaves",
-                CreativeModeTab.TAB_DECORATIONS);
-            VampireLibClient.ColoredLeaves coloredLeaves = new VampireLibClient.ColoredLeaves(woodRegistry.leaves, true, color);
-            VampireLibClient.COLORED_LEAVES.add(coloredLeaves);
-            return this;
-        }
-
-        public Builder coloredLeaves(String nameIn) {
-            woodRegistry.leaves = registryHelper.registerBlock(new LeavesBaseBlock(), nameIn + "_leaves",
-                CreativeModeTab.TAB_DECORATIONS);
-            VampireLibClient.ColoredLeaves coloredLeaves = new VampireLibClient.ColoredLeaves(woodRegistry.leaves, false, 0xFFF);
-            VampireLibClient.COLORED_LEAVES.add(coloredLeaves);
-            return this;
-        }
-
-        public Builder coloredLeaves(String... nameIn) {
-            for (String leavesName : nameIn) {
-                woodRegistry.leaves = registryHelper.registerBlock(new LeavesBaseBlock(), leavesName + "_leaves",
-                    CreativeModeTab.TAB_DECORATIONS);
-                VampireLibClient.ColoredLeaves coloredLeaves = new VampireLibClient.ColoredLeaves(woodRegistry.leaves, false, 0xFFF);
-                VampireLibClient.COLORED_LEAVES.add(coloredLeaves);
-                leaves.add(leavesName + "_leaves");
-            }
-            return this;
-        }
-
-        public Builder coloredLeaves(String nameIn, int color) {
-            woodRegistry.leaves = registryHelper.registerBlock(new LeavesBaseBlock(), nameIn + "_leaves",
-                CreativeModeTab.TAB_DECORATIONS);
-            VampireLibClient.ColoredLeaves coloredLeaves = new VampireLibClient.ColoredLeaves(woodRegistry.leaves, true, color);
-            VampireLibClient.COLORED_LEAVES.add(coloredLeaves);
-            return this;
-        }
-
-        public Builder coloredLeaves(int color, String... nameIn) {
-            for (String leavesName : nameIn) {
-                woodRegistry.leaves = registryHelper.registerBlock(new LeavesBaseBlock(), leavesName + "_leaves",
-                    CreativeModeTab.TAB_DECORATIONS);
-                VampireLibClient.ColoredLeaves coloredLeaves = new VampireLibClient.ColoredLeaves(woodRegistry.leaves, false, color);
-                VampireLibClient.COLORED_LEAVES.add(coloredLeaves);
-                leaves.add(leavesName + "_leaves");
-            }
-            return this;
-        }
-
-        public Builder coloredLeaves(ColoredLeavesBlock... coloredLeavesBlocks) {
-            for (ColoredLeavesBlock coloredLeavesBlock : coloredLeavesBlocks) {
-                woodRegistry.leaves = registryHelper.registerBlock(new LeavesBaseBlock(), coloredLeavesBlock.name + "_leaves",
-                    CreativeModeTab.TAB_DECORATIONS);
-                VampireLibClient.ColoredLeaves coloredLeaves = new VampireLibClient.ColoredLeaves(woodRegistry.leaves, true, coloredLeavesBlock.color);
-                VampireLibClient.COLORED_LEAVES.add(coloredLeaves);
-                leaves.add(coloredLeavesBlock.name + "_leaves");
-            }
-            return this;
-        }
-
-        public Builder sapling() {
-            woodRegistry.sapling = registryHelper.registerBlock(new SaplingBaseBlock(woodRegistry.saplingGenerator),
-                name.getPath() + "_sapling", CreativeModeTab.TAB_DECORATIONS);
-            return this;
-        }
-
-        public Builder sapling(String nameIn) {
-            woodRegistry.sapling = registryHelper.registerBlock(new SaplingBaseBlock(woodRegistry.saplingGenerator),
-                nameIn + "_sapling", CreativeModeTab.TAB_DECORATIONS);
-            return this;
-        }
-
-        public Builder saplings(String... names) {
-            for (String saplingName : names) {
-                woodRegistry.sapling = registryHelper.registerBlock(new SaplingBaseBlock(woodRegistry.saplingGenerator),
-                    saplingName + "_sapling", CreativeModeTab.TAB_DECORATIONS);
-                saplings.add(saplingName + "_sapling");
-            }
-            return this;
-        }
-
-        public Builder fence() {
-            woodRegistry.fence = registryHelper.registerBlock(new FenceBlock(BlockBehaviour.Properties.copy(woodRegistry.planks)),
-                name.getPath() + "_fence", CreativeModeTab.TAB_DECORATIONS);
-            return this;
-        }
-
-        public Builder fenceGate() {
-            woodRegistry.fenceGate = registryHelper.registerBlock(new FenceGateBlock(BlockBehaviour.Properties.copy(woodRegistry.planks)),
-                name.getPath() + "_fence_gate", CreativeModeTab.TAB_REDSTONE);
-            return this;
-        }
-
-        public Builder bookshelf() {
-            woodRegistry.bookshelf = registryHelper.registerBlock(new Block(Block.Settings.copy(woodRegistry.planks)),
-                name.getPath() + "_bookshelf", CreativeModeTab.TAB_BUILDING_BLOCKS);
-            return this;
-        }
-
-        public Builder door() {
-            woodRegistry.door = registryHelper.registerBlock(new DoorBaseBlock(BlockBehaviour.Properties.copy(woodRegistry.planks)),
-                name.getPath() + "_door", CreativeModeTab.TAB_REDSTONE);
-            return this;
-        }
-
-        public Builder trapdoor() {
-            woodRegistry.trapdoor = registryHelper.registerBlock(new TrapdoorBaseBlock(BlockBehaviour.Properties.copy(woodRegistry.planks)),
-                name.getPath() + "_trapdoor", CreativeModeTab.TAB_REDSTONE);
-            return this;
-        }
-
-        public Builder button() {
-            woodRegistry.button = registryHelper.registerBlock(new ButtonBaseBlock(true, BlockBehaviour.Properties.copy(woodRegistry.planks)),
-                name.getPath() + "_button", CreativeModeTab.TAB_REDSTONE);
-            return this;
-        }
-
-        public Builder pressurePlate(PressurePlateBlock.Sensitivity type) {
-            woodRegistry.pressurePlate = registryHelper.registerBlock(new PressurePlateBaseBlock(BlockBehaviour.Properties.copy(woodRegistry.planks), type),
-                name.getPath() + "_pressure_plate", CreativeModeTab.TAB_REDSTONE);
-            return this;
-        }
-
-        public Builder ladder() {
-            woodRegistry.ladder = registryHelper.registerBlock(new CustomLadderBlock(),
-                name.getPath() + "_ladder", CreativeModeTab.TAB_DECORATIONS);
-            return this;
-        }
-
-        /*public Builder sign() {
-            BlockEntityType<SignBlockEntity> signBlockEntityBlockEntityType = Registry.register(Registry.BLOCK_ENTITY_TYPE, Utils.appendToPath(name, "_base"), BlockEntityType.Builder.create(SignBlockEntity::new).build(null));
-            SignType signType = SignType.register(new SignType(name.getPath()));
-            woodRegistry.sign = registryHelper.registerBlockWithoutItem(name.getPath() + "_sign", new CustomSignBlock(signType, FabricBlockSettings.copy(Blocks.OAK_SIGN)));
-            woodRegistry.wallSign = registryHelper.registerBlockWithoutItem(name.getPath() + "_wall_sign", new CustomWallSignBlock(signType, FabricBlockSettings.copy(Blocks.OAK_WALL_SIGN)));
-            woodRegistry.signItem = registryHelper.registerItem(name.getPath() + "_sign", new SignItem(new Item.Settings().maxCount(16).group(ItemGroup.DECORATIONS), woodRegistry.sign, woodRegistry.wallSign));
-            ((IBlockEntityType) signBlockEntityBlockEntityType).vl_addBlocks(woodRegistry.sign, woodRegistry.wallSign);
-            return this;
-        }*/
-
-        public Builder boat() {
-            woodRegistry.boatItem = registryHelper.registerItem(name.getPath() + "_boat", new CustomBoatItem(() -> woodRegistry.boatEntity, new Item.Properties().stacksTo(1).tab(CreativeModeTab.TAB_TRANSPORTATION)));
-            woodRegistry.boatEntity = Registry.register(Registry.ENTITY_TYPE, Utils.appendToPath(name, "_boat"), FabricEntityTypeBuilder.<CustomBoatEntity>create(MobCategory.MISC, (entity, world) -> new CustomBoatEntity(entity, world, new CustomBoatInfo(woodRegistry.boatItem, woodRegistry.planks.asItem(), Utils.appendAndPrependToPath(name, "textures/entity/boat/", ".png"), boatType))).dimensions(EntityDimensions.fixed(1.375F, 0.5625F)).build());
-            return this;
         }
 
         public WoodRegistry build() {
@@ -1387,23 +1378,6 @@ public class WoodRegistry {
         }
     }
 
-    public static class ColoredLeavesBlock {
-
-        private final String name;
-        private final int color;
-
-        public ColoredLeavesBlock(String name, int color) {
-            this.name = name;
-            this.color = color;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public int getColor() {
-            return color;
-        }
-    }
+    public record ColoredLeavesBlock(String name, int color) {}
 
 }
