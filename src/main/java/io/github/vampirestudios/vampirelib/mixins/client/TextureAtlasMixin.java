@@ -11,7 +11,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import com.mojang.blaze3d.platform.NativeImage;
 
-import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.resources.ResourceLocation;
@@ -29,9 +28,8 @@ public class TextureAtlasMixin {
 	@Shadow @Final private ResourceLocation location;
 
 	@Inject(method = "load(Lnet/minecraft/server/packs/resources/ResourceManager;Lnet/minecraft/client/renderer/texture/TextureAtlasSprite$Info;IIIII)Lnet/minecraft/client/renderer/texture/TextureAtlasSprite;", at = @At("HEAD"), cancellable = true)
-	private void raa_loadSprite(ResourceManager container, TextureAtlasSprite.Info info, int atlasWidth, int atlasHeight, int maxLevel, int x, int y, CallbackInfoReturnable<TextureAtlasSprite> cir) {
-		//Planning on making banners and shields work with glow ink sack
-		if (!FabricLoader.getInstance().isModLoaded("optifabric") && !FabricLoader.getInstance().isModLoaded("bclib") && !this.location.equals(Sheets.BANNER_SHEET)/* && !this.location.equals(Sheets.SHIELD_SHEET)*/) {
+	private void vl_loadSprites(ResourceManager container, TextureAtlasSprite.Info info, int atlasWidth, int atlasHeight, int maxLevel, int x, int y, CallbackInfoReturnable<TextureAtlasSprite> cir) {
+		if (!FabricLoader.getInstance().isModLoaded("optifabric") && !FabricLoader.getInstance().isModLoaded("bclib")) {
 			ResourceLocation location = info.name();
 			ResourceLocation emissiveLocation = new ResourceLocation(location.getNamespace(), "textures/" + location.getPath() + "_e.png");
 			if (container.hasResource(emissiveLocation)) {
@@ -46,8 +44,7 @@ public class TextureAtlasMixin {
 					resource = container.getResource(emissiveLocation);
 					emission = NativeImage.read(resource.getInputStream());
 					resource.close();
-				}
-				catch (IOException e) {
+				} catch (IOException e) {
 					VampireLib.LOGGER.info(e.getMessage());
 				}
 				if (sprite != null && emission != null) {
@@ -62,7 +59,7 @@ public class TextureAtlasMixin {
 								int g = (argb >> 8) & 255;
 								int b = argb & 255;
 								if (r > 0 || g > 0 || b > 0) {
-									argb = (argb & 0x00FFFFFF) | (250 << 24);
+									argb = (argb & 0x00FFFFFF) | EMISSIVE_ALPHA;
 									sprite.setPixelRGBA(posX, posY, argb);
 								}
 							}

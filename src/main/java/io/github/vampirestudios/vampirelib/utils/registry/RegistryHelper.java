@@ -702,28 +702,28 @@ import net.minecraft.world.level.material.MaterialColor;
 import net.fabricmc.loader.api.FabricLoader;
 
 import io.github.vampirestudios.vampirelib.blocks.CompatBlock;
+import io.github.vampirestudios.vampirelib.mixins.SpawnEggItemAccessor;
 
-public class RegistryHelper {
-
-    private final String modId;
-
-    RegistryHelper(String modId) {
-        this.modId = modId;
-    }
-
+public record RegistryHelper(String modId) {
     public static RegistryHelper createRegistryHelper(String modId) {
         return new RegistryHelper(modId);
     }
 
     public Blocks blocks() {
-        return new Blocks(modId);
+        return new Blocks(modId());
     }
 
     public Items items() {
-        return new Items(modId);
+        return new Items(modId());
     }
 
-    static record Blocks(String modId) {
+    public static class Blocks {
+        private final String modId;
+
+        public Blocks(String modId) {
+            this.modId = modId;
+        }
+
         public Block registerBlock(Block block, String name) {
             registerBlock(block, name, CreativeModeTab.TAB_DECORATIONS);
             return block;
@@ -781,7 +781,13 @@ public class RegistryHelper {
         }
     }
 
-    static record Items(String modId) {
+    public static class Items {
+        private final String modId;
+
+        public Items(String modId) {
+            this.modId = modId;
+        }
+
         public Item registerItem(String name, Item item) {
             return Registry.register(Registry.ITEM, new ResourceLocation(modId, name), item);
         }
@@ -795,7 +801,9 @@ public class RegistryHelper {
         }
 
         public Item registerSpawnEgg(String name, EntityType<? extends Mob> entity, int primaryColor, int secondaryColor) {
-            return registerItem(name + "_spawn_egg", new SpawnEggItem(entity, primaryColor, secondaryColor, new Item.Properties().tab(CreativeModeTab.TAB_MISC)));
+            Item item = registerItem(name + "_spawn_egg", new SpawnEggItem(entity, primaryColor, secondaryColor, new Item.Properties().tab(CreativeModeTab.TAB_MISC)));
+            SpawnEggItemAccessor.getBY_ID().put(entity, (SpawnEggItem) item);
+            return item;
         }
 
         public Potion registerPotion(String name, Potion potion) {
@@ -810,7 +818,6 @@ public class RegistryHelper {
     private static class Carvers {
 
     }
-
 
 
     public <T extends BlockEntity> BlockEntityType<T> registerBlockEntity(BlockEntityType.Builder<T> builder, String name) {

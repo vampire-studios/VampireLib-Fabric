@@ -681,7 +681,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Quaternion;
 import com.mojang.math.Vector3f;
-import io.github.vampirestudios.vampirelib.boat.CustomBoatEntity;
+
 import net.minecraft.client.model.BoatModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -691,6 +691,8 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+
+import io.github.vampirestudios.vampirelib.boat.CustomBoatEntity;
 
 public class CustomBoatEntityRenderer extends EntityRenderer<CustomBoatEntity> {
 
@@ -750,7 +752,7 @@ public class CustomBoatEntityRenderer extends EntityRenderer<CustomBoatEntity> {
     }
 
     @Override
-    public ResourceLocation getTexture(CustomBoatEntity boatEntity) {
+    public ResourceLocation getTextureLocation(CustomBoatEntity boatEntity) {
         return boatEntity.getBoatSkin();
     }
 

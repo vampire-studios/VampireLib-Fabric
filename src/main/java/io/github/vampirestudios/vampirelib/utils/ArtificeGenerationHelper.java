@@ -882,33 +882,27 @@ public class ArtificeGenerationHelper {
         pack.add(Utils.appendAndPrependToPath(name, "blockstates/", ".json"), new StringResource(JSON));
     }
 
-    public static void generateStairsBlockModels(ArtificeResourcePack.ClientResourcePackBuilder pack, ResourceLocation name, Map<String, ResourceLocation> textures) {
+    public static void generateStairsBlockModels(ArtificeResourcePack.ClientResourcePackBuilder pack, ResourceLocation name, ResourceLocation textures) {
         pack.addBlockModel(Utils.appendToPath(name, "_inner"), model -> {
             model.parent(new ResourceLocation("block/inner_stairs"));
-            ResourceLocation particle = textures.containsKey("particle") ? textures.get("particle") : textures.containsKey("end") ?
-                textures.get("end") : textures.get("all");
-            model.texture("particle", particle);
-            model.texture("side", textures.containsKey("side") ? textures.get("side") : textures.get("all"));
-            model.texture("top", textures.containsKey("top") ? textures.get("top") : textures.containsKey("end") ? textures.get("end") : textures.get("all"));
-            model.texture("bottom", textures.containsKey("bottom") ? textures.get("bottom") : textures.containsKey("end") ? textures.get("end") : textures.get("all"));
+            model.texture("particle", textures);
+            model.texture("side", textures);
+            model.texture("top", textures);
+            model.texture("bottom", textures);
         });
         pack.addBlockModel(Utils.appendToPath(name, "_outer"), model -> {
             model.parent(new ResourceLocation("block/outer_stairs"));
-            ResourceLocation particle = textures.containsKey("particle") ? textures.get("particle") : textures.containsKey("end") ?
-                textures.get("end") : textures.get("all");
-            model.texture("particle", particle);
-            model.texture("side", textures.containsKey("side") ? textures.get("side") : textures.get("all"));
-            model.texture("top", textures.containsKey("top") ? textures.get("top") : textures.containsKey("end") ? textures.get("end") : textures.get("all"));
-            model.texture("bottom", textures.containsKey("bottom") ? textures.get("bottom") : textures.containsKey("end") ? textures.get("end") : textures.get("all"));
+            model.texture("particle", textures);
+            model.texture("side", textures);
+            model.texture("top", textures);
+            model.texture("bottom", textures);
         });
         pack.addBlockModel(name, model -> {
             model.parent(new ResourceLocation("block/stairs"));
-            ResourceLocation particle = textures.containsKey("particle") ? textures.get("particle") : textures.containsKey("end") ?
-                textures.get("end") : textures.get("all");
-            model.texture("particle", particle);
-            model.texture("side", textures.containsKey("side") ? textures.get("side") : textures.get("all"));
-            model.texture("top", textures.containsKey("top") ? textures.get("top") : textures.containsKey("end") ? textures.get("end") : textures.get("all"));
-            model.texture("bottom", textures.containsKey("bottom") ? textures.get("bottom") : textures.containsKey("end") ? textures.get("end") : textures.get("all"));
+            model.texture("particle", textures);
+            model.texture("side", textures);
+            model.texture("top", textures);
+            model.texture("bottom", textures);
         });
     }
 
@@ -919,22 +913,22 @@ public class ArtificeGenerationHelper {
         pack.add(Utils.appendAndPrependToPath(name, "blockstates/", ".json"), new StringResource(JSON));
     }
 
-    public static void generateWallBlockModels(ArtificeResourcePack.ClientResourcePackBuilder pack, ResourceLocation name, Map<String, ResourceLocation> textures) {
+    public static void generateWallBlockModels(ArtificeResourcePack.ClientResourcePackBuilder pack, ResourceLocation name, ResourceLocation textures) {
         pack.addBlockModel(Utils.appendToPath(name, "_inventory"), model -> {
             model.parent(new ResourceLocation("block/wall_inventory"));
-            model.texture("wall", textures.containsKey("wall") ? textures.get("wall") : textures.containsKey("side") ? textures.get("side") : textures.get("all"));
+            model.texture("wall", textures);
         });
         pack.addBlockModel(Utils.appendToPath(name, "_post"), model -> {
             model.parent(new ResourceLocation("block/template_wall_post"));
-            model.texture("wall", textures.containsKey("wall") ? textures.get("wall") : textures.containsKey("side") ? textures.get("side") : textures.get("all"));
+            model.texture("wall", textures);
         });
         pack.addBlockModel(Utils.appendToPath(name, "_side"), model -> {
             model.parent(new ResourceLocation("block/template_wall_side"));
-            model.texture("wall", textures.containsKey("wall") ? textures.get("wall") : textures.containsKey("side") ? textures.get("side") : textures.get("all"));
+            model.texture("wall", textures);
         });
         pack.addBlockModel(Utils.appendToPath(name, "_side_tall"), model -> {
             model.parent(new ResourceLocation("block/template_wall_side_tall"));
-            model.texture("wall", textures.containsKey("wall") ? textures.get("wall") : textures.containsKey("side") ? textures.get("side") : textures.get("all"));
+            model.texture("wall", textures);
         });
     }
 
@@ -952,37 +946,20 @@ public class ArtificeGenerationHelper {
         });
     }
 
-    public static void generateSlabBlockModels(ArtificeResourcePack.ClientResourcePackBuilder pack, ResourceLocation name, ResourceLocation texture) {
-        pack.addBlockModel(Utils.appendToPath(name, "_top"), model -> {
-            model.parent(new ResourceLocation("block/slab_top"));
-            model.texture("particle", texture);
-            model.texture("side", texture);
-            model.texture("top", texture);
-            model.texture("bottom", texture);
-        });
-        pack.addBlockModel(name, model -> {
-            model.parent(new ResourceLocation("block/slab"));
-            model.texture("particle", texture);
-            model.texture("side", texture);
-            model.texture("top", texture);
-            model.texture("bottom", texture);
-        });
-    }
-
-    public static void generateSlabBlockModels(ArtificeResourcePack.ClientResourcePackBuilder pack, ResourceLocation name, Map<String, ResourceLocation> textures) {
+    public static void generateSlabBlockModels(ArtificeResourcePack.ClientResourcePackBuilder pack, ResourceLocation name, ResourceLocation textures) {
         pack.addBlockModel(Utils.appendToPath(name, "_top"), model -> {
             model.parent(new ResourceLocation("block/slab_top"));
 //            model.texture("particle", textures.containsKey("particle") ? textures.get("particle") : textures.get("all"));
-            model.texture("side", textures.containsKey("side") ? textures.get("side") : textures.get("all"));
-            model.texture("top", textures.containsKey("top") ? textures.get("top") : textures.containsKey("end") ? textures.get("end") : textures.get("all"));
-            model.texture("bottom", textures.containsKey("bottom") ? textures.get("bottom") : textures.containsKey("end") ? textures.get("end") : textures.get("all"));
+            model.texture("side", textures);
+            model.texture("top", textures);
+            model.texture("bottom", textures);
         });
         pack.addBlockModel(name, model -> {
             model.parent(new ResourceLocation("block/slab"));
 //            model.texture("particle", textures.containsKey("particle") ? textures.get("particle") : textures.get("all"));
-            model.texture("side", textures.containsKey("side") ? textures.get("side") : textures.get("all"));
-            model.texture("top", textures.containsKey("top") ? textures.get("top") : textures.containsKey("end") ? textures.get("end") : textures.get("all"));
-            model.texture("bottom", textures.containsKey("bottom") ? textures.get("bottom") : textures.containsKey("end") ? textures.get("end") : textures.get("all"));
+            model.texture("side", textures);
+            model.texture("top", textures);
+            model.texture("bottom", textures);
         });
     }
 
@@ -1099,25 +1076,22 @@ public class ArtificeGenerationHelper {
     }
 
     public static void generateDoorBlockModels(ArtificeResourcePack.ClientResourcePackBuilder pack, ResourceLocation name,
-                                               ResourceLocation topParent, ResourceLocation topTextures,
-                                               ResourceLocation topHingeParent, ResourceLocation topHingeTextures,
-                                               ResourceLocation bottomParent, ResourceLocation bottomTextures,
-                                               ResourceLocation bottomHingeParent, ResourceLocation bottomHingeTextures) {
+                                               ResourceLocation topTextures, ResourceLocation bottomTextures) {
         pack.addBlockModel(Utils.appendToPath(name, "_bottom"), model -> {
-            model.parent(bottomParent != null ? bottomParent : new ResourceLocation("block/door_bottom"));
-            bottomTextures.forEach(model::texture);
+            model.parent(new ResourceLocation("block/door_bottom"));
+            model.texture("texture", bottomTextures);
         });
         pack.addBlockModel(Utils.appendToPath(name, "_bottom_hinge"), model -> {
-            model.parent(bottomHingeParent != null ? bottomHingeParent : new ResourceLocation("block/door_bottom_rh"));
-            bottomHingeTextures.forEach(model::texture);
+            model.parent(new ResourceLocation("block/door_bottom_rh"));
+            model.texture("texture", bottomTextures);
         });
         pack.addBlockModel(Utils.appendToPath(name, "_top"), model -> {
-            model.parent(topParent != null ? topParent : new ResourceLocation("block/door_top"));
-            topTextures.forEach(model::texture);
+            model.parent(new ResourceLocation("block/door_top"));
+            model.texture("texture", topTextures);
         });
         pack.addBlockModel(Utils.appendToPath(name, "_top_hinge"), model -> {
-            model.parent(topHingeParent != null ? topHingeParent : new ResourceLocation("block/door_top_rh"));
-            topHingeTextures.forEach(model::texture);
+            model.parent(new ResourceLocation("block/door_top_rh"));
+            model.texture("texture", topTextures);
         });
     }
 
@@ -1129,20 +1103,18 @@ public class ArtificeGenerationHelper {
     }
 
     public static void generateTrapdoorBlockModels(ArtificeResourcePack.ClientResourcePackBuilder pack, ResourceLocation name,
-                                                   ResourceLocation topParent, Map<String, ResourceLocation> topTextures,
-                                                   ResourceLocation openParent, Map<String, ResourceLocation> openTextures,
-                                                   ResourceLocation bottomParent, Map<String, ResourceLocation> bottomTextures) {
+                                                   ResourceLocation texture) {
         pack.addBlockModel(Utils.appendToPath(name, "_bottom"), model -> {
-            model.parent(bottomParent);
-            bottomTextures.forEach(model::texture);
+            model.parent(new ResourceLocation("block/template_orientable_trapdoor_bottom"));
+            model.texture("texture", texture);
         });
         pack.addBlockModel(Utils.appendToPath(name, "_open"), model -> {
-            model.parent(openParent);
-            openTextures.forEach(model::texture);
+            model.parent(new ResourceLocation("block/template_orientable_trapdoor_open"));
+            model.texture("texture", texture);
         });
         pack.addBlockModel(Utils.appendToPath(name, "_top"), model -> {
-            model.parent(topParent);
-            topTextures.forEach(model::texture);
+            model.parent(new ResourceLocation("block/template_orientable_trapdoor_top"));
+            model.texture("texture", texture);
         });
     }
 

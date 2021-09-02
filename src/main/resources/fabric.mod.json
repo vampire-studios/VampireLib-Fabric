@@ -29,7 +29,6 @@
   ],
   "accessWidener": "vampirelib.accesswidener",
   "depends": {
-    "fabric": "0.37.2+1.18_experimental",
     "fabricloader": ">=0.11.6",
     "java": ">=16"
   },

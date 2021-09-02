@@ -681,10 +681,13 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
 import com.mojang.blaze3d.vertex.PoseStack;
-import io.github.vampirestudios.vampirelib.callbacks.RenderGuiCallback;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+
+import io.github.vampirestudios.vampirelib.callbacks.RenderGuiCallback;
 
 @Mixin(AbstractContainerScreen.class)
 public class HandledScreenMixin {
@@ -695,7 +698,7 @@ public class HandledScreenMixin {
         method = "render",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/client/gui/screen/ingame/HandledScreen;drawForeground(Lnet/minecraft/client/util/math/MatrixStack;II)V"
+            target = "Lnet/minecraft/client/gui/screens/inventory/AbstractContainerScreen;renderLabels(Lcom/mojang/blaze3d/vertex/PoseStack;II)V"
         )
     )
     private void hookRender(PoseStack matrices, int mouseX, int mouseY, float delta, CallbackInfo ci) {

@@ -684,13 +684,8 @@ import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobCategory;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.SpawnEggItem;
 
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
-
-import io.github.vampirestudios.vampirelib.mixins.SpawnEggItemAccessor;
 
 public class EntityRegistryBuilder<E extends Entity> {
 
@@ -794,8 +789,7 @@ public class EntityRegistryBuilder<E extends Entity> {
         EntityType<E> entityType = Registry.register(Registry.ENTITY_TYPE, name, entityBuilder.build());
 
         if (hasEgg) {
-            Item spawnEggItem = RegistryHelper.createRegistryHelper(name.getNamespace()).registerItem(String.format("%s_spawn_egg", name.getPath()), new SpawnEggItem((EntityType<? extends Mob>) entityType, primaryColor, secondaryColor, new Item.Properties().tab(CreativeModeTab.TAB_MISC)));
-            SpawnEggItemAccessor.getSPAWN_EGGS().put((EntityType<? extends Mob>) entityType, (SpawnEggItem) spawnEggItem);
+            RegistryHelper.createRegistryHelper(name.getNamespace()).items().registerSpawnEgg(name.getPath(), (EntityType<? extends Mob>) entityType, primaryColor, secondaryColor);
         }
 
         return entityType;

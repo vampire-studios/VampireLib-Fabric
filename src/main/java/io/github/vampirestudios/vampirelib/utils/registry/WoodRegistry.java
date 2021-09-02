@@ -712,7 +712,8 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 
 import net.fabricmc.api.EnvType;
-import net.fabricmc.fabric.api.client.rendereregistry.v1.EntityRendererRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
@@ -720,7 +721,6 @@ import net.fabricmc.fabric.api.registry.FlammableBlockRegistry;
 import net.fabricmc.fabric.api.registry.FuelRegistry;
 import net.fabricmc.fabric.api.tool.attribute.v1.FabricToolTags;
 import net.fabricmc.fabric.impl.blockrenderlayer.BlockRenderLayerMapImpl;
-import net.fabricmc.fabric.impl.client.renderer.registry.EntityModelLayerImpl;
 import net.fabricmc.loader.api.FabricLoader;
 
 import io.github.vampirestudios.vampirelib.blocks.ButtonBaseBlock;
@@ -943,7 +943,7 @@ public class WoodRegistry {
         }
 
         public Builder stairs() {
-            woodRegistry.stairs = registryHelper.blocks().registerBlock(new StairsBaseBlock(woodRegistry.planks.defaultBlockState()),
+            woodRegistry.stairs = registryHelper.blocks().registerBlock(new StairsBaseBlock(woodRegistry.planks),
                 name.getPath() + "_stairs", CreativeModeTab.TAB_BUILDING_BLOCKS);
             return this;
         }
@@ -1361,8 +1361,8 @@ public class WoodRegistry {
 //                }
                 if (woodRegistry.boatItem != null) {
                     ModelLayerLocation entityModelLayer = VEntityModelLayers.createBoat(name);
-                    EntityModelLayerImpl.PROVIDERS.put(entityModelLayer, BoatModel::createBodyModel);
-                    EntityRendererRegistry.INSTANCE.register(woodRegistry.boatEntity, ctx -> new CustomBoatEntityRenderer(entityModelLayer, ctx));
+                    EntityModelLayerRegistry.registerModelLayer(entityModelLayer, BoatModel::createBodyModel);
+                    EntityRendererRegistry.register(woodRegistry.boatEntity, ctx -> new CustomBoatEntityRenderer(entityModelLayer, ctx));
                 }
             }
             Artifice.registerDataPack(name, serverResourcePackBuilder -> {

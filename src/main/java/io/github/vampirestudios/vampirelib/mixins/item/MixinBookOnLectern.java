@@ -681,7 +681,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import io.github.vampirestudios.vampirelib.blocks.LecternBaseBlock;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.WritableBookItem;
@@ -691,10 +691,12 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.LecternBlock;
 import net.minecraft.world.level.block.state.BlockState;
 
+import io.github.vampirestudios.vampirelib.blocks.LecternBaseBlock;
+
 @Mixin({WritableBookItem.class, WrittenBookItem.class})
 public abstract class MixinBookOnLectern {
 
-    @Inject(method = "useOnBlock", at = @At(value = "HEAD"), cancellable = true)
+    @Inject(method = "useOn", at = @At(value = "HEAD"), cancellable = true)
     public void useOnBlock(UseOnContext usageContext, CallbackInfoReturnable<InteractionResult> cir) {
         Level world = usageContext.getLevel();
         BlockPos blockPos = usageContext.getClickedPos();

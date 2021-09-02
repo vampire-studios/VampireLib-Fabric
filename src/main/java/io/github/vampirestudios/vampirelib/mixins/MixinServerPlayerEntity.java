@@ -681,15 +681,17 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import io.github.vampirestudios.vampirelib.callbacks.PlayerDropItemCallback;
+
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 
+import io.github.vampirestudios.vampirelib.callbacks.PlayerDropItemCallback;
+
 @Mixin(ServerPlayer.class)
 public class MixinServerPlayerEntity {
-    @Inject(method = "dropItem", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "drop(Lnet/minecraft/world/item/ItemStack;ZZ)Lnet/minecraft/world/entity/item/ItemEntity;", at = @At("HEAD"), cancellable = true)
     private void onPlayerDropItem(final ItemStack stack, final boolean dropAtFeet, final boolean saveThrower, final CallbackInfoReturnable<ItemEntity> info) {
         ServerPlayer player = (ServerPlayer) (Object) this;
         InteractionResult result = PlayerDropItemCallback.EVENT.invoker().interact(player, stack);

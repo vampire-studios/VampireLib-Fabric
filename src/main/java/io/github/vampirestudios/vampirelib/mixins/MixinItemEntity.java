@@ -681,14 +681,16 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import io.github.vampirestudios.vampirelib.callbacks.PlayerPickupItemCallback;
+
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 
+import io.github.vampirestudios.vampirelib.callbacks.PlayerPickupItemCallback;
+
 @Mixin(ItemEntity.class)
 public abstract class MixinItemEntity {
-    @Inject(at = @At("HEAD"), method = "onPlayerCollision", cancellable = true)
+    @Inject(at = @At("HEAD"), method = "playerTouch", cancellable = true)
     private void pickupItem(final Player playerEntity, final CallbackInfo info) {
         InteractionResult result = PlayerPickupItemCallback.EVENT.invoker().interact(playerEntity, (ItemEntity) (Object) this);
 

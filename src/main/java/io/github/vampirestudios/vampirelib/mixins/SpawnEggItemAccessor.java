@@ -678,16 +678,18 @@
 package io.github.vampirestudios.vampirelib.mixins;
 
 import java.util.Map;
+
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.gen.Accessor;
+
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.SpawnEggItem;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.gen.Accessor;
 
 @Mixin(SpawnEggItem.class)
 public interface SpawnEggItemAccessor {
     @Accessor
-    static Map<EntityType<? extends Mob>, SpawnEggItem> getSPAWN_EGGS() {
+    static Map<EntityType<? extends Mob>, SpawnEggItem> getBY_ID() {
         throw new UnsupportedOperationException();
     }
 }

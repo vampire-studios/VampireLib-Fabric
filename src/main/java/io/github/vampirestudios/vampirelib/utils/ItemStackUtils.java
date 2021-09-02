@@ -677,11 +677,12 @@
 
 package io.github.vampirestudios.vampirelib.utils;
 
-import io.github.vampirestudios.vampirelib.mixins.ItemInvokerMixin;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+
+import io.github.vampirestudios.vampirelib.mixins.ItemInvokerMixin;
 
 public class ItemStackUtils {
 
@@ -709,7 +710,7 @@ public class ItemStackUtils {
      * @return - Whether the item is present in the group or not
      */
     public static boolean isInGroup(Item item, CreativeModeTab group) {
-        return ((ItemInvokerMixin) item).callIsIn(group);
+        return ((ItemInvokerMixin) item).callAllowdedIn(group);
     }
 
 }

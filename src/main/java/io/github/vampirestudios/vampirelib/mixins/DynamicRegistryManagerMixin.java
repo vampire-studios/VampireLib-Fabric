@@ -686,17 +686,20 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
-import net.fabricmc.loader.api.FabricLoader;
+
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.data.BuiltinRegistries;
 import net.minecraft.resources.ResourceKey;
+
+import net.fabricmc.loader.api.FabricLoader;
+
 import io.github.vampirestudios.vampirelib.api.CustomDynamicRegistry;
 import io.github.vampirestudios.vampirelib.api.DynamicRegistryProvider;
 
 @Mixin(RegistryAccess.class)
 public class DynamicRegistryManagerMixin {
-    @Inject(method = "net/minecraft/util/registry/DynamicRegistryManager.method_30531()Lcom/google/common/collect/ImmutableMap;", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/registry/DynamicRegistryManager;register(Lcom/google/common/collect/ImmutableMap$Builder;Lnet/minecraft/util/registry/RegistryKey;Lcom/mojang/serialization/Codec;)V", ordinal = 0), locals = LocalCapture.CAPTURE_FAILHARD)
+    @Inject(method = "net/minecraft/core/RegistryAccess.method_32635()Lcom/google/common/collect/ImmutableMap;", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/registry/DynamicRegistryManager;register(Lcom/google/common/collect/ImmutableMap$Builder;Lnet/minecraft/util/registry/RegistryKey;Lcom/mojang/serialization/Codec;)V", ordinal = 0), locals = LocalCapture.CAPTURE_FAILHARD)
     private static void registerCustomDynamicRegistries(CallbackInfoReturnable<ImmutableMap<ResourceKey<? extends Registry<?>>, RegistryAccess.RegistryData<?>>> ci, ImmutableMap.Builder<ResourceKey<? extends Registry<?>>, RegistryAccess.RegistryData<?>> builder) {
         List<DynamicRegistryProvider> providers = FabricLoader.getInstance().getEntrypoints("vampirelib:dynamic-registry-provider", DynamicRegistryProvider.class);
         for (DynamicRegistryProvider provider : providers) {

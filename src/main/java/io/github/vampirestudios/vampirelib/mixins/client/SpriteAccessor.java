@@ -677,10 +677,12 @@
 
 package io.github.vampirestudios.vampirelib.mixins.client;
 
-import com.mojang.blaze3d.platform.NativeImage;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
+
+import com.mojang.blaze3d.platform.NativeImage;
+
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 
 /**
  * Simply gets the {@link NativeImage[]} in Sprite.
@@ -688,6 +690,6 @@ import org.spongepowered.asm.mixin.gen.Accessor;
  */
 @Mixin(TextureAtlasSprite.class)
 public interface SpriteAccessor {
-    @Accessor("images")
+    @Accessor("mainImage")
     NativeImage[] getImages();
 }

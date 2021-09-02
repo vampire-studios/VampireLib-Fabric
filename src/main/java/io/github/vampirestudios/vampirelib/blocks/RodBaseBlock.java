@@ -692,7 +692,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class RodBaseBlock extends DirectionalBlock {
+public class RodBaseBlock extends io.github.vampirestudios.vampirelib.blocks.DirectionalBlock {
 
     protected static final VoxelShape BB_AXIS_Y = Block.box(0.375D, 0.0D, 0.375D, 0.625D, 1.0D, 0.625D);
     protected static final VoxelShape BB_AXIS_Z = Block.box(0.375D, 0.375D, 0.0D, 0.625D, 0.625D, 1.0D);

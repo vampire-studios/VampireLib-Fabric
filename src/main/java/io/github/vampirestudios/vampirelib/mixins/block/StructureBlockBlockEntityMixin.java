@@ -677,14 +677,15 @@
 
 package io.github.vampirestudios.vampirelib.mixins.block;
 
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.Constant;
+import org.spongepowered.asm.mixin.injection.ModifyConstant;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.entity.StructureBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.Constant;
-import org.spongepowered.asm.mixin.injection.ModifyConstant;
 
 @Mixin(StructureBlockEntity.class)
 public abstract class StructureBlockBlockEntityMixin extends BlockEntity {
@@ -693,12 +694,12 @@ public abstract class StructureBlockBlockEntityMixin extends BlockEntity {
         super(blockEntityType, blockPos, blockState);
     }
 
-    @ModifyConstant(method = "readNbt", constant = @Constant(intValue = 48))
+    @ModifyConstant(method = "load", constant = @Constant(intValue = 48))
     public int readNbt(int old) {
         return 2048;
     }
 
-    @ModifyConstant(method = "detectStructureSize", constant = @Constant(intValue = 80))
+    @ModifyConstant(method = "detectSize", constant = @Constant(intValue = 80))
     public int detectStructureSize(int old) {
         return 2048;
     }

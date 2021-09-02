@@ -677,22 +677,22 @@
 
 package io.github.vampirestudios.vampirelib.api;
 
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.collection.DefaultedList;
+import net.minecraft.core.NonNullList;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 
 /**
- * Interface implemented on classes for special filling of {@link Item}s in {@link ItemGroup}s.
+ * Interface implemented on classes for special filling of {@link Item}s in {@link CreativeModeTab}s.
  */
 @FunctionalInterface
 public interface ItemGroupAppender {
     /**
-     * Fills an {@link Item} for an {@link ItemGroup} given a {@link DefaultedList} of the {@link ItemStack}s for that {@link ItemGroup}.
+     * Fills an {@link Item} for an {@link CreativeModeTab} given a {@link NonNullList} of the {@link ItemStack}s for that {@link CreativeModeTab}.
      *
      * @param item  The {@link Item} to fill.
-     * @param group The {@link ItemGroup} to fill into.
-     * @param items A {@link DefaultedList} of the {@link ItemStack}s for the {@link ItemGroup}.
+     * @param group The {@link CreativeModeTab} to fill into.
+     * @param items A {@link NonNullList} of the {@link ItemStack}s for the {@link CreativeModeTab}.
      */
-    void appendStacks(Item item, ItemGroup group, DefaultedList<ItemStack> items);
+    void appendStacks(Item item, CreativeModeTab group, NonNullList<ItemStack> items);
 }
