@@ -677,8 +677,7 @@
 
 package io.github.vampirestudios.vampirelib.api;
 
-import java.util.function.Predicate;
-
+import io.github.vampirestudios.vampirelib.utils.ItemStackUtils;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
@@ -686,7 +685,7 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
-import io.github.vampirestudios.vampirelib.utils.ItemStackUtils;
+import java.util.function.Predicate;
 
 /**
  * Implementation class of {@link IItemGroupFiller} for filling {@link Item}s alphabetically.
@@ -710,7 +709,7 @@ public record AlphabeticalItemGroupFiller(Predicate<Item> shouldInclude) impleme
 
 	@Override
 	public void fillItem(Item item, CreativeModeTab group, NonNullList<ItemStack> items) {
-		if (ItemStackUtils.isInGroup(item, group)) {
+		if (ItemStackUtils.isAllowedInTab(item, group)) {
 			ResourceLocation location = Registry.ITEM.getKey(item);
 			String itemName = location.getPath();
 			int insert = -1;

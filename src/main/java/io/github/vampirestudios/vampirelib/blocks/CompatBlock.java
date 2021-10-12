@@ -697,7 +697,7 @@ public class CompatBlock extends Block {
 
     @Override
     public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> stacks) {
-        if (ItemStackUtils.isInGroup(this.asItem(), group)) {
+        if (ItemStackUtils.isAllowedInTab(this.asItem(), group)) {
             if (FabricLoader.getInstance().isModLoaded(this.modName)) {
                 int targetIndex = ItemStackUtils.findIndexOfItem(modBlock.asItem(), stacks);
                 if (targetIndex != -1) {

@@ -677,19 +677,17 @@
 
 package io.github.vampirestudios.vampirelib.api;
 
-import java.util.Map;
-import java.util.Set;
-import java.util.function.Supplier;
-
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-
+import io.github.vampirestudios.vampirelib.utils.ItemStackUtils;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
-import io.github.vampirestudios.vampirelib.utils.ItemStackUtils;
+import java.util.Map;
+import java.util.Set;
+import java.util.function.Supplier;
 
 /**
  * Implementation class of {@link IItemGroupFiller} for filling {@link Item}s after a target {@link Item}.
@@ -701,7 +699,7 @@ public final record TargetedItemGroupFiller(Supplier<Item> targetItem) implement
 
     @Override
     public void fillItem(Item item, CreativeModeTab group, NonNullList<ItemStack> items) {
-        if (ItemStackUtils.isInGroup(item, group)) {
+        if (ItemStackUtils.isAllowedInTab(item, group)) {
             OffsetValue offset = offsetMap.computeIfAbsent(group, (key) -> new OffsetValue());
             if (offset.itemsProcessed.contains(item)) {
                 offset.reset();

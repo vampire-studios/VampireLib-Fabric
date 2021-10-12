@@ -700,9 +700,9 @@ public class MixinClientPlayNetworkHandler {
     private static EntityType<?> vampireLib$entityType;
     private static int vampireLib$entityData;
     @Shadow
-    private ClientLevel world;
+    private ClientLevel level;
 
-    @Inject(method = "onEntitySpawn", at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/network/packet/s2c/play/EntitySpawnS2CPacket;getEntityTypeId()Lnet/minecraft/entity/EntityType;"), locals = LocalCapture.CAPTURE_FAILHARD)
+    @Inject(method = "handleAddEntity", at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/network/protocol/game/ClientboundAddEntityPacket;getType()Lnet/minecraft/world/entity/EntityType;"), locals = LocalCapture.CAPTURE_FAILHARD)
     public void onEntitySpawn(ClientboundAddEntityPacket packet, CallbackInfo callbackInfo, double xIn, double yIn, double zIn, EntityType<?> entityTypeIn) {
         vampireLib$x = xIn;
         vampireLib$y = yIn;
@@ -712,13 +712,13 @@ public class MixinClientPlayNetworkHandler {
     }
 
     @ModifyVariable(
-        method = "onEntitySpawn",
+        method = "handleAddEntity",
         at = @At(value = "JUMP", opcode = Opcodes.IFNULL, ordinal = 3, shift = At.Shift.BEFORE),
         index = 8
     )
     private Entity setSpawnEntity(Entity old) {
         if (old == null)
-            return EntityRegistry.construct(vampireLib$entityType, world, vampireLib$x, vampireLib$y, vampireLib$z, vampireLib$entityData);
+            return EntityRegistry.construct(vampireLib$entityType, level, vampireLib$x, vampireLib$y, vampireLib$z, vampireLib$entityData);
         return old;
     }
 

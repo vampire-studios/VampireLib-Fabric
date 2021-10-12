@@ -687,12 +687,12 @@ import net.minecraft.world.item.ItemStack;
  */
 @FunctionalInterface
 public interface IItemGroupFiller {
-    /**
-     * Fills an {@link Item} for an {@link CreativeModeTab} given a {@link NonNullList} of the {@link ItemStack}s for that {@link CreativeModeTab}.
-     *
-     * @param item  The {@link Item} to fill.
-     * @param group The {@link CreativeModeTab} to fill into.
-     * @param items A {@link NonNullList} of the {@link ItemStack}s for the {@link CreativeModeTab}.
-     */
-    void fillItem(Item item, CreativeModeTab group, NonNullList<ItemStack> items);
+	/**
+	 * Fills an {@link Item} for a {@link CreativeModeTab} given a {@link NonNullList} of the {@link ItemStack}s for that {@link CreativeModeTab}.
+	 *
+	 * @param item  The {@link Item} to fill.
+	 * @param tab   The {@link CreativeModeTab} to fill into.
+	 * @param items A {@link NonNullList} of the {@link ItemStack}s for the {@link CreativeModeTab}.
+	 */
+	void fillItem(Item item, CreativeModeTab tab, NonNullList<ItemStack> items);
 }

@@ -685,7 +685,7 @@ import org.spongepowered.asm.mixin.injection.ModifyConstant;
 @Mixin(ServerboundSetStructureBlockPacket.class)
 public abstract class UpdateStructureBlockC2SPacketMixin {
 
-    @ModifyConstant(method = "<init>(Lnet/minecraft/network/PacketByteBuf;)V", constant = @Constant(intValue = 48))
+    @ModifyConstant(method = "<init>(Lnet/minecraft/network/FriendlyByteBuf;)V", constant = @Constant(intValue = 48))
     public int readNbt(int old) {
         return 2048;
     }
