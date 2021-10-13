@@ -677,19 +677,19 @@
 
 package io.github.vampirestudios.vampirelib.blocks;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.DoorBlock;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.BlockView;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.block.DoorBlock;
+import net.minecraft.world.level.block.state.BlockState;
 
 public class DoorBaseBlock extends DoorBlock {
-    public DoorBaseBlock(Settings settings) {
+    public DoorBaseBlock(Properties settings) {
         super(settings);
     }
 
     @Override
-    public ItemStack getPickStack(BlockView blockView_1, BlockPos blockPos_1, BlockState blockState_1) {
+    public ItemStack getCloneItemStack(BlockGetter blockView_1, BlockPos blockPos_1, BlockState blockState_1) {
         return new ItemStack(this);
     }
 

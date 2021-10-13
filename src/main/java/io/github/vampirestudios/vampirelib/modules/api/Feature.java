@@ -679,16 +679,15 @@ package io.github.vampirestudios.vampirelib.modules.api;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
-
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.ResourceLocation;
 
 public abstract class Feature {
 
-    private final Identifier registryName;
+    private final ResourceLocation registryName;
     private final String name;
     private boolean enabled = true;
 
-    public Feature(Identifier registryName, String name) {
+    public Feature(ResourceLocation registryName, String name) {
         this.registryName = registryName;
         this.name = name;
     }
@@ -701,7 +700,7 @@ public abstract class Feature {
         this.enabled = enabled;
     }
 
-    public Identifier getRegistryName() {
+    public ResourceLocation getRegistryName() {
         return registryName;
     }
 

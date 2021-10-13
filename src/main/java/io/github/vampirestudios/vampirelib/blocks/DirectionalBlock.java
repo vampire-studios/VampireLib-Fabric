@@ -677,14 +677,14 @@
 
 package io.github.vampirestudios.vampirelib.blocks;
 
-import net.minecraft.block.AbstractBlock;
-import net.minecraft.block.Block;
-import net.minecraft.state.property.DirectionProperty;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.properties.DirectionProperty;
 
 public abstract class DirectionalBlock extends Block {
-    public static final DirectionProperty FACING = DirectionProperty.of("facing");
+    public static final DirectionProperty FACING = DirectionProperty.create("facing");
 
-    public DirectionalBlock(AbstractBlock.Settings builder) {
+    public DirectionalBlock(BlockBehaviour.Properties builder) {
         super(builder);
     }
 

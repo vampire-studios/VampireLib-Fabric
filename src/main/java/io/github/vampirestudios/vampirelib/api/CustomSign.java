@@ -677,8 +677,8 @@
 
 package io.github.vampirestudios.vampirelib.api;
 
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.ResourceLocation;
 
 public interface CustomSign {
-    Identifier getTexture();
+    ResourceLocation getTexture();
 }

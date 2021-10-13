@@ -677,10 +677,10 @@
 
 package io.github.vampirestudios.vampirelib.blocks;
 
-import net.minecraft.block.AbstractBlock;
-import net.minecraft.block.CakeBlock;
-import net.minecraft.block.Material;
-import net.minecraft.sound.BlockSoundGroup;
+import net.minecraft.world.level.block.CakeBlock;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.material.Material;
 
 public class CakeBaseBlock extends CakeBlock {
     private final int slices;
@@ -690,7 +690,7 @@ public class CakeBaseBlock extends CakeBlock {
     }
 
     public CakeBaseBlock(int slices) {
-        super(AbstractBlock.Settings.of(Material.CAKE).strength(0.5F).sounds(BlockSoundGroup.WOOL));
+        super(BlockBehaviour.Properties.of(Material.CAKE).strength(0.5F).sound(SoundType.WOOL));
         this.slices = slices;
     }
 

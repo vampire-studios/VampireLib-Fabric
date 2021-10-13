@@ -1,6 +1,6 @@
 accessWidener v1 named
-accessible class net/minecraft/util/registry/DynamicRegistryManager$Info
-accessible method net/minecraft/util/registry/BuiltinRegistries addRegistry (Lnet/minecraft/util/registry/RegistryKey;Lnet/minecraft/util/registry/MutableRegistry;Ljava/util/function/Supplier;Lcom/mojang/serialization/Lifecycle;)Lnet/minecraft/util/registry/MutableRegistry;
+accessible class net/minecraft/core/RegistryAccess$RegistryData
+accessible method net/minecraft/data/BuiltinRegistries internalRegister (Lnet/minecraft/resources/ResourceKey;Lnet/minecraft/core/WritableRegistry;Ljava/util/function/Supplier;Lcom/mojang/serialization/Lifecycle;)Lnet/minecraft/core/WritableRegistry;
 
 accessible class net/minecraft/block/entity/BlockEntityType$BlockEntityFactory
 extendable class net/minecraft/block/entity/BlockEntityType$BlockEntityFactory

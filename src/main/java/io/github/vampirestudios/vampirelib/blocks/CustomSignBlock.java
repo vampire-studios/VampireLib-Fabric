@@ -677,12 +677,12 @@
 
 package io.github.vampirestudios.vampirelib.blocks;
 
-import net.minecraft.block.SignBlock;
-import net.minecraft.util.SignType;
+import net.minecraft.world.level.block.StandingSignBlock;
+import net.minecraft.world.level.block.state.properties.WoodType;
 
-public class CustomSignBlock extends SignBlock {
+public class CustomSignBlock extends StandingSignBlock {
 
-    public CustomSignBlock(SignType signType, Settings settings) {
+    public CustomSignBlock(WoodType signType, Properties settings) {
         super(settings, signType);
     }
 

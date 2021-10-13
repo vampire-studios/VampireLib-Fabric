@@ -677,9 +677,9 @@
 
 package io.github.vampirestudios.vampirelib.api;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.Entity;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.block.state.BlockState;
 
 /**
  * Blocks that implement this can be climbed by LivingEntities.

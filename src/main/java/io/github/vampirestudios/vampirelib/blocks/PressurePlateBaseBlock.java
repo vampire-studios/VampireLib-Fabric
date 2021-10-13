@@ -677,11 +677,11 @@
 
 package io.github.vampirestudios.vampirelib.blocks;
 
-import net.minecraft.block.PressurePlateBlock;
+import net.minecraft.world.level.block.PressurePlateBlock;
 
 public class PressurePlateBaseBlock extends PressurePlateBlock {
 
-    public PressurePlateBaseBlock(Settings settings, ActivationRule sensitivity) {
+    public PressurePlateBaseBlock(Properties settings, Sensitivity sensitivity) {
         super(sensitivity, settings);
     }
 

@@ -677,32 +677,31 @@
 
 package io.github.vampirestudios.vampirelib.api;
 
-import java.util.Map;
-import java.util.Set;
-
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.collection.DefaultedList;
-
 import io.github.vampirestudios.vampirelib.utils.ItemStackUtils;
+import net.minecraft.core.NonNullList;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+
+import java.util.Map;
+import java.util.Set;
+import java.util.function.Supplier;
 
 /**
  * Implementation class of {@link ItemGroupAppender} for filling {@link Item}s after a target {@link Item}.
  *
  * @see ItemGroupAppender
  */
-public final record TargetedItemGroupAppender(Item targetItem) implements ItemGroupAppender {
-    private static final Map<ItemGroup, NegateAmount> negateMap = Maps.newHashMap();
+public final record TargetedItemGroupFiller(Supplier<Item> targetItem) implements IItemGroupFiller {
+    private static final Map<CreativeModeTab, OffsetValue> offsetMap = Maps.newHashMap();
 
     @Override
-    public void appendStacks(Item item, ItemGroup group, DefaultedList<ItemStack> items) {
-        if (ItemStackUtils.isInGroup(item, group)) {
-            NegateAmount offset = negateMap.computeIfAbsent(group, (key) -> new NegateAmount());
-            if (offset.handledItems.contains(item)) {
+    public void fillItem(Item item, CreativeModeTab group, NonNullList<ItemStack> items) {
+        if (ItemStackUtils.isAllowedInTab(item, group)) {
+            OffsetValue offset = offsetMap.computeIfAbsent(group, (key) -> new OffsetValue());
+            if (offset.itemsProcessed.contains(item)) {
                 offset.reset();
             }
             int itemSize = ItemStackUtils.findIndexOfItem(targetItem(), items);

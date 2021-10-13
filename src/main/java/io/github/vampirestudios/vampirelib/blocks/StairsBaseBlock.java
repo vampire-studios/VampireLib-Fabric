@@ -677,13 +677,13 @@
 
 package io.github.vampirestudios.vampirelib.blocks;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.StairsBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.StairBlock;
 
-public class StairsBaseBlock extends StairsBlock {
+public class StairsBaseBlock extends StairBlock {
 
-    public StairsBaseBlock(BlockState blockState_1) {
-        super(blockState_1, Settings.copy(blockState_1.getBlock()));
+    public StairsBaseBlock(Block block) {
+        super(block.defaultBlockState(), Properties.copy(block));
     }
 
 }

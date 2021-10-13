@@ -678,14 +678,11 @@
 package io.github.vampirestudios.vampirelib.modules;
 
 import java.util.Objects;
-
-import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
-
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
-
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceLocation;
 import io.github.vampirestudios.vampirelib.VampireLib;
 import io.github.vampirestudios.vampirelib.modules.api.ClientFeature;
 import io.github.vampirestudios.vampirelib.modules.api.CommonFeature;
@@ -694,32 +691,32 @@ import io.github.vampirestudios.vampirelib.modules.utils.ConsoleUtils;
 
 public class FeatureManager {
 
-    public static final Registry<CommonFeature> COMMON_FEATURES = FabricRegistryBuilder.createSimple(CommonFeature.class, new Identifier("vampirelib:common_features")).buildAndRegister();
-    public static final Registry<ClientFeature> CLIENT_FEATURES = FabricRegistryBuilder.createSimple(ClientFeature.class, new Identifier("vampirelib:client_features")).buildAndRegister();
-    public static final Registry<ServerFeature> SERVER_FEATURES = FabricRegistryBuilder.createSimple(ServerFeature.class, new Identifier("vampirelib:server_features")).buildAndRegister();
+    public static final Registry<CommonFeature> COMMON_FEATURES = FabricRegistryBuilder.createSimple(CommonFeature.class, new ResourceLocation("vampirelib:common_features")).buildAndRegister();
+    public static final Registry<ClientFeature> CLIENT_FEATURES = FabricRegistryBuilder.createSimple(ClientFeature.class, new ResourceLocation("vampirelib:client_features")).buildAndRegister();
+    public static final Registry<ServerFeature> SERVER_FEATURES = FabricRegistryBuilder.createSimple(ServerFeature.class, new ResourceLocation("vampirelib:server_features")).buildAndRegister();
 
-    public static FeatureManager createFeatureManager(Identifier modIdentifier) {
+    public static FeatureManager createFeatureManager(ResourceLocation modIdentifier) {
         return Registry.register(VampireLib.FEATURE_MANAGERS, modIdentifier, new FeatureManager());
     }
 
-    public static FeatureManager getFeatureManager(Identifier modIdentifier) {
+    public static FeatureManager getFeatureManager(ResourceLocation modIdentifier) {
         return VampireLib.FEATURE_MANAGERS.get(modIdentifier);
     }
 
     public void registerCommonFeature(CommonFeature module) {
-        if (!COMMON_FEATURES.getOrEmpty(module.getRegistryName()).isPresent()) {
+        if (!COMMON_FEATURES.getOptional(module.getRegistryName()).isPresent()) {
             Registry.register(COMMON_FEATURES, module.getRegistryName(), module);
         }
     }
 
     public void registerClientFeature(ClientFeature module) {
-        if (!CLIENT_FEATURES.getOrEmpty(module.getRegistryName()).isPresent()) {
+        if (!CLIENT_FEATURES.getOptional(module.getRegistryName()).isPresent()) {
             Registry.register(CLIENT_FEATURES, module.getRegistryName(), module);
         }
     }
 
     public void registerServerFeature(ServerFeature module) {
-        if (!SERVER_FEATURES.getOrEmpty(module.getRegistryName()).isPresent()) {
+        if (!SERVER_FEATURES.getOptional(module.getRegistryName()).isPresent()) {
             Registry.register(SERVER_FEATURES, module.getRegistryName(), module);
         }
     }
@@ -754,27 +751,27 @@ public class FeatureManager {
     }
 
     public boolean doesCommonFeatureExist(CommonFeature module) {
-        return COMMON_FEATURES.containsId(module.getRegistryName());
+        return COMMON_FEATURES.containsKey(module.getRegistryName());
     }
 
     public boolean doesClientFeatureExist(ClientFeature module) {
-        return CLIENT_FEATURES.containsId(module.getRegistryName());
+        return CLIENT_FEATURES.containsKey(module.getRegistryName());
     }
 
     public boolean doesServerFeatureExist(ServerFeature module) {
-        return SERVER_FEATURES.containsId(module.getRegistryName());
+        return SERVER_FEATURES.containsKey(module.getRegistryName());
     }
 
-    public boolean isFeatureEnabled(Identifier name) {
-        if (COMMON_FEATURES.containsId(name)) {
+    public boolean isFeatureEnabled(ResourceLocation name) {
+        if (COMMON_FEATURES.containsKey(name)) {
             CommonFeature module = COMMON_FEATURES.get(name);
             return Objects.requireNonNull(module).isEnabled();
         }
-        if (CLIENT_FEATURES.containsId(name)) {
+        if (CLIENT_FEATURES.containsKey(name)) {
             ClientFeature module = CLIENT_FEATURES.get(name);
             return Objects.requireNonNull(module).isEnabled();
         }
-        if (SERVER_FEATURES.containsId(name)) {
+        if (SERVER_FEATURES.containsKey(name)) {
             ServerFeature module = SERVER_FEATURES.get(name);
             return Objects.requireNonNull(module).isEnabled();
         }

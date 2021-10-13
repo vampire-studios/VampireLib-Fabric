@@ -677,21 +677,21 @@
 
 package io.github.vampirestudios.vampirelib.boat;
 
-import net.minecraft.entity.vehicle.BoatEntity;
-import net.minecraft.item.Item;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.vehicle.Boat;
+import net.minecraft.world.item.Item;
 
 public class CustomBoatInfo {
     private final Item item;
     private final Item planks;
-    private final Identifier skin;
-    private final BoatEntity.Type vanilla;
+    private final ResourceLocation skin;
+    private final Boat.Type vanilla;
 
-    public CustomBoatInfo(Item item, Item planks, Identifier skin) {
-        this(item, planks, skin, BoatEntity.Type.OAK);
+    public CustomBoatInfo(Item item, Item planks, ResourceLocation skin) {
+        this(item, planks, skin, Boat.Type.OAK);
     }
 
-    public CustomBoatInfo(Item item, Item planks, Identifier skin, BoatEntity.Type vanilla) {
+    public CustomBoatInfo(Item item, Item planks, ResourceLocation skin, Boat.Type vanilla) {
         this.item = item;
         this.planks = planks;
         this.skin = skin;
@@ -706,11 +706,11 @@ public class CustomBoatInfo {
         return planks;
     }
 
-    public Identifier getSkin() {
+    public ResourceLocation getSkin() {
         return skin;
     }
 
-    public BoatEntity.Type getVanillaType() {
+    public Boat.Type getVanillaType() {
         return vanilla;
     }
 }

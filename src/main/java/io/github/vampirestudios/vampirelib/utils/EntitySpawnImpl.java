@@ -678,13 +678,11 @@
 package io.github.vampirestudios.vampirelib.utils;
 
 import java.util.concurrent.atomic.AtomicReference;
-
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.SpawnReason;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.ActionResult;
-import net.minecraft.world.ServerWorldAccess;
-
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.level.ServerLevelAccessor;
 import io.github.vampirestudios.vampirelib.callbacks.EntitySpawnCallback;
 
 public final class EntitySpawnImpl {
@@ -694,14 +692,14 @@ public final class EntitySpawnImpl {
     /**
      * @author Valoeghese
      */
-    public static boolean spawnEntityZ(ServerWorld self, Entity entity) {
+    public static boolean spawnEntityZ(ServerLevel self, Entity entity) {
         AtomicReference<Entity> currentEntity = new AtomicReference<>(entity);
-        ActionResult result = EntitySpawnCallback.PRE.invoker().onEntitySpawnPre(entity, currentEntity, self, SpawnReason.COMMAND);
+        InteractionResult result = EntitySpawnCallback.PRE.invoker().onEntitySpawnPre(entity, currentEntity, self, MobSpawnType.COMMAND);
         entity = currentEntity.get();
 
-        if (result != ActionResult.FAIL) {
-            if (self.shouldCreateNewEntityWithPassenger(entity)) {
-                EntitySpawnCallback.POST.invoker().onEntitySpawnPost(entity, self, entity.getPos(), SpawnReason.COMMAND);
+        if (result != InteractionResult.FAIL) {
+            if (self.tryAddFreshEntityWithPassengers(entity)) {
+                EntitySpawnCallback.POST.invoker().onEntitySpawnPost(entity, self, entity.position(), MobSpawnType.COMMAND);
                 return true;
             }
         }
@@ -712,30 +710,30 @@ public final class EntitySpawnImpl {
     /**
      * @author Valoeghese
      */
-    public static void spawnEntityV(ServerWorldAccess self, Entity entity) {
+    public static void spawnEntityV(ServerLevelAccessor self, Entity entity) {
         AtomicReference<Entity> currentEntity = new AtomicReference<>(entity);
-        ActionResult result = EntitySpawnCallback.PRE.invoker().onEntitySpawnPre(entity, currentEntity, self, SpawnReason.NATURAL);
+        InteractionResult result = EntitySpawnCallback.PRE.invoker().onEntitySpawnPre(entity, currentEntity, self, MobSpawnType.NATURAL);
         entity = currentEntity.get();
 
-        if (result != ActionResult.FAIL) {
-            self.spawnEntityAndPassengers(entity);
-            EntitySpawnCallback.POST.invoker().onEntitySpawnPost(entity, self, entity.getPos(), SpawnReason.NATURAL);
+        if (result != InteractionResult.FAIL) {
+            self.addFreshEntityWithPassengers(entity);
+            EntitySpawnCallback.POST.invoker().onEntitySpawnPost(entity, self, entity.position(), MobSpawnType.NATURAL);
         }
     }
 
     /**
      * @author Valoeghese
      */
-    public static Entity spawnEntityE(Entity entity, ServerWorld serverWorld, SpawnReason spawnReason) {
+    public static Entity spawnEntityE(Entity entity, ServerLevel serverWorld, MobSpawnType spawnReason) {
         if (entity != null) {
             AtomicReference<Entity> currentEntity = new AtomicReference<>(entity);
-            ActionResult result = EntitySpawnCallback.PRE.invoker().onEntitySpawnPre(entity, currentEntity, serverWorld, spawnReason);
-            entity = result != ActionResult.FAIL ? currentEntity.get() : null;
+            InteractionResult result = EntitySpawnCallback.PRE.invoker().onEntitySpawnPre(entity, currentEntity, serverWorld, spawnReason);
+            entity = result != InteractionResult.FAIL ? currentEntity.get() : null;
         }
 
         if (entity != null) {
-            serverWorld.spawnEntityAndPassengers(entity);
-            EntitySpawnCallback.POST.invoker().onEntitySpawnPost(entity, serverWorld, entity.getPos(), spawnReason);
+            serverWorld.addFreshEntityWithPassengers(entity);
+            EntitySpawnCallback.POST.invoker().onEntitySpawnPost(entity, serverWorld, entity.position(), spawnReason);
         }
 
         return entity;
@@ -744,15 +742,15 @@ public final class EntitySpawnImpl {
     /**
      * @author Valoeghese
      */
-    public static ActionResult eventPre(Entity original, AtomicReference<Entity> entity, ServerWorldAccess world, SpawnReason reason, EntitySpawnCallback.Pre[] listeners) {
+    public static InteractionResult eventPre(Entity original, AtomicReference<Entity> entity, ServerLevelAccessor world, MobSpawnType reason, EntitySpawnCallback.Pre[] listeners) {
         for (EntitySpawnCallback.Pre callback : listeners) {
-            ActionResult result = callback.onEntitySpawnPre(original, entity, world, reason);
+            InteractionResult result = callback.onEntitySpawnPre(original, entity, world, reason);
 
-            if (result != ActionResult.PASS) {
+            if (result != InteractionResult.PASS) {
                 return result;
             }
         }
 
-        return ActionResult.PASS;
+        return InteractionResult.PASS;
     }
 }

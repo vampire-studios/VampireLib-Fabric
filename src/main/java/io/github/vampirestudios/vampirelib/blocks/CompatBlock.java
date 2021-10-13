@@ -677,13 +677,11 @@
 
 package io.github.vampirestudios.vampirelib.blocks;
 
-import net.minecraft.block.Block;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.collection.DefaultedList;
-
 import net.fabricmc.loader.api.FabricLoader;
-
+import net.minecraft.core.NonNullList;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Block;
 import io.github.vampirestudios.vampirelib.utils.ItemStackUtils;
 
 public class CompatBlock extends Block {
@@ -691,24 +689,24 @@ public class CompatBlock extends Block {
     private final String modName;
     private final Block modBlock;
 
-    public CompatBlock(String modName, Block modBlock, Settings settings) {
+    public CompatBlock(String modName, Block modBlock, Properties settings) {
         super(settings);
         this.modName = modName;
         this.modBlock = modBlock;
     }
 
     @Override
-    public void appendStacks(ItemGroup group, DefaultedList<ItemStack> stacks) {
-        if (ItemStackUtils.isInGroup(this.asItem(), group)) {
+    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> stacks) {
+        if (ItemStackUtils.isAllowedInTab(this.asItem(), group)) {
             if (FabricLoader.getInstance().isModLoaded(this.modName)) {
                 int targetIndex = ItemStackUtils.findIndexOfItem(modBlock.asItem(), stacks);
                 if (targetIndex != -1) {
                     stacks.add(targetIndex + 1, new ItemStack(this));
                 } else {
-                    super.appendStacks(group, stacks);
+                    super.fillItemCategory(group, stacks);
                 }
             } else {
-                super.appendStacks(group, stacks);
+                super.fillItemCategory(group, stacks);
             }
         }
     }

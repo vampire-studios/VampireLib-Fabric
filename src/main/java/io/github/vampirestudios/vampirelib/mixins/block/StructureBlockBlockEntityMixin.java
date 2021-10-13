@@ -681,25 +681,25 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.ModifyConstant;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.block.entity.StructureBlockBlockEntity;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.entity.StructureBlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 
-@Mixin(StructureBlockBlockEntity.class)
+@Mixin(StructureBlockEntity.class)
 public abstract class StructureBlockBlockEntityMixin extends BlockEntity {
 
     public StructureBlockBlockEntityMixin(BlockEntityType<?> blockEntityType, BlockPos blockPos, BlockState blockState) {
         super(blockEntityType, blockPos, blockState);
     }
 
-    @ModifyConstant(method = "readNbt", constant = @Constant(intValue = 48))
+    @ModifyConstant(method = "load", constant = @Constant(intValue = 48))
     public int readNbt(int old) {
         return 2048;
     }
 
-    @ModifyConstant(method = "detectStructureSize", constant = @Constant(intValue = 80))
+    @ModifyConstant(method = "detectSize", constant = @Constant(intValue = 80))
     public int detectStructureSize(int old) {
         return 2048;
     }

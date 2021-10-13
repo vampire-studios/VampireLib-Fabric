@@ -677,13 +677,11 @@
 
 package io.github.vampirestudios.vampirelib.callbacks;
 
+import com.mojang.math.Matrix4f;
 import java.util.function.BiConsumer;
-
-import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.util.math.Matrix4f;
-
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
+import net.minecraft.client.renderer.MultiBufferSource;
 
 @FunctionalInterface
 public interface TextRendererDrawLayerStringCallback {
@@ -697,5 +695,5 @@ public interface TextRendererDrawLayerStringCallback {
             }
         });
 
-    void onDrawLayer(String text, float x, float y, int color, boolean shadow, Matrix4f matrix, VertexConsumerProvider vertexConsumerProvider, boolean seeThrough, int underlineColor, int light, BiConsumer<Boolean, Float> cancelAndReturn);
+    void onDrawLayer(String text, float x, float y, int color, boolean shadow, Matrix4f matrix, MultiBufferSource vertexConsumerProvider, boolean seeThrough, int underlineColor, int light, BiConsumer<Boolean, Float> cancelAndReturn);
 }

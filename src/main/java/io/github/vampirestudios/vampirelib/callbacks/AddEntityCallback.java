@@ -677,22 +677,21 @@
 
 package io.github.vampirestudios.vampirelib.callbacks;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.util.ActionResult;
-
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.Entity;
 
 public interface AddEntityCallback {
     Event<AddEntityCallback> EVENT = EventFactory.createArrayBacked(AddEntityCallback.class, (listeners) -> (entity) -> {
         for (AddEntityCallback listener : listeners) {
-            ActionResult result = listener.interact(entity);
-            if (result != ActionResult.PASS)
+            InteractionResult result = listener.interact(entity);
+            if (result != InteractionResult.PASS)
                 return result;
         }
 
-        return ActionResult.PASS;
+        return InteractionResult.PASS;
     });
 
-    ActionResult interact(Entity entity);
+    InteractionResult interact(Entity entity);
 }

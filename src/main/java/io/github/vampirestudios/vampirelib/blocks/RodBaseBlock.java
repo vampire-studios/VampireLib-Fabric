@@ -677,50 +677,50 @@
 
 package io.github.vampirestudios.vampirelib.blocks;
 
-import net.minecraft.block.AbstractBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.FacingBlock;
-import net.minecraft.block.Material;
-import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.state.StateManager;
-import net.minecraft.util.BlockMirror;
-import net.minecraft.util.BlockRotation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.shape.VoxelShape;
-import net.minecraft.world.BlockView;
-import net.minecraft.world.WorldView;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.DirectionalBlock;
+import net.minecraft.world.level.block.Mirror;
+import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class RodBaseBlock extends FacingBlock {
+public class RodBaseBlock extends io.github.vampirestudios.vampirelib.blocks.DirectionalBlock {
 
-    protected static final VoxelShape BB_AXIS_Y = Block.createCuboidShape(0.375D, 0.0D, 0.375D, 0.625D, 1.0D, 0.625D);
-    protected static final VoxelShape BB_AXIS_Z = Block.createCuboidShape(0.375D, 0.375D, 0.0D, 0.625D, 0.625D, 1.0D);
-    protected static final VoxelShape BB_AXIS_X = Block.createCuboidShape(0.0D, 0.375D, 0.375D, 1.0D, 0.625D, 0.625D);
+    protected static final VoxelShape BB_AXIS_Y = Block.box(0.375D, 0.0D, 0.375D, 0.625D, 1.0D, 0.625D);
+    protected static final VoxelShape BB_AXIS_Z = Block.box(0.375D, 0.375D, 0.0D, 0.625D, 0.625D, 1.0D);
+    protected static final VoxelShape BB_AXIS_X = Block.box(0.0D, 0.375D, 0.375D, 1.0D, 0.625D, 0.625D);
 
     @SuppressWarnings("unused")
     public RodBaseBlock(boolean emitsLight) {
-        super(emitsLight ? AbstractBlock.Settings.of(Material.STONE).strength(0.3F, 1.0F).luminance(blockState -> 13) : AbstractBlock.Settings.of(Material.STONE));
-        this.setDefaultState(this.getDefaultState().with(FACING, Direction.UP));
+        super(emitsLight ? BlockBehaviour.Properties.of(Material.STONE).strength(0.3F, 1.0F).lightLevel(blockState -> 13) : BlockBehaviour.Properties.of(Material.STONE));
+        this.registerDefaultState(this.defaultBlockState().setValue(FACING, Direction.UP));
     }
 
     @SuppressWarnings("unused")
     public RodBaseBlock(Material material, boolean emitsLight) {
-        super(emitsLight ? AbstractBlock.Settings.of(material).strength(0.3F).luminance(blockState -> 13) : AbstractBlock.Settings.of(material));
-        this.setDefaultState(this.getDefaultState().with(FACING, Direction.UP));
+        super(emitsLight ? BlockBehaviour.Properties.of(material).strength(0.3F).lightLevel(blockState -> 13) : BlockBehaviour.Properties.of(material));
+        this.registerDefaultState(this.defaultBlockState().setValue(FACING, Direction.UP));
     }
 
-    public BlockState rotate(BlockState blockState_1, BlockRotation rotation_1) {
-        return blockState_1.with(FACING, rotation_1.rotate(blockState_1.get(FACING)));
+    public BlockState rotate(BlockState blockState_1, Rotation rotation_1) {
+        return blockState_1.setValue(FACING, rotation_1.rotate(blockState_1.getValue(FACING)));
     }
 
-    public BlockState mirror(BlockState blockState_1, BlockMirror mirror_1) {
-        return blockState_1.with(FACING, mirror_1.apply(blockState_1.get(FACING)));
+    public BlockState mirror(BlockState blockState_1, Mirror mirror_1) {
+        return blockState_1.setValue(FACING, mirror_1.mirror(blockState_1.getValue(FACING)));
     }
 
     @Override
-    public VoxelShape getRaycastShape(BlockState blockState_1, BlockView blockView_1, BlockPos blockPos_1) {
-        switch (blockState_1.get(FACING).getAxis()) {
+    public VoxelShape getInteractionShape(BlockState blockState_1, BlockGetter blockView_1, BlockPos blockPos_1) {
+        switch (blockState_1.getValue(FACING).getAxis()) {
             case X:
             default:
                 return BB_AXIS_X;
@@ -732,24 +732,24 @@ public class RodBaseBlock extends FacingBlock {
     }
 
     @Override
-    public boolean isTranslucent(BlockState blockState_1, BlockView blockView_1, BlockPos blockPos_1) {
+    public boolean propagatesSkylightDown(BlockState blockState_1, BlockGetter blockView_1, BlockPos blockPos_1) {
         return false;
     }
 
     @Override
-    public boolean canPlaceAt(BlockState blockState_1, WorldView viewableWorld_1, BlockPos blockPos_1) {
+    public boolean canSurvive(BlockState blockState_1, LevelReader viewableWorld_1, BlockPos blockPos_1) {
         return true;
     }
 
     @Override
-    public BlockState getPlacementState(ItemPlacementContext itemPlacementContext_1) {
-        Direction direction_1 = itemPlacementContext_1.getPlayerFacing();
-        BlockState blockState_1 = itemPlacementContext_1.getWorld().getBlockState(itemPlacementContext_1.getBlockPos().offset(direction_1.getOpposite()));
-        return blockState_1.getBlock() == this && blockState_1.get(FACING) == direction_1 ? this.getDefaultState().with(FACING, direction_1.getOpposite()) : this.getDefaultState().with(FACING, direction_1);
+    public BlockState getStateForPlacement(BlockPlaceContext itemPlacementContext_1) {
+        Direction direction_1 = itemPlacementContext_1.getHorizontalDirection();
+        BlockState blockState_1 = itemPlacementContext_1.getLevel().getBlockState(itemPlacementContext_1.getClickedPos().relative(direction_1.getOpposite()));
+        return blockState_1.getBlock() == this && blockState_1.getValue(FACING) == direction_1 ? this.defaultBlockState().setValue(FACING, direction_1.getOpposite()) : this.defaultBlockState().setValue(FACING, direction_1);
     }
 
     @Override
-    protected void appendProperties(StateManager.Builder<Block, BlockState> stateFactory$Builder_1) {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> stateFactory$Builder_1) {
         stateFactory$Builder_1.add(FACING);
     }
 

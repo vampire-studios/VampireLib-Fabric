@@ -677,26 +677,23 @@
 
 package io.github.vampirestudios.vampirelib.utils.registry;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityDimensions;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.SpawnGroup;
-import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.SpawnEggItem;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MobCategory;
 
-import io.github.vampirestudios.vampirelib.mixins.SpawnEggItemAccessor;
+import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 
 public class EntityRegistryBuilder<E extends Entity> {
 
-    private static Identifier name;
+    private static ResourceLocation name;
 
     private EntityType.EntityFactory<E> entityFactory;
 
-    private SpawnGroup category;
+    private MobCategory category;
 
     private int trackingDistance;
     private int updateIntervalTicks;
@@ -709,7 +706,7 @@ public class EntityRegistryBuilder<E extends Entity> {
 
     private EntityDimensions dimensions;
 
-    public static <E extends Entity> EntityRegistryBuilder<E> createBuilder(Identifier nameIn) {
+    public static <E extends Entity> EntityRegistryBuilder<E> createBuilder(ResourceLocation nameIn) {
         name = nameIn;
         return new EntityRegistryBuilder<>();
     }
@@ -720,16 +717,32 @@ public class EntityRegistryBuilder<E extends Entity> {
     }
 
     @Deprecated
-    public EntityRegistryBuilder<E> category(SpawnGroup category) {
+    public EntityRegistryBuilder<E> category(MobCategory category) {
         this.category = category;
         return this;
     }
 
-    public EntityRegistryBuilder<E> group(SpawnGroup category) {
+    public EntityRegistryBuilder<E> group(MobCategory category) {
         this.category = category;
         return this;
     }
 
+    public EntityRegistryBuilder<E> trackingDistance(int trackingDistance) {
+        this.trackingDistance = trackingDistance;
+        return this;
+    }
+
+    public EntityRegistryBuilder<E> updateIntervalTicks(int updateIntervalTicks) {
+        this.updateIntervalTicks = updateIntervalTicks;
+        return this;
+    }
+
+    public EntityRegistryBuilder<E> alwaysUpdateVelocity(boolean alwaysUpdateVelocity) {
+        this.alwaysUpdateVelocity = alwaysUpdateVelocity;
+        return this;
+    }
+
+    @Deprecated
     public EntityRegistryBuilder<E> tracker(int trackingDistance, int updateIntervalTicks, boolean alwaysUpdateVelocity) {
         this.trackingDistance = trackingDistance;
         this.updateIntervalTicks = updateIntervalTicks;
@@ -759,20 +772,24 @@ public class EntityRegistryBuilder<E extends Entity> {
     }
 
     public EntityType<E> build() {
-        EntityType.Builder<E> entityBuilder = EntityType.Builder.create(this.entityFactory, this.category).setDimensions(this.dimensions.height, this.dimensions.width);
+        FabricEntityTypeBuilder<E> entityBuilder = FabricEntityTypeBuilder.create(this.category, this.entityFactory).dimensions(this.dimensions);
         if (fireImmune) {
-            entityBuilder.makeFireImmune();
+            entityBuilder.fireImmune();
         }
-        if (this.alwaysUpdateVelocity && this.updateIntervalTicks != 0 & this.trackingDistance != 0) {
-//            FabricEntityTypeBuilder.create(this.category, this.entityFactory).dimensions(this.dimensions)
-//                    .trackable(this.trackingDistance, this.updateIntervalTicks, this.alwaysUpdateVelocity).build();
+        if (this.trackingDistance != 0) {
+            entityBuilder.trackRangeBlocks(this.trackingDistance);
+        }
+        if (this.updateIntervalTicks != 0) {
+            entityBuilder.trackedUpdateRate(this.updateIntervalTicks);
+        }
+        if (this.updateIntervalTicks != 0) {
+            entityBuilder.forceTrackedVelocityUpdates(this.alwaysUpdateVelocity);
         }
 
-        EntityType<E> entityType = Registry.register(Registry.ENTITY_TYPE, name, entityBuilder.build(name.getPath()));
+        EntityType<E> entityType = Registry.register(Registry.ENTITY_TYPE, name, entityBuilder.build());
 
         if (hasEgg) {
-            Item spawnEggItem = RegistryHelper.createRegistryHelper(name.getNamespace()).registerItem(String.format("%s_spawn_egg", name.getPath()), new SpawnEggItem((EntityType<? extends MobEntity>) entityType, primaryColor, secondaryColor, new Item.Settings().group(ItemGroup.MISC)));
-            SpawnEggItemAccessor.getSPAWN_EGGS().put((EntityType<? extends MobEntity>) entityType, (SpawnEggItem) spawnEggItem);
+            RegistryHelper.createRegistryHelper(name.getNamespace()).items().registerSpawnEgg(name.getPath(), (EntityType<? extends Mob>) entityType, primaryColor, secondaryColor);
         }
 
         return entityType;

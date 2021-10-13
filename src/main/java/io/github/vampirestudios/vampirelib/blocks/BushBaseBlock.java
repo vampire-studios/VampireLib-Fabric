@@ -677,14 +677,14 @@
 
 package io.github.vampirestudios.vampirelib.blocks;
 
-import net.minecraft.block.AbstractBlock;
-import net.minecraft.block.Material;
-import net.minecraft.block.PlantBlock;
+import net.minecraft.world.level.block.BushBlock;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.material.Material;
 
-public class BushBaseBlock extends PlantBlock {
+public class BushBaseBlock extends BushBlock {
 
     public BushBaseBlock() {
-        super(AbstractBlock.Settings.of(Material.PLANT));
+        super(BlockBehaviour.Properties.of(Material.PLANT));
     }
 
 }

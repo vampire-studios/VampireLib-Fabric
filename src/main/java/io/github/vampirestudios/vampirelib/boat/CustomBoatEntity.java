@@ -678,43 +678,40 @@
 package io.github.vampirestudios.vampirelib.boat;
 
 import io.netty.buffer.Unpooled;
-
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.vehicle.BoatEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.network.Packet;
-import net.minecraft.network.PacketByteBuf;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.world.GameRules;
-import net.minecraft.world.World;
-
 import net.fabricmc.fabric.api.network.ServerSidePacketRegistry;
-
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Registry;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.Mth;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.vehicle.Boat;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.GameRules;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import io.github.vampirestudios.vampirelib.VampireLib;
 
-public class CustomBoatEntity extends BoatEntity {
+public class CustomBoatEntity extends Boat {
     private final CustomBoatInfo boatInfo;
 
-    public CustomBoatEntity(EntityType<? extends CustomBoatEntity> type, World world, CustomBoatInfo boatInfo) {
+    public CustomBoatEntity(EntityType<? extends CustomBoatEntity> type, Level world, CustomBoatInfo boatInfo) {
         super(type, world);
         this.boatInfo = boatInfo;
     }
 
     @Override
-    protected void initDataTracker() {
-        super.initDataTracker();
+    protected void defineSynchedData() {
+        super.defineSynchedData();
     }
 
     @Override
-    public Item asItem() {
+    public Item getDropItem() {
         return boatInfo.asItem();
     }
 
@@ -722,35 +719,35 @@ public class CustomBoatEntity extends BoatEntity {
         return boatInfo.asPlanks();
     }
 
-    public Identifier getBoatSkin() {
+    public ResourceLocation getBoatSkin() {
         return boatInfo.getSkin();
     }
 
     @Override
-    protected void writeCustomDataToNbt(NbtCompound tag) {
+    protected void addAdditionalSaveData(CompoundTag tag) {
     }
 
     @Override
-    protected void readCustomDataFromNbt(NbtCompound tag) {
+    protected void readAdditionalSaveData(CompoundTag tag) {
     }
 
     private boolean isOnLand() {
-        return getPaddleSoundEvent() == SoundEvents.ENTITY_BOAT_PADDLE_LAND;
+        return getPaddleSound() == SoundEvents.BOAT_PADDLE_LAND;
     }
 
     @Override
-    public boolean isGlowing() {
+    public boolean isCurrentlyGlowing() {
         return false;
     }
 
     @Override
-    protected void fall(double heightDifference, boolean onGround, BlockState landedState, BlockPos landedPosition) {
+    protected void checkFallDamage(double heightDifference, boolean onGround, BlockState landedState, BlockPos landedPosition) {
         float savedFallDistance = this.fallDistance;
 
         // Run other logic, including setting the private field fallVelocity
-        super.fall(heightDifference, false, landedState, landedPosition);
+        super.checkFallDamage(heightDifference, false, landedState, landedPosition);
 
-        if (!this.hasVehicle() && onGround) {
+        if (!this.isPassenger() && onGround) {
             this.fallDistance = savedFallDistance;
 
             if (this.fallDistance > 3.0F) {
@@ -759,18 +756,18 @@ public class CustomBoatEntity extends BoatEntity {
                     return;
                 }
 
-                this.handleFallDamage(this.fallDistance, 1.0F,
+                this.causeFallDamage(this.fallDistance, 1.0F,
                     DamageSource.FALL);
-                if (!this.world.isClient && !this.isRemoved()) {
+                if (!this.level.isClientSide && !this.isRemoved()) {
                     this.kill();
-                    if (this.world.getGameRules()
-                        .getBoolean(GameRules.DO_ENTITY_DROPS)) {
+                    if (this.level.getGameRules()
+                        .getBoolean(GameRules.RULE_DOENTITYDROPS)) {
                         for (int i = 0; i < 3; i++) {
-                            this.dropItem(this.asPlanks());
+                            this.spawnAtLocation(this.asPlanks());
                         }
 
                         for (int i = 0; i < 2; i++) {
-                            this.dropItem(Items.STICK);
+                            this.spawnAtLocation(Items.STICK);
                         }
                     }
                 }
@@ -781,29 +778,29 @@ public class CustomBoatEntity extends BoatEntity {
     }
 
     @Override
-    public Packet<?> createSpawnPacket() {
-        final PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
+    public Packet<?> getAddEntityPacket() {
+        final FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
 
         buf.writeVarInt(this.getId());
-        buf.writeUuid(this.uuid);
-        buf.writeVarInt(Registry.ENTITY_TYPE.getRawId(this.getType()));
+        buf.writeUUID(this.uuid);
+        buf.writeVarInt(Registry.ENTITY_TYPE.getId(this.getType()));
         buf.writeDouble(this.getX());
         buf.writeDouble(this.getY());
         buf.writeDouble(this.getZ());
-        buf.writeByte(MathHelper.floor(this.getYaw() * 256.0F / 360.0F));
-        buf.writeByte(MathHelper.floor(this.getPitch() * 256.0F / 360.0F));
+        buf.writeByte(Mth.floor(this.getYRot() * 256.0F / 360.0F));
+        buf.writeByte(Mth.floor(this.getXRot() * 256.0F / 360.0F));
 
         return ServerSidePacketRegistry.INSTANCE
-            .toPacket(new Identifier(VampireLib.MOD_ID, "spawn_boat"), buf);
+            .toPacket(new ResourceLocation(VampireLib.MOD_ID, "spawn_boat"), buf);
     }
 
     @Override
-    public BoatEntity.Type getBoatType() {
+    public Boat.Type getBoatType() {
         return boatInfo.getVanillaType();
     }
 
     @Override
-    public void setBoatType(BoatEntity.Type type) {
+    public void setType(Boat.Type type) {
         throw new UnsupportedOperationException("Tried to set the boat type of a " + VampireLib.MOD_NAME + " boat");
     }
 

@@ -1,32 +1,31 @@
 {
-  "required": true,
-  "package": "io.github.vampirestudios.vampirelib.mixins",
-  "compatibilityLevel": "JAVA_16",
-  "mixins": [
-    "BrewingStandBlockEntityMixin",
-    "BrewingStandScreenHandlerPotionSlotMixin",
-    "DynamicRegistryManagerMixin",
-    "HandledScreenMixin",
-    "ItemInvokerMixin",
-    "MixinItemEntity",
-    "MixinLivingEntity",
-    "MixinMobSpawnerLogic",
-    "MixinServerPlayerEntity",
-    "MixinSpawnHelper",
-    "ServerPlayerEntityDamageMixin",
-    "SpawnEggItemAccessor",
-    "block.BlockEntityTypeMixin",
-    "block.StructureBlockBlockEntityMixin",
-    "client.TextureAtlasMixin",
-    "entity.EntityMixin",
-    "item.MixinBookOnLectern"
-  ],
-  "client": [
-    "client.BoatEntityRendererMixin",
-    "client.SpriteAccessor",
-    "client.TextRendererMixin"
-  ],
-  "injectors": {
-    "defaultRequire": 1
-  }
+	"required": true,
+	"package": "io.github.vampirestudios.vampirelib.mixins",
+	"compatibilityLevel": "JAVA_16",
+	"mixins": [
+		"HandledScreenMixin",
+		"ItemInvokerMixin",
+		"MixinItemEntity",
+		"MixinLivingEntity",
+		"MixinMobSpawnerLogic",
+		"MixinServerPlayerEntity",
+		"MixinSpawnHelper",
+		"ServerPlayerEntityDamageMixin",
+		"SpawnEggItemAccessor",
+		"block.BlockEntityTypeMixin",
+		"block.StructureBlockBlockEntityMixin",
+		"block.UpdateStructureBlockC2SPacketMixin",
+		"client.MixinClientPlayNetworkHandler",
+		"client.TextureAtlasMixin",
+		"entity.EntityMixin",
+		"item.MixinBookOnLectern"
+	],
+	"client": [
+		"client.BoatEntityRendererMixin",
+		"client.SpriteAccessor",
+		"client.TextRendererMixin"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	}
 }

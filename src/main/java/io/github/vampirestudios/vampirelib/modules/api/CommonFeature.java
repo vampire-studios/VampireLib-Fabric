@@ -677,11 +677,11 @@
 
 package io.github.vampirestudios.vampirelib.modules.api;
 
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.ResourceLocation;
 
 public abstract class CommonFeature extends Feature {
 
-    public CommonFeature(Identifier registryName, String name) {
+    public CommonFeature(ResourceLocation registryName, String name) {
         super(registryName, name);
     }
 

@@ -1,13 +1,10 @@
 plugins {
-	id 'fabric-loom' version '0.9.+'
+	id 'fabric-loom' version '0.10.+'
 	id 'maven-publish'
-	id 'checkstyle'
-	id 'org.cadixdev.licenser' version '0.6.1'
-	id "co.riiid.gradle" version "0.4.2"
+	id 'java'
 }
 
-sourceCompatibility = JavaVersion.VERSION_16
-targetCompatibility = JavaVersion.VERSION_16
+sourceCompatibility = targetCompatibility = JavaVersion.VERSION_16
 
 archivesBaseName = project.archives_base_name
 version = project.mod_version + "+" + "build." + project.build_number + "-" + project.minecraft_version
@@ -20,15 +17,8 @@ loom {
 repositories {
 	mavenCentral()
 	mavenLocal()
-	maven { url "https://jitpack.io" }
 	maven { url "https://maven.fabricmc.net" }
 	maven { url "https://raw.githubusercontent.com/vampire-studios/VampireStudiosMaven/main/" }
-}
-
-// Perform linting using Checkstyle
-checkstyle {
-	configFile file('.checkstyle.xml')
-	toolVersion project.checkstyle_version
 }
 
 dependencies {
@@ -56,7 +46,6 @@ processResources {
 
 tasks.withType(JavaCompile).configureEach {
 	it.options.encoding = "UTF-8"
-	it.options.release = 16
 }
 
 java {
@@ -82,7 +71,7 @@ publishing {
 	}
 	repositories {
 		maven {
-			url file("E:\\Development\\Work\\VampireStudiosMaven\\")
+			url file("D:\\Development\\Work\\VampireStudiosMaven\\")
 		}
 	}
 }

@@ -677,9 +677,10 @@
 
 package io.github.vampirestudios.vampirelib.utils.registry;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
 import io.github.vampirestudios.vampirelib.blocks.SlabBaseBlock;
 import io.github.vampirestudios.vampirelib.blocks.StairsBaseBlock;
@@ -687,7 +688,7 @@ import io.github.vampirestudios.vampirelib.blocks.WallBaseBlock;
 
 public class StoneRegistry {
 
-    public Identifier name;
+    public ResourceLocation name;
 
     public Block raw;
     public Block slab;
@@ -719,11 +720,11 @@ public class StoneRegistry {
     public Block mossyBricksStairs;
     public Block mossyBricksSlab;
 
-    public StoneRegistry(Identifier name) {
+    public StoneRegistry(ResourceLocation name) {
         this.name = name;
     }
 
-    public static StoneRegistry.Builder of(Identifier name) {
+    public static StoneRegistry.Builder of(ResourceLocation name) {
         return new Builder().of(name);
     }
 
@@ -825,11 +826,11 @@ public class StoneRegistry {
 
     public static class Builder {
 
-        public Identifier name;
+        public ResourceLocation name;
         private StoneRegistry stoneRegistry;
         private RegistryHelper registryHelper;
 
-        public Builder of(Identifier name) {
+        public Builder of(ResourceLocation name) {
             this.name = name;
             stoneRegistry = new StoneRegistry(name);
             registryHelper = RegistryHelper.createRegistryHelper(name.getNamespace());
@@ -837,7 +838,7 @@ public class StoneRegistry {
         }
 
         public Builder raw() {
-            stoneRegistry.raw = registryHelper.registerBlock(new Block(Block.Settings.copy(Blocks.STONE)), name.getPath());
+            stoneRegistry.raw = registryHelper.blocks().registerBlock(new Block(BlockBehaviour.Properties.copy(Blocks.STONE)), name.getPath());
             return this;
         }
 
@@ -847,7 +848,7 @@ public class StoneRegistry {
         }
 
         public Builder slab() {
-            stoneRegistry.slab = registryHelper.registerBlock(new SlabBaseBlock(Block.Settings.copy(Blocks.STONE_SLAB)),
+            stoneRegistry.slab = registryHelper.blocks().registerBlock(new SlabBaseBlock(BlockBehaviour.Properties.copy(Blocks.STONE_SLAB)),
                 name.getPath() + "_slab");
             return this;
         }
@@ -858,7 +859,7 @@ public class StoneRegistry {
         }
 
         public Builder stairs() {
-            stoneRegistry.stairs = registryHelper.registerBlock(new StairsBaseBlock(stoneRegistry.raw.getDefaultState()),
+            stoneRegistry.stairs = registryHelper.blocks().registerBlock(new StairsBaseBlock(stoneRegistry.raw),
                 name.getPath() + "_stairs");
             return this;
         }
@@ -869,7 +870,7 @@ public class StoneRegistry {
         }
 
         public Builder wall() {
-            stoneRegistry.wall = registryHelper.registerBlock(new WallBaseBlock(Block.Settings.copy(Blocks.COBBLESTONE_WALL)),
+            stoneRegistry.wall = registryHelper.blocks().registerBlock(new WallBaseBlock(BlockBehaviour.Properties.copy(Blocks.COBBLESTONE_WALL)),
                 name.getPath() + "_wall");
             return this;
         }
@@ -880,7 +881,7 @@ public class StoneRegistry {
         }
 
         public Builder cobblestone() {
-            stoneRegistry.cobblestone = registryHelper.registerBlock(new Block(Block.Settings.copy(Blocks.COBBLESTONE)),
+            stoneRegistry.cobblestone = registryHelper.blocks().registerBlock(new Block(BlockBehaviour.Properties.copy(Blocks.COBBLESTONE)),
                 name.getPath() + "_cobblestone");
             return this;
         }
@@ -891,7 +892,7 @@ public class StoneRegistry {
         }
 
         public Builder cobblestoneSlab() {
-            stoneRegistry.cobblestoneSlab = registryHelper.registerBlock(new SlabBaseBlock(Block.Settings.copy(Blocks.COBBLESTONE_SLAB)),
+            stoneRegistry.cobblestoneSlab = registryHelper.blocks().registerBlock(new SlabBaseBlock(BlockBehaviour.Properties.copy(Blocks.COBBLESTONE_SLAB)),
                 name.getPath() + "_cobblestone_slab");
             return this;
         }
@@ -902,7 +903,7 @@ public class StoneRegistry {
         }
 
         public Builder cobblestoneStairs() {
-            stoneRegistry.cobblestoneStairs = registryHelper.registerBlock(new StairsBaseBlock(stoneRegistry.cobblestone.getDefaultState()),
+            stoneRegistry.cobblestoneStairs = registryHelper.blocks().registerBlock(new StairsBaseBlock(stoneRegistry.cobblestone),
                 name.getPath() + "_cobblestone_stairs");
             return this;
         }
@@ -913,7 +914,7 @@ public class StoneRegistry {
         }
 
         public Builder cobblestoneWall() {
-            stoneRegistry.cobblestoneWall = registryHelper.registerBlock(new WallBaseBlock(Block.Settings.copy(Blocks.COBBLESTONE_WALL)),
+            stoneRegistry.cobblestoneWall = registryHelper.blocks().registerBlock(new WallBaseBlock(BlockBehaviour.Properties.copy(Blocks.COBBLESTONE_WALL)),
                 name.getPath() + "_cobblestone_wall");
             return this;
         }
@@ -929,7 +930,7 @@ public class StoneRegistry {
         }
 
         public Builder polished() {
-            stoneRegistry.polished = registryHelper.registerBlock(new Block(Block.Settings.copy(Blocks.COBBLESTONE)),
+            stoneRegistry.polished = registryHelper.blocks().registerBlock(new Block(BlockBehaviour.Properties.copy(Blocks.COBBLESTONE)),
                 "polished_" + name.getPath());
             return this;
         }
@@ -940,7 +941,7 @@ public class StoneRegistry {
         }
 
         public Builder polishedSlab() {
-            stoneRegistry.polishedSlab = registryHelper.registerBlock(new SlabBaseBlock(Block.Settings.copy(Blocks.STONE_SLAB)),
+            stoneRegistry.polishedSlab = registryHelper.blocks().registerBlock(new SlabBaseBlock(BlockBehaviour.Properties.copy(Blocks.STONE_SLAB)),
                 "polished_" + name.getPath() + "_slab");
             return this;
         }
@@ -951,7 +952,7 @@ public class StoneRegistry {
         }
 
         public Builder polishedStairs() {
-            stoneRegistry.polishedStairs = registryHelper.registerBlock(new StairsBaseBlock(stoneRegistry.polished.getDefaultState()),
+            stoneRegistry.polishedStairs = registryHelper.blocks().registerBlock(new StairsBaseBlock(stoneRegistry.polished),
                 "polished_" + name.getPath() + "_stairs");
             return this;
         }
@@ -962,13 +963,13 @@ public class StoneRegistry {
         }
 
         public Builder polishedWall() {
-            stoneRegistry.polishedWall = registryHelper.registerBlock(new WallBaseBlock(Block.Settings.copy(Blocks.COBBLESTONE_WALL)),
+            stoneRegistry.polishedWall = registryHelper.blocks().registerBlock(new WallBaseBlock(BlockBehaviour.Properties.copy(stoneRegistry.cobblestone)),
                 "polished_" + name.getPath() + "_wall");
             return this;
         }
 
         public Builder bricks() {
-            stoneRegistry.bricks = registryHelper.registerBlock(new Block(Block.Settings.copy(Blocks.COBBLESTONE)),
+            stoneRegistry.bricks = registryHelper.blocks().registerBlock(new Block(BlockBehaviour.Properties.copy(Blocks.COBBLESTONE)),
                 name.getPath() + "_bricks");
             return this;
         }
@@ -984,7 +985,7 @@ public class StoneRegistry {
         }
 
         public Builder brickSlab() {
-            stoneRegistry.brickSlab = registryHelper.registerBlock(new SlabBaseBlock(Block.Settings.copy(Blocks.STONE_SLAB)),
+            stoneRegistry.brickSlab = registryHelper.blocks().registerBlock(new SlabBaseBlock(BlockBehaviour.Properties.copy(Blocks.STONE_SLAB)),
                 name.getPath() + "_brick_slab");
             return this;
         }
@@ -995,7 +996,7 @@ public class StoneRegistry {
         }
 
         public Builder brickStairs() {
-            stoneRegistry.brickStairs = registryHelper.registerBlock(new StairsBaseBlock(stoneRegistry.bricks.getDefaultState()),
+            stoneRegistry.brickStairs = registryHelper.blocks().registerBlock(new StairsBaseBlock(stoneRegistry.bricks),
                 name.getPath() + "_brick_stairs");
             return this;
         }
@@ -1006,7 +1007,7 @@ public class StoneRegistry {
         }
 
         public Builder brickWall() {
-            stoneRegistry.brickWall = registryHelper.registerBlock(new WallBaseBlock(Block.Settings.copy(Blocks.BRICK_WALL)),
+            stoneRegistry.brickWall = registryHelper.blocks().registerBlock(new WallBaseBlock(BlockBehaviour.Properties.copy(Blocks.BRICK_WALL)),
                 name.getPath() + "_brick_wall");
             return this;
         }
@@ -1017,7 +1018,7 @@ public class StoneRegistry {
         }
 
         public Builder crackedBricks() {
-            stoneRegistry.crackedBricks = registryHelper.registerBlock(new Block(Block.Settings.copy(Blocks.COBBLESTONE)),
+            stoneRegistry.crackedBricks = registryHelper.blocks().registerBlock(new Block(BlockBehaviour.Properties.copy(Blocks.COBBLESTONE)),
                 "cracked_" + name.getPath() + "_bricks");
             return this;
         }
@@ -1028,7 +1029,7 @@ public class StoneRegistry {
         }
 
         public Builder crackedBricksWall() {
-            stoneRegistry.crackedBricksWall = registryHelper.registerBlock(new WallBaseBlock(Block.Settings.copy(Blocks.COBBLESTONE_WALL)),
+            stoneRegistry.crackedBricksWall = registryHelper.blocks().registerBlock(new WallBaseBlock(BlockBehaviour.Properties.copy(Blocks.COBBLESTONE_WALL)),
                 "cracked_" + name.getPath() + "_bricks_wall");
             return this;
         }
@@ -1039,7 +1040,7 @@ public class StoneRegistry {
         }
 
         public Builder crackedBricksStairs() {
-            stoneRegistry.crackedBricksStairs = registryHelper.registerBlock(new StairsBaseBlock(stoneRegistry.cobblestone.getDefaultState()),
+            stoneRegistry.crackedBricksStairs = registryHelper.blocks().registerBlock(new StairsBaseBlock(stoneRegistry.cobblestone),
                 "cracked_" + name.getPath() + "_bricks_stairs");
             return this;
         }
@@ -1050,7 +1051,7 @@ public class StoneRegistry {
         }
 
         public Builder crackedBricksSlab() {
-            stoneRegistry.crackedBricksSlab = registryHelper.registerBlock(new SlabBaseBlock(Block.Settings.copy(Blocks.STONE_SLAB)),
+            stoneRegistry.crackedBricksSlab = registryHelper.blocks().registerBlock(new SlabBaseBlock(BlockBehaviour.Properties.copy(Blocks.STONE_SLAB)),
                 "cracked_" + name.getPath() + "_bricks_slab");
             return this;
         }
@@ -1061,7 +1062,7 @@ public class StoneRegistry {
         }
 
         public Builder mossyBricks() {
-            stoneRegistry.bricks = registryHelper.registerBlock(new Block(Block.Settings.copy(Blocks.COBBLESTONE)),
+            stoneRegistry.bricks = registryHelper.blocks().registerBlock(new Block(BlockBehaviour.Properties.copy(Blocks.COBBLESTONE)),
                 "mossy_" + name.getPath() + "_bricks");
             return this;
         }
@@ -1072,7 +1073,7 @@ public class StoneRegistry {
         }
 
         public Builder mossyBricksSlab() {
-            stoneRegistry.mossyBricksSlab = registryHelper.registerBlock(new SlabBaseBlock(Block.Settings.copy(Blocks.STONE_SLAB)),
+            stoneRegistry.mossyBricksSlab = registryHelper.blocks().registerBlock(new SlabBaseBlock(BlockBehaviour.Properties.copy(Blocks.STONE_SLAB)),
                 "mossy_" + name.getPath() + "_bricks_slab");
             return this;
         }
@@ -1083,7 +1084,7 @@ public class StoneRegistry {
         }
 
         public Builder mossyBricksStairs() {
-            stoneRegistry.mossyBricksStairs = registryHelper.registerBlock(new StairsBaseBlock(stoneRegistry.cobblestone.getDefaultState()),
+            stoneRegistry.mossyBricksStairs = registryHelper.blocks().registerBlock(new StairsBaseBlock(stoneRegistry.cobblestone),
                 "mossy_" + name.getPath() + "_bricks_stairs");
             return this;
         }
@@ -1094,18 +1095,38 @@ public class StoneRegistry {
         }
 
         public Builder mossyBricksWall() {
-            stoneRegistry.mossyBricksWall = registryHelper.registerBlock(new WallBaseBlock(Block.Settings.copy(Blocks.COBBLESTONE_WALL)),
+            stoneRegistry.mossyBricksWall = registryHelper.blocks().registerBlock(new WallBaseBlock(BlockBehaviour.Properties.copy(Blocks.COBBLESTONE_WALL)),
                 "mossy_" + name.getPath() + "_bricks_wall");
             return this;
         }
 
+        public Builder basicBlocks() {
+            return this.raw().slab().stairs().wall();
+        }
+
+        public Builder cobblestoneBlocks() {
+            return this.cobblestone().cobblestoneSlab().cobblestoneStairs().cobblestoneWall();
+        }
+
+        public Builder polishedBlocks() {
+            return this.polished().polishedSlab().polishedStairs().polishedWall();
+        }
+
+        public Builder brickBlocks() {
+            return this.bricks().brickSlab().brickStairs().brickWall();
+        }
+
+        public Builder crackedBrickBlocks() {
+            return this.crackedBricks().crackedBricksSlab().crackedBricksStairs().crackedBricksWall();
+        }
+
+        public Builder mossyBrickBlocks() {
+            return this.mossyBricks().mossyBricksSlab().mossyBricksStairs().mossyBricksWall();
+        }
+
         public Builder all() {
-            return this.raw().slab().stairs().wall()
-                .cobblestone().cobblestoneSlab().cobblestoneStairs().cobblestoneWall()
-                .polished().polishedSlab().polishedStairs().polishedWall()
-                .bricks().brickSlab().brickStairs().brickWall()
-                .crackedBricks().crackedBricksSlab().crackedBricksStairs().crackedBricksWall()
-                .mossyBricks().mossyBricksSlab().mossyBricksStairs().mossyBricksWall();
+            return this.basicBlocks().cobblestoneBlocks().polishedBlocks()
+                .brickBlocks().crackedBrickBlocks().mossyBrickBlocks();
         }
 
         public StoneRegistry build() {
