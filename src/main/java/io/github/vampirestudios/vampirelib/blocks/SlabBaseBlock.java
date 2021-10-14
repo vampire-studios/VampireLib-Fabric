@@ -677,11 +677,11 @@
 
 package io.github.vampirestudios.vampirelib.blocks;
 
-import net.minecraft.world.level.block.SlabBlock;
+import net.minecraft.block.SlabBlock;
 
 public class SlabBaseBlock extends SlabBlock {
 
-    public SlabBaseBlock(Properties block$Settings_1) {
+    public SlabBaseBlock(Settings block$Settings_1) {
         super(block$Settings_1);
     }
 }

@@ -677,23 +677,23 @@
 
 package io.github.vampirestudios.vampirelib.utils;
 
-import net.minecraft.core.NonNullList;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.collection.DefaultedList;
 
 import io.github.vampirestudios.vampirelib.mixins.ItemInvokerMixin;
 
 public class ItemStackUtils {
 
 	/**
-	 * Searches for a specific item in a {@link NonNullList} of {@link ItemStack} and returns its index.
+	 * Searches for a specific item in a {@link DefaultedList} of {@link ItemStack} and returns its index.
 	 *
 	 * @param item  The item to search for.
 	 * @param items The list of {@link ItemStack}s.
 	 * @return The index of the specified item in the list, or -1 if it was not in the list.
 	 */
-	public static int findIndexOfItem(Item item, NonNullList<ItemStack> items) {
+	public static int findIndexOfItem(Item item, DefaultedList<ItemStack> items) {
 		for (int i = 0; i < items.size(); i++) {
 			if (items.get(i).getItem() == item) {
 				return i;
@@ -703,15 +703,15 @@ public class ItemStackUtils {
 	}
 
 	/**
-	 * Used in {@link Item#fillItemCategory(CreativeModeTab, NonNullList)} and {@link (CreativeModeTab, NonNullList)} to fill an item after a specific item for a group.
+	 * Used in {@link Item#appendStacks(ItemGroup, DefaultedList)} and {@link (ItemGroup, DefaultedList)} to fill an item after a specific item for a group.
 	 *
 	 * @param item       The item to fill.
 	 * @param targetItem The item to fill after.
 	 * @param tab        The tab to fill it in.
-	 * @param items      The {@link NonNullList} of item stacks to search for the target item and inject the item in.
+	 * @param items      The {@link DefaultedList} of item stacks to search for the target item and inject the item in.
 	 */
-	public static void fillAfterItemForCategory(Item item, Item targetItem, CreativeModeTab tab, NonNullList<ItemStack> items) {
-		if (isAllowedInTab(item, tab)) {
+	public static void fillAfterItemForCategory(Item item, Item targetItem, ItemGroup tab, DefaultedList<ItemStack> items) {
+		if (isAllowedInGroup(item, tab)) {
 			int targetIndex = findIndexOfItem(targetItem, items);
 			if (targetIndex != -1) {
 				items.add(targetIndex + 1, new ItemStack(item));
@@ -722,14 +722,14 @@ public class ItemStackUtils {
 	}
 
     /**
-     * Searches for if an {@link Item} is present in an {@link CreativeModeTab} and returns if it is
+     * Searches for if an {@link Item} is present in an {@link ItemGroup} and returns if it is
      *
      * @param item  The {@link Item} to check.
-     * @param tab The {@link CreativeModeTab} to check.
-	 * @return Whether the item is in the {@link CreativeModeTab} or not.
+     * @param tab The {@link ItemGroup} to check.
+	 * @return Whether the item is in the {@link ItemGroup} or not.
      */
-    public static boolean isAllowedInTab(Item item, CreativeModeTab tab) {
-        return ((ItemInvokerMixin) item).callAllowdedIn(tab);
+    public static boolean isAllowedInGroup(Item item, ItemGroup tab) {
+        return ((ItemInvokerMixin) item).callIsIn(tab);
     }
 
 }

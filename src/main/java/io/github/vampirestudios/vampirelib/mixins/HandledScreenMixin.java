@@ -682,14 +682,13 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.screen.ingame.HandledScreen;
+import net.minecraft.client.util.math.MatrixStack;
 
 import io.github.vampirestudios.vampirelib.callbacks.RenderGuiCallback;
 
-@Mixin(AbstractContainerScreen.class)
+@Mixin(HandledScreen.class)
 public class HandledScreenMixin {
     /**
      * Simulates Forge's GuiContainerEvent.DrawForeground
@@ -698,11 +697,11 @@ public class HandledScreenMixin {
         method = "render",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/client/gui/screens/inventory/AbstractContainerScreen;renderLabels(Lcom/mojang/blaze3d/vertex/PoseStack;II)V"
+            target = "Lnet/minecraft/client/gui/screen/ingame/HandledScreen;drawForeground(Lnet/minecraft/client/util/math/MatrixStack;II)V"
         )
     )
-    private void hookRender(PoseStack matrices, int mouseX, int mouseY, float delta, CallbackInfo ci) {
-        Minecraft client = Minecraft.getInstance();
+    private void hookRender(MatrixStack matrices, int mouseX, int mouseY, float delta, CallbackInfo ci) {
+        MinecraftClient client = MinecraftClient.getInstance();
         RenderGuiCallback.EVENT.invoker().interact(client, matrices, mouseX, mouseY, delta);
     }
 

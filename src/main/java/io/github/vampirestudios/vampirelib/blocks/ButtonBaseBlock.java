@@ -677,23 +677,23 @@
 
 package io.github.vampirestudios.vampirelib.blocks;
 
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.world.level.block.ButtonBlock;
+import net.minecraft.block.AbstractButtonBlock;
+import net.minecraft.sound.SoundEvent;
+import net.minecraft.sound.SoundEvents;
 
-public class ButtonBaseBlock extends ButtonBlock {
+public class ButtonBaseBlock extends AbstractButtonBlock {
 
     boolean wooden;
 
-    public ButtonBaseBlock(boolean wooden, Properties settings) {
+    public ButtonBaseBlock(boolean wooden, Settings settings) {
         super(wooden, settings);
         this.wooden = wooden;
     }
 
     @Override
-    protected SoundEvent getSound(boolean pressed) {
-        return this.wooden ? pressed ? SoundEvents.WOODEN_BUTTON_CLICK_ON : SoundEvents.WOODEN_BUTTON_CLICK_OFF :
-            pressed ? SoundEvents.STONE_BUTTON_CLICK_ON : SoundEvents.STONE_BUTTON_CLICK_OFF;
+    protected SoundEvent getClickSound(boolean powered) {
+        return this.wooden ? powered ? SoundEvents.BLOCK_WOODEN_BUTTON_CLICK_ON : SoundEvents.BLOCK_WOODEN_BUTTON_CLICK_OFF :
+            powered ? SoundEvents.BLOCK_STONE_BUTTON_CLICK_ON : SoundEvents.BLOCK_STONE_BUTTON_CLICK_OFF;
     }
 
 }

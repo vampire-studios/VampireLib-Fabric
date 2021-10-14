@@ -677,25 +677,59 @@
 
 package io.github.vampirestudios.vampirelib.api;
 
-import com.mojang.serialization.Codec;
-import com.mojang.serialization.Lifecycle;
-import net.minecraft.core.MappedRegistry;
-import net.minecraft.core.Registry;
-import net.minecraft.resources.ResourceKey;
+import java.util.function.Predicate;
 
-import java.util.function.Supplier;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.collection.DefaultedList;
+import net.minecraft.util.registry.Registry;
+
+import io.github.vampirestudios.vampirelib.utils.ItemStackUtils;
 
 /**
- * A nicer wrapper around {@link net.minecraft.core.RegistryAccess}.
+ * Implementation class of {@link ItemGroupFiller} for filling {@link Item}s alphabetically.
+ * <p>{@link #shouldInclude} is used to test what items should be considered when inserting an item at its alphabetical position.</p>
  *
- * @param <T> the type that the registry holds
+ * @see ItemGroupFiller
  */
-public record CustomDynamicRegistry<T>(MappedRegistry<T> registry, Supplier<T> defaultValueSupplier, Codec<T> codec) {
-	public ResourceKey<? extends Registry<T>> getRegistryRef() {
-		return this.registry.key();
+public record AlphabeticalItemGroupFiller(Predicate<Item> shouldInclude) implements ItemGroupFiller {
+	/**
+	 * Creates an {@link AlphabeticalItemGroupFiller} that fills items alphabetically for items that are an instance of a class. (e.g. Having a modded spawn egg filled alphabetically into the vanilla's spawn eggs)
+	 *
+	 * @param clazz The class to test for.
+	 * @param <I>   The type of the class, must extend {@link Item}.
+	 * @return An {@link AlphabeticalItemGroupFiller} that fills items alphabetically for items that are an instance of a class. (e.g. Having a modded spawn egg filled alphabetically into the vanilla's spawn eggs)
+	 */
+	public static <I extends Item> AlphabeticalItemGroupFiller forClass(Class<I> clazz) {
+		return new AlphabeticalItemGroupFiller(clazz::isInstance);
 	}
 
-	public Lifecycle getLifecycle() {
-		return this.registry.elementsLifecycle();
+	@Override
+	public void fillItem(Item item, ItemGroup group, DefaultedList<ItemStack> items) {
+		if (ItemStackUtils.isAllowedInGroup(item, group)) {
+			Identifier location = Registry.ITEM.getId(item);
+			String itemName = location.getPath();
+			int insert = -1;
+			for (int i = 0; i < items.size(); i++) {
+				Item next = items.get(i).getItem();
+				if (this.shouldInclude.test(next)) {
+                    Identifier nextName = Registry.ITEM.getId(next);
+					if (itemName.compareTo(nextName.getPath()) > 0) {
+						insert = i + 1;
+					} else if (insert == -1) {
+						insert += i + 1;
+					} else {
+						break;
+					}
+				}
+			}
+			if (insert == -1) {
+				items.add(new ItemStack(item));
+			} else {
+				items.add(insert, new ItemStack(item));
+			}
+		}
 	}
 }

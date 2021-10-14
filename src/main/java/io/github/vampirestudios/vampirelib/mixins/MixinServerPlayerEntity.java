@@ -682,22 +682,22 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.entity.ItemEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.util.ActionResult;
 
 import io.github.vampirestudios.vampirelib.callbacks.PlayerDropItemCallback;
 
-@Mixin(ServerPlayer.class)
+@Mixin(ServerPlayerEntity.class)
 public class MixinServerPlayerEntity {
-    @Inject(method = "drop(Lnet/minecraft/world/item/ItemStack;ZZ)Lnet/minecraft/world/entity/item/ItemEntity;", at = @At("HEAD"), cancellable = true)
-    private void onPlayerDropItem(final ItemStack stack, final boolean dropAtFeet, final boolean saveThrower, final CallbackInfoReturnable<ItemEntity> info) {
-        ServerPlayer player = (ServerPlayer) (Object) this;
-        InteractionResult result = PlayerDropItemCallback.EVENT.invoker().interact(player, stack);
+    @Inject(method = "dropItem", at = @At("HEAD"), cancellable = true)
+    private void onPlayerDropItem(ItemStack stack, boolean throwRandomly, boolean retainOwnership, CallbackInfoReturnable<ItemEntity> cir) {
+        ServerPlayerEntity player = (ServerPlayerEntity) (Object) this;
+        ActionResult result = PlayerDropItemCallback.EVENT.invoker().interact(player, stack);
 
-        if (result == InteractionResult.FAIL) {
-            info.cancel();
+        if (result == ActionResult.FAIL) {
+            cir.cancel();
         }
     }
 }

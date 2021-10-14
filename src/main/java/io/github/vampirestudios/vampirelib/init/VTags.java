@@ -687,6 +687,7 @@ import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.gen.chunk.ChunkGeneratorSettings;
 
 import net.fabricmc.fabric.api.tag.ExpandedTagFactory;
+import net.fabricmc.fabric.api.tag.TagFactory;
 
 import io.github.vampirestudios.vampirelib.VampireLib;
 
@@ -809,7 +810,7 @@ public class VTags {
         public static final Tag<Block> NEEDS_NETHERITE_TOOL = registerBlockTag("needs_netherite_tool");
 
         public static Tag<Block> registerBlockTag(String id) {
-            return ExpandedTagFactory.BLOCK.create(new Identifier(VampireLib.MOD_ID, id));
+            return TagFactory.BLOCK.create(new Identifier(VampireLib.MOD_ID, id));
         }
     }
 
@@ -996,7 +997,7 @@ public class VTags {
         public static final Tag<Item> STRING = registerItemTag("string");
 
         public static Tag<Item> registerItemTag(String id) {
-            return ExpandedTagFactory.ITEM.create(new Identifier(VampireLib.MOD_ID, id));
+            return TagFactory.ITEM.create(new Identifier(VampireLib.MOD_ID, id));
         }
     }
 
@@ -1041,7 +1042,7 @@ public class VTags {
         public static final Tag<Biome> END = tag("end");
 
         private static Tag<Biome> tag(String name) {
-            return ExpandedTagFactory.BIOME_EXPANDED.create(new Identifier(VampireLib.MOD_ID, name));
+            return TagFactory.BIOME.create(new Identifier(VampireLib.MOD_ID, name));
         }
     }
 

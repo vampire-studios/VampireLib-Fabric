@@ -677,35 +677,34 @@
 
 package io.github.vampirestudios.vampirelib.mixins;
 
-import net.minecraft.server.level.ServerLevel;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.level.NaturalSpawner;
-import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.entity.Entity;
+import net.minecraft.world.ServerWorldAccess;
+import net.minecraft.world.SpawnHelper;
 
 import io.github.vampirestudios.vampirelib.utils.EntitySpawnImpl;
 
 /**
  * @author Valoeghese
  */
-@Mixin(NaturalSpawner.class)
+@Mixin(SpawnHelper.class)
 public class MixinSpawnHelper {
     @Redirect(
-        at = @At(value = "INVOKE", target = "Lnet/minecraft/server/level/ServerLevel;addFreshEntityWithPassengers(Lnet/minecraft/world/entity/Entity;)V"),
-        method = "spawnCategoryForPosition(Lnet/minecraft/world/entity/MobCategory;Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/level/chunk/ChunkAccess;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/NaturalSpawner$SpawnPredicate;Lnet/minecraft/world/level/NaturalSpawner$AfterSpawnCallback;)V"
+        at = @At(value = "INVOKE", target = "Lnet/minecraft/world/ServerWorldAccess;spawnEntityAndPassengers(Lnet/minecraft/entity/Entity;)V"),
+        method = "spawnEntitiesInChunk(Lnet/minecraft/entity/SpawnGroup;Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/world/chunk/Chunk;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/world/SpawnHelper$Checker;Lnet/minecraft/world/SpawnHelper$Runner;)V"
     )
-    private static void entitySpawnEventNatural(ServerLevel serverLevel, Entity entity) {
+    private static void entitySpawnEventNatural(ServerWorldAccess serverLevel, Entity entity) {
         EntitySpawnImpl.spawnEntityV(serverLevel, entity);
     }
 
     @Redirect(
-        at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/ServerLevelAccessor;addFreshEntityWithPassengers(Lnet/minecraft/world/entity/Entity;)V"),
-        method = "spawnMobsForChunkGeneration"
+        at = @At(value = "INVOKE", target = "Lnet/minecraft/world/ServerWorldAccess;spawnEntityAndPassengers(Lnet/minecraft/entity/Entity;)V"),
+        method = "populateEntities"
     )
-    private static void entitySpawnEventChunk(ServerLevelAccessor serverLevelAccessor, Entity entity) {
+    private static void entitySpawnEventChunk(ServerWorldAccess serverLevelAccessor, Entity entity) {
         EntitySpawnImpl.spawnEntityV(serverLevelAccessor, entity);
     }
 

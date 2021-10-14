@@ -677,8 +677,6 @@
 
 package io.github.vampirestudios.vampirelib.mixins;
 
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.Item;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 import org.spongepowered.asm.mixin.gen.Invoker;

@@ -24,26 +24,48 @@
 
 package io.github.vampirestudios.vampirelib.blocks;
 
+import java.util.Random;
+
+import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Oxidizable;
+import net.minecraft.block.PillarBlock;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.collection.DefaultedList;
+import net.minecraft.util.math.BlockPos;
 
 import io.github.vampirestudios.vampirelib.api.ItemGroupFiller;
 import io.github.vampirestudios.vampirelib.api.VanillaTargetedItemGroupFiller;
 
-public class CompatBlock extends Block {
+public class CompatOxidizablePillarBlock extends PillarBlock implements Oxidizable {
 
     private final ItemGroupFiller targetedItemGroupAppender;
+    private final OxidizationLevel oxidizationLevel;
 
-    public CompatBlock(String modName, Block modBlock, Settings settings) {
+    public CompatOxidizablePillarBlock(String modName, Block modBlock, OxidizationLevel oxidizationLevel, AbstractBlock.Settings settings) {
         super(settings);
+        this.oxidizationLevel = oxidizationLevel;
         this.targetedItemGroupAppender = new VanillaTargetedItemGroupFiller(modBlock.asItem());
     }
 
     @Override
     public void appendStacks(ItemGroup group, DefaultedList<ItemStack> stacks) {
         targetedItemGroupAppender.fillItem(this.asItem(), group, stacks);
+    }
+
+    public void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
+        this.tickDegradation(state, world, pos, random);
+    }
+
+    public boolean hasRandomTicks(BlockState state) {
+        return Oxidizable.getIncreasedOxidationBlock(state.getBlock()).isPresent();
+    }
+
+    public OxidizationLevel getDegradationLevel() {
+        return this.oxidizationLevel;
     }
 
 }

@@ -677,11 +677,12 @@
 
 package io.github.vampirestudios.vampirelib.callbacks;
 
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ActionResult;
+
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 
 /**
  * Callback for the player dropping an item entity.
@@ -696,16 +697,16 @@ public interface PlayerDropItemCallback {
     Event<PlayerDropItemCallback> EVENT = EventFactory.createArrayBacked(PlayerDropItemCallback.class,
         (listeners) -> (player, stack) -> {
             for (PlayerDropItemCallback event : listeners) {
-                InteractionResult result = event.interact(player, stack);
+                ActionResult result = event.interact(player, stack);
 
-                if (result != InteractionResult.PASS) {
+                if (result != ActionResult.PASS) {
                     return result;
                 }
             }
 
-            return InteractionResult.PASS;
+            return ActionResult.PASS;
         }
     );
 
-    InteractionResult interact(Player player, ItemStack stack);
+    ActionResult interact(PlayerEntity player, ItemStack stack);
 }

@@ -677,83 +677,81 @@
 
 package io.github.vampirestudios.vampirelib.client.renderer;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Quaternion;
-import com.mojang.math.Vector3f;
-
-import net.minecraft.client.model.BoatModel;
-import net.minecraft.client.model.geom.ModelLayerLocation;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.entity.EntityRenderer;
-import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Mth;
+import net.minecraft.client.render.OverlayTexture;
+import net.minecraft.client.render.RenderLayer;
+import net.minecraft.client.render.VertexConsumer;
+import net.minecraft.client.render.VertexConsumerProvider;
+import net.minecraft.client.render.entity.EntityRenderer;
+import net.minecraft.client.render.entity.EntityRendererFactory;
+import net.minecraft.client.render.entity.model.BoatEntityModel;
+import net.minecraft.client.render.entity.model.EntityModelLayer;
+import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Quaternion;
+import net.minecraft.util.math.Vec3f;
 
 import io.github.vampirestudios.vampirelib.boat.CustomBoatEntity;
 
 public class CustomBoatEntityRenderer extends EntityRenderer<CustomBoatEntity> {
 
-    private final BoatModel boatEntityModel;
+    private final BoatEntityModel boatEntityModel;
 
-    public CustomBoatEntityRenderer(ModelLayerLocation entityModelLayer,
-                                    EntityRendererProvider.Context ctx) {
+    public CustomBoatEntityRenderer(EntityModelLayer entityModelLayer,
+                                    EntityRendererFactory.Context ctx) {
         super(ctx);
         this.shadowRadius = 0.8F;
-        this.boatEntityModel =
-            new BoatModel(ctx.bakeLayer(entityModelLayer));
+        this.boatEntityModel = new BoatEntityModel(ctx.getPart(entityModelLayer));
     }
 
+    @Override
     public void render(CustomBoatEntity boatEntity, float f, float g,
-                       PoseStack matrixStack,
-                       MultiBufferSource vertexConsumerProvider, int i) {
-        matrixStack.pushPose();
+                       MatrixStack matrixStack,
+                       VertexConsumerProvider vertexConsumerProvider, int i) {
+        matrixStack.push();
         matrixStack.translate(0.0D, 0.375D, 0.0D);
-        matrixStack.mulPose(Vector3f.YP.rotationDegrees(180.0F - f));
-        float h = (float) boatEntity.getHurtTime() - g;
-        float j = boatEntity.getDamage() - g;
+        matrixStack.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(180.0F - f));
+        float h = (float) boatEntity.getDamageWobbleTicks() - g;
+        float j = boatEntity.getDamageWobbleStrength() - g;
         if (j < 0.0F) {
             j = 0.0F;
         }
 
         if (h > 0.0F) {
-            matrixStack.mulPose(Vector3f.XP.rotationDegrees(
-                Mth.sin(h) * h * j / 10.0F *
-                    (float) boatEntity.getHurtDir()));
+            matrixStack.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(
+                MathHelper.sin(h) * h * j / 10.0F *
+                    (float) boatEntity.getDamageWobbleSide()));
         }
 
-        float k = boatEntity.getBubbleAngle(g);
-        if (!Mth.equal(k, 0.0F)) {
-            matrixStack.mulPose(new Quaternion(new Vector3f(1.0F, 0.0F, 1.0F),
-                boatEntity.getBubbleAngle(g), true));
+        float k = boatEntity.interpolateBubbleWobble(g);
+        if (!MathHelper.approximatelyEquals(k, 0.0F)) {
+            matrixStack.multiply(new Quaternion(new Vec3f(1.0F, 0.0F, 1.0F),
+                boatEntity.interpolateBubbleWobble(g), true));
         }
 
-        ResourceLocation identifier = boatEntity.getBoatSkin();
+        Identifier identifier = boatEntity.getBoatSkin();
         matrixStack.scale(-1.0F, -1.0F, 1.0F);
-        matrixStack.mulPose(Vector3f.YP.rotationDegrees(90.0F));
-        boatEntityModel.setupAnim(boatEntity, g, 0.0F, -0.1F, 0.0F, 0.0F);
+        matrixStack.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(90.0F));
+        boatEntityModel.setAngles(boatEntity, g, 0.0F, -0.1F, 0.0F, 0.0F);
         VertexConsumer vertexConsumer = vertexConsumerProvider
-            .getBuffer(boatEntityModel.renderType(identifier));
-        boatEntityModel
-            .renderToBuffer(matrixStack, vertexConsumer, i, OverlayTexture.NO_OVERLAY,
+            .getBuffer(boatEntityModel.getLayer(identifier));
+        boatEntityModel.render(matrixStack, vertexConsumer, i, OverlayTexture.DEFAULT_UV,
                 1.0F, 1.0F, 1.0F, 1.0F);
-        if (!boatEntity.isUnderWater()) {
+        if (!boatEntity.isSubmergedInWater()) {
             VertexConsumer vertexConsumer2 =
-                vertexConsumerProvider.getBuffer(RenderType.waterMask());
-            boatEntityModel.waterPatch()
+                vertexConsumerProvider.getBuffer(RenderLayer.getWaterMask());
+            boatEntityModel.getWaterPatch()
                 .render(matrixStack, vertexConsumer2, i,
-                    OverlayTexture.NO_OVERLAY);
+                    OverlayTexture.DEFAULT_UV);
         }
 
-        matrixStack.popPose();
+        matrixStack.pop();
         super.render(boatEntity, f, g, matrixStack, vertexConsumerProvider, i);
     }
 
     @Override
-    public ResourceLocation getTextureLocation(CustomBoatEntity boatEntity) {
-        return boatEntity.getBoatSkin();
+    public Identifier getTexture(CustomBoatEntity entity) {
+        return entity.getBoatSkin();
     }
 
 }

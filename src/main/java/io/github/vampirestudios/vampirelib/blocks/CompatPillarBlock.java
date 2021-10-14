@@ -24,7 +24,9 @@
 
 package io.github.vampirestudios.vampirelib.blocks;
 
+import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
+import net.minecraft.block.PillarBlock;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.collection.DefaultedList;
@@ -32,11 +34,11 @@ import net.minecraft.util.collection.DefaultedList;
 import io.github.vampirestudios.vampirelib.api.ItemGroupFiller;
 import io.github.vampirestudios.vampirelib.api.VanillaTargetedItemGroupFiller;
 
-public class CompatBlock extends Block {
+public class CompatPillarBlock extends PillarBlock {
 
     private final ItemGroupFiller targetedItemGroupAppender;
 
-    public CompatBlock(String modName, Block modBlock, Settings settings) {
+    public CompatPillarBlock(String modName, Block modBlock, AbstractBlock.Settings settings) {
         super(settings);
         this.targetedItemGroupAppender = new VanillaTargetedItemGroupFiller(modBlock.asItem());
     }

@@ -677,9 +677,9 @@
 
 package io.github.vampirestudios.vampirelib.utils.registry;
 
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
+import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
+import net.minecraft.util.Identifier;
 
 public class WoodType {
     public static final WoodType SPRUCE = WoodTypeRegistry.registerVanilla(new WoodType("spruce", Blocks.SPRUCE_LEAVES, Blocks.SPRUCE_LOG));
@@ -691,19 +691,19 @@ public class WoodType {
     public static final WoodType[] VANILLA = new WoodType[] {OAK, SPRUCE, BIRCH, JUNGLE, ACACIA, DARK_OAK};
     private final Block leaves;
     private final Block log;
-    protected ResourceLocation identifier;
+    protected Identifier identifier;
 
     public WoodType(String name, Block leaves, Block log) {
-        this(new ResourceLocation(name), leaves, log);
+        this(new Identifier(name), leaves, log);
     }
 
-    public WoodType(ResourceLocation identifier, Block leaves, Block log) {
+    public WoodType(Identifier identifier, Block leaves, Block log) {
         this.identifier = identifier;
         this.leaves = leaves;
         this.log = log;
     }
 
-    public ResourceLocation getIdentifier() {
+    public Identifier getIdentifier() {
         return identifier;
     }
 

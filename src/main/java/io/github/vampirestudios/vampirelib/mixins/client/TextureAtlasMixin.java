@@ -54,7 +54,7 @@ public class TextureAtlasMixin {
 					int height = Math.min(sprite.getHeight(), emission.getHeight());
 					for (int x = 0; x < width; x++) {
 						for (int y = 0; y < height; y++) {
-							int argb = emission.getPixelColor(x, y);
+							int argb = emission.getColor(x, y);
 							int alpha = (argb >> 24) & 255;
 							if (alpha > 127) {
 								int r = (argb >> 16) & 255;
@@ -62,7 +62,7 @@ public class TextureAtlasMixin {
 								int b = argb & 255;
 								if (r > 0 || g > 0 || b > 0) {
 									argb = (argb & 0x00FFFFFF) | (250 << 24);
-									sprite.setPixelColor(x, y, argb);
+									sprite.setColor(x, y, argb);
 								}
 							}
 						}

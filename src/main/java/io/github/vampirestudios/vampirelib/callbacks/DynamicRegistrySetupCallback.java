@@ -677,12 +677,13 @@
 
 package io.github.vampirestudios.vampirelib.callbacks;
 
+import net.minecraft.util.registry.DynamicRegistryManager;
+
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
-import net.minecraft.core.RegistryAccess;
 
 /**
- * This event gets triggered when a new {@link RegistryAccess} gets created, but before it gets filled.
+ * This event gets triggered when a new {@link DynamicRegistryManager} gets created, but before it gets filled.
  * Therefore, this is the ideal place to register callbacks to dynamic registries.
  * For example, the following code is used to register a callback that gets triggered for any registered Biome, both JSON and code defined.
  *
@@ -708,5 +709,5 @@ public interface DynamicRegistrySetupCallback {
         }
     );
 
-    void onSetupRegistry(RegistryAccess registryManager);
+    void onSetupRegistry(DynamicRegistryManager registryManager);
 }

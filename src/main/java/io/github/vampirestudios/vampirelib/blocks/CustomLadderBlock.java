@@ -677,17 +677,17 @@
 
 package io.github.vampirestudios.vampirelib.blocks;
 
-import net.minecraft.core.Direction;
-import net.minecraft.world.level.block.LadderBlock;
-import net.minecraft.world.level.block.SoundType;
-import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.level.material.Material;
+import net.minecraft.block.AbstractBlock;
+import net.minecraft.block.LadderBlock;
+import net.minecraft.block.Material;
+import net.minecraft.sound.BlockSoundGroup;
+import net.minecraft.util.math.Direction;
 
 public class CustomLadderBlock extends LadderBlock {
 
     public CustomLadderBlock() {
-        super(BlockBehaviour.Properties.of(Material.SAND).strength(0.4F).sound(SoundType.LADDER));
-        registerDefaultState(this.defaultBlockState().setValue(FACING, Direction.NORTH).setValue(WATERLOGGED, false));
+        super(AbstractBlock.Settings.of(Material.WOOD).strength(0.4F).sounds(BlockSoundGroup.LADDER));
+        setDefaultState(this.getDefaultState().with(FACING, Direction.NORTH).with(WATERLOGGED, false));
     }
 
 }

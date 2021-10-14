@@ -677,18 +677,17 @@
 
 package io.github.vampirestudios.vampirelib.blocks;
 
-import net.minecraft.world.level.block.SaplingBlock;
-import net.minecraft.world.level.block.SimpleWaterloggedBlock;
-import net.minecraft.world.level.block.SoundType;
-import net.minecraft.world.level.block.grower.AbstractTreeGrower;
-import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.level.material.Material;
+import net.minecraft.block.AbstractBlock;
+import net.minecraft.block.Material;
+import net.minecraft.block.SaplingBlock;
+import net.minecraft.block.Waterloggable;
+import net.minecraft.block.sapling.SaplingGenerator;
+import net.minecraft.sound.BlockSoundGroup;
 
-public class WaterloggedSaplingBaseBlock extends SaplingBlock
-    implements SimpleWaterloggedBlock {
+public class WaterloggedSaplingBaseBlock extends SaplingBlock implements Waterloggable {
 
-    public WaterloggedSaplingBaseBlock(AbstractTreeGrower saplingGenerator_1) {
-        super(saplingGenerator_1, BlockBehaviour.Properties.of(Material.PLANT).noCollission().randomTicks().instabreak().sound(SoundType.GRASS));
+    public WaterloggedSaplingBaseBlock(SaplingGenerator saplingGenerator_1) {
+        super(saplingGenerator_1, AbstractBlock.Settings.of(Material.PLANT).noCollision().ticksRandomly().breakInstantly().sounds(BlockSoundGroup.GRASS));
     }
 
 }

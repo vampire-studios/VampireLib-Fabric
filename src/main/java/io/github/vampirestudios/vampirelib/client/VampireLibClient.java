@@ -679,12 +679,14 @@ package io.github.vampirestudios.vampirelib.client;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
+import net.minecraft.client.color.block.BlockColorProvider;
+import net.minecraft.client.color.item.ItemColorProvider;
+
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.impl.client.rendering.ColorProviderRegistryImpl;
-import net.minecraft.client.color.block.BlockColor;
-import net.minecraft.client.color.item.ItemColor;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 
 public class VampireLibClient implements ClientModInitializer {
 
@@ -695,11 +697,11 @@ public class VampireLibClient implements ClientModInitializer {
         COLORED_LEAVES.forEach(coloredLeaves -> {
             if (!coloredLeaves.customColor) {
                 ColorProviderRegistryImpl.BLOCK.register((block, world, pos, layer) -> {
-                    BlockColor provider = ColorProviderRegistryImpl.BLOCK.get(Blocks.OAK_LEAVES);
+                    BlockColorProvider provider = ColorProviderRegistryImpl.BLOCK.get(Blocks.OAK_LEAVES);
                     return provider == null ? -1 : provider.getColor(block, world, pos, layer);
                 }, coloredLeaves.leavesBlock);
                 ColorProviderRegistryImpl.ITEM.register((item, layer) -> {
-                    ItemColor provider = ColorProviderRegistryImpl.ITEM.get(Blocks.OAK_LEAVES);
+                    ItemColorProvider provider = ColorProviderRegistryImpl.ITEM.get(Blocks.OAK_LEAVES);
                     return provider == null ? -1 : provider.getColor(item, layer);
                 }, coloredLeaves.leavesBlock);
             } else {

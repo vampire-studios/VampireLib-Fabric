@@ -677,9 +677,10 @@
 
 package io.github.vampirestudios.vampirelib.colorSnifferApi;
 
-import com.mojang.blaze3d.platform.NativeImage;
+import net.minecraft.client.texture.NativeImage;
+import net.minecraft.client.texture.Sprite;
+
 import io.github.vampirestudios.vampirelib.mixins.client.SpriteAccessor;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 
 /**
  * Utility class for averaging Sprite colors.
@@ -691,7 +692,7 @@ public class ColorSniffer {
      * @param sprite The Sprite you want to get the average color from.
      * @return The average ABGR color of the provided Sprite.
      */
-    public static int getAverageSpriteColor(TextureAtlasSprite sprite) {
+    public static int getAverageSpriteColor(Sprite sprite) {
         return getAverageSpriteColor(sprite, 0);
     }
 
@@ -700,7 +701,7 @@ public class ColorSniffer {
      * @param frame  The specific frame of the sprite, in case it has more than one.
      * @return The average ABGR color of the provided Sprite, during the provided frame.
      */
-    public static int getAverageSpriteColor(TextureAtlasSprite sprite, int frame) {
+    public static int getAverageSpriteColor(Sprite sprite, int frame) {
         if (sprite == null) {
             return 0xFFFF00FF;
         }
@@ -710,7 +711,7 @@ public class ColorSniffer {
         long avgR = 0, avgG = 0, avgB = 0;
         for (int y = 0; y < sprite.getHeight(); y++) {
             for (int x = 0; x < sprite.getWidth(); x++) {
-                int c = image.getPixelRGBA(x, y);
+                int c = image.getColor(x, y);
                 if (((c >> 24) & 0xFF) != 0x00) {
                     avgB += ((c >> 16) & 0xFF) * ((c >> 16) & 0xFF);
                     avgG += ((c >> 8) & 0xFF) * ((c >> 8) & 0xFF);

@@ -677,14 +677,15 @@
 
 package io.github.vampirestudios.vampirelib.blocks;
 
-import io.github.vampirestudios.vampirelib.api.Climbable;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.level.block.TrapDoorBlock;
-import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.TrapdoorBlock;
+import net.minecraft.entity.Entity;
+import net.minecraft.util.math.BlockPos;
 
-public class TrapdoorBaseBlock extends TrapDoorBlock implements Climbable {
-    public TrapdoorBaseBlock(Properties block$Settings_1) {
+import io.github.vampirestudios.vampirelib.api.Climbable;
+
+public class TrapdoorBaseBlock extends TrapdoorBlock implements Climbable {
+    public TrapdoorBaseBlock(Settings block$Settings_1) {
         super(block$Settings_1);
     }
 

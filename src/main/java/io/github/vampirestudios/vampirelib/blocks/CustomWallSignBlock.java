@@ -677,12 +677,13 @@
 
 package io.github.vampirestudios.vampirelib.blocks;
 
-import net.minecraft.world.level.block.WallSignBlock;
-import net.minecraft.world.level.block.state.properties.WoodType;
+import net.minecraft.block.AbstractBlock;
+import net.minecraft.block.WallSignBlock;
+import net.minecraft.util.SignType;
 
 public class CustomWallSignBlock extends WallSignBlock {
 
-    public CustomWallSignBlock(WoodType signType, Properties settings) {
+    public CustomWallSignBlock(SignType signType, AbstractBlock.Settings settings) {
         super(settings, signType);
     }
 

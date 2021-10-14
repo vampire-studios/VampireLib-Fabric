@@ -682,31 +682,31 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.item.WritableBookItem;
-import net.minecraft.world.item.WrittenBookItem;
-import net.minecraft.world.item.context.UseOnContext;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.LecternBlock;
-import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.LecternBlock;
+import net.minecraft.item.ItemUsageContext;
+import net.minecraft.item.WritableBookItem;
+import net.minecraft.item.WrittenBookItem;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 import io.github.vampirestudios.vampirelib.blocks.LecternBaseBlock;
 
 @Mixin({WritableBookItem.class, WrittenBookItem.class})
 public abstract class MixinBookOnLectern {
 
-    @Inject(method = "useOn", at = @At(value = "HEAD"), cancellable = true)
-    public void useOnBlock(UseOnContext usageContext, CallbackInfoReturnable<InteractionResult> cir) {
-        Level world = usageContext.getLevel();
-        BlockPos blockPos = usageContext.getClickedPos();
+    @Inject(method = "useOnBlock", at = @At(value = "HEAD"), cancellable = true)
+    public void useOnBlock(ItemUsageContext context, CallbackInfoReturnable<ActionResult> cir) {
+        World world = context.getWorld();
+        BlockPos blockPos = context.getBlockPos();
         BlockState blockState = world.getBlockState(blockPos);
         if (blockState.getBlock() instanceof LecternBlock) {
-            cir.setReturnValue(LecternBlock.tryPlaceBook(usageContext.getPlayer(), world, blockPos, blockState, usageContext.getItemInHand()) ? InteractionResult.SUCCESS : InteractionResult.PASS);
+            cir.setReturnValue(LecternBlock.putBookIfAbsent(context.getPlayer(), world, blockPos, blockState, context.getStack()) ? ActionResult.SUCCESS : ActionResult.PASS);
         } else if (blockState.getBlock() instanceof LecternBaseBlock && !(blockState.getBlock() instanceof LecternBlock)) {
-            cir.setReturnValue(LecternBaseBlock.tryPlaceBook(usageContext.getPlayer(), world, blockPos, blockState, usageContext.getItemInHand()) ? InteractionResult.SUCCESS : InteractionResult.PASS);
+            cir.setReturnValue(LecternBaseBlock.tryPlaceBook(context.getPlayer(), world, blockPos, blockState, context.getStack()) ? ActionResult.SUCCESS : ActionResult.PASS);
         } else {
-            cir.setReturnValue(InteractionResult.PASS);
+            cir.setReturnValue(ActionResult.PASS);
         }
     }
 }

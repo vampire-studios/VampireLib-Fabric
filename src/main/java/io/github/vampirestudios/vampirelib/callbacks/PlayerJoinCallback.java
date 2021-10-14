@@ -677,15 +677,14 @@
 
 package io.github.vampirestudios.vampirelib.callbacks;
 
+import net.minecraft.server.network.ServerPlayerEntity;
+
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
-import net.minecraft.network.Connection;
-import net.minecraft.server.level.ServerPlayer;
 
 /**
  * This event is called when a player joins the server.
  *
- * <p>It hooks in at the end of {@link net.minecraft.server.players.PlayerList#placeNewPlayer(Connection, ServerPlayer)} through {@link net.fabricmc.fabric.mixin.event.lifecycle.MixinPlayerManager}.
  */
 public interface PlayerJoinCallback {
     Event<PlayerJoinCallback> EVENT = EventFactory.createArrayBacked(PlayerJoinCallback.class,
@@ -696,5 +695,5 @@ public interface PlayerJoinCallback {
         }
     );
 
-    void onPlayerJoin(ServerPlayer player);
+    void onPlayerJoin(ServerPlayerEntity player);
 }

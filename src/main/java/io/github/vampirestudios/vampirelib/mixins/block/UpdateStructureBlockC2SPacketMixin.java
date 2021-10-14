@@ -677,15 +677,16 @@
 
 package io.github.vampirestudios.vampirelib.mixins.block;
 
-import net.minecraft.network.protocol.game.ServerboundSetStructureBlockPacket;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.ModifyConstant;
 
-@Mixin(ServerboundSetStructureBlockPacket.class)
+import net.minecraft.network.packet.c2s.play.UpdateStructureBlockC2SPacket;
+
+@Mixin(UpdateStructureBlockC2SPacket.class)
 public abstract class UpdateStructureBlockC2SPacketMixin {
 
-    @ModifyConstant(method = "<init>(Lnet/minecraft/network/FriendlyByteBuf;)V", constant = @Constant(intValue = 48))
+    @ModifyConstant(method = "<init>(Lnet/minecraft/network/PacketByteBuf;)V", constant = @Constant(intValue = 48))
     public int readNbt(int old) {
         return 2048;
     }

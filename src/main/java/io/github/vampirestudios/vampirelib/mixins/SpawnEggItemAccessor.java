@@ -682,14 +682,14 @@ import java.util.Map;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.Mob;
-import net.minecraft.world.item.SpawnEggItem;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.mob.MobEntity;
+import net.minecraft.item.SpawnEggItem;
 
 @Mixin(SpawnEggItem.class)
 public interface SpawnEggItemAccessor {
-    @Accessor
-    static Map<EntityType<? extends Mob>, SpawnEggItem> getBY_ID() {
+    @Accessor("SPAWN_EGGS")
+    static Map<EntityType<? extends MobEntity>, SpawnEggItem> getSpawnEggs() {
         throw new UnsupportedOperationException();
     }
 }

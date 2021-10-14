@@ -677,13 +677,14 @@
 
 package io.github.vampirestudios.vampirelib.modules.api;
 
+import net.minecraft.util.Identifier;
+
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.resources.ResourceLocation;
 
 public abstract class ServerFeature extends Feature {
 
-    public ServerFeature(ResourceLocation registryName, String name) {
+    public ServerFeature(Identifier registryName, String name) {
         super(registryName, name);
     }
 

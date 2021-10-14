@@ -25,12 +25,11 @@
     ]
   },
   "mixins": [
-    "vampirelib.mixins.json",
-    "fabric-tag-extensions-v1.mixins.json"
+    "vampirelib.mixins.json"
   ],
   "accessWidener": "vampirelib.accesswidener",
   "depends": {
-    "fabricloader": ">=0.11.6",
+    "fabricloader": ">=0.12.1",
     "java": ">=16"
   },
   "custom": {

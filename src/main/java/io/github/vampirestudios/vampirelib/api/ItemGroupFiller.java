@@ -677,27 +677,22 @@
 
 package io.github.vampirestudios.vampirelib.api;
 
-import java.util.function.Consumer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.collection.DefaultedList;
 
 /**
- * An entrypoint for developers to modify custom dynamic registries.
- *
- * <p>A dynamic registry is an optional per-server extension to an existing registry. They are decoded from datapack JSONs at the path {@code data/&lt;entry_namespace&gt;/&lt;registry_path&gt;/&lt;entry_id&gt;.json} and synced to clients using a codec provided for registry entries.</p>
- *
- * <p>In {@code fabric.mod.json}, the entrypoint is defined with the {@code dynamic-registry-provider} key.</p>
- *
- * <p>Dynamic registries are initialized at different times in relation to the mod's initialization depending on the environment and version of Fabric loader. Due to this, some parts of the game may not be initialized yet. To prevent issues from occurring, the dynamic registry provider should be defined within a separate class and access as few other classes as possible.</p>
- *
- * <pre><code>
- * public class ExampleDynamicRegistryProvider implements DynamicRegistryProvider {
- * 	public void addDynamicRegistries(Consumer&lt;CustomDynamicRegistry&lt;?&gt;&gt; adder) {
- * 		adder.accept(new CustomDynamicRegistry&lt;&gt;(CUSTOM_REGISTRY, () -> DEFAULT_VALUE, RegistryItem.CODEC));
- *    }
- * }
- * </code></pre>
- *
- * @see net.fabricmc.loader.api.FabricLoader#getEntrypointContainers(String, Class)
+ * Interface implemented on classes for special filling of {@link Item}s in {@link ItemGroup}s.
  */
-public interface DynamicRegistryProvider {
-    void addDynamicRegistries(Consumer<CustomDynamicRegistry<?>> adder);
+@FunctionalInterface
+public interface ItemGroupFiller {
+	/**
+	 * Fills an {@link Item} for a {@link ItemGroup} given a {@link DefaultedList} of the {@link ItemStack}s for that {@link ItemGroup}.
+	 *
+	 * @param item  The {@link Item} to fill.
+	 * @param tab   The {@link ItemGroup} to fill into.
+	 * @param items A {@link DefaultedList} of the {@link ItemStack}s for the {@link ItemGroup}.
+	 */
+	void fillItem(Item item, ItemGroup tab, DefaultedList<ItemStack> items);
 }

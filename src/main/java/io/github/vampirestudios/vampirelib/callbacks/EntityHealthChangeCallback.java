@@ -677,10 +677,11 @@
 
 package io.github.vampirestudios.vampirelib.callbacks;
 
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.util.ActionResult;
+
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.LivingEntity;
 
 public interface EntityHealthChangeCallback {
     /**
@@ -690,13 +691,13 @@ public interface EntityHealthChangeCallback {
     Event<EntityHealthChangeCallback> EVENT = EventFactory.createArrayBacked(EntityHealthChangeCallback.class,
         (listeners) -> (entity, health) -> {
             for (EntityHealthChangeCallback event : listeners) {
-                InteractionResult result = event.health(entity, health);
-                if (result != InteractionResult.PASS) {
+                ActionResult result = event.health(entity, health);
+                if (result != ActionResult.PASS) {
                     return result;
                 }
             }
-            return InteractionResult.PASS;
+            return ActionResult.PASS;
         });
 
-    InteractionResult health(LivingEntity entity, float health);
+    ActionResult health(LivingEntity entity, float health);
 }

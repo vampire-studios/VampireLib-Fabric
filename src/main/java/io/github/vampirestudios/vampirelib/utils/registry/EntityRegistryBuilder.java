@@ -677,23 +677,23 @@
 
 package io.github.vampirestudios.vampirelib.utils.registry;
 
-import net.minecraft.core.Registry;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityDimensions;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.MobCategory;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityDimensions;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.SpawnGroup;
+import net.minecraft.entity.mob.MobEntity;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.registry.Registry;
 
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 
 public class EntityRegistryBuilder<E extends Entity> {
 
-    private static ResourceLocation name;
+    private static Identifier name;
 
     private EntityType.EntityFactory<E> entityFactory;
 
-    private MobCategory category;
+    private SpawnGroup category;
 
     private int trackingDistance;
     private int updateIntervalTicks;
@@ -706,7 +706,7 @@ public class EntityRegistryBuilder<E extends Entity> {
 
     private EntityDimensions dimensions;
 
-    public static <E extends Entity> EntityRegistryBuilder<E> createBuilder(ResourceLocation nameIn) {
+    public static <E extends Entity> EntityRegistryBuilder<E> createBuilder(Identifier nameIn) {
         name = nameIn;
         return new EntityRegistryBuilder<>();
     }
@@ -717,12 +717,12 @@ public class EntityRegistryBuilder<E extends Entity> {
     }
 
     @Deprecated
-    public EntityRegistryBuilder<E> category(MobCategory category) {
+    public EntityRegistryBuilder<E> category(SpawnGroup category) {
         this.category = category;
         return this;
     }
 
-    public EntityRegistryBuilder<E> group(MobCategory category) {
+    public EntityRegistryBuilder<E> group(SpawnGroup category) {
         this.category = category;
         return this;
     }
@@ -789,7 +789,7 @@ public class EntityRegistryBuilder<E extends Entity> {
         EntityType<E> entityType = Registry.register(Registry.ENTITY_TYPE, name, entityBuilder.build());
 
         if (hasEgg) {
-            RegistryHelper.createRegistryHelper(name.getNamespace()).items().registerSpawnEgg(name.getPath(), (EntityType<? extends Mob>) entityType, primaryColor, secondaryColor);
+            RegistryHelper.createRegistryHelper(name.getNamespace()).items().registerSpawnEgg(name.getPath(), (EntityType<? extends MobEntity>) entityType, primaryColor, secondaryColor);
         }
 
         return entityType;

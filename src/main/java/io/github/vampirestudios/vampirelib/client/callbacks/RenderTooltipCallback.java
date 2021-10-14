@@ -678,12 +678,15 @@
 package io.github.vampirestudios.vampirelib.client.callbacks;
 
 import java.util.List;
+
+import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.item.ItemStack;
+import net.minecraft.text.OrderedText;
+
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
-import net.minecraft.client.gui.Font;
-import net.minecraft.util.FormattedCharSequence;
-import net.minecraft.world.item.ItemStack;
-import com.mojang.blaze3d.vertex.PoseStack;
+
 import io.github.vampirestudios.vampirelib.client.TooltipRenderer;
 
 public interface RenderTooltipCallback {
@@ -734,7 +737,7 @@ public interface RenderTooltipCallback {
             };
         });
 
-        TooltipRenderer.Color color(ItemStack stack, List<? extends FormattedCharSequence> textLines, PoseStack matrixStack, int x, int y, Font fr, int background, int borderStart, int borderEnd);
+        TooltipRenderer.Color color(ItemStack stack, List<? extends OrderedText> textLines, MatrixStack matrixStack, int x, int y, TextRenderer fr, int background, int borderStart, int borderEnd);
     }
 
 }

@@ -682,18 +682,18 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import net.minecraft.client.renderer.entity.BoatRenderer;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.vehicle.Boat;
+import net.minecraft.client.render.entity.BoatEntityRenderer;
+import net.minecraft.entity.vehicle.BoatEntity;
+import net.minecraft.util.Identifier;
 
 import io.github.vampirestudios.vampirelib.boat.CustomBoatEntity;
 
-@Mixin(BoatRenderer.class)
+@Mixin(BoatEntityRenderer.class)
 public class BoatEntityRendererMixin {
-    @Inject(method = "getTextureLocation", at = @At("HEAD"), cancellable = true)
-    private void injectCustomTexture(Boat boat, CallbackInfoReturnable<ResourceLocation> cir) {
-        if (boat instanceof CustomBoatEntity) {
-            cir.setReturnValue(((CustomBoatEntity) boat).getBoatSkin());
+    @Inject(method = "getTexture", at = @At("HEAD"), cancellable = true)
+    private void injectCustomTexture(BoatEntity boat, CallbackInfoReturnable<Identifier> cir) {
+        if (boat instanceof CustomBoatEntity customBoatEntity) {
+            cir.setReturnValue(customBoatEntity.getBoatSkin());
         }
     }
 }

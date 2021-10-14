@@ -677,15 +677,15 @@
 
 package io.github.vampirestudios.vampirelib.blocks;
 
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.FlowerPotBlock;
-import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.level.material.Material;
+import net.minecraft.block.AbstractBlock;
+import net.minecraft.block.Block;
+import net.minecraft.block.FlowerPotBlock;
+import net.minecraft.block.Material;
 
 public class FlowerPotBaseBlock extends FlowerPotBlock {
 
     public FlowerPotBaseBlock(Block block_1) {
-        super(block_1, BlockBehaviour.Properties.of(Material.SAND).instabreak());
+        super(block_1, AbstractBlock.Settings.of(Material.GOURD).breakInstantly());
     }
 
 }
