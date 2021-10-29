@@ -23,9 +23,9 @@ repositories {
 
 dependencies {
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
-	mappings loom.layered() {
+	mappings loom.layered {
 		officialMojangMappings()
-		parchment("org.parchmentmc.data:parchment-1.17.1:BLEEDING-SNAPSHOT@zip")
+		signatureFix("net.fabricmc:yarn:21w43a+build.4:v2")
 	}
 
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"

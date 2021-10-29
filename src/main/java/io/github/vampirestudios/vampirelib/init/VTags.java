@@ -995,6 +995,7 @@ public class VTags {
         public static final Tag<Item> STORAGE_BLOCKS_QUARTZ = registerItemTag("storage_blocks/quartz");
         public static final Tag<Item> STORAGE_BLOCKS_REDSTONE = registerItemTag("storage_blocks/redstone");
         public static final Tag<Item> STRING = registerItemTag("string");
+		public static final Tag<Item> FISHING_ROD = registerItemTag("fishing_rod");
 
         public static Tag<Item> registerItemTag(String id) {
             return TagRegistry.item(new ResourceLocation(VampireLib.MOD_ID, id));
