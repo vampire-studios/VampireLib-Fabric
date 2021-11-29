@@ -681,51 +681,49 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.common.collect.ImmutableMap;
 import com.swordglowsblue.artifice.api.Artifice;
+import net.devtech.arrp.api.RuntimeResourcePack;
+import net.devtech.arrp.json.tags.JTag;
 
 import net.minecraft.client.model.BoatModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.vehicle.Boat;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.ComposterBlock;
 import net.minecraft.world.level.block.FenceBlock;
 import net.minecraft.world.level.block.FenceGateBlock;
 import net.minecraft.world.level.block.PressurePlateBlock;
-import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.block.grower.AbstractTreeGrower;
 import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
+import net.minecraft.world.level.levelgen.feature.HugeFungusConfiguration;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
-import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.fabricmc.fabric.api.registry.FlammableBlockRegistry;
 import net.fabricmc.fabric.api.registry.FuelRegistry;
-import net.fabricmc.fabric.api.tool.attribute.v1.FabricToolTags;
+import net.fabricmc.fabric.api.registry.StrippableBlockRegistry;
 import net.fabricmc.fabric.impl.blockrenderlayer.BlockRenderLayerMapImpl;
 import net.fabricmc.loader.api.FabricLoader;
 
+import io.github.vampirestudios.vampirelib.blocks.BaseLogAndWoodBlock;
 import io.github.vampirestudios.vampirelib.blocks.ButtonBaseBlock;
+import io.github.vampirestudios.vampirelib.blocks.CompatBlock;
 import io.github.vampirestudios.vampirelib.blocks.CustomLadderBlock;
 import io.github.vampirestudios.vampirelib.blocks.DoorBaseBlock;
+import io.github.vampirestudios.vampirelib.blocks.FungusBaseBlock;
 import io.github.vampirestudios.vampirelib.blocks.LeavesBaseBlock;
 import io.github.vampirestudios.vampirelib.blocks.PressurePlateBaseBlock;
 import io.github.vampirestudios.vampirelib.blocks.SaplingBaseBlock;
@@ -743,7 +741,9 @@ import io.github.vampirestudios.vampirelib.utils.Utils;
 
 public class WoodRegistry {
 
-    public ResourceLocation name;
+    private final ResourceLocation name;
+    private final AbstractTreeGrower saplingGenerator;
+    private final ConfiguredFeature<HugeFungusConfiguration, ?> fungusGenerator;
     private Block log;
     private Block wood;
     private Block strippedLog;
@@ -760,25 +760,29 @@ public class WoodRegistry {
     private Block trapdoor;
     private Block button;
     private Block pressurePlate;
-    private Block ladder;
-//    private Block sign;
+    //    private Block sign;
 //    private Block wallSign;
-
+    private Block ladder;
     //    private Item signItem;
     private Item boatItem;
-
     private EntityType<CustomBoatEntity> boatEntity;
-
-    private final AbstractTreeGrower saplingGenerator;
 
     private WoodRegistry(ResourceLocation name, AbstractTreeGrower saplingGenerator) {
         this.name = name;
         this.saplingGenerator = saplingGenerator;
+        this.fungusGenerator = null;
+    }
+
+    private WoodRegistry(ResourceLocation name, ConfiguredFeature<HugeFungusConfiguration, ?> fungusGenerator) {
+        this.name = name;
+        this.saplingGenerator = null;
+        this.fungusGenerator = fungusGenerator;
     }
 
     private WoodRegistry(ResourceLocation name) {
         this.name = name;
         this.saplingGenerator = null;
+        this.fungusGenerator = null;
     }
 
     public static WoodRegistry.Builder of(ResourceLocation name) {
@@ -793,71 +797,71 @@ public class WoodRegistry {
         return new WoodRegistry.Builder().of(name, saplingGenerator);
     }
 
-    public Block getLog() {
+    public Block log() {
         return log;
     }
 
-    public Block getWood() {
+    public Block wood() {
         return wood;
     }
 
-    public Block getStrippedLog() {
+    public Block strippedLog() {
         return strippedLog;
     }
 
-    public Block getStrippedWood() {
+    public Block strippedWood() {
         return strippedWood;
     }
 
-    public Block getStairs() {
+    public Block stairs() {
         return stairs;
     }
 
-    public Block getSlab() {
+    public Block slab() {
         return slab;
     }
 
-    public Block getPlanks() {
+    public Block planks() {
         return planks;
     }
 
-    public Block getLeaves() {
+    public Block leaves() {
         return leaves;
     }
 
-    public Block getSapling() {
+    public Block sapling() {
         return sapling;
     }
 
-    public Block getFence() {
+    public Block fence() {
         return fence;
     }
 
-    public Block getFenceGate() {
+    public Block fenceGate() {
         return fenceGate;
     }
 
-    public Block getBookshelf() {
+    public Block bookshelf() {
         return bookshelf;
     }
 
-    public Block getDoor() {
+    public Block door() {
         return door;
     }
 
-    public Block getTrapdoor() {
+    public Block trapdoor() {
         return trapdoor;
     }
 
-    public Block getButton() {
+    public Block button() {
         return button;
     }
 
-    public Block getPressurePlate() {
+    public Block pressurePlate() {
         return pressurePlate;
     }
 
-    public Block getLadder() {
+    public Block ladder() {
         return ladder;
     }
 
@@ -873,22 +877,22 @@ public class WoodRegistry {
         return signItem;
     }*/
 
-    public Item getBoatItem() {
+    public Item boatItem() {
         return boatItem;
     }
 
     public static class Builder {
 
+        private final Boat.Type boatType = Boat.Type.OAK;
+        private final List<String> availableLeaves = new ArrayList<>();
+        private final List<String> availableSaplings = new ArrayList<>();
         public ResourceLocation name;
         private WoodRegistry woodRegistry;
         private RegistryHelper registryHelper;
-        private final Boat.Type boatType = Boat.Type.OAK;
         private boolean flammable = true;
         private boolean mushroomLike = false;
         private boolean generateAssets = false;
         private boolean preRegisteredPlanks = false;
-        private final List<String> leaves = new ArrayList<>();
-        private final List<String> saplings = new ArrayList<>();
 
         public Builder of(ResourceLocation name) {
             this.name = name;
@@ -914,31 +918,42 @@ public class WoodRegistry {
             return this;
         }
 
+        public Builder of(ResourceLocation name, ConfiguredFeature<HugeFungusConfiguration, ?> fungusGenerator) {
+            this.name = name;
+            woodRegistry = new WoodRegistry(name, fungusGenerator);
+            registryHelper = RegistryHelper.createRegistryHelper(name.getNamespace());
+            return this;
+        }
+
         public Builder log() {
             String logName = mushroomLike ? name.getPath() + "_stem" : this.name.getPath() + "_log";
-            BlockBehaviour.Properties blockSettings = mushroomLike ? FabricBlockSettings.copyOf(Blocks.WARPED_STEM) : FabricBlockSettings.copyOf(Blocks.OAK_LOG);
-            woodRegistry.log = registryHelper.blocks().registerBlock(new RotatedPillarBlock(blockSettings), logName, CreativeModeTab.TAB_BUILDING_BLOCKS);
+            Block block = mushroomLike ? Blocks.WARPED_STEM : Blocks.DARK_OAK_LOG;
+            BlockBehaviour.Properties blockSettings = FabricBlockSettings.copyOf(block);
+            woodRegistry.log = registryHelper.blocks().registerBlock(new BaseLogAndWoodBlock(blockSettings, block), logName, CreativeModeTab.TAB_BUILDING_BLOCKS);
             return this;
         }
 
         public Builder wood() {
             String woodName = mushroomLike ? name.getPath() + "_hyphae" : name.getPath() + "_wood";
-            BlockBehaviour.Properties blockSettings = mushroomLike ? FabricBlockSettings.copyOf(Blocks.WARPED_HYPHAE) : FabricBlockSettings.copyOf(Blocks.OAK_WOOD);
-            woodRegistry.wood = registryHelper.blocks().registerBlock(new RotatedPillarBlock(blockSettings), woodName, CreativeModeTab.TAB_BUILDING_BLOCKS);
+            Block block = mushroomLike ? Blocks.WARPED_HYPHAE : Blocks.DARK_OAK_WOOD;
+            BlockBehaviour.Properties blockSettings = FabricBlockSettings.copyOf(block);
+            woodRegistry.wood = registryHelper.blocks().registerBlock(new BaseLogAndWoodBlock(blockSettings, block), woodName, CreativeModeTab.TAB_BUILDING_BLOCKS);
             return this;
         }
 
         public Builder strippedLog() {
             String logName = mushroomLike ? name.getPath() + "_stem" : name.getPath() + "_log";
-            BlockBehaviour.Properties blockSettings = mushroomLike ? FabricBlockSettings.copyOf(Blocks.STRIPPED_WARPED_STEM) : FabricBlockSettings.copyOf(Blocks.STRIPPED_OAK_LOG);
-            woodRegistry.strippedLog = registryHelper.blocks().registerBlock(new RotatedPillarBlock(blockSettings), "stripped_" + logName, CreativeModeTab.TAB_BUILDING_BLOCKS);
+            Block block = mushroomLike ? Blocks.STRIPPED_WARPED_STEM : Blocks.STRIPPED_DARK_OAK_LOG;
+            BlockBehaviour.Properties blockSettings = FabricBlockSettings.copyOf(block);
+            woodRegistry.strippedLog = registryHelper.blocks().registerBlock(new BaseLogAndWoodBlock(blockSettings, block), "stripped_" + logName, CreativeModeTab.TAB_BUILDING_BLOCKS);
             return this;
         }
 
         public Builder strippedWood() {
             String woodName = mushroomLike ? name.getPath() + "_hyphae" : name.getPath() + "_wood";
-            BlockBehaviour.Properties blockSettings = mushroomLike ? FabricBlockSettings.copyOf(Blocks.STRIPPED_WARPED_HYPHAE) : FabricBlockSettings.copyOf(Blocks.STRIPPED_OAK_WOOD);
-            woodRegistry.strippedWood = registryHelper.blocks().registerBlock(new RotatedPillarBlock(blockSettings), "stripped_" + woodName, CreativeModeTab.TAB_BUILDING_BLOCKS);
+            Block block = mushroomLike ? Blocks.STRIPPED_WARPED_HYPHAE : Blocks.STRIPPED_DARK_OAK_WOOD;
+            BlockBehaviour.Properties blockSettings = FabricBlockSettings.copyOf(block);
+            woodRegistry.strippedWood = registryHelper.blocks().registerBlock(new BaseLogAndWoodBlock(blockSettings, block), "stripped_" + woodName, CreativeModeTab.TAB_BUILDING_BLOCKS);
             return this;
         }
 
@@ -949,7 +964,7 @@ public class WoodRegistry {
         }
 
         public Builder slab() {
-            woodRegistry.slab = registryHelper.blocks().registerBlock(new SlabBaseBlock(BlockBehaviour.Properties.copy(woodRegistry.planks)),
+            woodRegistry.slab = registryHelper.blocks().registerBlock(new SlabBaseBlock(FabricBlockSettings.copy(woodRegistry.planks)),
                 name.getPath() + "_slab", CreativeModeTab.TAB_BUILDING_BLOCKS);
             return this;
         }
@@ -960,35 +975,47 @@ public class WoodRegistry {
             return this;
         }
 
-        public Builder wartBlock() {
-            woodRegistry.leaves = registryHelper.blocks().registerBlock(new Block(FabricBlockSettings.copyOf(Blocks.NETHER_WART_BLOCK)),
-                name.getPath() + "_wart_block", CreativeModeTab.TAB_DECORATIONS);
-            return this;
-        }
-
         public Builder leaves() {
-            woodRegistry.leaves = registryHelper.blocks().registerBlock(new LeavesBaseBlock(), name.getPath() + "_leaves",
+            String leavesName = mushroomLike ? name.getPath() + "_wart_block" : name.getPath() + "_leaves";
+            Block block = mushroomLike ? Blocks.WARPED_WART_BLOCK : Blocks.FLOWERING_AZALEA_LEAVES;
+            woodRegistry.leaves = registryHelper.blocks().registerBlock(new LeavesBaseBlock(block), name.getPath() + leavesName,
                 CreativeModeTab.TAB_DECORATIONS);
             return this;
         }
 
         public Builder leaves(String nameIn) {
-            woodRegistry.leaves = registryHelper.blocks().registerBlock(new LeavesBaseBlock(), nameIn + "_leaves",
+            String leavesName = mushroomLike ? name.getPath() + "_wart_block" : name.getPath() + "_leaves";
+            Block block = mushroomLike ? Blocks.WARPED_WART_BLOCK : Blocks.FLOWERING_AZALEA_LEAVES;
+            woodRegistry.leaves = registryHelper.blocks().registerBlock(new LeavesBaseBlock(block), nameIn + leavesName,
                 CreativeModeTab.TAB_DECORATIONS);
             return this;
         }
 
         public Builder leaves(String... nameIn) {
-            for (String leavesName : nameIn) {
-                woodRegistry.leaves = registryHelper.blocks().registerBlock(new LeavesBaseBlock(), leavesName + "_leaves",
+            String leavesName = mushroomLike ? name.getPath() + "_wart_block" : name.getPath() + "_leaves";
+            Block block = mushroomLike ? Blocks.WARPED_WART_BLOCK : Blocks.FLOWERING_AZALEA_LEAVES;
+            for (String name : nameIn) {
+                woodRegistry.leaves = registryHelper.blocks().registerBlock(new LeavesBaseBlock(block), name + leavesName,
                     CreativeModeTab.TAB_DECORATIONS);
-                leaves.add(leavesName + "_leaves");
+                availableLeaves.add(name + leavesName);
             }
             return this;
         }
 
+        public Builder coloredLeaves() {
+            String leavesName = mushroomLike ? name.getPath() + "_wart_block" : name.getPath() + "_leaves";
+            Block block = mushroomLike ? Blocks.WARPED_WART_BLOCK : Blocks.FLOWERING_AZALEA_LEAVES;
+            woodRegistry.leaves = registryHelper.blocks().registerBlock(new LeavesBaseBlock(block), name.getPath() + leavesName,
+                CreativeModeTab.TAB_DECORATIONS);
+            VampireLibClient.ColoredLeaves coloredLeaves = new VampireLibClient.ColoredLeaves(woodRegistry.leaves, false, 0);
+            VampireLibClient.COLORED_LEAVES.add(coloredLeaves);
+            return this;
+        }
+
         public Builder coloredLeaves(int color) {
-            woodRegistry.leaves = registryHelper.blocks().registerBlock(new LeavesBaseBlock(), name.getPath() + "_leaves",
+            String leavesName = mushroomLike ? name.getPath() + "_wart_block" : name.getPath() + "_leaves";
+            Block block = mushroomLike ? Blocks.WARPED_WART_BLOCK : Blocks.FLOWERING_AZALEA_LEAVES;
+            woodRegistry.leaves = registryHelper.blocks().registerBlock(new LeavesBaseBlock(block), name.getPath() + leavesName,
                 CreativeModeTab.TAB_DECORATIONS);
             VampireLibClient.ColoredLeaves coloredLeaves = new VampireLibClient.ColoredLeaves(woodRegistry.leaves, true, color);
             VampireLibClient.COLORED_LEAVES.add(coloredLeaves);
@@ -996,7 +1023,9 @@ public class WoodRegistry {
         }
 
         public Builder coloredLeaves(String nameIn) {
-            woodRegistry.leaves = registryHelper.blocks().registerBlock(new LeavesBaseBlock(), nameIn + "_leaves",
+            String leavesName = mushroomLike ? name.getPath() + "_wart_block" : name.getPath() + "_leaves";
+            Block block = mushroomLike ? Blocks.WARPED_WART_BLOCK : Blocks.FLOWERING_AZALEA_LEAVES;
+            woodRegistry.leaves = registryHelper.blocks().registerBlock(new LeavesBaseBlock(block), nameIn + leavesName,
                 CreativeModeTab.TAB_DECORATIONS);
             VampireLibClient.ColoredLeaves coloredLeaves = new VampireLibClient.ColoredLeaves(woodRegistry.leaves, false, 0xFFF);
             VampireLibClient.COLORED_LEAVES.add(coloredLeaves);
@@ -1004,18 +1033,22 @@ public class WoodRegistry {
         }
 
         public Builder coloredLeaves(String... nameIn) {
-            for (String leavesName : nameIn) {
-                woodRegistry.leaves = registryHelper.blocks().registerBlock(new LeavesBaseBlock(), leavesName + "_leaves",
+            String leavesName = mushroomLike ? name.getPath() + "_wart_block" : name.getPath() + "_leaves";
+            Block block = mushroomLike ? Blocks.WARPED_WART_BLOCK : Blocks.FLOWERING_AZALEA_LEAVES;
+            for (String name : nameIn) {
+                woodRegistry.leaves = registryHelper.blocks().registerBlock(new LeavesBaseBlock(block), name + leavesName,
                     CreativeModeTab.TAB_DECORATIONS);
                 VampireLibClient.ColoredLeaves coloredLeaves = new VampireLibClient.ColoredLeaves(woodRegistry.leaves, false, 0xFFF);
                 VampireLibClient.COLORED_LEAVES.add(coloredLeaves);
-                leaves.add(leavesName + "_leaves");
+                availableLeaves.add(name + leavesName);
             }
             return this;
         }
 
         public Builder coloredLeaves(String nameIn, int color) {
-            woodRegistry.leaves = registryHelper.blocks().registerBlock(new LeavesBaseBlock(), nameIn + "_leaves",
+            String leavesName = mushroomLike ? name.getPath() + "_wart_block" : name.getPath() + "_leaves";
+            Block block = mushroomLike ? Blocks.WARPED_WART_BLOCK : Blocks.FLOWERING_AZALEA_LEAVES;
+            woodRegistry.leaves = registryHelper.blocks().registerBlock(new LeavesBaseBlock(block), nameIn + leavesName,
                 CreativeModeTab.TAB_DECORATIONS);
             VampireLibClient.ColoredLeaves coloredLeaves = new VampireLibClient.ColoredLeaves(woodRegistry.leaves, true, color);
             VampireLibClient.COLORED_LEAVES.add(coloredLeaves);
@@ -1023,44 +1056,58 @@ public class WoodRegistry {
         }
 
         public Builder coloredLeaves(int color, String... nameIn) {
-            for (String leavesName : nameIn) {
-                woodRegistry.leaves = registryHelper.blocks().registerBlock(new LeavesBaseBlock(), leavesName + "_leaves",
+            String leavesName = mushroomLike ? name.getPath() + "_wart_block" : name.getPath() + "_leaves";
+            Block block = mushroomLike ? Blocks.WARPED_WART_BLOCK : Blocks.FLOWERING_AZALEA_LEAVES;
+            for (String name : nameIn) {
+                woodRegistry.leaves = registryHelper.blocks().registerBlock(new LeavesBaseBlock(block), name + leavesName,
                     CreativeModeTab.TAB_DECORATIONS);
                 VampireLibClient.ColoredLeaves coloredLeaves = new VampireLibClient.ColoredLeaves(woodRegistry.leaves, false, color);
                 VampireLibClient.COLORED_LEAVES.add(coloredLeaves);
-                leaves.add(leavesName + "_leaves");
+                availableLeaves.add(name + leavesName);
             }
             return this;
         }
 
         public Builder coloredLeaves(ColoredLeavesBlock... coloredLeavesBlocks) {
+            String leavesName = mushroomLike ? name.getPath() + "_wart_block" : name.getPath() + "_leaves";
+            Block block = mushroomLike ? Blocks.WARPED_WART_BLOCK : Blocks.FLOWERING_AZALEA_LEAVES;
             for (ColoredLeavesBlock coloredLeavesBlock : coloredLeavesBlocks) {
-                woodRegistry.leaves = registryHelper.blocks().registerBlock(new LeavesBaseBlock(), coloredLeavesBlock.name + "_leaves",
+                woodRegistry.leaves = registryHelper.blocks().registerBlock(new LeavesBaseBlock(block), coloredLeavesBlock.name + leavesName,
                     CreativeModeTab.TAB_DECORATIONS);
                 VampireLibClient.ColoredLeaves coloredLeaves = new VampireLibClient.ColoredLeaves(woodRegistry.leaves, true, coloredLeavesBlock.color);
                 VampireLibClient.COLORED_LEAVES.add(coloredLeaves);
-                leaves.add(coloredLeavesBlock.name + "_leaves");
+                availableLeaves.add(coloredLeavesBlock.name + leavesName);
             }
             return this;
         }
 
         public Builder sapling() {
-            woodRegistry.sapling = registryHelper.blocks().registerBlock(new SaplingBaseBlock(woodRegistry.saplingGenerator),
+            if (!mushroomLike) woodRegistry.sapling = registryHelper.blocks().registerBlock(new SaplingBaseBlock(woodRegistry.saplingGenerator),
                 name.getPath() + "_sapling", CreativeModeTab.TAB_DECORATIONS);
+            else woodRegistry.sapling = registryHelper.blocks().registerBlock(new FungusBaseBlock(woodRegistry.fungusGenerator),
+                name.getPath() + "_fungus", CreativeModeTab.TAB_DECORATIONS);
             return this;
         }
 
         public Builder sapling(String nameIn) {
-            woodRegistry.sapling = registryHelper.blocks().registerBlock(new SaplingBaseBlock(woodRegistry.saplingGenerator),
+            if (!mushroomLike) woodRegistry.sapling = registryHelper.blocks().registerBlock(new SaplingBaseBlock(woodRegistry.saplingGenerator),
                 nameIn + "_sapling", CreativeModeTab.TAB_DECORATIONS);
+            else woodRegistry.sapling = registryHelper.blocks().registerBlock(new FungusBaseBlock(woodRegistry.fungusGenerator),
+                nameIn + "_fungus", CreativeModeTab.TAB_DECORATIONS);
             return this;
         }
 
         public Builder saplings(String... names) {
             for (String saplingName : names) {
-                woodRegistry.sapling = registryHelper.blocks().registerBlock(new SaplingBaseBlock(woodRegistry.saplingGenerator),
-                    saplingName + "_sapling", CreativeModeTab.TAB_DECORATIONS);
-                saplings.add(saplingName + "_sapling");
+                if (!mushroomLike) {
+                    woodRegistry.sapling = registryHelper.blocks().registerBlock(new SaplingBaseBlock(woodRegistry.saplingGenerator),
+                        saplingName + "_sapling", CreativeModeTab.TAB_DECORATIONS);
+                    availableSaplings.add(saplingName + "_sapling");
+                } else {
+                    woodRegistry.sapling = registryHelper.blocks().registerBlock(new FungusBaseBlock(woodRegistry.fungusGenerator),
+                        saplingName + "_fungus", CreativeModeTab.TAB_DECORATIONS);
+                    availableSaplings.add(saplingName + "_fungus");
+                }
             }
             return this;
         }
@@ -1078,13 +1125,14 @@ public class WoodRegistry {
         }
 
         public Builder bookshelf() {
-            woodRegistry.bookshelf = registryHelper.blocks().registerBlock(new Block(BlockBehaviour.Properties.copy(woodRegistry.planks)),
-                name.getPath() + "_bookshelf", CreativeModeTab.TAB_BUILDING_BLOCKS);
+            woodRegistry.bookshelf = registryHelper.blocks().registerBlock(new CompatBlock("minecraft", Blocks.BOOKSHELF,
+                    BlockBehaviour.Properties.copy(woodRegistry.planks)), name.getPath() + "_bookshelf",
+                CreativeModeTab.TAB_BUILDING_BLOCKS);
             return this;
         }
 
         public Builder door() {
-            woodRegistry.door = registryHelper.blocks().registerBlock(new DoorBaseBlock(BlockBehaviour.Properties.copy(woodRegistry.planks)),
+            woodRegistry.door = registryHelper.blocks().registerBlock(new DoorBaseBlock(false, BlockBehaviour.Properties.copy(woodRegistry.planks)),
                 name.getPath() + "_door", CreativeModeTab.TAB_REDSTONE);
             return this;
         }
@@ -1144,11 +1192,23 @@ public class WoodRegistry {
             return this;
         }
 
-        public Builder defaultBlocks() {
-            return this.log().strippedLog().wood().strippedWood().planks().leaves().sapling().door().trapdoor().boat();
+        public Builder defaultLogsAndWoods() {
+            return this.log().strippedLog().wood().strippedWood();
         }
 
-        public WoodRegistry build() {
+        public Builder defaultBlocks() {
+            return this.defaultLogsAndWoods().planks().leaves().sapling();
+        }
+
+        public Builder defaultExtraBlocks() {
+            return this.fence().fenceGate().stairs().slab().door().trapdoor().button().pressurePlate(PressurePlateBlock.Sensitivity.EVERYTHING);
+        }
+
+        public Builder defaultBlocksColoredLeaves() {
+            return this.defaultLogsAndWoods().planks().coloredLeaves().sapling();
+        }
+
+        public WoodRegistry build(RuntimeResourcePack runtimeResourcePack) {
             if (woodRegistry.leaves != null)
                 ComposterBlock.COMPOSTABLES.put(woodRegistry.leaves, 0.3F);
             if (flammable) {
@@ -1160,61 +1220,42 @@ public class WoodRegistry {
                 int smallSpreadChance = baseSpreadChance / 4;
                 int largeSpreadChance = baseSpreadChance * 3;
 
-                FlammableBlockRegistry fbrInstance = FlammableBlockRegistry.getDefaultInstance();
+                FlammableBlockRegistry flammableBlockRegistry = FlammableBlockRegistry.getDefaultInstance();
                 if (woodRegistry.planks != null && !preRegisteredPlanks)
-                    fbrInstance.add(woodRegistry.planks, baseBurnChance, baseSpreadChance);
+                    flammableBlockRegistry.add(woodRegistry.planks, baseBurnChance, baseSpreadChance);
                 if (woodRegistry.slab != null)
-                    fbrInstance.add(woodRegistry.slab, baseBurnChance, baseSpreadChance);
+                    flammableBlockRegistry.add(woodRegistry.slab, baseBurnChance, baseSpreadChance);
                 if (woodRegistry.fenceGate != null)
-                    fbrInstance.add(woodRegistry.fenceGate, baseBurnChance, baseSpreadChance);
+                    flammableBlockRegistry.add(woodRegistry.fenceGate, baseBurnChance, baseSpreadChance);
                 if (woodRegistry.fence != null)
-                    fbrInstance.add(woodRegistry.fence, baseBurnChance, baseSpreadChance);
+                    flammableBlockRegistry.add(woodRegistry.fence, baseBurnChance, baseSpreadChance);
                 if (woodRegistry.stairs != null)
-                    fbrInstance.add(woodRegistry.stairs, baseBurnChance, baseSpreadChance);
+                    flammableBlockRegistry.add(woodRegistry.stairs, baseBurnChance, baseSpreadChance);
                 if (woodRegistry.log != null)
-                    fbrInstance.add(woodRegistry.log, baseBurnChance, smallSpreadChance);
+                    flammableBlockRegistry.add(woodRegistry.log, baseBurnChance, smallSpreadChance);
                 if (woodRegistry.strippedLog != null)
-                    fbrInstance.add(woodRegistry.strippedLog, baseBurnChance, smallSpreadChance);
+                    flammableBlockRegistry.add(woodRegistry.strippedLog, baseBurnChance, smallSpreadChance);
                 if (woodRegistry.strippedWood != null)
-                    fbrInstance.add(woodRegistry.strippedWood, baseBurnChance, smallSpreadChance);
+                    flammableBlockRegistry.add(woodRegistry.strippedWood, baseBurnChance, smallSpreadChance);
                 if (woodRegistry.wood != null)
-                    fbrInstance.add(woodRegistry.wood, baseBurnChance, smallSpreadChance);
+                    flammableBlockRegistry.add(woodRegistry.wood, baseBurnChance, smallSpreadChance);
                 if (woodRegistry.leaves != null)
-                    fbrInstance.add(woodRegistry.leaves, largeBurnChance, largeSpreadChance);
+                    flammableBlockRegistry.add(woodRegistry.leaves, largeBurnChance, largeSpreadChance);
 
                 // fuel registering
                 int fenceFuelTime = 300;
 
-                FuelRegistry frInstance = FuelRegistry.INSTANCE;
+                FuelRegistry fuelRegistry = FuelRegistry.INSTANCE;
                 if (woodRegistry.fence != null)
-                    frInstance.add(woodRegistry.fence, fenceFuelTime);
+                    fuelRegistry.add(woodRegistry.fence, fenceFuelTime);
                 if (woodRegistry.fenceGate != null)
-                    frInstance.add(woodRegistry.fenceGate, fenceFuelTime);
+                    fuelRegistry.add(woodRegistry.fenceGate, fenceFuelTime);
             }
 
-            if (woodRegistry.log != null && woodRegistry.wood != null && woodRegistry.strippedLog != null && woodRegistry.strippedWood != null)
-                new ImmutableMap.Builder<Block, Block>()
-                    .put(woodRegistry.log, woodRegistry.strippedLog)
-                    .put(woodRegistry.wood, woodRegistry.strippedWood)
-                    .build().forEach((base, result) -> UseBlockCallback.EVENT.register((player, world, hand, hit) -> {
-                    if (player.getItemInHand(hand).is(FabricToolTags.AXES) && world.getBlockState(hit.getBlockPos()).getBlock() == base) {
-                        BlockPos blockPos = hit.getBlockPos();
-                        BlockState blockState = world.getBlockState(blockPos);
-
-                        world.playSound(player, blockPos, SoundEvents.AXE_STRIP, SoundSource.BLOCKS, 1.0F, 1.0F);
-                        if (!world.isClientSide) {
-                            world.setBlock(blockPos, result.defaultBlockState().setValue(RotatedPillarBlock.AXIS, blockState.getValue(RotatedPillarBlock.AXIS)), 11);
-                            if (!player.isCreative()) {
-                                ItemStack stack = player.getItemInHand(hand);
-                                stack.hurtAndBreak(1, player, ((p) -> p.broadcastBreakEvent(hand)));
-                            }
-                        }
-
-                        return InteractionResult.SUCCESS;
-                    }
-
-                    return InteractionResult.PASS;
-                }));
+            if (woodRegistry.log != null && woodRegistry.wood != null && woodRegistry.strippedLog != null && woodRegistry.strippedWood != null) {
+                StrippableBlockRegistry.register(woodRegistry.log, woodRegistry.strippedLog);
+                StrippableBlockRegistry.register(woodRegistry.wood, woodRegistry.strippedWood);
+            }
 
             if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
                 if (generateAssets) {
@@ -1253,8 +1294,8 @@ public class WoodRegistry {
                         }
 
                         if (woodRegistry.leaves != null) {
-                            if (!leaves.isEmpty()) {
-                                for (String leaves : leaves) {
+                            if (!availableLeaves.isEmpty()) {
+                                for (String leaves : availableLeaves) {
                                     ResourceLocation leavesName = new ResourceLocation(name.getNamespace(), leaves);
                                     ArtificeGenerationHelper.generateBasicBlockState(clientResourcePackBuilder, leavesName);
                                     ArtificeGenerationHelper.generateAllBlockModel(clientResourcePackBuilder, leavesName, leavesName);
@@ -1268,8 +1309,8 @@ public class WoodRegistry {
                         }
 
                         if (woodRegistry.sapling != null) {
-                            if (!saplings.isEmpty()) {
-                                for (String sapling : saplings) {
+                            if (!availableSaplings.isEmpty()) {
+                                for (String sapling : availableSaplings) {
                                     ResourceLocation saplingName = new ResourceLocation(name.getNamespace(), sapling);
                                     ArtificeGenerationHelper.generateBasicBlockState(clientResourcePackBuilder, saplingName);
                                     ArtificeGenerationHelper.generateCrossBlockModel(clientResourcePackBuilder, saplingName);
@@ -1331,24 +1372,26 @@ public class WoodRegistry {
                             ArtificeGenerationHelper.generateTrapdoorBlockModels(clientResourcePackBuilder, Utils.appendToPath(name, "_trapdoor"), Utils.appendAndPrependToPath(name, "block/", "_trapdoor"));
                             ArtificeGenerationHelper.generateBlockItemModel(clientResourcePackBuilder, Utils.appendToPath(name, "_trapdoor"), Utils.appendToPath(name, "_trapdoor_bottom"));
                         }
-                        try {
-                            clientResourcePackBuilder.dumpResources("test", "assets");
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
+                        new Thread(() -> {
+                            try {
+                                clientResourcePackBuilder.dumpResources("test", "assets");
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }).start();
                     });
                 }
                 if (woodRegistry.leaves != null) {
                     BlockRenderLayerMapImpl.INSTANCE.putBlock(woodRegistry.leaves, RenderType.cutoutMipped());
                 }
                 if (woodRegistry.sapling != null) {
-                    BlockRenderLayerMapImpl.INSTANCE.putBlock(woodRegistry.sapling, RenderType.cutout());
+                    BlockRenderLayerMapImpl.INSTANCE.putBlock(woodRegistry.sapling, RenderType.cutoutMipped());
                 }
                 if (woodRegistry.door != null) {
-                    BlockRenderLayerMapImpl.INSTANCE.putBlock(woodRegistry.sapling, RenderType.cutout());
+                    BlockRenderLayerMapImpl.INSTANCE.putBlock(woodRegistry.door, RenderType.cutoutMipped());
                 }
                 if (woodRegistry.trapdoor != null) {
-                    BlockRenderLayerMapImpl.INSTANCE.putBlock(woodRegistry.sapling, RenderType.cutout());
+                    BlockRenderLayerMapImpl.INSTANCE.putBlock(woodRegistry.trapdoor, RenderType.cutoutMipped());
                 }
 //                if(woodRegistry.sign != null) {
 //                    Map<SignType, SpriteIdentifier> textures = new HashMap<>(TexturedRenderLayersAccessor.getWOOD_TYPE_TEXTURES());
@@ -1365,19 +1408,179 @@ public class WoodRegistry {
                     EntityRendererRegistry.register(woodRegistry.boatEntity, ctx -> new CustomBoatEntityRenderer(entityModelLayer, ctx));
                 }
             }
+
+            if (woodRegistry.button != null) runtimeResourcePack.addTag(new ResourceLocation("wooden_buttons"), JTag.tag()
+                .add(Utils.appendToPath(name, "_button")));
+            if (woodRegistry.door != null) runtimeResourcePack.addTag(new ResourceLocation("wooden_doors"), JTag.tag()
+                .add(Utils.appendToPath(name, "_door")));
+            if (woodRegistry.fence != null) runtimeResourcePack.addTag(new ResourceLocation("wooden_fences"), JTag.tag()
+                .add(Utils.appendToPath(name, "_fence")));
+            if (woodRegistry.fenceGate != null) runtimeResourcePack.addTag(new ResourceLocation("fence_gates"), JTag.tag()
+                .add(Utils.appendToPath(name, "_fence_gate")));
+            if (woodRegistry.leaves != null) {
+                if (!mushroomLike)
+                    runtimeResourcePack.addTag(new ResourceLocation("leaves"), JTag.tag()
+                        .add(Utils.appendToPath(name, "_leaves")));
+                else
+                    runtimeResourcePack.addTag(new ResourceLocation("wart_blocks"), JTag.tag()
+                        .add(Utils.appendToPath(name, "_wart_block")));
+            }
+            JTag logsTag = JTag.tag();
+            if (!mushroomLike) {
+                if (woodRegistry.log != null) logsTag.add(Utils.appendToPath(name, "_log"));
+                if (woodRegistry.strippedLog != null) logsTag.add(Utils.appendAndPrependToPath(name, "stripped_", "_log"));
+                if (woodRegistry.wood != null) logsTag.add(Utils.appendToPath(name, "_wood"));
+                if (woodRegistry.strippedWood != null) logsTag.add(Utils.appendAndPrependToPath(name, "stripped_", "_wood"));
+            } else {
+                if (woodRegistry.log != null) logsTag.add(Utils.appendToPath(name, "_stem"));
+                if (woodRegistry.strippedLog != null) logsTag.add(Utils.appendAndPrependToPath(name, "stripped_", "_stem"));
+                if (woodRegistry.wood != null) logsTag.add(Utils.appendToPath(name, "_hyphae"));
+                if (woodRegistry.strippedWood != null) logsTag.add(Utils.appendAndPrependToPath(name, "stripped_", "_hyphae"));
+            }
+            runtimeResourcePack.addTag(new ResourceLocation("logs"), logsTag);
+            if (flammable) runtimeResourcePack.addTag(new ResourceLocation("logs_that_burn"), logsTag);
+            else runtimeResourcePack.addTag(new ResourceLocation("non_flammable_wood"), logsTag);
+
+//            if (!mushroomLike) {
+//
+//                serverResourcePackBuilder.addBlockTag(new ResourceLocation("logs"), tagBuilder -> {
+//                    tagBuilder.replace(false);
+//                    tagBuilder.include(Utils.appendToPath(name, "_logs"));
+//                });
+//                if (flammable)
+//                    serverResourcePackBuilder.addBlockTag(new ResourceLocation("logs_that_burn"), tagBuilder -> {
+//                        tagBuilder.replace(false);
+//                        tagBuilder.include(Utils.appendToPath(name, "_logs"));
+//                    });
+//                else
+//                    serverResourcePackBuilder.addBlockTag(new ResourceLocation("non_flammable_wood"), tagBuilder -> {
+//                        tagBuilder.replace(false);
+//                        tagBuilder.include(Utils.appendToPath(name, "_logs"));
+//                    });
+//            } else {
+//                serverResourcePackBuilder.addBlockTag(new ResourceLocation("logs"), tagBuilder -> {
+//                    tagBuilder.replace(false);
+//                    tagBuilder.include(Utils.appendToPath(name, "_stems"));
+//                });
+//                if (flammable) {
+//                    serverResourcePackBuilder.addBlockTag(new ResourceLocation("logs_that_burn"), tagBuilder -> {
+//                        tagBuilder.replace(false);
+//                        tagBuilder.include(Utils.appendToPath(name, "_stems"));
+//                    });
+//                } else {
+//                    serverResourcePackBuilder.addBlockTag(new ResourceLocation("non_flammable_wood"), tagBuilder -> {
+//                        tagBuilder.replace(false);
+//                        tagBuilder.include(Utils.appendToPath(name, "_logs"));
+//                    });
+//                }
+//            }
+            runtimeResourcePack.dump();
+
             Artifice.registerDataPack(name, serverResourcePackBuilder -> {
-                if (woodRegistry.fence != null) {
-                    serverResourcePackBuilder.addBlockTag(new ResourceLocation("fences"), tagBuilder -> {
+                if (woodRegistry.pressurePlate != null)
+                    serverResourcePackBuilder.addBlockTag(new ResourceLocation("wooden_pressure_plates"), tagBuilder -> {
                         tagBuilder.replace(false);
-                        tagBuilder.values(Utils.appendToPath(name, "_fence"));
+                        tagBuilder.values(Utils.appendToPath(name, "_pressure_plate"));
                     });
+                if (woodRegistry.slab != null)
+                    serverResourcePackBuilder.addBlockTag(new ResourceLocation("wooden_slabs"), tagBuilder -> {
+                        tagBuilder.replace(false);
+                        tagBuilder.values(Utils.appendToPath(name, "_slab"));
+                    });
+                if (woodRegistry.stairs != null)
+                    serverResourcePackBuilder.addBlockTag(new ResourceLocation("wooden_stairs"), tagBuilder -> {
+                        tagBuilder.replace(false);
+                        tagBuilder.values(Utils.appendToPath(name, "_stairs"));
+                    });
+                if (woodRegistry.trapdoor != null)
+                    serverResourcePackBuilder.addBlockTag(new ResourceLocation("wooden_trapdoors"), tagBuilder -> {
+                        tagBuilder.replace(false);
+                        tagBuilder.values(Utils.appendToPath(name, "_trapdoor"));
+                    });
+                if (woodRegistry.planks != null)
+                    serverResourcePackBuilder.addBlockTag(new ResourceLocation("planks"), tagBuilder -> {
+                        tagBuilder.replace(false);
+                        tagBuilder.values(Utils.appendToPath(name, "_planks"));
+                    });
+                if (woodRegistry.leaves != null) {
+                    if (!mushroomLike)
+                        serverResourcePackBuilder.addBlockTag(new ResourceLocation("leaves"), tagBuilder -> {
+                            tagBuilder.replace(false);
+                            tagBuilder.values(Utils.appendToPath(name, "_leaves"));
+                        });
+                    else
+                        serverResourcePackBuilder.addBlockTag(new ResourceLocation("wart_blocks"), tagBuilder -> {
+                            tagBuilder.replace(false);
+                            tagBuilder.values(Utils.appendToPath(name, "_wart_block"));
+                        });
                 }
+
+                if (!mushroomLike) {
+                    serverResourcePackBuilder.addBlockTag(Utils.appendToPath(name, "_logs"), tagBuilder -> {
+                        if (woodRegistry.log != null)
+                            tagBuilder.values(Utils.appendToPath(name, "_log"));
+                        if (woodRegistry.strippedLog != null)
+                            tagBuilder.values(Utils.appendAndPrependToPath(name, "stripped_", "_log"));
+                        if (woodRegistry.wood != null)
+                            tagBuilder.values(Utils.appendToPath(name, "_wood"));
+                        if (woodRegistry.strippedWood != null)
+                            tagBuilder.values(Utils.appendAndPrependToPath(name, "stripped_", "_wood"));
+                    });
+                    serverResourcePackBuilder.addBlockTag(new ResourceLocation("logs"), tagBuilder -> {
+                        tagBuilder.replace(false);
+                        tagBuilder.include(Utils.appendToPath(name, "_logs"));
+                    });
+                    if (flammable)
+                        serverResourcePackBuilder.addBlockTag(new ResourceLocation("logs_that_burn"), tagBuilder -> {
+                            tagBuilder.replace(false);
+                            tagBuilder.include(Utils.appendToPath(name, "_logs"));
+                        });
+                    else
+                        serverResourcePackBuilder.addBlockTag(new ResourceLocation("non_flammable_wood"), tagBuilder -> {
+                            tagBuilder.replace(false);
+                            tagBuilder.include(Utils.appendToPath(name, "_logs"));
+                        });
+                } else {
+                    serverResourcePackBuilder.addBlockTag(Utils.appendToPath(name, "_stems"), tagBuilder -> {
+                        if (woodRegistry.log != null)
+                            tagBuilder.values(Utils.appendToPath(name, "_stem"));
+                        if (woodRegistry.strippedLog != null)
+                            tagBuilder.values(Utils.appendAndPrependToPath(name, "stripped_", "_stem"));
+                        if (woodRegistry.wood != null)
+                            tagBuilder.values(Utils.appendToPath(name, "_hyphae"));
+                        if (woodRegistry.strippedWood != null)
+                            tagBuilder.values(Utils.appendAndPrependToPath(name, "stripped_", "_hyphae"));
+                    });
+                    serverResourcePackBuilder.addBlockTag(new ResourceLocation("logs"), tagBuilder -> {
+                        tagBuilder.replace(false);
+                        tagBuilder.include(Utils.appendToPath(name, "_stems"));
+                    });
+                    if (flammable) {
+                        serverResourcePackBuilder.addBlockTag(new ResourceLocation("logs_that_burn"), tagBuilder -> {
+                            tagBuilder.replace(false);
+                            tagBuilder.include(Utils.appendToPath(name, "_stems"));
+                        });
+                    } else {
+                        serverResourcePackBuilder.addBlockTag(new ResourceLocation("non_flammable_wood"), tagBuilder -> {
+                            tagBuilder.replace(false);
+                            tagBuilder.include(Utils.appendToPath(name, "_logs"));
+                        });
+                    }
+                }
+                new Thread(() -> {
+                    try {
+                        serverResourcePackBuilder.dumpResources("test", "data");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }).start();
             });
 //            WoodTypeRegistry.registerModded(new WoodType(name.toString(), woodRegistry.leaves, woodRegistry.log), 0.2F, 0.2F);
             return woodRegistry;
         }
     }
 
-    public record ColoredLeavesBlock(String name, int color) {}
+    public record ColoredLeavesBlock(String name, int color) {
+    }
 
 }

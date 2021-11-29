@@ -685,12 +685,14 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
-import io.github.vampirestudios.vampirelib.entities.EntityRegistry;
+
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+
+import io.github.vampirestudios.vampirelib.entities.EntityRegistry;
 
 @Mixin(ClientPacketListener.class)
 public class MixinClientPlayNetworkHandler {
@@ -703,11 +705,11 @@ public class MixinClientPlayNetworkHandler {
     private ClientLevel level;
 
     @Inject(method = "handleAddEntity", at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/network/protocol/game/ClientboundAddEntityPacket;getType()Lnet/minecraft/world/entity/EntityType;"), locals = LocalCapture.CAPTURE_FAILHARD)
-    public void onEntitySpawn(ClientboundAddEntityPacket packet, CallbackInfo callbackInfo, double xIn, double yIn, double zIn, EntityType<?> entityTypeIn) {
-        vampireLib$x = xIn;
-        vampireLib$y = yIn;
-        vampireLib$z = zIn;
-        vampireLib$entityType = entityTypeIn;
+    public void onEntitySpawn(ClientboundAddEntityPacket packet, CallbackInfo ci) {
+        vampireLib$x = packet.getX();
+        vampireLib$y = packet.getY();
+        vampireLib$z = packet.getZ();
+        vampireLib$entityType = packet.getType();
         vampireLib$entityData = packet.getData();
     }
 

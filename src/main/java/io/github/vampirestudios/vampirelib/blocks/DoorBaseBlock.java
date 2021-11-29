@@ -678,14 +678,27 @@
 package io.github.vampirestudios.vampirelib.blocks;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.NonNullList;
+import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.DoorBlock;
 import net.minecraft.world.level.block.state.BlockState;
 
+import io.github.vampirestudios.vampirelib.api.VanillaTargetedItemGroupFiller;
+
 public class DoorBaseBlock extends DoorBlock {
-    public DoorBaseBlock(Properties settings) {
+    private final VanillaTargetedItemGroupFiller FILLER;
+
+    public DoorBaseBlock(boolean metal, Properties settings) {
         super(settings);
+        FILLER = new VanillaTargetedItemGroupFiller(metal ? Blocks.IRON_DOOR.asItem() : Blocks.WARPED_DOOR.asItem());
+    }
+
+    @Override
+    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> list) {
+        FILLER.fillItem(this.asItem(), group, list);
     }
 
     @Override

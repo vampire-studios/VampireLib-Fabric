@@ -677,26 +677,29 @@
 
 package io.github.vampirestudios.vampirelib.blocks;
 
-import io.github.vampirestudios.vampirelib.api.Climbable;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.entity.Entity;
+import net.minecraft.core.NonNullList;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.TrapDoorBlock;
-import net.minecraft.world.level.block.state.BlockState;
 
-public class TrapdoorBaseBlock extends TrapDoorBlock implements Climbable {
-    public TrapdoorBaseBlock(Properties block$Settings_1) {
-        super(block$Settings_1);
+import io.github.vampirestudios.vampirelib.api.VanillaTargetedItemGroupFiller;
+
+public class TrapdoorBaseBlock extends TrapDoorBlock {
+    private final VanillaTargetedItemGroupFiller FILLER;
+
+    public TrapdoorBaseBlock(Properties properties) {
+        this(false, properties);
     }
 
-    /**
-     * Determines if the passed LivingEntity can climb this block.
-     *
-     * @param entity The LivingEntity that is attempting to climb this block.
-     * @param state  The block state of the ladder being climbed.
-     * @param pos    The position of the block.
-     */
+    public TrapdoorBaseBlock(boolean metal, Properties properties) {
+        super(properties);
+        FILLER = new VanillaTargetedItemGroupFiller(metal ? Blocks.IRON_TRAPDOOR.asItem() : Blocks.WARPED_TRAPDOOR.asItem());
+    }
+
     @Override
-    public ClimbBehavior getClimbBehavior(Entity entity, BlockState state, BlockPos pos) {
-        return ClimbBehavior.Ladder;
+    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> list) {
+        FILLER.fillItem(this.asItem(), group, list);
     }
+
 }

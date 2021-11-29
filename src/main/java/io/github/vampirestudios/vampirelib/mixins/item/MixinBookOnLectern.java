@@ -703,7 +703,7 @@ public abstract class MixinBookOnLectern {
         BlockState blockState = world.getBlockState(blockPos);
         if (blockState.getBlock() instanceof LecternBlock) {
             cir.setReturnValue(LecternBlock.tryPlaceBook(usageContext.getPlayer(), world, blockPos, blockState, usageContext.getItemInHand()) ? InteractionResult.SUCCESS : InteractionResult.PASS);
-        } else if (blockState.getBlock() instanceof LecternBaseBlock && !(blockState.getBlock() instanceof LecternBlock)) {
+        } else if (blockState.getBlock() instanceof LecternBaseBlock) {
             cir.setReturnValue(LecternBaseBlock.tryPlaceBook(usageContext.getPlayer(), world, blockPos, blockState, usageContext.getItemInHand()) ? InteractionResult.SUCCESS : InteractionResult.PASS);
         } else {
             cir.setReturnValue(InteractionResult.PASS);

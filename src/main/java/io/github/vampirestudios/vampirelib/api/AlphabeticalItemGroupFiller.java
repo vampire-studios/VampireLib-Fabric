@@ -677,7 +677,8 @@
 
 package io.github.vampirestudios.vampirelib.api;
 
-import io.github.vampirestudios.vampirelib.utils.ItemStackUtils;
+import java.util.function.Predicate;
+
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
@@ -685,16 +686,20 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
-import java.util.function.Predicate;
+import io.github.vampirestudios.vampirelib.utils.ItemStackUtils;
 
 /**
- * Implementation class of {@link IItemGroupFiller} for filling {@link Item}s alphabetically.
+ * Implementation class of {@link ItemGroupFiller} for filling {@link Item}s alphabetically.
  * <p>{@link #shouldInclude} is used to test what items should be considered when inserting an item at its alphabetical position.</p>
  *
- * @author SmellyModder (Luke Tonon)
- * @see IItemGroupFiller
+ * @see ItemGroupFiller
  */
-public record AlphabeticalItemGroupFiller(Predicate<Item> shouldInclude) implements IItemGroupFiller {
+public final class AlphabeticalItemGroupFiller implements ItemGroupFiller {
+    private final Predicate<Item> shouldInclude;
+
+    public AlphabeticalItemGroupFiller(Predicate<Item> shouldInclude) {
+        this.shouldInclude = shouldInclude;
+    }
 
 	/**
 	 * Creates an {@link AlphabeticalItemGroupFiller} that fills items alphabetically for items that are an instance of a class. (e.g. Having a modded spawn egg filled alphabetically into the vanilla's spawn eggs)

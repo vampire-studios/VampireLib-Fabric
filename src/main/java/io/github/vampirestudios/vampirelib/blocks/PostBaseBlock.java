@@ -764,7 +764,7 @@ public class PostBaseBlock extends Block implements SimpleWaterloggedBlock {
     @Override
     public BlockState updateShape(BlockState blockState, Direction direction, BlockState blockState2, LevelAccessor iWorld, BlockPos pos, BlockPos pos1) {
         if (blockState.getValue(WATERLOGGED)) {
-            iWorld.getLiquidTicks().scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(iWorld));
+            iWorld.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(iWorld));
         }
 
         return super.updateShape(blockState, direction, blockState2, iWorld, pos, pos1);

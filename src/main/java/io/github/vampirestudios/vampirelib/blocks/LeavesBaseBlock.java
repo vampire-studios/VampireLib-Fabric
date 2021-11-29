@@ -677,15 +677,32 @@
 
 package io.github.vampirestudios.vampirelib.blocks;
 
+import net.minecraft.core.NonNullList;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LeavesBlock;
-import net.minecraft.world.level.block.SoundType;
-import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.level.material.Material;
+
+import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
+
+import io.github.vampirestudios.vampirelib.api.VanillaTargetedItemGroupFiller;
 
 public class LeavesBaseBlock extends LeavesBlock {
+    private final VanillaTargetedItemGroupFiller FILLER;
+
+    public LeavesBaseBlock(Block parent) {
+        super(FabricBlockSettings.copyOf(parent));
+        FILLER = new VanillaTargetedItemGroupFiller(parent.asItem());
+    }
 
     public LeavesBaseBlock() {
-        super(BlockBehaviour.Properties.of(Material.LEAVES).strength(0.2F).randomTicks().sound(SoundType.GRASS));
+        this(Blocks.FLOWERING_AZALEA_LEAVES);
+    }
+
+    @Override
+    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> list) {
+        FILLER.fillItem(this.asItem(), group, list);
     }
 
 }

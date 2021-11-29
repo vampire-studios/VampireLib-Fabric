@@ -677,34 +677,40 @@
 
 package io.github.vampirestudios.vampirelib.api;
 
+import java.util.Map;
+import java.util.Set;
+
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import io.github.vampirestudios.vampirelib.utils.ItemStackUtils;
+
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
-import java.util.Map;
-import java.util.Set;
-import java.util.function.Supplier;
+import io.github.vampirestudios.vampirelib.utils.ItemStackUtils;
 
 /**
- * Implementation class of {@link IItemGroupFiller} for filling {@link Item}s after a target {@link Item}.
+ * Implementation class of {@link ItemGroupFiller} for filling {@link Item}s after a target {@link Item}.
  *
- * @see IItemGroupFiller
+ * @see ItemGroupFiller
  */
-public final record TargetedItemGroupFiller(Supplier<Item> targetItem) implements IItemGroupFiller {
-    private static final Map<CreativeModeTab, OffsetValue> offsetMap = Maps.newHashMap();
+public final class TargetedItemGroupFiller implements ItemGroupFiller {
+    private final Item targetItem;
+    private final Map<CreativeModeTab, OffsetValue> offsetMap = Maps.newHashMap();
+
+    public TargetedItemGroupFiller(Item targetItem) {
+        this.targetItem = targetItem;
+    }
 
     @Override
     public void fillItem(Item item, CreativeModeTab group, NonNullList<ItemStack> items) {
         if (ItemStackUtils.isAllowedInTab(item, group)) {
-            OffsetValue offset = offsetMap.computeIfAbsent(group, (key) -> new OffsetValue());
+            OffsetValue offset = this.offsetMap.computeIfAbsent(group, (key) -> new OffsetValue());
             if (offset.itemsProcessed.contains(item)) {
                 offset.reset();
             }
-            int index = ItemStackUtils.findIndexOfItem(targetItem().get(), items);
+            int index = ItemStackUtils.findIndexOfItem(this.targetItem, items);
             if (index != -1) {
                 items.add(index + offset.offset, new ItemStack(item));
                 offset.itemsProcessed.add(item);

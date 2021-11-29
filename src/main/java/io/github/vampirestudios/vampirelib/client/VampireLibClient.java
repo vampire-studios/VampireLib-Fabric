@@ -679,19 +679,32 @@ package io.github.vampirestudios.vampirelib.client;
 
 import java.util.ArrayList;
 import java.util.List;
-import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.fabric.impl.client.rendering.ColorProviderRegistryImpl;
+
+import net.minecraft.SharedConstants;
 import net.minecraft.client.color.block.BlockColor;
 import net.minecraft.client.color.item.ItemColor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 
-public class VampireLibClient implements ClientModInitializer {
+import net.fabricmc.fabric.impl.client.rendering.ColorProviderRegistryImpl;
 
+import io.github.vampirestudios.vampirelib.api.BasicModClass;
+import io.github.vampirestudios.vampirelib.utils.Rands;
+
+public class VampireLibClient extends BasicModClass {
+
+    public static final VampireLibClient INSTANCE = new VampireLibClient();
     public static final List<ColoredLeaves> COLORED_LEAVES = new ArrayList<>();
+
+    public VampireLibClient() {
+        super("VampireLib", "4.1.0+build.1", true);
+    }
 
     @Override
     public void onInitializeClient() {
+        shouldNotPrintVersionMessage();
+        getLogger().info(String.format("%s running %s v%s on client-side for %s", Rands.chance(15) ? "Your are" : (Rands.chance(15) ? "You're" : "You are"),
+            modName(), modVersion(), SharedConstants.getCurrentVersion().getName()));
         COLORED_LEAVES.forEach(coloredLeaves -> {
             if (!coloredLeaves.customColor) {
                 ColorProviderRegistryImpl.BLOCK.register((block, world, pos, layer) -> {
@@ -709,7 +722,7 @@ public class VampireLibClient implements ClientModInitializer {
         });
     }
 
-    public static class ColoredLeaves {
+    public static final class ColoredLeaves {
 
         private final Block leavesBlock;
         private final boolean customColor;

@@ -678,12 +678,15 @@
 package io.github.vampirestudios.vampirelib.modules;
 
 import java.util.Objects;
+
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceLocation;
+
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
-import net.minecraft.core.Registry;
-import net.minecraft.resources.ResourceLocation;
-import io.github.vampirestudios.vampirelib.VampireLib;
+
+import io.github.vampirestudios.vampirelib.Something;
 import io.github.vampirestudios.vampirelib.modules.api.ClientFeature;
 import io.github.vampirestudios.vampirelib.modules.api.CommonFeature;
 import io.github.vampirestudios.vampirelib.modules.api.ServerFeature;
@@ -696,11 +699,11 @@ public class FeatureManager {
     public static final Registry<ServerFeature> SERVER_FEATURES = FabricRegistryBuilder.createSimple(ServerFeature.class, new ResourceLocation("vampirelib:server_features")).buildAndRegister();
 
     public static FeatureManager createFeatureManager(ResourceLocation modIdentifier) {
-        return Registry.register(VampireLib.FEATURE_MANAGERS, modIdentifier, new FeatureManager());
+        return Registry.register(Something.FEATURE_MANAGERS, modIdentifier, new FeatureManager());
     }
 
     public static FeatureManager getFeatureManager(ResourceLocation modIdentifier) {
-        return VampireLib.FEATURE_MANAGERS.get(modIdentifier);
+        return Something.FEATURE_MANAGERS.get(modIdentifier);
     }
 
     public void registerCommonFeature(CommonFeature module) {

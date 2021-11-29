@@ -15,15 +15,11 @@
 		"block.BlockEntityTypeMixin",
 		"block.StructureBlockBlockEntityMixin",
 		"block.UpdateStructureBlockC2SPacketMixin",
-		"client.MixinClientPlayNetworkHandler",
 		"client.TextureAtlasMixin",
-		"entity.EntityMixin",
 		"item.MixinBookOnLectern"
 	],
 	"client": [
-		"client.BoatEntityRendererMixin",
-		"client.SpriteAccessor",
-		"client.TextRendererMixin"
+		"client.BoatEntityRendererMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

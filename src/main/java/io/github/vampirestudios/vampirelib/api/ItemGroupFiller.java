@@ -675,25 +675,24 @@
  * <https://www.gnu.org/licenses/why-not-lgpl.html>.
  */
 
-package io.github.vampirestudios.vampirelib.callbacks;
+package io.github.vampirestudios.vampirelib.api;
 
-import com.mojang.math.Matrix4f;
-import java.util.function.BiConsumer;
-import net.fabricmc.fabric.api.event.Event;
-import net.fabricmc.fabric.api.event.EventFactory;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.core.NonNullList;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 
+/**
+ * Interface implemented on classes for special filling of {@link Item}s in {@link CreativeModeTab}s.
+ */
 @FunctionalInterface
-public interface TextRendererDrawLayerStringCallback {
+public interface ItemGroupFiller {
     /**
-     * Fired after each TextRenderer drawLayer call
+     * Fills an {@link Item} for a {@link CreativeModeTab} given a {@link NonNullList} of the {@link ItemStack}s for that {@link CreativeModeTab}.
+     *
+     * @param item  The {@link Item} to fill.
+     * @param tab   The {@link CreativeModeTab} to fill into.
+     * @param items A {@link NonNullList} of the {@link ItemStack}s for the {@link CreativeModeTab}.
      */
-    Event<TextRendererDrawLayerStringCallback> EVENT = EventFactory
-        .createArrayBacked(TextRendererDrawLayerStringCallback.class, (listeners) -> (text, x, y, color, shadow, matrix, vertexConsumerProvider, seeThrough, underlineColor, light, cancelAndReturn) -> {
-            for (TextRendererDrawLayerStringCallback handler : listeners) {
-                handler.onDrawLayer(text, x, y, color, shadow, matrix, vertexConsumerProvider, seeThrough, underlineColor, light, cancelAndReturn);
-            }
-        });
-
-    void onDrawLayer(String text, float x, float y, int color, boolean shadow, Matrix4f matrix, MultiBufferSource vertexConsumerProvider, boolean seeThrough, int underlineColor, int light, BiConsumer<Boolean, Float> cancelAndReturn);
+	void fillItem(Item item, CreativeModeTab tab, NonNullList<ItemStack> items);
 }

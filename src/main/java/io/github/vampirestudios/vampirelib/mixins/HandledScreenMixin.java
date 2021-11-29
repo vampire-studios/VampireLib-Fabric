@@ -706,5 +706,4 @@ public class HandledScreenMixin {
         RenderGuiCallback.EVENT.invoker().interact(client, matrices, mouseX, mouseY, delta);
     }
 
-
 }

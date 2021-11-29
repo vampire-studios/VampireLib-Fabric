@@ -692,8 +692,8 @@ import io.github.vampirestudios.vampirelib.boat.CustomBoatEntity;
 public class BoatEntityRendererMixin {
     @Inject(method = "getTextureLocation", at = @At("HEAD"), cancellable = true)
     private void injectCustomTexture(Boat boat, CallbackInfoReturnable<ResourceLocation> cir) {
-        if (boat instanceof CustomBoatEntity) {
-            cir.setReturnValue(((CustomBoatEntity) boat).getBoatSkin());
+        if (boat instanceof CustomBoatEntity boatEntity) {
+            cir.setReturnValue(boatEntity.getBoatSkin());
         }
     }
 }

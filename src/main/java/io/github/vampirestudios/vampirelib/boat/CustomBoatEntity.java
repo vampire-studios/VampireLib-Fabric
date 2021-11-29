@@ -678,7 +678,7 @@
 package io.github.vampirestudios.vampirelib.boat;
 
 import io.netty.buffer.Unpooled;
-import net.fabricmc.fabric.api.network.ServerSidePacketRegistry;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
@@ -695,6 +695,9 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+
 import io.github.vampirestudios.vampirelib.VampireLib;
 
 public class CustomBoatEntity extends Boat {
@@ -790,8 +793,7 @@ public class CustomBoatEntity extends Boat {
         buf.writeByte(Mth.floor(this.getYRot() * 256.0F / 360.0F));
         buf.writeByte(Mth.floor(this.getXRot() * 256.0F / 360.0F));
 
-        return ServerSidePacketRegistry.INSTANCE
-            .toPacket(new ResourceLocation(VampireLib.MOD_ID, "spawn_boat"), buf);
+        return ServerPlayNetworking.createS2CPacket(new ResourceLocation(VampireLib.INSTANCE.modId(), "spawn_boat"), buf);
     }
 
     @Override
@@ -801,7 +803,7 @@ public class CustomBoatEntity extends Boat {
 
     @Override
     public void setType(Boat.Type type) {
-        throw new UnsupportedOperationException("Tried to set the boat type of a " + VampireLib.MOD_NAME + " boat");
+        throw new UnsupportedOperationException("Tried to set the boat type of a " + VampireLib.INSTANCE.modName() + " boat");
     }
 
 }

@@ -677,28 +677,84 @@
 
 package io.github.vampirestudios.vampirelib;
 
-import io.github.vampirestudios.vampirelib.modules.FeatureManager;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
+
+import net.devtech.arrp.api.RRPCallback;
+import net.devtech.arrp.api.RuntimeResourcePack;
+
+import net.minecraft.SharedConstants;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.item.ItemStack;
+
+import net.fabricmc.fabric.api.event.player.UseBlockCallback;
+
+import io.github.vampirestudios.vampirelib.api.BasicModClass;
+import io.github.vampirestudios.vampirelib.api.ConvertibleBlockPair;
 import io.github.vampirestudios.vampirelib.utils.Rands;
 import io.github.vampirestudios.vampirelib.utils.registry.BlockChiseler;
-import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
-import net.minecraft.core.Registry;
-import net.minecraft.resources.ResourceLocation;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import io.github.vampirestudios.vampirelib.utils.registry.WoodRegistry;
 
-public class VampireLib implements ModInitializer {
+public class VampireLib extends BasicModClass {
+    public static final VampireLib INSTANCE = new VampireLib();
 
-    public static final Registry<FeatureManager> FEATURE_MANAGERS = FabricRegistryBuilder.createSimple(FeatureManager.class, new ResourceLocation("vampirelib:feature_managers")).buildAndRegister();
-    public static String MOD_ID = "vampirelib";
-    public static String MOD_NAME = "VampireLib";
-    public static final Logger LOGGER = LogManager.getLogger(MOD_NAME);
-    public static String MOD_VERSION = "4.0.0+build.1-EXPERIMENTAL for 1.18";
+    public static final List<ConvertibleBlockPair> CONVERTIBLE_BLOCKS = new ArrayList<>();
+    public static final RuntimeResourcePack WOOD_TYPES = RuntimeResourcePack.create(INSTANCE.identifier("wood_types"));
+    public static final List<WoodRegistry.Builder> WOOD_BUILDERS = new ArrayList<>();
+
+    public VampireLib() {
+        super("VampireLib", "4.1.0+build.1");
+    }
 
     @Override
     public void onInitialize() {
-        LOGGER.info((Rands.chance(15) ? "Your are" : (Rands.chance(15) ? "You're" : "You are")) + " running " + MOD_NAME + " v" + MOD_VERSION);
+        shouldNotPrintVersionMessage();
+        getLogger().info(String.format("%s running %s v%s for %s", Rands.chance(15) ? "Your are" : (Rands.chance(15) ? "You're" : "You are"),
+            modName(), modVersion(), SharedConstants.getCurrentVersion().getName()));
         BlockChiseler.setup();
+
+        // Overworld-like
+        WOOD_BUILDERS.add(WoodRegistry.of(identifier("test1"))
+            .defaultBlocks().defaultExtraBlocks());
+        WOOD_BUILDERS.add(WoodRegistry.of(identifier("test2"))
+            .defaultBlocksColoredLeaves().defaultExtraBlocks());
+        WOOD_BUILDERS.add(WoodRegistry.of(identifier("test3"))
+            .defaultBlocks().defaultExtraBlocks().nonFlammable());
+
+        //Nether-like
+        WOOD_BUILDERS.add(WoodRegistry.of(identifier("test4"))
+            .defaultBlocks().defaultExtraBlocks().mushroomLike());
+        WOOD_BUILDERS.add(WoodRegistry.of(identifier("test5"))
+            .defaultBlocksColoredLeaves().defaultExtraBlocks().mushroomLike());
+        WOOD_BUILDERS.add(WoodRegistry.of(identifier("test6"))
+            .defaultBlocks().defaultExtraBlocks().mushroomLike().nonFlammable());
+
+        for (WoodRegistry.Builder woodRegistry : WOOD_BUILDERS) {
+            woodRegistry.build(WOOD_TYPES);
+            WOOD_TYPES.dump(Path.of(RuntimeResourcePack.DEFAULT_OUTPUT.toPath().toString(), woodRegistry.name.getPath()));
+        }
+
+        RRPCallback.AFTER_VANILLA.register(a -> a.add(WOOD_TYPES));
+
+        for (ConvertibleBlockPair convertibleBlock : CONVERTIBLE_BLOCKS) {
+            UseBlockCallback.EVENT.register((player, world, hand, hitResult) -> {
+                ItemStack itemStack = player.getItemInHand(hand);
+                if (convertibleBlock.getConversionItem().matches(itemStack) && !world.isClientSide) {
+                    if (world.getBlockState(hitResult.getBlockPos()).is(convertibleBlock.getOriginal())) {
+                        world.setBlock(hitResult.getBlockPos(), convertibleBlock.getConverted().defaultBlockState(), 11);
+                        itemStack.hurtAndBreak(1, player, playerEntity -> playerEntity.broadcastBreakEvent(hand));
+                        return InteractionResult.SUCCESS;
+                    }
+                } else if (convertibleBlock.getReversingItem() != null && convertibleBlock.getReversingItem().matches(itemStack) &&
+                    !world.isClientSide &&world.getBlockState(hitResult.getBlockPos()).is(convertibleBlock.getConverted())) {
+                    world.setBlock(hitResult.getBlockPos(), convertibleBlock.getOriginal().defaultBlockState(), 11);
+                    itemStack.hurtAndBreak(1, player, playerEntity -> playerEntity.broadcastBreakEvent(hand));
+                    return InteractionResult.SUCCESS;
+                }
+                return InteractionResult.PASS;
+            });
+        }
     }
 
 }

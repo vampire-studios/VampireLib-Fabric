@@ -677,12 +677,19 @@
 
 package io.github.vampirestudios.vampirelib.blocks;
 
+import net.minecraft.core.NonNullList;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CakeBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.Material;
 
+import io.github.vampirestudios.vampirelib.api.VanillaTargetedItemGroupFiller;
+
 public class CakeBaseBlock extends CakeBlock {
+    private final VanillaTargetedItemGroupFiller FILLER;
     private final int slices;
 
     public CakeBaseBlock() {
@@ -692,6 +699,12 @@ public class CakeBaseBlock extends CakeBlock {
     public CakeBaseBlock(int slices) {
         super(BlockBehaviour.Properties.of(Material.CAKE).strength(0.5F).sound(SoundType.WOOL));
         this.slices = slices;
+        FILLER = new VanillaTargetedItemGroupFiller(Blocks.CAKE.asItem());
+    }
+
+    @Override
+    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> list) {
+        FILLER.fillItem(this.asItem(), group, list);
     }
 
     public int getSlices() {

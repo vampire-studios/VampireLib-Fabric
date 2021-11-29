@@ -678,16 +678,29 @@
 package io.github.vampirestudios.vampirelib.blocks;
 
 import net.minecraft.core.Direction;
+import net.minecraft.core.NonNullList;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LadderBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.Material;
 
+import io.github.vampirestudios.vampirelib.api.VanillaTargetedItemGroupFiller;
+
 public class CustomLadderBlock extends LadderBlock {
+    private final VanillaTargetedItemGroupFiller FILLER;
 
     public CustomLadderBlock() {
         super(BlockBehaviour.Properties.of(Material.SAND).strength(0.4F).sound(SoundType.LADDER));
         registerDefaultState(this.defaultBlockState().setValue(FACING, Direction.NORTH).setValue(WATERLOGGED, false));
+        FILLER = new VanillaTargetedItemGroupFiller(Blocks.LADDER.asItem());
+    }
+
+    @Override
+    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> list) {
+        FILLER.fillItem(this.asItem(), group, list);
     }
 
 }

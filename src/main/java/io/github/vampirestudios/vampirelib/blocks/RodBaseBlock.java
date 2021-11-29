@@ -679,11 +679,14 @@ package io.github.vampirestudios.vampirelib.blocks;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.NonNullList;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.DirectionalBlock;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -692,7 +695,10 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
+import io.github.vampirestudios.vampirelib.api.VanillaTargetedItemGroupFiller;
+
 public class RodBaseBlock extends io.github.vampirestudios.vampirelib.blocks.DirectionalBlock {
+    private final VanillaTargetedItemGroupFiller FILLER;
 
     protected static final VoxelShape BB_AXIS_Y = Block.box(0.375D, 0.0D, 0.375D, 0.625D, 1.0D, 0.625D);
     protected static final VoxelShape BB_AXIS_Z = Block.box(0.375D, 0.375D, 0.0D, 0.625D, 0.625D, 1.0D);
@@ -700,35 +706,38 @@ public class RodBaseBlock extends io.github.vampirestudios.vampirelib.blocks.Dir
 
     @SuppressWarnings("unused")
     public RodBaseBlock(boolean emitsLight) {
-        super(emitsLight ? BlockBehaviour.Properties.of(Material.STONE).strength(0.3F, 1.0F).lightLevel(blockState -> 13) : BlockBehaviour.Properties.of(Material.STONE));
-        this.registerDefaultState(this.defaultBlockState().setValue(FACING, Direction.UP));
+        this(Material.STONE, emitsLight);
     }
 
     @SuppressWarnings("unused")
     public RodBaseBlock(Material material, boolean emitsLight) {
         super(emitsLight ? BlockBehaviour.Properties.of(material).strength(0.3F).lightLevel(blockState -> 13) : BlockBehaviour.Properties.of(material));
         this.registerDefaultState(this.defaultBlockState().setValue(FACING, Direction.UP));
+        FILLER = new VanillaTargetedItemGroupFiller(Blocks.END_ROD.asItem());
     }
 
+    @Override
+    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> list) {
+        FILLER.fillItem(this.asItem(), group, list);
+    }
+
+    @Override
     public BlockState rotate(BlockState blockState_1, Rotation rotation_1) {
         return blockState_1.setValue(FACING, rotation_1.rotate(blockState_1.getValue(FACING)));
     }
 
+    @Override
     public BlockState mirror(BlockState blockState_1, Mirror mirror_1) {
         return blockState_1.setValue(FACING, mirror_1.mirror(blockState_1.getValue(FACING)));
     }
 
     @Override
     public VoxelShape getInteractionShape(BlockState blockState_1, BlockGetter blockView_1, BlockPos blockPos_1) {
-        switch (blockState_1.getValue(FACING).getAxis()) {
-            case X:
-            default:
-                return BB_AXIS_X;
-            case Z:
-                return BB_AXIS_Z;
-            case Y:
-                return BB_AXIS_Y;
-        }
+        return switch (blockState_1.getValue(FACING).getAxis()) {
+            case X -> BB_AXIS_X;
+            case Z -> BB_AXIS_Z;
+            case Y -> BB_AXIS_Y;
+        };
     }
 
     @Override

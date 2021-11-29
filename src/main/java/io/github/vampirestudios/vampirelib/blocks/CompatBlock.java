@@ -677,38 +677,24 @@
 
 package io.github.vampirestudios.vampirelib.blocks;
 
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
-import io.github.vampirestudios.vampirelib.utils.ItemStackUtils;
+
+import io.github.vampirestudios.vampirelib.api.ModdedTargetedItemGroupFiller;
 
 public class CompatBlock extends Block {
+    private final ModdedTargetedItemGroupFiller FILLER;
 
-    private final String modName;
-    private final Block modBlock;
-
-    public CompatBlock(String modName, Block modBlock, Properties settings) {
+    public CompatBlock(String modId, Block modBlock, Properties settings) {
         super(settings);
-        this.modName = modName;
-        this.modBlock = modBlock;
+        FILLER = new ModdedTargetedItemGroupFiller(modId, modBlock.asItem());
     }
 
     @Override
     public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> stacks) {
-        if (ItemStackUtils.isAllowedInTab(this.asItem(), group)) {
-            if (FabricLoader.getInstance().isModLoaded(this.modName)) {
-                int targetIndex = ItemStackUtils.findIndexOfItem(modBlock.asItem(), stacks);
-                if (targetIndex != -1) {
-                    stacks.add(targetIndex + 1, new ItemStack(this));
-                } else {
-                    super.fillItemCategory(group, stacks);
-                }
-            } else {
-                super.fillItemCategory(group, stacks);
-            }
-        }
+        FILLER.fillItem(this.asItem(), group, stacks);
     }
 
 }

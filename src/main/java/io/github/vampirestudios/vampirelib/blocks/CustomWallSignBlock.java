@@ -677,13 +677,26 @@
 
 package io.github.vampirestudios.vampirelib.blocks;
 
+import net.minecraft.core.NonNullList;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.WallSignBlock;
 import net.minecraft.world.level.block.state.properties.WoodType;
 
+import io.github.vampirestudios.vampirelib.api.VanillaTargetedItemGroupFiller;
+
 public class CustomWallSignBlock extends WallSignBlock {
+    private final VanillaTargetedItemGroupFiller FILLER;
 
     public CustomWallSignBlock(WoodType signType, Properties settings) {
         super(settings, signType);
+        FILLER = new VanillaTargetedItemGroupFiller(Blocks.WARPED_SIGN.asItem());
+    }
+
+    @Override
+    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> list) {
+        FILLER.fillItem(this.asItem(), group, list);
     }
 
 }

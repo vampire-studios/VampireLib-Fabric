@@ -17,17 +17,31 @@
 package net.fabricmc.fabric.api.tag;
 
 import net.minecraft.core.Registry;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.dimension.DimensionType;
-import net.minecraft.world.level.dimension.LevelStem;
 import net.minecraft.world.level.levelgen.NoiseGeneratorSettings;
+import net.minecraft.world.level.levelgen.carver.ConfiguredWorldCarver;
+import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
+import net.minecraft.world.level.levelgen.feature.ConfiguredStructureFeature;
+import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.placement.PlacedFeature;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorList;
+import net.minecraft.world.level.levelgen.synth.NormalNoise;
 
 /**
  * A factory for accessing datapack tags.
  */
-public interface ExpandedTagFactory<T> extends TagFactory<T> {
-	TagFactory<Biome> BIOME_EXPANDED = TagFactory.of(Registry.BIOME_REGISTRY, "tags/worldgen/biomes");
-	TagFactory<DimensionType> DIMENSION_TYPE = TagFactory.of(Registry.DIMENSION_TYPE_REGISTRY, "tags/dimension_types");
-	TagFactory<NoiseGeneratorSettings> NOISE_SETTINGS = TagFactory.of(Registry.NOISE_GENERATOR_SETTINGS_REGISTRY, "tags/worldgen/noise_settings");
-	TagFactory<LevelStem> DIMENSIONS = TagFactory.of(Registry.LEVEL_STEM_REGISTRY, "tags/dimensions");
+public abstract class ExpandedTagFactory<T> implements TagFactory<T> {
+	public static final TagFactory<Level> DIMENSIONS = TagFactory.of(Registry.DIMENSION_REGISTRY, "tags/dimensions");
+	public static final TagFactory<DimensionType> DIMENSION_TYPE = TagFactory.of(Registry.DIMENSION_TYPE_REGISTRY, "tags/dimension_types");
+	public static final TagFactory<Biome> BIOME_EXPANDED = TagFactory.of(Registry.BIOME_REGISTRY, "tags/worldgen/biomes");
+	public static final TagFactory<ConfiguredWorldCarver<?>> CONFIGURED_CARVER = TagFactory.of(Registry.CONFIGURED_CARVER_REGISTRY, "tags/worldgen/configured_carvers");
+	public static final TagFactory<ConfiguredFeature<?, ?>> CONFIGURED_FEATURE = TagFactory.of(Registry.CONFIGURED_FEATURE_REGISTRY, "tags/worldgen/configured_features");
+	public static final TagFactory<ConfiguredStructureFeature<?, ?>> CONFIGURED_STRUCTURE_FEATURE = TagFactory.of(Registry.CONFIGURED_STRUCTURE_FEATURE_REGISTRY, "tags/worldgen/configured_structure_features");
+	public static final TagFactory<Feature<?>> FEATURE = TagFactory.of(Registry.FEATURE_REGISTRY, "tags/worldgen/features");
+//	public static final TagFactory<NormalNoise.NoiseParameters> NOISE = TagFactory.of(Registry.NOISE_REGISTRY, "tags/worldgen/noises");
+	public static final TagFactory<NoiseGeneratorSettings> NOISE_SETTINGS = TagFactory.of(Registry.NOISE_GENERATOR_SETTINGS_REGISTRY, "tags/worldgen/noise_settings");
+	public static final TagFactory<PlacedFeature> PLACED_FEATURE = TagFactory.of(Registry.PLACED_FEATURE_REGISTRY, "tags/worldgen/placed_features");
+//	public static final TagFactory<StructureProcessorList> PROCESSOR_LIST = TagFactory.of(Registry.PROCESSOR_LIST_REGISTRY, "tags/worldgen/processor_lists");
 }

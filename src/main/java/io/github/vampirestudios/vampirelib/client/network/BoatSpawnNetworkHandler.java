@@ -678,10 +678,7 @@
 package io.github.vampirestudios.vampirelib.client.network;
 
 import java.util.UUID;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.network.ClientSidePacketRegistry;
-import net.fabricmc.fabric.api.network.PacketContext;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.Registry;
@@ -689,6 +686,12 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.network.ClientSidePacketRegistry;
+import net.fabricmc.fabric.api.network.PacketContext;
+
 import io.github.vampirestudios.vampirelib.VampireLib;
 
 @SuppressWarnings("deprecation")
@@ -737,6 +740,6 @@ public class BoatSpawnNetworkHandler {
     }
 
     public void register() {
-        ClientSidePacketRegistry.INSTANCE.register(new ResourceLocation(VampireLib.MOD_ID, "spawn_boat"), BoatSpawnNetworkHandler::accept);
+        ClientSidePacketRegistry.INSTANCE.register(new ResourceLocation(VampireLib.INSTANCE.modId(), "spawn_boat"), BoatSpawnNetworkHandler::accept);
     }
 }
