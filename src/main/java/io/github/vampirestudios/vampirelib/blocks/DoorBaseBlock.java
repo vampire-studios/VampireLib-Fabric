@@ -682,7 +682,7 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.DoorBlock;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -691,9 +691,9 @@ import io.github.vampirestudios.vampirelib.api.VanillaTargetedItemGroupFiller;
 public class DoorBaseBlock extends DoorBlock {
     private final VanillaTargetedItemGroupFiller FILLER;
 
-    public DoorBaseBlock(boolean metal, Properties settings) {
+    public DoorBaseBlock(Block vanillaBlock, Properties settings) {
         super(settings);
-        FILLER = new VanillaTargetedItemGroupFiller(metal ? Blocks.IRON_DOOR.asItem() : Blocks.WARPED_DOOR.asItem());
+        FILLER = new VanillaTargetedItemGroupFiller(vanillaBlock.asItem());
     }
 
     @Override

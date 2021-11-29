@@ -677,12 +677,8 @@
 
 package io.github.vampirestudios.vampirelib;
 
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
-
-import net.devtech.arrp.api.RRPCallback;
-import net.devtech.arrp.api.RuntimeResourcePack;
 
 import net.minecraft.SharedConstants;
 import net.minecraft.world.InteractionResult;
@@ -694,14 +690,11 @@ import io.github.vampirestudios.vampirelib.api.BasicModClass;
 import io.github.vampirestudios.vampirelib.api.ConvertibleBlockPair;
 import io.github.vampirestudios.vampirelib.utils.Rands;
 import io.github.vampirestudios.vampirelib.utils.registry.BlockChiseler;
-import io.github.vampirestudios.vampirelib.utils.registry.WoodRegistry;
 
 public class VampireLib extends BasicModClass {
     public static final VampireLib INSTANCE = new VampireLib();
 
     public static final List<ConvertibleBlockPair> CONVERTIBLE_BLOCKS = new ArrayList<>();
-    public static final RuntimeResourcePack WOOD_TYPES = RuntimeResourcePack.create(INSTANCE.identifier("wood_types"));
-    public static final List<WoodRegistry.Builder> WOOD_BUILDERS = new ArrayList<>();
 
     public VampireLib() {
         super("VampireLib", "4.1.0+build.1");
@@ -713,29 +706,6 @@ public class VampireLib extends BasicModClass {
         getLogger().info(String.format("%s running %s v%s for %s", Rands.chance(15) ? "Your are" : (Rands.chance(15) ? "You're" : "You are"),
             modName(), modVersion(), SharedConstants.getCurrentVersion().getName()));
         BlockChiseler.setup();
-
-        // Overworld-like
-        WOOD_BUILDERS.add(WoodRegistry.of(identifier("test1"))
-            .defaultBlocks().defaultExtraBlocks());
-        WOOD_BUILDERS.add(WoodRegistry.of(identifier("test2"))
-            .defaultBlocksColoredLeaves().defaultExtraBlocks());
-        WOOD_BUILDERS.add(WoodRegistry.of(identifier("test3"))
-            .defaultBlocks().defaultExtraBlocks().nonFlammable());
-
-        //Nether-like
-        WOOD_BUILDERS.add(WoodRegistry.of(identifier("test4"))
-            .defaultBlocks().defaultExtraBlocks().mushroomLike());
-        WOOD_BUILDERS.add(WoodRegistry.of(identifier("test5"))
-            .defaultBlocksColoredLeaves().defaultExtraBlocks().mushroomLike());
-        WOOD_BUILDERS.add(WoodRegistry.of(identifier("test6"))
-            .defaultBlocks().defaultExtraBlocks().mushroomLike().nonFlammable());
-
-        for (WoodRegistry.Builder woodRegistry : WOOD_BUILDERS) {
-            woodRegistry.build(WOOD_TYPES);
-            WOOD_TYPES.dump(Path.of(RuntimeResourcePack.DEFAULT_OUTPUT.toPath().toString(), woodRegistry.name.getPath()));
-        }
-
-        RRPCallback.AFTER_VANILLA.register(a -> a.add(WOOD_TYPES));
 
         for (ConvertibleBlockPair convertibleBlock : CONVERTIBLE_BLOCKS) {
             UseBlockCallback.EVENT.register((player, world, hand, hitResult) -> {

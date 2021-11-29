@@ -682,7 +682,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.ButtonBlock;
 
 import io.github.vampirestudios.vampirelib.api.VanillaTargetedItemGroupFiller;
@@ -691,10 +691,10 @@ public class ButtonBaseBlock extends ButtonBlock {
     private final VanillaTargetedItemGroupFiller FILLER;
     private final boolean wooden;
 
-    public ButtonBaseBlock(boolean wooden, Properties settings) {
+    public ButtonBaseBlock(boolean wooden, Block vanillaBlock, Properties settings) {
         super(wooden, settings);
         this.wooden = wooden;
-        FILLER = new VanillaTargetedItemGroupFiller(wooden ? Blocks.WARPED_BUTTON.asItem() : Blocks.POLISHED_BLACKSTONE_BUTTON.asItem());
+        FILLER = new VanillaTargetedItemGroupFiller(vanillaBlock.asItem());
     }
 
     @Override

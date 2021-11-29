@@ -677,17 +677,17 @@
 
 package io.github.vampirestudios.vampirelib.callbacks;
 
-import net.fabricmc.fabric.api.event.Event;
-import net.fabricmc.fabric.api.event.EventFactory;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.GameRules;
+
+import net.fabricmc.fabric.api.event.Event;
+import net.fabricmc.fabric.api.event.EventFactory;
 
 /**
  * Represents a callback for when a {@link ServerPlayer} is respawned.
  *
  * <p>This occurs when a player dies, or changes dimensions, such as returning to the overworld from the end.
  *
- * @apiNote This callback may be used to reposition the respawning player, or copy modded data between the old and the new.
  */
 public interface PlayerRespawnCallback {
     Event<PlayerRespawnCallback> EVENT = EventFactory.createArrayBacked(PlayerRespawnCallback.class, (callbacks) -> (newPlayer, oldPlayer, alive) -> {

@@ -677,11 +677,25 @@
 
 package io.github.vampirestudios.vampirelib.blocks;
 
+import net.minecraft.core.NonNullList;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SlabBlock;
 
-public class SlabBaseBlock extends SlabBlock {
+import io.github.vampirestudios.vampirelib.api.VanillaTargetedItemGroupFiller;
 
-    public SlabBaseBlock(Properties block$Settings_1) {
+public class SlabBaseBlock extends SlabBlock {
+    private final VanillaTargetedItemGroupFiller FILLER;
+
+    public SlabBaseBlock(Properties block$Settings_1, Block vanillaBlock) {
         super(block$Settings_1);
+        FILLER = new VanillaTargetedItemGroupFiller(vanillaBlock.asItem());
     }
+
+    @Override
+    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> list) {
+        FILLER.fillItem(this.asItem(), group, list);
+    }
+
 }

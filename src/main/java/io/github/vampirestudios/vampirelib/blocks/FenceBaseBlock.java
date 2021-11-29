@@ -681,15 +681,15 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.PressurePlateBlock;
+import net.minecraft.world.level.block.FenceBlock;
 
 import io.github.vampirestudios.vampirelib.api.VanillaTargetedItemGroupFiller;
 
-public class PressurePlateBaseBlock extends PressurePlateBlock {
+public class FenceBaseBlock extends FenceBlock {
     private final VanillaTargetedItemGroupFiller FILLER;
 
-    public PressurePlateBaseBlock(Block vanillaBlock, Properties settings, Sensitivity sensitivity) {
-        super(sensitivity, settings);
+    public FenceBaseBlock(Block vanillaBlock, Properties properties) {
+        super(properties);
         FILLER = new VanillaTargetedItemGroupFiller(vanillaBlock.asItem());
     }
 

@@ -703,7 +703,7 @@ public class ItemStackUtils {
 	}
 
     /**
-     * Used in {@link Item#fillItemCategory(CreativeModeTab, NonNullList)} and {@link (CreativeModeTab, NonNullList)} to fill an item after a specific item for a group.
+     * Used in {@link Item#fillItemCategory(CreativeModeTab, NonNullList)} to fill an item after a specific item for a group.
      *
      * @param item       The item to fill.
      * @param targetItem The item to fill after.

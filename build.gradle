@@ -53,8 +53,6 @@ dependencies {
 	include ("io.github.vampirestudios:artifice:0.15.10+21w20a") {
 		exclude group: "net.fabricmc.fabric-api"
 	}
-
-	modImplementation("net.devtech:arrp:0.5.4")
 }
 
 processResources {

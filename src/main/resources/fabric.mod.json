@@ -25,7 +25,8 @@
     ]
   },
   "mixins": [
-    "vampirelib.mixins.json"
+    "vampirelib.mixins.json",
+    "fabric-data-generation-api-v1.mixins.json"
   ],
   "accessWidener": "vampirelib.accesswidener",
   "depends": {

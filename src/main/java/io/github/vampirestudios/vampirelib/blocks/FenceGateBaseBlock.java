@@ -675,26 +675,27 @@
  * <https://www.gnu.org/licenses/why-not-lgpl.html>.
  */
 
-package io.github.vampirestudios.vampirelib.callbacks;
+package io.github.vampirestudios.vampirelib.blocks;
 
-import net.fabricmc.fabric.api.event.Event;
-import net.fabricmc.fabric.api.event.EventFactory;
-import net.minecraft.network.Connection;
-import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.core.NonNullList;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.FenceGateBlock;
 
-/**
- * This event is called when a player joins the server.
- *
- * <p>It hooks in at the end of {@link net.minecraft.server.players.PlayerList#placeNewPlayer(Connection, ServerPlayer)} through {@link net.fabricmc.fabric.mixin.event.lifecycle.MixinPlayerManager}.
- */
-public interface PlayerJoinCallback {
-    Event<PlayerJoinCallback> EVENT = EventFactory.createArrayBacked(PlayerJoinCallback.class,
-        (listeners) -> (playerEntity) -> {
-            for (PlayerJoinCallback event : listeners) {
-                event.onPlayerJoin(playerEntity);
-            }
-        }
-    );
+import io.github.vampirestudios.vampirelib.api.VanillaTargetedItemGroupFiller;
 
-    void onPlayerJoin(ServerPlayer player);
+public class FenceGateBaseBlock extends FenceGateBlock {
+    private final VanillaTargetedItemGroupFiller FILLER;
+
+    public FenceGateBaseBlock(Block vanillaBlock, Properties properties) {
+        super(properties);
+        FILLER = new VanillaTargetedItemGroupFiller(vanillaBlock.asItem());
+    }
+
+    @Override
+    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> list) {
+        FILLER.fillItem(this.asItem(), group, list);
+    }
+
 }

@@ -680,7 +680,7 @@ package io.github.vampirestudios.vampirelib.blocks;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.TrapDoorBlock;
 
 import io.github.vampirestudios.vampirelib.api.VanillaTargetedItemGroupFiller;
@@ -688,13 +688,9 @@ import io.github.vampirestudios.vampirelib.api.VanillaTargetedItemGroupFiller;
 public class TrapdoorBaseBlock extends TrapDoorBlock {
     private final VanillaTargetedItemGroupFiller FILLER;
 
-    public TrapdoorBaseBlock(Properties properties) {
-        this(false, properties);
-    }
-
-    public TrapdoorBaseBlock(boolean metal, Properties properties) {
+    public TrapdoorBaseBlock(Block vanillaBlock, Properties properties) {
         super(properties);
-        FILLER = new VanillaTargetedItemGroupFiller(metal ? Blocks.IRON_TRAPDOOR.asItem() : Blocks.WARPED_TRAPDOOR.asItem());
+        FILLER = new VanillaTargetedItemGroupFiller(vanillaBlock.asItem());
     }
 
     @Override
