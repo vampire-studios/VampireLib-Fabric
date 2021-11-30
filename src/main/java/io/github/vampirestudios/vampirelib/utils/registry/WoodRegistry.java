@@ -677,7 +677,6 @@
 
 package io.github.vampirestudios.vampirelib.utils.registry;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
@@ -691,8 +690,11 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.Registry;
 import net.minecraft.data.loot.BlockLoot;
 import net.minecraft.data.models.BlockModelGenerators;
+import net.minecraft.data.models.model.ModelTemplates;
+import net.minecraft.data.models.model.TextureMapping;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeProvider;
+import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
@@ -703,6 +705,7 @@ import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.vehicle.Boat;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -712,6 +715,7 @@ import net.minecraft.world.level.block.grower.AbstractTreeGrower;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.HugeFungusConfiguration;
+import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
@@ -751,6 +755,10 @@ import io.github.vampirestudios.vampirelib.items.CustomBoatItem;
 import io.github.vampirestudios.vampirelib.utils.ArtificeGenerationHelper;
 import io.github.vampirestudios.vampirelib.utils.Utils;
 
+import static net.minecraft.data.loot.BlockLoot.createSingleItemTableWithSilkTouch;
+import static net.minecraft.data.models.BlockModelGenerators.createSimpleBlock;
+import static net.minecraft.data.recipes.RecipeProvider.has;
+
 public class WoodRegistry {
 
     private final ResourceLocation name;
@@ -772,10 +780,7 @@ public class WoodRegistry {
     private Block trapdoor;
     private Block button;
     private Block pressurePlate;
-    //    private Block sign;
-//    private Block wallSign;
     private Block ladder;
-    //    private Item signItem;
     private Item boatItem;
     private EntityType<CustomBoatEntity> boatEntity;
 
@@ -905,50 +910,39 @@ public class WoodRegistry {
         return logsItemTag;
     }
 
-    /*public Block getSign() {
-        return sign;
-    }
-
-    public Block getWallSign() {
-        return wallSign;
-    }
-
-    public Item getSignItem() {
-        return signItem;
-    }*/
-
     public Item boatItem() {
         return boatItem;
     }
 
     public void generateBlockTags(FabricTagProvider.Blocks blockTags) {
-        blockTags.tag(logsTag).add(log(), strippedLog(), wood(), strippedWood());
+        blockTags.tag(logsTag).add(log, strippedLog, wood, strippedWood);
         blockTags.tag(BlockTags.LOGS).addTag(logsTag);
-        blockTags.tag(BlockTags.PLANKS).add(planks());
-        if (leaves != null && !mushroomLike) blockTags.tag(BlockTags.LEAVES).add(leaves());
-        if (leaves != null && mushroomLike) blockTags.tag(BlockTags.WART_BLOCKS).add(leaves());
-        if (ladder != null) blockTags.tag(BlockTags.CLIMBABLE).add(ladder());
-        if (trapdoor != null) blockTags.tag(BlockTags.WOODEN_TRAPDOORS).add(trapdoor());
-        if (button != null) blockTags.tag(BlockTags.WOODEN_BUTTONS).add(button());
-        if (door != null) blockTags.tag(BlockTags.WOODEN_DOORS).add(door());
-        if (sapling != null) blockTags.tag(BlockTags.SAPLINGS).add(sapling());
-        if (fence != null) blockTags.tag(BlockTags.WOODEN_FENCES).add(fence());
-        if (fenceGate != null) blockTags.tag(BlockTags.FENCE_GATES).add(fenceGate());
-        if (pressurePlate != null) blockTags.tag(BlockTags.PRESSURE_PLATES).add(pressurePlate());
-        if (slab != null) blockTags.tag(BlockTags.WOODEN_SLABS).add(slab());
-        if (stairs != null) blockTags.tag(BlockTags.WOODEN_STAIRS).add(stairs());
+        blockTags.tag(BlockTags.PLANKS).add(planks);
+        if (leaves != null && !mushroomLike) blockTags.tag(BlockTags.LEAVES).add(leaves);
+        if (leaves != null && mushroomLike) blockTags.tag(BlockTags.WART_BLOCKS).add(leaves);
+        if (ladder != null) blockTags.tag(BlockTags.CLIMBABLE).add(ladder);
+        if (trapdoor != null) blockTags.tag(BlockTags.WOODEN_TRAPDOORS).add(trapdoor);
+        if (button != null) blockTags.tag(BlockTags.WOODEN_BUTTONS).add(button);
+        if (door != null) blockTags.tag(BlockTags.WOODEN_DOORS).add(door);
+        if (sapling != null) blockTags.tag(BlockTags.SAPLINGS).add(sapling);
+        if (fence != null) blockTags.tag(BlockTags.WOODEN_FENCES).add(fence);
+        if (fenceGate != null) blockTags.tag(BlockTags.FENCE_GATES).add(fenceGate);
+        if (pressurePlate != null) blockTags.tag(BlockTags.PRESSURE_PLATES).add(pressurePlate);
+        if (slab != null) blockTags.tag(BlockTags.WOODEN_SLABS).add(slab);
+        if (stairs != null) blockTags.tag(BlockTags.WOODEN_STAIRS).add(stairs);
         if (flammable) {
             blockTags.tag(BlockTags.LOGS_THAT_BURN).addTag(logsTag);
         } else {
-            if (ladder != null) blockTags.tag(BlockTags.NON_FLAMMABLE_WOOD).add(ladder());
-            if (trapdoor != null) blockTags.tag(BlockTags.NON_FLAMMABLE_WOOD).add(trapdoor());
-            if (button != null) blockTags.tag(BlockTags.NON_FLAMMABLE_WOOD).add(button());
-            if (door != null) blockTags.tag(BlockTags.NON_FLAMMABLE_WOOD).add(door());
-            if (fence != null) blockTags.tag(BlockTags.NON_FLAMMABLE_WOOD).add(fence());
-            if (fenceGate != null) blockTags.tag(BlockTags.NON_FLAMMABLE_WOOD).add(fenceGate());
-            if (pressurePlate != null) blockTags.tag(BlockTags.NON_FLAMMABLE_WOOD).add(pressurePlate());
-            if (slab != null) blockTags.tag(BlockTags.NON_FLAMMABLE_WOOD).add(slab());
-            if (stairs != null) blockTags.tag(BlockTags.NON_FLAMMABLE_WOOD).add(stairs());
+            if (ladder != null) blockTags.tag(BlockTags.NON_FLAMMABLE_WOOD).add(ladder);
+            if (trapdoor != null) blockTags.tag(BlockTags.NON_FLAMMABLE_WOOD).add(trapdoor);
+            if (button != null) blockTags.tag(BlockTags.NON_FLAMMABLE_WOOD).add(button);
+            if (door != null) blockTags.tag(BlockTags.NON_FLAMMABLE_WOOD).add(door);
+            if (fence != null) blockTags.tag(BlockTags.NON_FLAMMABLE_WOOD).add(fence);
+            if (fenceGate != null) blockTags.tag(BlockTags.NON_FLAMMABLE_WOOD).add(fenceGate);
+            if (pressurePlate != null) blockTags.tag(BlockTags.NON_FLAMMABLE_WOOD).add(pressurePlate);
+            if (slab != null) blockTags.tag(BlockTags.NON_FLAMMABLE_WOOD).add(slab);
+            if (stairs != null) blockTags.tag(BlockTags.NON_FLAMMABLE_WOOD).add(stairs);
+            if (bookshelf != null) blockTags.tag(BlockTags.NON_FLAMMABLE_WOOD).add(bookshelf);
         }
     }
 
@@ -969,72 +963,80 @@ public class WoodRegistry {
     }
 
     public void generateModels(BlockModelGenerators blockStateModelGenerator) {
-        blockStateModelGenerator.woodProvider(log()).log(log()).wood(wood());
-        blockStateModelGenerator.woodProvider(strippedLog()).log(strippedLog()).wood(strippedWood());
-        if (leaves != null) blockStateModelGenerator.createTrivialCube(leaves());
-        if (door != null) blockStateModelGenerator.createDoor(door());
-        if (trapdoor != null) blockStateModelGenerator.createTrapdoor(trapdoor());
-        if (sapling != null) blockStateModelGenerator.createCrossBlockWithDefaultItem(sapling(), BlockModelGenerators.TintState.NOT_TINTED);
-        BlockModelGenerators.BlockFamilyProvider familyProvider = blockStateModelGenerator.family(planks());
-        if (fence != null) familyProvider.fence(fence());
-        if (slab != null) familyProvider.slab(slab());
-        if (stairs != null) familyProvider.stairs(stairs());
-        if (fenceGate != null) familyProvider.fenceGate(fenceGate());
-        if (pressurePlate != null) familyProvider.pressurePlate(pressurePlate());
-        if (button != null) familyProvider.button(button());
+        blockStateModelGenerator.woodProvider(log).log(log).wood(wood);
+        blockStateModelGenerator.woodProvider(strippedLog).log(strippedLog).wood(strippedWood);
+        if (leaves != null) blockStateModelGenerator.createTrivialCube(leaves);
+        if (door != null) blockStateModelGenerator.createDoor(door);
+        if (trapdoor != null) blockStateModelGenerator.createTrapdoor(trapdoor);
+        if (sapling != null) blockStateModelGenerator.createCrossBlockWithDefaultItem(sapling, BlockModelGenerators.TintState.NOT_TINTED);
+        if (bookshelf != null) {
+            TextureMapping textureMapping = TextureMapping.column(TextureMapping.getBlockTexture(bookshelf), TextureMapping.getBlockTexture(planks));
+            ResourceLocation resourceLocation = ModelTemplates.CUBE_COLUMN.create(bookshelf, textureMapping, blockStateModelGenerator.modelOutput);
+            blockStateModelGenerator.blockStateOutput.accept(createSimpleBlock(bookshelf, resourceLocation));
+        }
+        BlockModelGenerators.BlockFamilyProvider familyProvider = blockStateModelGenerator.family(planks);
+        if (fence != null) familyProvider.fence(fence);
+        if (slab != null) familyProvider.slab(slab);
+        if (stairs != null) familyProvider.stairs(stairs);
+        if (fenceGate != null) familyProvider.fenceGate(fenceGate);
+        if (pressurePlate != null) familyProvider.pressurePlate(pressurePlate);
+        if (button != null) familyProvider.button(button);
     }
 
     public void generateLang(FabricLanguageProvider languageProvider) {
         String translatedName = WordUtils.capitalizeFully(name.getPath().replace("_", " "));
-        languageProvider.addBlock(log(), translatedName + (mushroomLike ? " Stem" : " Log"));
-        languageProvider.addBlock(strippedLog(), "Stripped " + translatedName + (mushroomLike ? " Stem" : " Log"));
-        languageProvider.addBlock(wood(), translatedName + (mushroomLike ? " Hyphae" : " Wood"));
-        languageProvider.addBlock(strippedWood(), "Stripped " + translatedName + (mushroomLike ? " Hyphae" : " Wood"));
-        languageProvider.addBlock(planks(), translatedName + " Planks");
-        if (sapling != null) languageProvider.addBlock(sapling(), translatedName + (mushroomLike ? " Fungi" : " Sapling"));
-        if (trapdoor != null) languageProvider.addBlock(trapdoor(), translatedName + " Trapdoor");
-        if (door != null) languageProvider.addBlock(door(), translatedName + " Door");
-        if (leaves != null) languageProvider.addBlock(leaves(), translatedName + (mushroomLike ? " Wart Block" : " Leaves"));
-        if (fence != null) languageProvider.addBlock(fence(), translatedName + " Fence");
-        if (fenceGate != null) languageProvider.addBlock(fenceGate(), translatedName + " Fence Gate");
-        if (button != null) languageProvider.addBlock(button(), translatedName + " Button");
-        if (pressurePlate != null) languageProvider.addBlock(pressurePlate(), translatedName + " Pressure Plate");
-        if (slab != null) languageProvider.addBlock(slab(), translatedName + " Slab");
-        if (stairs != null) languageProvider.addBlock(stairs(), translatedName + " Stairs");
+        languageProvider.addBlock(log, translatedName + (mushroomLike ? " Stem" : " Log"));
+        languageProvider.addBlock(strippedLog, "Stripped " + translatedName + (mushroomLike ? " Stem" : " Log"));
+        languageProvider.addBlock(wood, translatedName + (mushroomLike ? " Hyphae" : " Wood"));
+        languageProvider.addBlock(strippedWood, "Stripped " + translatedName + (mushroomLike ? " Hyphae" : " Wood"));
+        languageProvider.addBlock(planks, translatedName + " Planks");
+        if (sapling != null) languageProvider.addBlock(sapling, translatedName + (mushroomLike ? " Fungi" : " Sapling"));
+        if (trapdoor != null) languageProvider.addBlock(trapdoor, translatedName + " Trapdoor");
+        if (door != null) languageProvider.addBlock(door, translatedName + " Door");
+        if (leaves != null) languageProvider.addBlock(leaves, translatedName + (mushroomLike ? " Wart Block" : " Leaves"));
+        if (fence != null) languageProvider.addBlock(fence, translatedName + " Fence");
+        if (fenceGate != null) languageProvider.addBlock(fenceGate, translatedName + " Fence Gate");
+        if (button != null) languageProvider.addBlock(button, translatedName + " Button");
+        if (pressurePlate != null) languageProvider.addBlock(pressurePlate, translatedName + " Pressure Plate");
+        if (slab != null) languageProvider.addBlock(slab, translatedName + " Slab");
+        if (stairs != null) languageProvider.addBlock(stairs, translatedName + " Stairs");
+        if (bookshelf != null) languageProvider.addBlock(bookshelf, translatedName + " Bookshelf");
     }
 
     public void generateLoot(FabricBlockLootTablesProvider lootTablesProvider) {
-        lootTablesProvider.dropSelf(log());
-        lootTablesProvider.dropSelf(strippedLog());
-        lootTablesProvider.dropSelf(wood());
-        lootTablesProvider.dropSelf(strippedWood());
-        lootTablesProvider.dropSelf(planks());
-        if (leaves != null && !mushroomLike) lootTablesProvider.add(leaves(), block -> BlockLoot.createLeavesDrops(block, sapling(), 0.05F, 0.0625F, 0.083333336F, 0.1F));
-        if (leaves != null && mushroomLike) lootTablesProvider.dropSelf(leaves());
-        if (ladder != null) lootTablesProvider.dropSelf(ladder());
-        if (trapdoor != null) lootTablesProvider.dropSelf(trapdoor());
-        if (button != null) lootTablesProvider.dropSelf(button());
-        if (door != null) lootTablesProvider.add(door(), BlockLoot::createDoorTable);
-        if (sapling != null) lootTablesProvider.dropSelf(sapling());
-        if (fence != null) lootTablesProvider.dropSelf(fence());
-        if (fenceGate != null) lootTablesProvider.dropSelf(fenceGate());
-        if (pressurePlate != null) lootTablesProvider.dropSelf(pressurePlate());
-        if (slab != null) lootTablesProvider.add(slab(), BlockLoot::createSlabItemTable);
-        if (stairs != null) lootTablesProvider.dropSelf(stairs());
+        lootTablesProvider.dropSelf(log);
+        lootTablesProvider.dropSelf(strippedLog);
+        lootTablesProvider.dropSelf(wood);
+        lootTablesProvider.dropSelf(strippedWood);
+        lootTablesProvider.dropSelf(planks);
+        if (leaves != null && !mushroomLike) lootTablesProvider.add(leaves, block -> BlockLoot.createLeavesDrops(block, sapling, 0.05F, 0.0625F, 0.083333336F, 0.1F));
+        if (leaves != null && mushroomLike) lootTablesProvider.dropSelf(leaves);
+        if (ladder != null) lootTablesProvider.dropSelf(ladder);
+        if (trapdoor != null) lootTablesProvider.dropSelf(trapdoor);
+        if (button != null) lootTablesProvider.dropSelf(button);
+        if (door != null) lootTablesProvider.add(door, BlockLoot::createDoorTable);
+        if (sapling != null) lootTablesProvider.dropSelf(sapling);
+        if (fence != null) lootTablesProvider.dropSelf(fence);
+        if (fenceGate != null) lootTablesProvider.dropSelf(fenceGate);
+        if (pressurePlate != null) lootTablesProvider.dropSelf(pressurePlate);
+        if (slab != null) lootTablesProvider.add(slab, BlockLoot::createSlabItemTable);
+        if (stairs != null) lootTablesProvider.dropSelf(stairs);
+        if (bookshelf != null) lootTablesProvider.add(bookshelf, blockx -> createSingleItemTableWithSilkTouch(blockx, Items.BOOK, ConstantValue.exactly(3.0F)));
     }
 
     public void generateRecipes(Consumer<FinishedRecipe> exporter) {
-        RecipeProvider.planksFromLogs(exporter, planks(), logsItemTag);
-        RecipeProvider.woodFromLogs(exporter, wood(), log());
-        RecipeProvider.woodFromLogs(exporter, strippedWood(), strippedLog());
-        if (trapdoor != null) RecipeProvider.trapdoorBuilder(trapdoor(), Ingredient.of(planks()));
-        if (door != null) RecipeProvider.doorBuilder(door(), Ingredient.of(planks()));
-        if (fence != null) RecipeProvider.fenceBuilder(fence(), Ingredient.of(planks()));
-        if (fenceGate != null) RecipeProvider.fenceGateBuilder(fenceGate(), Ingredient.of(planks()));
-        if (slab != null) RecipeProvider.slab(exporter, slab(), planks());
-        if (stairs != null) RecipeProvider.stairBuilder(stairs(), Ingredient.of(planks()));
-        if (pressurePlate != null) RecipeProvider.pressurePlate(exporter, pressurePlate(), planks());
-        if (button != null) RecipeProvider.buttonBuilder(button(), Ingredient.of(planks()));
+        RecipeProvider.planksFromLogs(exporter, planks, logsItemTag);
+        RecipeProvider.woodFromLogs(exporter, wood, log);
+        RecipeProvider.woodFromLogs(exporter, strippedWood, strippedLog);
+        if (trapdoor != null) RecipeProvider.trapdoorBuilder(trapdoor, Ingredient.of(planks));
+        if (door != null) RecipeProvider.doorBuilder(door, Ingredient.of(planks));
+        if (fence != null) RecipeProvider.fenceBuilder(fence, Ingredient.of(planks));
+        if (fenceGate != null) RecipeProvider.fenceGateBuilder(fenceGate, Ingredient.of(planks));
+        if (slab != null) RecipeProvider.slab(exporter, slab, planks);
+        if (stairs != null) RecipeProvider.stairBuilder(stairs, Ingredient.of(planks));
+        if (pressurePlate != null) RecipeProvider.pressurePlate(exporter, pressurePlate, planks);
+        if (button != null) RecipeProvider.buttonBuilder(button, Ingredient.of(planks));
+        if (bookshelf != null) ShapedRecipeBuilder.shaped(bookshelf).define('#', planks).define('X', Items.BOOK).pattern("###").pattern("XXX").pattern("###").unlockedBy("has_book", has(Items.BOOK)).save(exporter);
     }
 
     public static class Builder {
@@ -1324,16 +1326,6 @@ public class WoodRegistry {
             return this;
         }
 
-        /*public Builder sign() {
-            BlockEntityType<SignBlockEntity> signBlockEntityBlockEntityType = Registry.register(Registry.BLOCK_ENTITY_TYPE, Utils.appendToPath(name, "_base"), BlockEntityType.Builder.create(SignBlockEntity::new).build(null));
-            SignType signType = SignType.register(new SignType(name.getPath()));
-            woodRegistry.sign = registryHelper.registerBlockWithoutItem(name.getPath() + "_sign", new CustomSignBlock(signType, FabricBlockSettings.copy(Blocks.OAK_SIGN)));
-            woodRegistry.wallSign = registryHelper.registerBlockWithoutItem(name.getPath() + "_wall_sign", new CustomWallSignBlock(signType, FabricBlockSettings.copy(Blocks.OAK_WALL_SIGN)));
-            woodRegistry.signItem = registryHelper.registerItem(name.getPath() + "_sign", new SignItem(new Item.Settings().maxCount(16).group(ItemGroup.DECORATIONS), woodRegistry.sign, woodRegistry.wallSign));
-            ((IBlockEntityType) signBlockEntityBlockEntityType).vl_addBlocks(woodRegistry.sign, woodRegistry.wallSign);
-            return this;
-        }*/
-
         public Builder boat() {
             woodRegistry.boatItem = registryHelper.items().registerItem(name.getPath() + "_boat", new CustomBoatItem(() -> woodRegistry.boatEntity, new Item.Properties().stacksTo(1).tab(CreativeModeTab.TAB_TRANSPORTATION)));
             woodRegistry.boatEntity = Registry.register(Registry.ENTITY_TYPE, Utils.appendToPath(name, "_boat"), FabricEntityTypeBuilder.<CustomBoatEntity>create(MobCategory.MISC, (entity, world) -> new CustomBoatEntity(entity, world, new CustomBoatInfo(woodRegistry.boatItem, woodRegistry.planks.asItem(), Utils.appendAndPrependToPath(name, "textures/entity/boat/", ".png"), boatType))).dimensions(EntityDimensions.fixed(1.375F, 0.5625F)).build());
@@ -1491,10 +1483,6 @@ public class WoodRegistry {
                             ArtificeGenerationHelper.generateSimpleItemModel(clientResourcePackBuilder, Utils.appendToPath(name, "_ladder"), Utils.appendAndPrependToPath(name, "block/", "_ladder"));
                         }
 
-//                        if (woodRegistry.sign != null) {
-//                            ArtificeGenerationHelper.generateSimpleItemModel(clientResourcePackBuilder, Utils.appendToPath(name, "_sign"));
-//                        }
-
                         if (woodRegistry.slab != null) {
                             ArtificeGenerationHelper.generateSlabBlockState(clientResourcePackBuilder, Utils.appendToPath(name, "_slab"), Utils.appendToPath(name, "_planks"));
                             ArtificeGenerationHelper.generateSlabBlockModels(clientResourcePackBuilder, Utils.appendToPath(name, "_slab"), Utils.appendAndPrependToPath(name, "block/", "_planks"));
@@ -1530,13 +1518,13 @@ public class WoodRegistry {
                             ArtificeGenerationHelper.generateTrapdoorBlockModels(clientResourcePackBuilder, Utils.appendToPath(name, "_trapdoor"), Utils.appendAndPrependToPath(name, "block/", "_trapdoor"));
                             ArtificeGenerationHelper.generateBlockItemModel(clientResourcePackBuilder, Utils.appendToPath(name, "_trapdoor"), Utils.appendToPath(name, "_trapdoor_bottom"));
                         }
-                        new Thread(() -> {
+                        /*new Thread(() -> {
                             try {
                                 clientResourcePackBuilder.dumpResources("test", "assets");
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
-                        }).start();
+                        }).start();*/
                     });
                 }
                 if (woodRegistry.leaves != null) {
@@ -1551,15 +1539,6 @@ public class WoodRegistry {
                 if (woodRegistry.trapdoor != null) {
                     BlockRenderLayerMapImpl.INSTANCE.putBlock(woodRegistry.trapdoor, RenderType.cutoutMipped());
                 }
-//                if(woodRegistry.sign != null) {
-//                    Map<SignType, SpriteIdentifier> textures = new HashMap<>(TexturedRenderLayersAccessor.getWOOD_TYPE_TEXTURES());
-//                    SignType.stream().forEach(signType -> {
-//                        if(signType.getName().equals(name.getPath())) {
-//                            textures.put(signType, new SpriteIdentifier(SIGNS_ATLAS_TEXTURE, Utils.prependToPath(name, "entity/signs/")));
-//                        }
-//                    });
-//                    TexturedRenderLayersAccessor.setWOOD_TYPE_TEXTURES(textures);
-//                }
                 if (woodRegistry.boatItem != null) {
                     ModelLayerLocation entityModelLayer = VEntityModelLayers.createBoat(name);
                     EntityModelLayerRegistry.registerModelLayer(entityModelLayer, BoatModel::createBodyModel);
@@ -1567,140 +1546,6 @@ public class WoodRegistry {
                 }
             }
 
-//            if (!mushroomLike) {
-//
-//                serverResourcePackBuilder.addBlockTag(new ResourceLocation("logs"), tagBuilder -> {
-//                    tagBuilder.replace(false);
-//                    tagBuilder.include(Utils.appendToPath(name, "_logs"));
-//                });
-//                if (flammable)
-//                    serverResourcePackBuilder.addBlockTag(new ResourceLocation("logs_that_burn"), tagBuilder -> {
-//                        tagBuilder.replace(false);
-//                        tagBuilder.include(Utils.appendToPath(name, "_logs"));
-//                    });
-//                else
-//                    serverResourcePackBuilder.addBlockTag(new ResourceLocation("non_flammable_wood"), tagBuilder -> {
-//                        tagBuilder.replace(false);
-//                        tagBuilder.include(Utils.appendToPath(name, "_logs"));
-//                    });
-//            } else {
-//                serverResourcePackBuilder.addBlockTag(new ResourceLocation("logs"), tagBuilder -> {
-//                    tagBuilder.replace(false);
-//                    tagBuilder.include(Utils.appendToPath(name, "_stems"));
-//                });
-//                if (flammable) {
-//                    serverResourcePackBuilder.addBlockTag(new ResourceLocation("logs_that_burn"), tagBuilder -> {
-//                        tagBuilder.replace(false);
-//                        tagBuilder.include(Utils.appendToPath(name, "_stems"));
-//                    });
-//                } else {
-//                    serverResourcePackBuilder.addBlockTag(new ResourceLocation("non_flammable_wood"), tagBuilder -> {
-//                        tagBuilder.replace(false);
-//                        tagBuilder.include(Utils.appendToPath(name, "_logs"));
-//                    });
-//                }
-//            }
-
-            Artifice.registerDataPack(name, serverResourcePackBuilder -> {
-                if (woodRegistry.pressurePlate != null)
-                    serverResourcePackBuilder.addBlockTag(new ResourceLocation("wooden_pressure_plates"), tagBuilder -> {
-                        tagBuilder.replace(false);
-                        tagBuilder.values(Utils.appendToPath(name, "_pressure_plate"));
-                    });
-                if (woodRegistry.slab != null)
-                    serverResourcePackBuilder.addBlockTag(new ResourceLocation("wooden_slabs"), tagBuilder -> {
-                        tagBuilder.replace(false);
-                        tagBuilder.values(Utils.appendToPath(name, "_slab"));
-                    });
-                if (woodRegistry.stairs != null)
-                    serverResourcePackBuilder.addBlockTag(new ResourceLocation("wooden_stairs"), tagBuilder -> {
-                        tagBuilder.replace(false);
-                        tagBuilder.values(Utils.appendToPath(name, "_stairs"));
-                    });
-                if (woodRegistry.trapdoor != null)
-                    serverResourcePackBuilder.addBlockTag(new ResourceLocation("wooden_trapdoors"), tagBuilder -> {
-                        tagBuilder.replace(false);
-                        tagBuilder.values(Utils.appendToPath(name, "_trapdoor"));
-                    });
-                if (woodRegistry.planks != null)
-                    serverResourcePackBuilder.addBlockTag(new ResourceLocation("planks"), tagBuilder -> {
-                        tagBuilder.replace(false);
-                        tagBuilder.values(Utils.appendToPath(name, "_planks"));
-                    });
-                if (woodRegistry.leaves != null) {
-                    if (!woodRegistry.mushroomLike)
-                        serverResourcePackBuilder.addBlockTag(new ResourceLocation("leaves"), tagBuilder -> {
-                            tagBuilder.replace(false);
-                            tagBuilder.values(Utils.appendToPath(name, "_leaves"));
-                        });
-                    else
-                        serverResourcePackBuilder.addBlockTag(new ResourceLocation("wart_blocks"), tagBuilder -> {
-                            tagBuilder.replace(false);
-                            tagBuilder.values(Utils.appendToPath(name, "_wart_block"));
-                        });
-                }
-
-                if (!woodRegistry.mushroomLike) {
-                    serverResourcePackBuilder.addBlockTag(Utils.appendToPath(name, "_logs"), tagBuilder -> {
-                        if (woodRegistry.log != null)
-                            tagBuilder.values(Utils.appendToPath(name, "_log"));
-                        if (woodRegistry.strippedLog != null)
-                            tagBuilder.values(Utils.appendAndPrependToPath(name, "stripped_", "_log"));
-                        if (woodRegistry.wood != null)
-                            tagBuilder.values(Utils.appendToPath(name, "_wood"));
-                        if (woodRegistry.strippedWood != null)
-                            tagBuilder.values(Utils.appendAndPrependToPath(name, "stripped_", "_wood"));
-                    });
-                    serverResourcePackBuilder.addBlockTag(new ResourceLocation("logs"), tagBuilder -> {
-                        tagBuilder.replace(false);
-                        tagBuilder.include(Utils.appendToPath(name, "_logs"));
-                    });
-                    if (woodRegistry.flammable)
-                        serverResourcePackBuilder.addBlockTag(new ResourceLocation("logs_that_burn"), tagBuilder -> {
-                            tagBuilder.replace(false);
-                            tagBuilder.include(Utils.appendToPath(name, "_logs"));
-                        });
-                    else
-                        serverResourcePackBuilder.addBlockTag(new ResourceLocation("non_flammable_wood"), tagBuilder -> {
-                            tagBuilder.replace(false);
-                            tagBuilder.include(Utils.appendToPath(name, "_logs"));
-                        });
-                } else {
-                    serverResourcePackBuilder.addBlockTag(Utils.appendToPath(name, "_stems"), tagBuilder -> {
-                        if (woodRegistry.log != null)
-                            tagBuilder.values(Utils.appendToPath(name, "_stem"));
-                        if (woodRegistry.strippedLog != null)
-                            tagBuilder.values(Utils.appendAndPrependToPath(name, "stripped_", "_stem"));
-                        if (woodRegistry.wood != null)
-                            tagBuilder.values(Utils.appendToPath(name, "_hyphae"));
-                        if (woodRegistry.strippedWood != null)
-                            tagBuilder.values(Utils.appendAndPrependToPath(name, "stripped_", "_hyphae"));
-                    });
-                    serverResourcePackBuilder.addBlockTag(new ResourceLocation("logs"), tagBuilder -> {
-                        tagBuilder.replace(false);
-                        tagBuilder.include(Utils.appendToPath(name, "_stems"));
-                    });
-                    if (woodRegistry.flammable) {
-                        serverResourcePackBuilder.addBlockTag(new ResourceLocation("logs_that_burn"), tagBuilder -> {
-                            tagBuilder.replace(false);
-                            tagBuilder.include(Utils.appendToPath(name, "_stems"));
-                        });
-                    } else {
-                        serverResourcePackBuilder.addBlockTag(new ResourceLocation("non_flammable_wood"), tagBuilder -> {
-                            tagBuilder.replace(false);
-                            tagBuilder.include(Utils.appendToPath(name, "_logs"));
-                        });
-                    }
-                }
-                new Thread(() -> {
-                    try {
-                        serverResourcePackBuilder.dumpResources("test", "data");
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }).start();
-            });
-//            WoodTypeRegistry.registerModded(new WoodType(name.toString(), woodRegistry.leaves, woodRegistry.log), 0.2F, 0.2F);
             return woodRegistry;
         }
     }

@@ -196,6 +196,8 @@ transitive-accessible	method	net/minecraft/data/models/BlockModelGenerators	crea
 transitive-accessible   class   net/minecraft/data/models/BlockModelGenerators$WoodProvider
 transitive-accessible   class   net/minecraft/data/models/BlockModelGenerators$BlockFamilyProvider
 transitive-accessible   class   net/minecraft/data/models/BlockModelGenerators$TintState
+transitive-accessible   field   net/minecraft/data/models/BlockModelGenerators  blockStateOutput    Ljava/util/function/Consumer;
+transitive-accessible   field   net/minecraft/data/models/BlockModelGenerators  modelOutput Ljava/util/function/BiConsumer;
 
 transitive-accessible	method	net/minecraft/data/loot/BlockLoot	applyExplosionDecay	(Lnet/minecraft/world/level/ItemLike;Lnet/minecraft/world/level/storage/loot/functions/FunctionUserBuilder;)Ljava/lang/Object;
 transitive-accessible	method	net/minecraft/data/loot/BlockLoot	applyExplosionCondition	(Lnet/minecraft/world/level/ItemLike;Lnet/minecraft/world/level/storage/loot/predicates/ConditionUserBuilder;)Ljava/lang/Object;
