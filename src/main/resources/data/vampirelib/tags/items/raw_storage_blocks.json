@@ -1,8 +1,0 @@
-{
-  "replace": false,
-  "values": [
-    "#vampirelib:raw_storage_blocks/copper",
-    "#vampirelib:raw_storage_blocks/gold",
-    "#vampirelib:raw_storage_blocks/iron"
-  ]
-}

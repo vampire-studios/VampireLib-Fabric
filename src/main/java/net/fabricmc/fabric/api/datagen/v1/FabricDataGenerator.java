@@ -16,16 +16,15 @@
 
 package net.fabricmc.fabric.api.datagen.v1;
 
-import java.nio.file.Path;
-import java.util.Collection;
-import java.util.function.Function;
-
-import org.jetbrains.annotations.ApiStatus;
-
+import net.fabricmc.loader.api.ModContainer;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
+import org.jetbrains.annotations.ApiStatus;
 
-import net.fabricmc.loader.api.ModContainer;
+import java.nio.file.Path;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.function.Function;
 
 /**
  * An extension to vanilla's {@link DataGenerator} providing mod specific data, and helper functions.
@@ -33,6 +32,11 @@ import net.fabricmc.loader.api.ModContainer;
 public final class FabricDataGenerator extends DataGenerator {
 	private final ModContainer modContainer;
 	private final boolean strictValidation;
+
+	@ApiStatus.Internal
+	public FabricDataGenerator(Path output, ModContainer mod, boolean strictValidation) {
+		this(output, Collections.emptyList(), mod, strictValidation);
+	}
 
 	@ApiStatus.Internal
 	public FabricDataGenerator(Path output, Collection<Path> inputs, ModContainer mod, boolean strictValidation) {

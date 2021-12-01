@@ -1,9 +1,0 @@
-{
-  "replace": false,
-  "values": [
-    "#vampirelib:seeds/beetroot",
-    "#vampirelib:seeds/melon",
-    "#vampirelib:seeds/pumpkin",
-    "#vampirelib:seeds/wheat"
-  ]
-}

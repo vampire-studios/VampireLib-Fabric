@@ -1,8 +1,0 @@
-{
-  "replace": false,
-  "values": [
-    "#vampirelib:raw_ores/copper",
-    "#vampirelib:raw_ores/gold",
-    "#vampirelib:raw_ores/iron"
-  ]
-}

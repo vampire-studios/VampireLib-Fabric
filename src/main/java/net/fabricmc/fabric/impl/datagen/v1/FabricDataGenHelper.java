@@ -16,23 +16,20 @@
 
 package net.fabricmc.fabric.impl.datagen.v1;
 
-import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
-
+import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
+import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
+import net.fabricmc.loader.api.FabricLoader;
+import net.fabricmc.loader.api.entrypoint.EntrypointContainer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
-import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
-import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
-import net.fabricmc.loader.api.FabricLoader;
-import net.fabricmc.loader.api.entrypoint.EntrypointContainer;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
+import java.util.Objects;
 
 @ApiStatus.Internal
 public final class FabricDataGenHelper {
@@ -74,7 +71,7 @@ public final class FabricDataGenHelper {
 
 	public static void run() throws IOException {
 		Path outputDir = Paths.get(Objects.requireNonNull(OUTPUT_DIR, "No output dir provided with the 'fabric-api.datagen.output-dir' property"));
-		Collection<Path> existingDir = !(EXISTING_DIR.isEmpty() || EXISTING_DIR.isBlank()) ? List.of(Paths.get(EXISTING_DIR)) : Collections.emptyList();
+//		Collection<Path> existingDir = !(EXISTING_DIR.isEmpty() || EXISTING_DIR.isBlank()) ? List.of(Paths.get(EXISTING_DIR)) : Collections.emptyList();
 
 		List<EntrypointContainer<DataGeneratorEntrypoint>> dataGeneratorInitializers = FabricLoader.getInstance()
 				.getEntrypointContainers(ENTRYPOINT_KEY, DataGeneratorEntrypoint.class);
@@ -92,7 +89,7 @@ public final class FabricDataGenHelper {
 			}
 
 			LOGGER.info("Running data generator for {}", entrypointContainer.getProvider().getMetadata().getName());
-			FabricDataGenerator dataGenerator = new FabricDataGenerator(outputDir, existingDir, entrypointContainer.getProvider(), STRICT_VALIDATION);
+			FabricDataGenerator dataGenerator = new FabricDataGenerator(outputDir, entrypointContainer.getProvider(), STRICT_VALIDATION);
 			entrypointContainer.getEntrypoint().onInitializeDataGenerator(dataGenerator);
 			dataGenerator.run();
 		}

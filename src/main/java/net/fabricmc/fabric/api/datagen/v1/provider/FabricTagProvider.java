@@ -16,24 +16,23 @@
 
 package net.fabricmc.fabric.api.datagen.v1.provider;
 
-import java.nio.file.Path;
-import java.util.Objects;
-import java.util.function.Function;
-
-import org.jetbrains.annotations.Nullable;
-
+import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.minecraft.core.Registry;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.tags.TagsProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.Tag;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.Fluid;
+import org.jetbrains.annotations.Nullable;
 
-import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
+import java.nio.file.Path;
+import java.util.Objects;
+import java.util.function.Function;
 
 /**
  * Implement this class (or one of the inner classes) to generate a tag list.
@@ -178,6 +177,24 @@ public abstract class FabricTagProvider<T> extends TagsProvider<T> {
 	}
 
 	/**
+	 * Extend this class to create {@link Registry} tags in the "/blocks" tag directory.
+	 */
+	public abstract static class RegistryTagProvider extends FabricTagProvider<Registry<?>> {
+		public RegistryTagProvider(FabricDataGenerator dataGenerator) {
+			super(dataGenerator, (Registry<Registry<?>>) Registry.REGISTRY, "registries", "Registry Tags");
+		}
+	}
+
+	/**
+	 * Extend this class to create {@link MobEffect} tags in the "/blocks" tag directory.
+	 */
+	public abstract static class MobEffectTagProvider extends FabricTagProvider<MobEffect> {
+		public MobEffectTagProvider(FabricDataGenerator dataGenerator) {
+			super(dataGenerator, Registry.MOB_EFFECT, "mob_effects", "Mob Effect Tags");
+		}
+	}
+
+	/**
 	 * An extension to {@link TagAppender} that provides additional functionality.
 	 */
 	public static class FabricTagBuilder<T> extends TagAppender<T> {
@@ -230,6 +247,18 @@ public abstract class FabricTagProvider<T> extends TagsProvider<T> {
 		@Override
 		public FabricTagBuilder<T> addTag(Tag.Named<T> tag) {
 			parent.addTag(tag);
+			return this;
+		}
+
+		/**
+		 * Add another tag to this tag.
+		 *
+		 * @return the {@link FabricTagBuilder} instance
+		 */
+		public FabricTagBuilder<T> addTags(Tag.Named<T>... values) {
+			for (Tag.Named<T> value : values) {
+				this.addTag(value);
+			}
 			return this;
 		}
 

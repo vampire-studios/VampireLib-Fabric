@@ -22,7 +22,10 @@
     "client": [
       "io.github.vampirestudios.vampirelib.client.network.BoatSpawnNetworkHandler::register",
       "io.github.vampirestudios.vampirelib.client.VampireLibClient"
-    ]
+    ],
+		"fabric-datagen": [
+			"io.github.vampirestudios.vampirelib.VampireLibDataGen"
+		]
   },
   "mixins": [
     "vampirelib.mixins.json",
