@@ -697,7 +697,7 @@ public class VampireLib extends BasicModClass {
     public static final List<ConvertibleBlockPair> CONVERTIBLE_BLOCKS = new ArrayList<>();
 
     public VampireLib() {
-        super("VampireLib", "4.1.0+build.1");
+        super("VampireLib", "4.2.1+build.1");
     }
 
     @Override

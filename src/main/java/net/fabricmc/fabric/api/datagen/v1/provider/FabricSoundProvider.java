@@ -41,8 +41,8 @@ import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 public abstract class FabricSoundProvider implements DataProvider {
     private static final Gson GSON = (new GsonBuilder()).setPrettyPrinting().create();
 
-    private final FabricDataGenerator dataGenerator;
-    private final String modId;
+    protected final FabricDataGenerator dataGenerator;
+    protected final String modId;
 
     private final Map<String, SoundDefinition> sounds = new LinkedHashMap<>();
 

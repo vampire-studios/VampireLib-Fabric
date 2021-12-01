@@ -678,14 +678,14 @@
 package io.github.vampirestudios.vampirelib.blocks;
 
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.FlowerPotBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.level.material.Material;
 
 public class FlowerPotBaseBlock extends FlowerPotBlock {
 
-    public FlowerPotBaseBlock(Block block_1) {
-        super(block_1, BlockBehaviour.Properties.of(Material.SAND).instabreak());
+    public FlowerPotBaseBlock(Block block) {
+        super(block, BlockBehaviour.Properties.copy(Blocks.POTTED_ACACIA_SAPLING));
     }
 
 }

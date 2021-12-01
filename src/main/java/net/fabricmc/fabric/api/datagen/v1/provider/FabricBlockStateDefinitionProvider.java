@@ -28,8 +28,11 @@ import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
  * <p>Register an instance of the class with {@link FabricDataGenerator#addProvider} in a {@link net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint}
  */
 public abstract class FabricBlockStateDefinitionProvider extends ModelProvider {
+	protected final FabricDataGenerator dataGenerator;
+
 	public FabricBlockStateDefinitionProvider(FabricDataGenerator generator) {
 		super(generator);
+		this.dataGenerator = generator;
 	}
 
 	public abstract void generateBlockStateModels(BlockModelGenerators blockStateModelGenerator);

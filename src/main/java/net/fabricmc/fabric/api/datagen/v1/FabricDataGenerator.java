@@ -62,9 +62,9 @@ public final class FabricDataGenerator extends DataGenerator {
 	}
 
 	/**
-	 * Returns the modid for the mod that this data generator has been created for.
+	 * Returns the mod ID for the mod that this data generator has been created for.
 	 *
-	 * @return a modid
+	 * @return a mod ID
 	 */
 	public String getModId() {
 		return getModContainer().getMetadata().getId();

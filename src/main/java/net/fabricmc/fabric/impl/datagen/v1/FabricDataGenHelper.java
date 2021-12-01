@@ -54,12 +54,12 @@ public final class FabricDataGenHelper {
 	private static final String EXISTING_DIR = System.getProperty("fabric-api.datagen.existing-dir");
 
 	/**
-	 * When enabled providers can enable extra validation, such as ensuring all registry entires have data generated for them.
+	 * When enabled providers can enable extra validation, such as ensuring all registry entries have data generated for them.
 	 */
-	private static final boolean STRICT_VALIDATION = System.getProperty("fabric-api.datagen.strict_validation") != null;
+	private static final boolean STRICT_VALIDATION = System.getProperty("fabric-api.datagen.strict-validation") != null;
 
 	/**
-	 * Filter to a specific modid with this property, useful if dependencies also have data generators.
+	 * Filter to a specific mod ID with this property, useful if dependencies also have data generators.
 	 */
 	@Nullable
 	private static final String MOD_ID_FILTER = System.getProperty("fabric-api.datagen.modid");

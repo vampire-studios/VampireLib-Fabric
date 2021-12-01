@@ -22,14 +22,15 @@ import java.util.function.BiConsumer;
 
 import com.google.common.collect.Sets;
 
+import net.minecraft.core.Registry;
 import net.minecraft.data.loot.BlockLoot;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSet;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
-import net.fabricmc.fabric.impl.datagen.v1.FabricLootTableProvider;
 
 /**
  * Extend this class and implement {@link FabricBlockLootTablesProvider#generateBlockLootTables}.
@@ -37,7 +38,7 @@ import net.fabricmc.fabric.impl.datagen.v1.FabricLootTableProvider;
  * <p>Register an instance of the class with {@link FabricDataGenerator#addProvider} in a {@link net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint}
  */
 public abstract class FabricBlockLootTablesProvider extends BlockLoot implements FabricLootTableProvider {
-	private final FabricDataGenerator dataGenerator;
+	protected final FabricDataGenerator dataGenerator;
 
 	protected FabricBlockLootTablesProvider(FabricDataGenerator dataGenerator) {
 		this.dataGenerator = dataGenerator;
@@ -45,7 +46,9 @@ public abstract class FabricBlockLootTablesProvider extends BlockLoot implements
 
 
 	/**
-	 * Use the range of {@link BlockLoot#dropSelf} methods to generate block drops.
+	 * Implement this method to add block drops.
+	 *
+	 * <p>Use the range of {@link BlockLoot#dropSelf} methods to generate block drops.
 	 */
 	protected abstract void generateBlockLootTables();
 
@@ -63,26 +66,22 @@ public abstract class FabricBlockLootTablesProvider extends BlockLoot implements
 	public void accept(BiConsumer<ResourceLocation, LootTable.Builder> biConsumer) {
 		generateBlockLootTables();
 
-		Set<ResourceLocation> generated = Sets.newHashSet();
-
 		for (Map.Entry<ResourceLocation, LootTable.Builder> entry : map.entrySet()) {
 			ResourceLocation identifier = entry.getKey();
 
-			generated.add(identifier);
-
-			if (identifier.equals(LootTable.EMPTY)) {
+			if (identifier.equals(BuiltInLootTables.EMPTY)) {
 				continue;
 			}
 
-			biConsumer.accept(entry.getKey(), entry.getValue());
+			biConsumer.accept(identifier, entry.getValue());
 		}
 
-		/*if (dataGenerator.isStrictValidationEnabled()) {
+		if (dataGenerator.isStrictValidationEnabled()) {
 			Set<ResourceLocation> missing = Sets.newHashSet();
 
 			for (ResourceLocation blockId : Registry.BLOCK.keySet()) {
 				if (blockId.getNamespace().equals(dataGenerator.getModId())) {
-					if (!generated.contains(blockId)) {
+					if (!map.containsKey(Registry.BLOCK.get(blockId).getLootTable())) {
 						missing.add(blockId);
 					}
 				}
@@ -91,7 +90,7 @@ public abstract class FabricBlockLootTablesProvider extends BlockLoot implements
 			if (!missing.isEmpty()) {
 				throw new IllegalStateException("Missing loot table(s) for %s".formatted(missing));
 			}
-		}*/
+		}
 	}
 
 	@Override

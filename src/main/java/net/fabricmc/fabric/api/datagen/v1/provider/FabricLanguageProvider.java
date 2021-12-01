@@ -46,12 +46,12 @@ import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
  * <p>Register an instance of the class with {@link FabricDataGenerator#addProvider} in a {@link net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint}
  */
 public abstract class FabricLanguageProvider implements DataProvider {
-	private static final Gson GSON = (new GsonBuilder()).setPrettyPrinting().create();
+	private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 	private final Map<String, String> data = new TreeMap<>();
 	private final String modId;
 	private final String locale;
 
-	private final FabricDataGenerator dataGenerator;
+	protected final FabricDataGenerator dataGenerator;
 
 	protected FabricLanguageProvider(FabricDataGenerator dataGenerator, String locale) {
 		this.dataGenerator = dataGenerator;

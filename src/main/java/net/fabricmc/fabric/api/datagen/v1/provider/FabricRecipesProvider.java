@@ -36,7 +36,7 @@ import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
  * <p>Register an instance of the class with {@link FabricDataGenerator#addProvider} in a {@link net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint}
  */
 public abstract class FabricRecipesProvider extends RecipeProvider {
-	private final FabricDataGenerator dataGenerator;
+	protected final FabricDataGenerator dataGenerator;
 
 	public FabricRecipesProvider(FabricDataGenerator dataGenerator) {
 		super(dataGenerator);
@@ -69,7 +69,7 @@ public abstract class FabricRecipesProvider extends RecipeProvider {
 	}
 
 	/**
-	 * Override this method to change the recipe identifier. The default implementation normalises the namespace to the modid.
+	 * Override this method to change the recipe identifier. The default implementation normalizes the namespace to the mod ID.
 	 */
 	protected ResourceLocation getRecipeIdentifier(ResourceLocation identifier) {
 		return new ResourceLocation(dataGenerator.getModId(), identifier.getPath());

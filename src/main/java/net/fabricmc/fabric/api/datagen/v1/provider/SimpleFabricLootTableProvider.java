@@ -24,14 +24,13 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParamSet;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
-import net.fabricmc.fabric.impl.datagen.v1.FabricLootTableProvider;
 
 /**
  * Extend this class and implement {@link java.util.function.Consumer#accept}. Register an instance of the class with {@link FabricDataGenerator#addProvider} in a {@link net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint}
  */
 public abstract class SimpleFabricLootTableProvider implements FabricLootTableProvider {
-	private final FabricDataGenerator dataGenerator;
-	private final LootContextParamSet lootContextType;
+	protected final FabricDataGenerator dataGenerator;
+	protected final LootContextParamSet lootContextType;
 
 	public SimpleFabricLootTableProvider(FabricDataGenerator dataGenerator, LootContextParamSet lootContextType) {
 		this.dataGenerator = dataGenerator;

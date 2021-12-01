@@ -688,10 +688,17 @@ import net.minecraft.client.model.BoatModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.Registry;
+import net.minecraft.data.BlockFamilies;
+import net.minecraft.data.BlockFamily;
 import net.minecraft.data.loot.BlockLoot;
 import net.minecraft.data.models.BlockModelGenerators;
+import net.minecraft.data.models.blockstates.MultiVariantGenerator;
+import net.minecraft.data.models.blockstates.VariantProperties;
+import net.minecraft.data.models.model.ModelLocationUtils;
 import net.minecraft.data.models.model.ModelTemplates;
 import net.minecraft.data.models.model.TextureMapping;
+import net.minecraft.data.models.model.TextureSlot;
+import net.minecraft.data.models.model.TexturedModel;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
@@ -739,6 +746,7 @@ import io.github.vampirestudios.vampirelib.blocks.CustomLadderBlock;
 import io.github.vampirestudios.vampirelib.blocks.DoorBaseBlock;
 import io.github.vampirestudios.vampirelib.blocks.FenceBaseBlock;
 import io.github.vampirestudios.vampirelib.blocks.FenceGateBaseBlock;
+import io.github.vampirestudios.vampirelib.blocks.FlowerPotBaseBlock;
 import io.github.vampirestudios.vampirelib.blocks.FungusBaseBlock;
 import io.github.vampirestudios.vampirelib.blocks.LeavesBaseBlock;
 import io.github.vampirestudios.vampirelib.blocks.PressurePlateBaseBlock;
@@ -756,7 +764,9 @@ import io.github.vampirestudios.vampirelib.utils.ArtificeGenerationHelper;
 import io.github.vampirestudios.vampirelib.utils.Utils;
 
 import static net.minecraft.data.loot.BlockLoot.createSingleItemTableWithSilkTouch;
+import static net.minecraft.data.models.BlockModelGenerators.createHorizontalFacingDispatch;
 import static net.minecraft.data.models.BlockModelGenerators.createSimpleBlock;
+import static net.minecraft.data.models.BlockModelGenerators.createTrapdoor;
 import static net.minecraft.data.recipes.RecipeProvider.has;
 
 public class WoodRegistry {
@@ -773,6 +783,7 @@ public class WoodRegistry {
     private Block planks;
     private Block leaves;
     private Block sapling;
+    private Block pottedSapling;
     private Block fence;
     private Block fenceGate;
     private Block bookshelf;
@@ -862,6 +873,10 @@ public class WoodRegistry {
         return sapling;
     }
 
+    public Block pottedSapling() {
+        return pottedSapling;
+    }
+
     public Block fence() {
         return fence;
     }
@@ -914,7 +929,7 @@ public class WoodRegistry {
         return boatItem;
     }
 
-    public void generateBlockTags(FabricTagProvider.Blocks blockTags) {
+    public void generateBlockTags(FabricTagProvider.BlockTagProvider blockTags) {
         blockTags.tag(logsTag).add(log, strippedLog, wood, strippedWood);
         blockTags.tag(BlockTags.LOGS).addTag(logsTag);
         blockTags.tag(BlockTags.PLANKS).add(planks);
@@ -925,6 +940,7 @@ public class WoodRegistry {
         if (button != null) blockTags.tag(BlockTags.WOODEN_BUTTONS).add(button);
         if (door != null) blockTags.tag(BlockTags.WOODEN_DOORS).add(door);
         if (sapling != null) blockTags.tag(BlockTags.SAPLINGS).add(sapling);
+        if (pottedSapling != null) blockTags.tag(BlockTags.FLOWER_POTS).add(pottedSapling);
         if (fence != null) blockTags.tag(BlockTags.WOODEN_FENCES).add(fence);
         if (fenceGate != null) blockTags.tag(BlockTags.FENCE_GATES).add(fenceGate);
         if (pressurePlate != null) blockTags.tag(BlockTags.PRESSURE_PLATES).add(pressurePlate);
@@ -946,7 +962,7 @@ public class WoodRegistry {
         }
     }
 
-    public void generateItemTags(FabricTagProvider.Items itemsTag) {
+    public void generateItemTags(FabricTagProvider.ItemTagProvider itemsTag) {
         itemsTag.copy(logsTag, logsItemTag);
         itemsTag.copy(BlockTags.LOGS, ItemTags.LOGS);
         itemsTag.copy(BlockTags.LOGS_THAT_BURN, ItemTags.LOGS_THAT_BURN);
@@ -963,24 +979,40 @@ public class WoodRegistry {
     }
 
     public void generateModels(BlockModelGenerators blockStateModelGenerator) {
-        blockStateModelGenerator.woodProvider(log).log(log).wood(wood);
-        blockStateModelGenerator.woodProvider(strippedLog).log(strippedLog).wood(strippedWood);
-        if (leaves != null) blockStateModelGenerator.createTrivialCube(leaves);
+        blockStateModelGenerator.woodProvider(log).logWithHorizontal(log).wood(wood);
+        blockStateModelGenerator.woodProvider(strippedLog).logWithHorizontal(strippedLog).wood(strippedWood);
+        if (leaves != null) blockStateModelGenerator.createTrivialBlock(leaves, TexturedModel.LEAVES.updateTexture(textureMapping ->
+            textureMapping.put(TextureSlot.ALL, Utils.appendAndPrependToPath(name, "block/", "_leaves"))));
         if (door != null) blockStateModelGenerator.createDoor(door);
-        if (trapdoor != null) blockStateModelGenerator.createTrapdoor(trapdoor);
-        if (sapling != null) blockStateModelGenerator.createCrossBlockWithDefaultItem(sapling, BlockModelGenerators.TintState.NOT_TINTED);
+        if (trapdoor != null) {
+            TextureMapping textureMapping = TextureMapping.defaultTexture(Utils.appendAndPrependToPath(name, "block/", "_trapdoor"));
+            ResourceLocation resourceLocation = ModelTemplates.TRAPDOOR_TOP.create(trapdoor, textureMapping, blockStateModelGenerator.modelOutput);
+            ResourceLocation resourceLocation2 = ModelTemplates.TRAPDOOR_BOTTOM.create(trapdoor, textureMapping, blockStateModelGenerator.modelOutput);
+            ResourceLocation resourceLocation3 = ModelTemplates.TRAPDOOR_OPEN.create(trapdoor, textureMapping, blockStateModelGenerator.modelOutput);
+            blockStateModelGenerator.blockStateOutput.accept(createTrapdoor(trapdoor, resourceLocation, resourceLocation2, resourceLocation3));
+            blockStateModelGenerator.delegateItemModel(trapdoor, resourceLocation2);
+        }
+        if (planks != null) blockStateModelGenerator.createTrivialBlock(planks, TexturedModel.CUBE.updateTexture(textureMapping ->
+            textureMapping.put(TextureSlot.ALL, Utils.appendAndPrependToPath(name, "block/", "_planks"))));
+        if (ladder != null) {
+            blockStateModelGenerator.blockStateOutput.accept(MultiVariantGenerator.multiVariant(ladder, net.minecraft.data.models.blockstates.Variant.variant()
+                .with(VariantProperties.MODEL, ModelLocationUtils.getModelLocation(Blocks.LADDER))).with(createHorizontalFacingDispatch()));
+            blockStateModelGenerator.createSimpleFlatItemModel(ladder);
+        }
+        if (sapling != null) blockStateModelGenerator.createPlant(sapling, pottedSapling, BlockModelGenerators.TintState.NOT_TINTED);
         if (bookshelf != null) {
-            TextureMapping textureMapping = TextureMapping.column(TextureMapping.getBlockTexture(bookshelf), TextureMapping.getBlockTexture(planks));
+            TextureMapping textureMapping = TextureMapping.column(Utils.appendAndPrependToPath(name, "block/", "_bookshelf"),
+                Utils.appendAndPrependToPath(name, "block/", "_planks"));
             ResourceLocation resourceLocation = ModelTemplates.CUBE_COLUMN.create(bookshelf, textureMapping, blockStateModelGenerator.modelOutput);
             blockStateModelGenerator.blockStateOutput.accept(createSimpleBlock(bookshelf, resourceLocation));
         }
-        BlockModelGenerators.BlockFamilyProvider familyProvider = blockStateModelGenerator.family(planks);
-        if (fence != null) familyProvider.fence(fence);
-        if (slab != null) familyProvider.slab(slab);
-        if (stairs != null) familyProvider.stairs(stairs);
-        if (fenceGate != null) familyProvider.fenceGate(fenceGate);
-        if (pressurePlate != null) familyProvider.pressurePlate(pressurePlate);
-        if (button != null) familyProvider.button(button);
+        BlockFamily.Builder family = BlockFamilies.familyBuilder(planks);
+        if (fence != null) family.fence(fence);
+        if (slab != null) family.slab(slab);
+        if (stairs != null) family.stairs(stairs);
+        if (fenceGate != null) family.fenceGate(fenceGate);
+        if (pressurePlate != null) family.pressurePlate(pressurePlate);
+        if (button != null) family.button(button);
     }
 
     public void generateLang(FabricLanguageProvider languageProvider) {
@@ -991,6 +1023,7 @@ public class WoodRegistry {
         languageProvider.addBlock(strippedWood, "Stripped " + translatedName + (mushroomLike ? " Hyphae" : " Wood"));
         languageProvider.addBlock(planks, translatedName + " Planks");
         if (sapling != null) languageProvider.addBlock(sapling, translatedName + (mushroomLike ? " Fungi" : " Sapling"));
+        if (pottedSapling != null) languageProvider.addBlock(pottedSapling, "Potted " + translatedName + (mushroomLike ? " Fungi" : " Sapling"));
         if (trapdoor != null) languageProvider.addBlock(trapdoor, translatedName + " Trapdoor");
         if (door != null) languageProvider.addBlock(door, translatedName + " Door");
         if (leaves != null) languageProvider.addBlock(leaves, translatedName + (mushroomLike ? " Wart Block" : " Leaves"));
@@ -1248,11 +1281,23 @@ public class WoodRegistry {
             return this;
         }
 
+        public Builder pottedSapling() {
+            woodRegistry.sapling = registryHelper.blocks().registerBlock(new FlowerPotBaseBlock(woodRegistry.sapling),
+                "potted_" + name.getPath() + (!woodRegistry.mushroomLike ? "_sapling" : "_fungus"), CreativeModeTab.TAB_DECORATIONS);
+            return this;
+        }
+
         public Builder sapling(String nameIn) {
             if (!woodRegistry.mushroomLike) woodRegistry.sapling = registryHelper.blocks().registerBlock(new SaplingBaseBlock(woodRegistry.saplingGenerator),
                 nameIn + "_sapling", CreativeModeTab.TAB_DECORATIONS);
             else woodRegistry.sapling = registryHelper.blocks().registerBlock(new FungusBaseBlock(woodRegistry.fungusGenerator),
                 nameIn + "_fungus", CreativeModeTab.TAB_DECORATIONS);
+            return this;
+        }
+
+        public Builder pottedSapling(String nameIn) {
+            woodRegistry.sapling = registryHelper.blocks().registerBlock(new FlowerPotBaseBlock(woodRegistry.sapling),
+                "potted_" + nameIn + (!woodRegistry.mushroomLike ? "_sapling" : "_fungus"), CreativeModeTab.TAB_DECORATIONS);
             return this;
         }
 
@@ -1267,6 +1312,14 @@ public class WoodRegistry {
                         saplingName + "_fungus", CreativeModeTab.TAB_DECORATIONS);
                     availableSaplings.add(saplingName + "_fungus");
                 }
+            }
+            return this;
+        }
+
+        public Builder pottedSapling(String... names) {
+            for (String saplingName : names) {
+                woodRegistry.sapling = registryHelper.blocks().registerBlock(new FlowerPotBaseBlock(woodRegistry.sapling),
+                    "potted_" + saplingName + (!woodRegistry.mushroomLike ? "_sapling" : "_fungus"), CreativeModeTab.TAB_DECORATIONS);
             }
             return this;
         }
@@ -1347,7 +1400,7 @@ public class WoodRegistry {
         }
 
         public Builder defaultBlocks() {
-            return this.defaultLogsAndWoods().planks().leaves().sapling();
+            return this.defaultLogsAndWoods().planks().leaves().sapling().pottedSapling();
         }
 
         public Builder defaultExtraBlocks() {
@@ -1355,7 +1408,7 @@ public class WoodRegistry {
         }
 
         public Builder defaultBlocksColoredLeaves() {
-            return this.defaultLogsAndWoods().planks().coloredLeaves().sapling();
+            return this.defaultLogsAndWoods().planks().coloredLeaves().sapling().pottedSapling();
         }
 
         public WoodRegistry build() {
