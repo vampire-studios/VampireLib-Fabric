@@ -690,11 +690,18 @@ import io.github.vampirestudios.vampirelib.api.BasicModClass;
 import io.github.vampirestudios.vampirelib.api.ConvertibleBlockPair;
 import io.github.vampirestudios.vampirelib.utils.Rands;
 import io.github.vampirestudios.vampirelib.utils.registry.BlockChiseler;
+import io.github.vampirestudios.vampirelib.utils.registry.WoodRegistry;
 
 public class VampireLib extends BasicModClass {
     public static final VampireLib INSTANCE = new VampireLib();
 
     public static final List<ConvertibleBlockPair> CONVERTIBLE_BLOCKS = new ArrayList<>();
+
+    public static WoodRegistry TEST_MOD_WOOD;
+    public static WoodRegistry TEST_MOD_WOOD1;
+    public static WoodRegistry TEST_MOD_WOOD2;
+    public static WoodRegistry TEST_MOD_WOOD3;
+    public static WoodRegistry TEST_MOD_WOOD4;
 
     public VampireLib() {
         super("VampireLib", "4.2.1+build.1");
@@ -706,6 +713,17 @@ public class VampireLib extends BasicModClass {
         getLogger().info(String.format("%s running %s v%s for %s", Rands.chance(15) ? "Your are" : (Rands.chance(15) ? "You're" : "You are"),
             modName(), modVersion(), SharedConstants.getCurrentVersion().getName()));
         BlockChiseler.setup();
+
+        TEST_MOD_WOOD = WoodRegistry.of(identifier("test"))
+            .defaultBlocks().defaultExtraBlocks().ladder().bookshelf().build();
+        TEST_MOD_WOOD1 = WoodRegistry.of(identifier("test1"))
+            .defaultBlocks().defaultExtraBlocks().ladder().bookshelf().build();
+        TEST_MOD_WOOD2 = WoodRegistry.of(identifier("test2"))
+            .defaultBlocks().defaultExtraBlocks().ladder().bookshelf().build();
+        TEST_MOD_WOOD3 = WoodRegistry.of(identifier("test3"))
+            .defaultBlocks().defaultExtraBlocks().ladder().bookshelf().build();
+        TEST_MOD_WOOD4 = WoodRegistry.of(identifier("test4"))
+            .defaultBlocks().defaultExtraBlocks().ladder().bookshelf().build();
 
         for (ConvertibleBlockPair convertibleBlock : CONVERTIBLE_BLOCKS) {
             UseBlockCallback.EVENT.register((player, world, hand, hitResult) -> {
