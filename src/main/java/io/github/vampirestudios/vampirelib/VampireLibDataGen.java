@@ -16,9 +16,14 @@
 
 package io.github.vampirestudios.vampirelib;
 
-import java.util.Locale;
-import java.util.function.Consumer;
-
+import io.github.vampirestudios.vampirelib.init.VTags;
+import io.github.vampirestudios.vampirelib.utils.registry.WoodRegistry;
+import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
+import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockStateDefinitionProvider;
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipesProvider;
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
 import net.minecraft.core.Registry;
 import net.minecraft.data.models.BlockModelGenerators;
 import net.minecraft.data.models.ItemModelGenerators;
@@ -32,90 +37,23 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 
-import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
-import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockStateDefinitionProvider;
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipesProvider;
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
+import java.util.Locale;
+import java.util.function.Consumer;
 
-import io.github.vampirestudios.vampirelib.init.VTags;
-import io.github.vampirestudios.vampirelib.utils.registry.WoodRegistry;
-
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.BARRELS;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.BARRELS_WOODEN;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.CHESTS;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.CHESTS_ENDER;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.CHESTS_TRAPPED;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.CHESTS_WOODEN;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.COBBLESTONE;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.DIRT;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.ENDERMAN_PLACE_ON_BLACKLIST;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.END_STONES;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.FENCES_NETHER_BRICK;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.FENCES_WOODEN;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.FENCE_GATES_WOODEN;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.GLASS;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.GLASS_COLORLESS;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.GLASS_PANES;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.GLASS_PANES_COLORLESS;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.GLASS_SILICA;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.GLASS_TINTED;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.GRAVEL;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.NETHERRACK;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.OBSIDIAN;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.ORES;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.ORES_COAL;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.ORES_COPPER;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.ORES_DIAMOND;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.ORES_EMERALD;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.ORES_GOLD;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.ORES_IN_GROUND_DEEPSLATE;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.ORES_IN_GROUND_NETHERRACK;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.ORES_IN_GROUND_STONE;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.ORES_IRON;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.ORES_LAPIS;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.ORES_NETHERITE_SCRAP;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.ORES_QUARTZ;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.ORES_REDSTONE;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.ORE_BEARING_GROUND_DEEPSLATE;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.ORE_BEARING_GROUND_NETHERRACK;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.ORE_BEARING_GROUND_STONE;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.ORE_RATES_DENSE;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.ORE_RATES_SINGULAR;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.ORE_RATES_SPARSE;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.SAND;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.SANDSTONE;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.SAND_COLORLESS;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.SAND_RED;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.STAINED_GLASS;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.STAINED_GLASS_PANES;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.STONE;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.STORAGE_BLOCKS;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.STORAGE_BLOCKS_AMETHYST;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.STORAGE_BLOCKS_COAL;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.STORAGE_BLOCKS_COPPER;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.STORAGE_BLOCKS_DIAMOND;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.STORAGE_BLOCKS_EMERALD;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.STORAGE_BLOCKS_GOLD;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.STORAGE_BLOCKS_IRON;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.STORAGE_BLOCKS_LAPIS;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.STORAGE_BLOCKS_NETHERITE;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.STORAGE_BLOCKS_QUARTZ;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.STORAGE_BLOCKS_RAW_COPPER;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.STORAGE_BLOCKS_RAW_GOLD;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.STORAGE_BLOCKS_RAW_IRON;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.STORAGE_BLOCKS_REDSTONE;
+import static io.github.vampirestudios.vampirelib.VampireLib.TEST_CONTENT_ENABLED;
+import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.*;
 import static net.minecraft.tags.BlockTags.FENCES;
 import static net.minecraft.tags.BlockTags.FENCE_GATES;
 
 public class VampireLibDataGen implements DataGeneratorEntrypoint {
 	@Override
 	public void onInitializeDataGenerator(FabricDataGenerator dataGenerator) {
-//		dataGenerator.addProvider(WoodTypeBlockStateDefinitionProvider::new);
-//		dataGenerator.addProvider(WoodTypeEnglishLanguageProvider::new);
-//		dataGenerator.addProvider(WoodTypeFrenchLanguageProvider::new);
-//		dataGenerator.addProvider(WoodTypeRecipeProvider::new);
+		if (TEST_CONTENT_ENABLED) {
+			dataGenerator.addProvider(WoodTypeBlockStateDefinitionProvider::new);
+			dataGenerator.addProvider(WoodTypeEnglishLanguageProvider::new);
+			dataGenerator.addProvider(WoodTypeFrenchLanguageProvider::new);
+			dataGenerator.addProvider(WoodTypeRecipeProvider::new);
+		}
 		TestBlockTagsProvider blockTagsProvider = dataGenerator.addProvider(TestBlockTagsProvider::new);
 		dataGenerator.addProvider(new TestItemTagsProvider(dataGenerator, blockTagsProvider));
 	}
@@ -127,11 +65,23 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
 
 		@Override
 		public void generateBlockStateModels(BlockModelGenerators blockStateModelGenerator) {
-			generateWoodTypeAssets(blockStateModelGenerator, VampireLib.TEST_MOD_WOOD);
-			generateWoodTypeAssets(blockStateModelGenerator, VampireLib.TEST_MOD_WOOD1);
-			generateWoodTypeAssets(blockStateModelGenerator, VampireLib.TEST_MOD_WOOD2);
-			generateWoodTypeAssets(blockStateModelGenerator, VampireLib.TEST_MOD_WOOD3);
-			generateWoodTypeAssets(blockStateModelGenerator, VampireLib.TEST_MOD_WOOD4);
+			generateWoodTypeAssets(blockStateModelGenerator, VampireLib.TEST_WOOD);
+			generateWoodTypeAssets(blockStateModelGenerator, VampireLib.TEST_WOOD1);
+			generateWoodTypeAssets(blockStateModelGenerator, VampireLib.TEST_WOOD2);
+			generateWoodTypeAssets(blockStateModelGenerator, VampireLib.TEST_WOOD3);
+			generateWoodTypeAssets(blockStateModelGenerator, VampireLib.TEST_WOOD4);
+			generateWoodTypeAssets(blockStateModelGenerator, VampireLib.TEST_WOOD5);
+			generateWoodTypeAssets(blockStateModelGenerator, VampireLib.TEST_WOOD6);
+			generateWoodTypeAssets(blockStateModelGenerator, VampireLib.TEST_WOOD7);
+
+			generateWoodTypeAssets(blockStateModelGenerator, VampireLib.TEST_NETHER_WOOD);
+			generateWoodTypeAssets(blockStateModelGenerator, VampireLib.TEST_NETHER_WOOD1);
+			generateWoodTypeAssets(blockStateModelGenerator, VampireLib.TEST_NETHER_WOOD2);
+			generateWoodTypeAssets(blockStateModelGenerator, VampireLib.TEST_NETHER_WOOD3);
+			generateWoodTypeAssets(blockStateModelGenerator, VampireLib.TEST_NETHER_WOOD4);
+			generateWoodTypeAssets(blockStateModelGenerator, VampireLib.TEST_NETHER_WOOD5);
+			generateWoodTypeAssets(blockStateModelGenerator, VampireLib.TEST_NETHER_WOOD6);
+			generateWoodTypeAssets(blockStateModelGenerator, VampireLib.TEST_NETHER_WOOD7);
 		}
 
 		@Override
@@ -147,11 +97,23 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
 	private static class WoodTypeEnglishLanguageProvider extends FabricLanguageProvider {
 		private WoodTypeEnglishLanguageProvider(FabricDataGenerator dataGenerator) {
 			super(dataGenerator, "en_us");
-			addWoodTypeLang(VampireLib.TEST_MOD_WOOD);
-			addWoodTypeLang(VampireLib.TEST_MOD_WOOD1);
-			addWoodTypeLang(VampireLib.TEST_MOD_WOOD2);
-			addWoodTypeLang(VampireLib.TEST_MOD_WOOD3);
-			addWoodTypeLang(VampireLib.TEST_MOD_WOOD4);
+			addWoodTypeLang(VampireLib.TEST_WOOD);
+			addWoodTypeLang(VampireLib.TEST_WOOD1);
+			addWoodTypeLang(VampireLib.TEST_WOOD2);
+			addWoodTypeLang(VampireLib.TEST_WOOD3);
+			addWoodTypeLang(VampireLib.TEST_WOOD4);
+			addWoodTypeLang(VampireLib.TEST_WOOD5);
+			addWoodTypeLang(VampireLib.TEST_WOOD6);
+			addWoodTypeLang(VampireLib.TEST_WOOD7);
+
+			addWoodTypeLang(VampireLib.TEST_NETHER_WOOD);
+			addWoodTypeLang(VampireLib.TEST_NETHER_WOOD1);
+			addWoodTypeLang(VampireLib.TEST_NETHER_WOOD2);
+			addWoodTypeLang(VampireLib.TEST_NETHER_WOOD3);
+			addWoodTypeLang(VampireLib.TEST_NETHER_WOOD4);
+			addWoodTypeLang(VampireLib.TEST_NETHER_WOOD5);
+			addWoodTypeLang(VampireLib.TEST_NETHER_WOOD6);
+			addWoodTypeLang(VampireLib.TEST_NETHER_WOOD7);
 		}
 
 		private void addWoodTypeLang(WoodRegistry woodRegistry) {
@@ -162,11 +124,23 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
 	private static class WoodTypeFrenchLanguageProvider extends FabricLanguageProvider {
 		private WoodTypeFrenchLanguageProvider(FabricDataGenerator dataGenerator) {
 			super(dataGenerator, "fr_fr");
-			addWoodTypeLang(VampireLib.TEST_MOD_WOOD);
-			addWoodTypeLang(VampireLib.TEST_MOD_WOOD1);
-			addWoodTypeLang(VampireLib.TEST_MOD_WOOD2);
-			addWoodTypeLang(VampireLib.TEST_MOD_WOOD3);
-			addWoodTypeLang(VampireLib.TEST_MOD_WOOD4);
+			addWoodTypeLang(VampireLib.TEST_WOOD);
+			addWoodTypeLang(VampireLib.TEST_WOOD1);
+			addWoodTypeLang(VampireLib.TEST_WOOD2);
+			addWoodTypeLang(VampireLib.TEST_WOOD3);
+			addWoodTypeLang(VampireLib.TEST_WOOD4);
+			addWoodTypeLang(VampireLib.TEST_WOOD5);
+			addWoodTypeLang(VampireLib.TEST_WOOD6);
+			addWoodTypeLang(VampireLib.TEST_WOOD7);
+
+			addWoodTypeLang(VampireLib.TEST_NETHER_WOOD);
+			addWoodTypeLang(VampireLib.TEST_NETHER_WOOD1);
+			addWoodTypeLang(VampireLib.TEST_NETHER_WOOD2);
+			addWoodTypeLang(VampireLib.TEST_NETHER_WOOD3);
+			addWoodTypeLang(VampireLib.TEST_NETHER_WOOD4);
+			addWoodTypeLang(VampireLib.TEST_NETHER_WOOD5);
+			addWoodTypeLang(VampireLib.TEST_NETHER_WOOD6);
+			addWoodTypeLang(VampireLib.TEST_NETHER_WOOD7);
 		}
 
 		private void addWoodTypeLang(WoodRegistry woodRegistry) {
@@ -181,11 +155,23 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
 
 		@Override
 		protected void generateRecipes(Consumer<FinishedRecipe> exporter) {
-			generateWoodTypeRecipes(exporter, VampireLib.TEST_MOD_WOOD);
-			generateWoodTypeRecipes(exporter, VampireLib.TEST_MOD_WOOD1);
-			generateWoodTypeRecipes(exporter, VampireLib.TEST_MOD_WOOD2);
-			generateWoodTypeRecipes(exporter, VampireLib.TEST_MOD_WOOD3);
-			generateWoodTypeRecipes(exporter, VampireLib.TEST_MOD_WOOD4);
+			generateWoodTypeRecipes(exporter, VampireLib.TEST_WOOD);
+			generateWoodTypeRecipes(exporter, VampireLib.TEST_WOOD1);
+			generateWoodTypeRecipes(exporter, VampireLib.TEST_WOOD2);
+			generateWoodTypeRecipes(exporter, VampireLib.TEST_WOOD3);
+			generateWoodTypeRecipes(exporter, VampireLib.TEST_WOOD4);
+			generateWoodTypeRecipes(exporter, VampireLib.TEST_WOOD5);
+			generateWoodTypeRecipes(exporter, VampireLib.TEST_WOOD6);
+			generateWoodTypeRecipes(exporter, VampireLib.TEST_WOOD7);
+
+			generateWoodTypeRecipes(exporter, VampireLib.TEST_NETHER_WOOD);
+			generateWoodTypeRecipes(exporter, VampireLib.TEST_NETHER_WOOD1);
+			generateWoodTypeRecipes(exporter, VampireLib.TEST_NETHER_WOOD2);
+			generateWoodTypeRecipes(exporter, VampireLib.TEST_NETHER_WOOD3);
+			generateWoodTypeRecipes(exporter, VampireLib.TEST_NETHER_WOOD4);
+			generateWoodTypeRecipes(exporter, VampireLib.TEST_NETHER_WOOD5);
+			generateWoodTypeRecipes(exporter, VampireLib.TEST_NETHER_WOOD6);
+			generateWoodTypeRecipes(exporter, VampireLib.TEST_NETHER_WOOD7);
 		}
 
 		private void generateWoodTypeRecipes(Consumer<FinishedRecipe> exporter, WoodRegistry woodRegistry) {

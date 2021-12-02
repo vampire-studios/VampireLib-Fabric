@@ -677,34 +677,45 @@
 
 package io.github.vampirestudios.vampirelib;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import net.minecraft.SharedConstants;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.item.ItemStack;
-
-import net.fabricmc.fabric.api.event.player.UseBlockCallback;
-
 import io.github.vampirestudios.vampirelib.api.BasicModClass;
 import io.github.vampirestudios.vampirelib.api.ConvertibleBlockPair;
 import io.github.vampirestudios.vampirelib.utils.Rands;
 import io.github.vampirestudios.vampirelib.utils.registry.BlockChiseler;
 import io.github.vampirestudios.vampirelib.utils.registry.WoodRegistry;
+import net.fabricmc.fabric.api.event.player.UseBlockCallback;
+import net.minecraft.SharedConstants;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.item.ItemStack;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class VampireLib extends BasicModClass {
     public static final VampireLib INSTANCE = new VampireLib();
 
     public static final List<ConvertibleBlockPair> CONVERTIBLE_BLOCKS = new ArrayList<>();
+	public static final boolean TEST_CONTENT_ENABLED = true;
 
-    public static WoodRegistry TEST_MOD_WOOD;
-    public static WoodRegistry TEST_MOD_WOOD1;
-    public static WoodRegistry TEST_MOD_WOOD2;
-    public static WoodRegistry TEST_MOD_WOOD3;
-    public static WoodRegistry TEST_MOD_WOOD4;
+    public static WoodRegistry TEST_WOOD;
+    public static WoodRegistry TEST_WOOD1;
+    public static WoodRegistry TEST_WOOD2;
+    public static WoodRegistry TEST_WOOD3;
+    public static WoodRegistry TEST_WOOD4;
+	public static WoodRegistry TEST_WOOD5;
+	public static WoodRegistry TEST_WOOD6;
+	public static WoodRegistry TEST_WOOD7;
+
+	public static WoodRegistry TEST_NETHER_WOOD;
+	public static WoodRegistry TEST_NETHER_WOOD1;
+	public static WoodRegistry TEST_NETHER_WOOD2;
+	public static WoodRegistry TEST_NETHER_WOOD3;
+	public static WoodRegistry TEST_NETHER_WOOD4;
+	public static WoodRegistry TEST_NETHER_WOOD5;
+	public static WoodRegistry TEST_NETHER_WOOD6;
+	public static WoodRegistry TEST_NETHER_WOOD7;
 
     public VampireLib() {
-        super("VampireLib", "4.2.1+build.1");
+        super("vampirelib", "VampireLib", "4.2.1+build.1");
     }
 
     @Override
@@ -714,16 +725,49 @@ public class VampireLib extends BasicModClass {
             modName(), modVersion(), SharedConstants.getCurrentVersion().getName()));
         BlockChiseler.setup();
 
-        TEST_MOD_WOOD = WoodRegistry.of(identifier("test"))
-            .defaultBlocks().defaultExtraBlocks().ladder().bookshelf().build();
-        TEST_MOD_WOOD1 = WoodRegistry.of(identifier("test1"))
-            .defaultBlocks().defaultExtraBlocks().ladder().bookshelf().build();
-        TEST_MOD_WOOD2 = WoodRegistry.of(identifier("test2"))
-            .defaultBlocks().defaultExtraBlocks().ladder().bookshelf().build();
-        TEST_MOD_WOOD3 = WoodRegistry.of(identifier("test3"))
-            .defaultBlocks().defaultExtraBlocks().ladder().bookshelf().build();
-        TEST_MOD_WOOD4 = WoodRegistry.of(identifier("test4"))
-            .defaultBlocks().defaultExtraBlocks().ladder().bookshelf().build();
+        if (TEST_CONTENT_ENABLED) {
+			//Overworld
+			TEST_WOOD = WoodRegistry.of(identifier("test"))
+				.defaultBlocks().build();
+			TEST_WOOD1 = WoodRegistry.of(identifier("test1"))
+				.defaultBlocksColoredLeaves().build();
+
+			TEST_WOOD2 = WoodRegistry.of(identifier("test2"))
+				.defaultBlocks().defaultExtraBlocks().build();
+			TEST_WOOD3 = WoodRegistry.of(identifier("test3"))
+				.defaultBlocksColoredLeaves().defaultExtraBlocks().build();
+
+			TEST_WOOD4 = WoodRegistry.of(identifier("test4"))
+				.defaultBlocks().defaultExtraBlocks().ladder().build();
+			TEST_WOOD5 = WoodRegistry.of(identifier("test5"))
+				.defaultBlocksColoredLeaves().defaultExtraBlocks().ladder().build();
+
+			TEST_WOOD6 = WoodRegistry.of(identifier("test6"))
+				.defaultBlocks().defaultExtraBlocks().ladder().bookshelf().build();
+			TEST_WOOD7 = WoodRegistry.of(identifier("test7"))
+				.defaultBlocksColoredLeaves().defaultExtraBlocks().ladder().bookshelf().build();
+
+			//Nether
+			TEST_NETHER_WOOD = WoodRegistry.of(identifier("test_nether"))
+				.defaultBlocks().mushroomLike().build();
+			TEST_NETHER_WOOD1 = WoodRegistry.of(identifier("test1_nether"))
+				.defaultBlocksColoredLeaves().mushroomLike().build();
+
+			TEST_NETHER_WOOD2 = WoodRegistry.of(identifier("test2_nether"))
+				.defaultBlocks().defaultExtraBlocks().mushroomLike().build();
+			TEST_NETHER_WOOD3 = WoodRegistry.of(identifier("test3_nether"))
+				.defaultBlocksColoredLeaves().defaultExtraBlocks().mushroomLike().build();
+
+			TEST_NETHER_WOOD4 = WoodRegistry.of(identifier("test4_nether"))
+				.defaultBlocks().defaultExtraBlocks().ladder().mushroomLike().build();
+			TEST_NETHER_WOOD5 = WoodRegistry.of(identifier("test5_nether"))
+				.defaultBlocksColoredLeaves().defaultExtraBlocks().ladder().mushroomLike().build();
+
+			TEST_NETHER_WOOD6 = WoodRegistry.of(identifier("test6_nether"))
+				.defaultBlocks().defaultExtraBlocks().ladder().bookshelf().mushroomLike().build();
+			TEST_NETHER_WOOD7 = WoodRegistry.of(identifier("test7_nether"))
+				.defaultBlocksColoredLeaves().defaultExtraBlocks().ladder().bookshelf().mushroomLike().build();
+		}
 
         for (ConvertibleBlockPair convertibleBlock : CONVERTIBLE_BLOCKS) {
             UseBlockCallback.EVENT.register((player, world, hand, hitResult) -> {

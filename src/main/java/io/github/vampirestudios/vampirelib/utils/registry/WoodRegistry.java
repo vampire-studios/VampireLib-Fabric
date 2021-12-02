@@ -677,28 +677,39 @@
 
 package io.github.vampirestudios.vampirelib.utils.registry;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Consumer;
-
 import com.swordglowsblue.artifice.api.Artifice;
-import org.apache.commons.lang3.text.WordUtils;
-
+import io.github.vampirestudios.vampirelib.blocks.*;
+import io.github.vampirestudios.vampirelib.boat.CustomBoatEntity;
+import io.github.vampirestudios.vampirelib.boat.CustomBoatInfo;
+import io.github.vampirestudios.vampirelib.client.VampireLibClient;
+import io.github.vampirestudios.vampirelib.client.renderer.CustomBoatEntityRenderer;
+import io.github.vampirestudios.vampirelib.init.VEntityModelLayers;
+import io.github.vampirestudios.vampirelib.items.CustomBoatItem;
+import io.github.vampirestudios.vampirelib.utils.ArtificeGenerationHelper;
+import io.github.vampirestudios.vampirelib.utils.Utils;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootTablesProvider;
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
+import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
+import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
+import net.fabricmc.fabric.api.registry.FlammableBlockRegistry;
+import net.fabricmc.fabric.api.registry.FuelRegistry;
+import net.fabricmc.fabric.api.registry.StrippableBlockRegistry;
+import net.fabricmc.fabric.api.tag.TagFactory;
+import net.fabricmc.fabric.impl.blockrenderlayer.BlockRenderLayerMapImpl;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.model.BoatModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.Registry;
-import net.minecraft.data.BlockFamilies;
-import net.minecraft.data.BlockFamily;
 import net.minecraft.data.loot.BlockLoot;
 import net.minecraft.data.models.BlockModelGenerators;
 import net.minecraft.data.models.blockstates.MultiVariantGenerator;
 import net.minecraft.data.models.blockstates.VariantProperties;
-import net.minecraft.data.models.model.ModelLocationUtils;
-import net.minecraft.data.models.model.ModelTemplates;
-import net.minecraft.data.models.model.TextureMapping;
-import net.minecraft.data.models.model.TextureSlot;
-import net.minecraft.data.models.model.TexturedModel;
+import net.minecraft.data.models.model.*;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
@@ -723,51 +734,14 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.HugeFungusConfiguration;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
+import org.apache.commons.lang3.text.WordUtils;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
-import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootTablesProvider;
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
-import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
-import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
-import net.fabricmc.fabric.api.registry.FlammableBlockRegistry;
-import net.fabricmc.fabric.api.registry.FuelRegistry;
-import net.fabricmc.fabric.api.registry.StrippableBlockRegistry;
-import net.fabricmc.fabric.api.tag.TagFactory;
-import net.fabricmc.fabric.impl.blockrenderlayer.BlockRenderLayerMapImpl;
-import net.fabricmc.loader.api.FabricLoader;
-
-import io.github.vampirestudios.vampirelib.blocks.BaseBlock;
-import io.github.vampirestudios.vampirelib.blocks.BaseLogAndWoodBlock;
-import io.github.vampirestudios.vampirelib.blocks.ButtonBaseBlock;
-import io.github.vampirestudios.vampirelib.blocks.CustomLadderBlock;
-import io.github.vampirestudios.vampirelib.blocks.DoorBaseBlock;
-import io.github.vampirestudios.vampirelib.blocks.FenceBaseBlock;
-import io.github.vampirestudios.vampirelib.blocks.FenceGateBaseBlock;
-import io.github.vampirestudios.vampirelib.blocks.FlowerPotBaseBlock;
-import io.github.vampirestudios.vampirelib.blocks.FungusBaseBlock;
-import io.github.vampirestudios.vampirelib.blocks.LeavesBaseBlock;
-import io.github.vampirestudios.vampirelib.blocks.PressurePlateBaseBlock;
-import io.github.vampirestudios.vampirelib.blocks.SaplingBaseBlock;
-import io.github.vampirestudios.vampirelib.blocks.SlabBaseBlock;
-import io.github.vampirestudios.vampirelib.blocks.StairsBaseBlock;
-import io.github.vampirestudios.vampirelib.blocks.TrapdoorBaseBlock;
-import io.github.vampirestudios.vampirelib.boat.CustomBoatEntity;
-import io.github.vampirestudios.vampirelib.boat.CustomBoatInfo;
-import io.github.vampirestudios.vampirelib.client.VampireLibClient;
-import io.github.vampirestudios.vampirelib.client.renderer.CustomBoatEntityRenderer;
-import io.github.vampirestudios.vampirelib.init.VEntityModelLayers;
-import io.github.vampirestudios.vampirelib.items.CustomBoatItem;
-import io.github.vampirestudios.vampirelib.utils.ArtificeGenerationHelper;
-import io.github.vampirestudios.vampirelib.utils.Utils;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Consumer;
 
 import static net.minecraft.data.loot.BlockLoot.createSingleItemTableWithSilkTouch;
-import static net.minecraft.data.models.BlockModelGenerators.createDoor;
-import static net.minecraft.data.models.BlockModelGenerators.createHorizontalFacingDispatch;
-import static net.minecraft.data.models.BlockModelGenerators.createSimpleBlock;
-import static net.minecraft.data.models.BlockModelGenerators.createTrapdoor;
+import static net.minecraft.data.models.BlockModelGenerators.*;
 import static net.minecraft.data.recipes.RecipeProvider.has;
 
 public class WoodRegistry {
@@ -980,70 +954,115 @@ public class WoodRegistry {
     }
 
     public void generateModels(BlockModelGenerators blockStateModelGenerator) {
-        BlockModelGenerators.WoodProvider woodProvider = blockStateModelGenerator.new WoodProvider(new TextureMapping()
-            .put(TextureSlot.SIDE, new ResourceLocation(name.getNamespace(), String.format("wood_sets/%s/log", name.getPath())))
-            .put(TextureSlot.END, new ResourceLocation(name.getNamespace(), String.format("wood_sets/%s/log_top", name.getPath()))));
-        woodProvider.logWithHorizontal(log).wood(wood);
-        woodProvider = blockStateModelGenerator.new WoodProvider(new TextureMapping()
-            .put(TextureSlot.SIDE, new ResourceLocation(name.getNamespace(), String.format("wood_sets/%s/stripped_log", name.getPath())))
-            .put(TextureSlot.END, new ResourceLocation(name.getNamespace(), String.format("wood_sets/%s/stripped_log_top", name.getPath()))));
-        woodProvider.logWithHorizontal(strippedLog).wood(strippedWood);
-        if (leaves != null) blockStateModelGenerator.createTrivialBlock(leaves, TexturedModel.LEAVES.updateTexture(textureMapping ->
-            textureMapping.put(TextureSlot.ALL, new ResourceLocation(name.getNamespace(), String.format("wood_sets/%s/leaves", name.getPath())))));
+		TextureMapping logMapping = new TextureMapping()
+			.put(TextureSlot.SIDE, new ResourceLocation(name.getNamespace(), String.format("wood_sets/%s/log", name.getPath())))
+			.put(TextureSlot.END, new ResourceLocation(name.getNamespace(), String.format("wood_sets/%s/log_top", name.getPath())));
+		TextureMapping strippedLogMapping = new TextureMapping()
+			.put(TextureSlot.SIDE, new ResourceLocation(name.getNamespace(), String.format("wood_sets/%s/stripped_log", name.getPath())))
+			.put(TextureSlot.END, new ResourceLocation(name.getNamespace(), String.format("wood_sets/%s/stripped_log_top", name.getPath())));
+
+		TextureMapping leavesMapping = TextureMapping.cube(new ResourceLocation(name.getNamespace(), String.format("wood_sets/%s/leaves", name.getPath())));
+
+		TextureMapping saplingMapping = TextureMapping.cross(new ResourceLocation(name.getNamespace(), String.format("wood_sets/%s/sapling", name.getPath())));
+		TextureMapping saplingItemMapping = TextureMapping.layer0(
+			new ResourceLocation(name.getNamespace(), String.format("wood_sets/%s/sapling", name.getPath()))
+		);
+		TextureMapping saplingPlantMapping = TextureMapping.singleSlot(TextureSlot.PLANT,
+			new ResourceLocation(name.getNamespace(), String.format("wood_sets/%s/potted_sapling", name.getPath())));
+
+		TextureMapping planksMapping = TextureMapping.cube(new ResourceLocation(name.getNamespace(), String.format("wood_sets/%s/planks", name.getPath())));
+
+		TextureMapping doorMapping = new TextureMapping()
+			.put(TextureSlot.TOP, new ResourceLocation(name.getNamespace(), String.format("wood_sets/%s/door_top", name.getPath())))
+			.put(TextureSlot.BOTTOM, new ResourceLocation(name.getNamespace(), String.format("wood_sets/%s/door_bottom", name.getPath())));
+		TextureMapping doorItemMapping = TextureMapping.layer0(
+			new ResourceLocation(name.getNamespace(), String.format("wood_sets/%s/door_item", name.getPath()))
+		);
+
+		TextureMapping trapdoorMapping = TextureMapping.defaultTexture(new ResourceLocation(name.getNamespace(), String.format("wood_sets/%s/trapdoor", name.getPath())));
+
+		TextureMapping ladderItemMapping = TextureMapping.layer0(
+			new ResourceLocation(name.getNamespace(), String.format("wood_sets/%s/ladder", name.getPath()))
+		);
+
+		TextureMapping bookshelfMapping = TextureMapping.column(new ResourceLocation(name.getNamespace(), String.format("wood_sets/%s/bookshelf", name.getPath())),
+			new ResourceLocation(name.getNamespace(), String.format("wood_sets/%s/planks", name.getPath())));
+
+        blockStateModelGenerator.new WoodProvider(logMapping).logWithHorizontal(log).wood(wood);
+        blockStateModelGenerator.new WoodProvider(strippedLogMapping).logWithHorizontal(strippedLog).wood(strippedWood);
+        if (leaves != null) blockStateModelGenerator.createTrivialBlock(leaves, TexturedModel.createDefault(block -> leavesMapping, ModelTemplates.LEAVES));
         if (door != null) {
-            TextureMapping textureMapping = new TextureMapping()
-                .put(TextureSlot.TOP, new ResourceLocation(name.getNamespace(), String.format("wood_sets/%s/door_top", name.getPath())))
-                .put(TextureSlot.BOTTOM, new ResourceLocation(name.getNamespace(), String.format("wood_sets/%s/door_bottom", name.getPath())));
-            ResourceLocation resourceLocation = ModelTemplates.DOOR_BOTTOM.create(door, textureMapping, blockStateModelGenerator.modelOutput);
-            ResourceLocation resourceLocation2 = ModelTemplates.DOOR_BOTTOM_HINGE.create(door, textureMapping, blockStateModelGenerator.modelOutput);
-            ResourceLocation resourceLocation3 = ModelTemplates.DOOR_TOP.create(door, textureMapping, blockStateModelGenerator.modelOutput);
-            ResourceLocation resourceLocation4 = ModelTemplates.DOOR_TOP_HINGE.create(door, textureMapping, blockStateModelGenerator.modelOutput);
-            ModelTemplates.FLAT_ITEM.create(ModelLocationUtils.getModelLocation(door), TextureMapping.layer0(
-                new ResourceLocation(name.getNamespace(), String.format("wood_sets/%s/door_item", name.getPath()))
-            ), blockStateModelGenerator.modelOutput);
+            ResourceLocation resourceLocation = ModelTemplates.DOOR_BOTTOM.create(door, doorMapping, blockStateModelGenerator.modelOutput);
+            ResourceLocation resourceLocation2 = ModelTemplates.DOOR_BOTTOM_HINGE.create(door, doorMapping, blockStateModelGenerator.modelOutput);
+            ResourceLocation resourceLocation3 = ModelTemplates.DOOR_TOP.create(door, doorMapping, blockStateModelGenerator.modelOutput);
+            ResourceLocation resourceLocation4 = ModelTemplates.DOOR_TOP_HINGE.create(door, doorMapping, blockStateModelGenerator.modelOutput);
+            ModelTemplates.FLAT_ITEM.create(ModelLocationUtils.getModelLocation(door), doorItemMapping, blockStateModelGenerator.modelOutput);
             blockStateModelGenerator.blockStateOutput.accept(createDoor(door, resourceLocation, resourceLocation2, resourceLocation3, resourceLocation4));
         }
         if (trapdoor != null) {
-            TextureMapping textureMapping = TextureMapping.defaultTexture(new ResourceLocation(name.getNamespace(), String.format("wood_sets/%s/trapdoor", name.getPath())));
-            ResourceLocation resourceLocation = ModelTemplates.TRAPDOOR_TOP.create(trapdoor, textureMapping, blockStateModelGenerator.modelOutput);
-            ResourceLocation resourceLocation2 = ModelTemplates.TRAPDOOR_BOTTOM.create(trapdoor, textureMapping, blockStateModelGenerator.modelOutput);
-            ResourceLocation resourceLocation3 = ModelTemplates.TRAPDOOR_OPEN.create(trapdoor, textureMapping, blockStateModelGenerator.modelOutput);
+            ResourceLocation resourceLocation = ModelTemplates.TRAPDOOR_TOP.create(trapdoor, trapdoorMapping, blockStateModelGenerator.modelOutput);
+            ResourceLocation resourceLocation2 = ModelTemplates.TRAPDOOR_BOTTOM.create(trapdoor, trapdoorMapping, blockStateModelGenerator.modelOutput);
+            ResourceLocation resourceLocation3 = ModelTemplates.TRAPDOOR_OPEN.create(trapdoor, trapdoorMapping, blockStateModelGenerator.modelOutput);
             blockStateModelGenerator.blockStateOutput.accept(createTrapdoor(trapdoor, resourceLocation, resourceLocation2, resourceLocation3));
             blockStateModelGenerator.delegateItemModel(trapdoor, resourceLocation2);
         }
-        if (planks != null) blockStateModelGenerator.createTrivialBlock(planks, TexturedModel.CUBE.updateTexture(textureMapping ->
-            textureMapping.put(TextureSlot.ALL, new ResourceLocation(name.getNamespace(), String.format("wood_sets/%s/planks", name.getPath())))));
+		if (planks != null) blockStateModelGenerator.createTrivialBlock(planks, TexturedModel.createDefault(block -> planksMapping, ModelTemplates.CUBE_ALL));
         if (ladder != null) {
             blockStateModelGenerator.blockStateOutput.accept(MultiVariantGenerator.multiVariant(ladder, net.minecraft.data.models.blockstates.Variant.variant()
                 .with(VariantProperties.MODEL, ModelLocationUtils.getModelLocation(Blocks.LADDER))).with(createHorizontalFacingDispatch()));
             blockStateModelGenerator.createSimpleFlatItemModel(ladder);
-            ModelTemplates.FLAT_ITEM.create(ModelLocationUtils.getModelLocation(ladder), TextureMapping.layer0(
-                new ResourceLocation(name.getNamespace(), String.format("wood_sets/%s/ladder", name.getPath()))
-            ), blockStateModelGenerator.modelOutput);
+            ModelTemplates.FLAT_ITEM.create(ModelLocationUtils.getModelLocation(ladder), ladderItemMapping, blockStateModelGenerator.modelOutput);
         }
-        if (sapling != null && pottedSapling != null) {
-            ModelTemplates.FLAT_ITEM.create(ModelLocationUtils.getModelLocation(sapling), TextureMapping.layer0(
-                new ResourceLocation(name.getNamespace(), String.format("wood_sets/%s/sapling", name.getPath()))
-            ), blockStateModelGenerator.modelOutput);
-            blockStateModelGenerator.createCrossBlock(sapling, BlockModelGenerators.TintState.NOT_TINTED);
-            TextureMapping textureMapping = TextureMapping.plant(sapling);
-            ResourceLocation resourceLocation = BlockModelGenerators.TintState.NOT_TINTED.getCrossPot().create(pottedSapling, textureMapping,
-                blockStateModelGenerator.modelOutput);
-            blockStateModelGenerator.blockStateOutput.accept(createSimpleBlock(pottedSapling, resourceLocation));
+        if (sapling != null) {
+			blockStateModelGenerator.createCrossBlock(sapling, BlockModelGenerators.TintState.NOT_TINTED, saplingMapping);
+			ModelTemplates.FLAT_ITEM.create(ModelLocationUtils.getModelLocation(sapling), saplingItemMapping, blockStateModelGenerator.modelOutput);
         }
+		if (pottedSapling != null) {
+			ResourceLocation resourceLocation = BlockModelGenerators.TintState.NOT_TINTED.getCrossPot().create(pottedSapling, saplingPlantMapping, blockStateModelGenerator.modelOutput);
+			blockStateModelGenerator.blockStateOutput.accept(createSimpleBlock(pottedSapling, resourceLocation));
+		}
         if (bookshelf != null) {
-            TextureMapping textureMapping = TextureMapping.column(new ResourceLocation(name.getNamespace(), String.format("wood_sets/%s/bookshelf", name.getPath())),
-                new ResourceLocation(name.getNamespace(), String.format("wood_sets/%s/planks", name.getPath())));
-            ResourceLocation resourceLocation = ModelTemplates.CUBE_COLUMN.create(bookshelf, textureMapping, blockStateModelGenerator.modelOutput);
+            ResourceLocation resourceLocation = ModelTemplates.CUBE_COLUMN.create(bookshelf, bookshelfMapping, blockStateModelGenerator.modelOutput);
             blockStateModelGenerator.blockStateOutput.accept(createSimpleBlock(bookshelf, resourceLocation));
         }
-        BlockFamily.Builder family = BlockFamilies.familyBuilder(planks);
-        if (fence != null) family.fence(fence);
-        if (slab != null) family.slab(slab);
-        if (stairs != null) family.stairs(stairs);
-        if (fenceGate != null) family.fenceGate(fenceGate);
-        if (pressurePlate != null) family.pressurePlate(pressurePlate);
-        if (button != null) family.button(button);
+        if (fence != null) {
+			ResourceLocation resourceLocation = ModelTemplates.FENCE_POST.create(fence, planksMapping, blockStateModelGenerator.modelOutput);
+			ResourceLocation resourceLocation2 = ModelTemplates.FENCE_SIDE.create(fence, planksMapping, blockStateModelGenerator.modelOutput);
+			blockStateModelGenerator.blockStateOutput.accept(BlockModelGenerators.createFence(fence, resourceLocation, resourceLocation2));
+			ResourceLocation resourceLocation3 = ModelTemplates.FENCE_INVENTORY.create(fence, planksMapping, blockStateModelGenerator.modelOutput);
+			blockStateModelGenerator.delegateItemModel(fence, resourceLocation3);
+		}
+		if (fenceGate != null) {
+			ResourceLocation resourceLocation = ModelTemplates.FENCE_GATE_OPEN.create(fenceGate, planksMapping, blockStateModelGenerator.modelOutput);
+			ResourceLocation resourceLocation2 = ModelTemplates.FENCE_GATE_CLOSED.create(fenceGate, planksMapping, blockStateModelGenerator.modelOutput);
+			ResourceLocation resourceLocation3 = ModelTemplates.FENCE_GATE_WALL_OPEN.create(fenceGate, planksMapping, blockStateModelGenerator.modelOutput);
+			ResourceLocation resourceLocation4 = ModelTemplates.FENCE_GATE_WALL_CLOSED.create(fenceGate, planksMapping, blockStateModelGenerator.modelOutput);
+			blockStateModelGenerator.blockStateOutput.accept(BlockModelGenerators.createFenceGate(fenceGate, resourceLocation, resourceLocation2, resourceLocation3, resourceLocation4));
+		}
+		if (pressurePlate != null) {
+			ResourceLocation resourceLocation = ModelTemplates.PRESSURE_PLATE_UP.create(pressurePlate, planksMapping, blockStateModelGenerator.modelOutput);
+			ResourceLocation resourceLocation2 = ModelTemplates.PRESSURE_PLATE_DOWN.create(pressurePlate, planksMapping, blockStateModelGenerator.modelOutput);
+			blockStateModelGenerator.blockStateOutput.accept(BlockModelGenerators.createPressurePlate(pressurePlate, resourceLocation, resourceLocation2));
+		}
+		if (slab != null) {
+			ResourceLocation resourceLocation = ModelTemplates.SLAB_TOP.create(slab, planksMapping, blockStateModelGenerator.modelOutput);
+			ResourceLocation resourceLocation2 = ModelTemplates.SLAB_BOTTOM.create(slab, planksMapping, blockStateModelGenerator.modelOutput);
+			blockStateModelGenerator.blockStateOutput.accept(BlockModelGenerators.createSlab(slab, resourceLocation, resourceLocation2, ModelLocationUtils.getModelLocation(planks)));
+		}
+		if (stairs != null) {
+			ResourceLocation resourceLocation = ModelTemplates.STAIRS_INNER.create(stairs, planksMapping, blockStateModelGenerator.modelOutput);
+			ResourceLocation resourceLocation2 = ModelTemplates.STAIRS_STRAIGHT.create(stairs, planksMapping, blockStateModelGenerator.modelOutput);
+			ResourceLocation resourceLocation3 = ModelTemplates.STAIRS_OUTER.create(stairs, planksMapping, blockStateModelGenerator.modelOutput);
+			blockStateModelGenerator.blockStateOutput.accept(BlockModelGenerators.createStairs(stairs, resourceLocation, resourceLocation2, resourceLocation3));
+			blockStateModelGenerator.delegateItemModel(stairs, resourceLocation2);
+		}
+		if (button != null) {
+			ResourceLocation resourceLocation = ModelTemplates.BUTTON.create(button, planksMapping, blockStateModelGenerator.modelOutput);
+			ResourceLocation resourceLocation2 = ModelTemplates.BUTTON_PRESSED.create(button, planksMapping, blockStateModelGenerator.modelOutput);
+			blockStateModelGenerator.blockStateOutput.accept(BlockModelGenerators.createButton(button, resourceLocation, resourceLocation2));
+			ResourceLocation resourceLocation3 = ModelTemplates.BUTTON_INVENTORY.create(button, planksMapping, blockStateModelGenerator.modelOutput);
+			blockStateModelGenerator.delegateItemModel(button, resourceLocation3);
+		}
     }
 
     public void generateLang(FabricLanguageProvider languageProvider) {
@@ -1313,7 +1332,7 @@ public class WoodRegistry {
         }
 
         public Builder pottedSapling() {
-            woodRegistry.sapling = registryHelper.blocks().registerBlock(new FlowerPotBaseBlock(woodRegistry.sapling),
+            woodRegistry.pottedSapling = registryHelper.blocks().registerBlock(new FlowerPotBaseBlock(woodRegistry.sapling),
                 "potted_" + name.getPath() + (!woodRegistry.mushroomLike ? "_sapling" : "_fungus"), CreativeModeTab.TAB_DECORATIONS);
             return this;
         }
@@ -1327,7 +1346,7 @@ public class WoodRegistry {
         }
 
         public Builder pottedSapling(String nameIn) {
-            woodRegistry.sapling = registryHelper.blocks().registerBlock(new FlowerPotBaseBlock(woodRegistry.sapling),
+            woodRegistry.pottedSapling = registryHelper.blocks().registerBlock(new FlowerPotBaseBlock(woodRegistry.sapling),
                 "potted_" + nameIn + (!woodRegistry.mushroomLike ? "_sapling" : "_fungus"), CreativeModeTab.TAB_DECORATIONS);
             return this;
         }
@@ -1349,7 +1368,7 @@ public class WoodRegistry {
 
         public Builder pottedSapling(String... names) {
             for (String saplingName : names) {
-                woodRegistry.sapling = registryHelper.blocks().registerBlock(new FlowerPotBaseBlock(woodRegistry.sapling),
+                woodRegistry.pottedSapling = registryHelper.blocks().registerBlock(new FlowerPotBaseBlock(woodRegistry.sapling),
                     "potted_" + saplingName + (!woodRegistry.mushroomLike ? "_sapling" : "_fungus"), CreativeModeTab.TAB_DECORATIONS);
             }
             return this;

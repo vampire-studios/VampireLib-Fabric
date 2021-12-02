@@ -1,24 +1,22 @@
 package io.github.vampirestudios.vampirelib.api;
 
-import java.util.Locale;
-
+import io.github.vampirestudios.vampirelib.modules.FeatureManager;
+import io.github.vampirestudios.vampirelib.utils.Rands;
+import io.github.vampirestudios.vampirelib.utils.registry.RegistryHelper;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.ConfigHolder;
 import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-import net.minecraft.SharedConstants;
-import net.minecraft.resources.ResourceLocation;
-
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.api.ModInitializer;
+import net.minecraft.SharedConstants;
+import net.minecraft.resources.ResourceLocation;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.jetbrains.annotations.ApiStatus;
 
-import io.github.vampirestudios.vampirelib.modules.FeatureManager;
-import io.github.vampirestudios.vampirelib.utils.Rands;
-import io.github.vampirestudios.vampirelib.utils.registry.RegistryHelper;
+import java.util.Locale;
 
 public abstract class BasicModClass implements ModInitializer, ClientModInitializer {
 
@@ -28,9 +26,13 @@ public abstract class BasicModClass implements ModInitializer, ClientModInitiali
 
 	private boolean printVersionMessage = true;
 
-	private static RegistryHelper REGISTRY_HELPER;
-	private static FeatureManager FEATURE_MANAGER;
+	@ApiStatus.Internal
+	public static RegistryHelper REGISTRY_HELPER;
+	@ApiStatus.Internal
+	public static FeatureManager FEATURE_MANAGER;
+	@ApiStatus.Internal
 	private ConfigHolder<? extends CustomConfig> config;
+	@ApiStatus.Internal
 	private final Logger LOGGER;
 
 	protected BasicModClass(String modName, String modVersion) {
