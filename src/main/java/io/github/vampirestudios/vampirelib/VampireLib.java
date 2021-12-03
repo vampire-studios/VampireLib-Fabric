@@ -677,24 +677,26 @@
 
 package io.github.vampirestudios.vampirelib;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import net.minecraft.SharedConstants;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.item.ItemStack;
+
+import net.fabricmc.fabric.api.event.player.UseBlockCallback;
+
 import io.github.vampirestudios.vampirelib.api.BasicModClass;
 import io.github.vampirestudios.vampirelib.api.ConvertibleBlockPair;
 import io.github.vampirestudios.vampirelib.utils.Rands;
 import io.github.vampirestudios.vampirelib.utils.registry.BlockChiseler;
 import io.github.vampirestudios.vampirelib.utils.registry.WoodRegistry;
-import net.fabricmc.fabric.api.event.player.UseBlockCallback;
-import net.minecraft.SharedConstants;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.item.ItemStack;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class VampireLib extends BasicModClass {
     public static final VampireLib INSTANCE = new VampireLib();
 
     public static final List<ConvertibleBlockPair> CONVERTIBLE_BLOCKS = new ArrayList<>();
-	public static final boolean TEST_CONTENT_ENABLED = true;
+	public static final boolean TEST_CONTENT_ENABLED = false;
 
     public static WoodRegistry TEST_WOOD;
     public static WoodRegistry TEST_WOOD1;
@@ -715,7 +717,7 @@ public class VampireLib extends BasicModClass {
 	public static WoodRegistry TEST_NETHER_WOOD7;
 
     public VampireLib() {
-        super("vampirelib", "VampireLib", "4.2.1+build.1");
+        super("vampirelib", "VampireLib", "4.2.1+build.6");
     }
 
     @Override

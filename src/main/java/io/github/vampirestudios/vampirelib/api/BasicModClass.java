@@ -1,22 +1,24 @@
 package io.github.vampirestudios.vampirelib.api;
 
-import io.github.vampirestudios.vampirelib.modules.FeatureManager;
-import io.github.vampirestudios.vampirelib.utils.Rands;
-import io.github.vampirestudios.vampirelib.utils.registry.RegistryHelper;
+import java.util.Locale;
+
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.ConfigHolder;
 import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import net.minecraft.SharedConstants;
+import net.minecraft.resources.ResourceLocation;
+
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.api.ModInitializer;
-import net.minecraft.SharedConstants;
-import net.minecraft.resources.ResourceLocation;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.jetbrains.annotations.ApiStatus;
 
-import java.util.Locale;
+import io.github.vampirestudios.vampirelib.modules.FeatureManager;
+import io.github.vampirestudios.vampirelib.utils.Rands;
+import io.github.vampirestudios.vampirelib.utils.registry.RegistryHelper;
 
 public abstract class BasicModClass implements ModInitializer, ClientModInitializer {
 
@@ -26,13 +28,9 @@ public abstract class BasicModClass implements ModInitializer, ClientModInitiali
 
 	private boolean printVersionMessage = true;
 
-	@ApiStatus.Internal
 	public static RegistryHelper REGISTRY_HELPER;
-	@ApiStatus.Internal
 	public static FeatureManager FEATURE_MANAGER;
-	@ApiStatus.Internal
 	private ConfigHolder<? extends CustomConfig> config;
-	@ApiStatus.Internal
 	private final Logger LOGGER;
 
 	protected BasicModClass(String modName, String modVersion) {
@@ -53,8 +51,6 @@ public abstract class BasicModClass implements ModInitializer, ClientModInitiali
 		this.modVersion = modVersion;
 		if (!client) {
 			REGISTRY_HELPER = RegistryHelper.createRegistryHelper(this.modId);
-		} else {
-			REGISTRY_HELPER = null;
 		}
 		LOGGER = LogManager.getLogger(this.modName + (client ? " Client" : ""));
 		FEATURE_MANAGER = FeatureManager.createFeatureManager(new ResourceLocation(this.modId,
