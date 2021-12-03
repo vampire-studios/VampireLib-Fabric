@@ -18,6 +18,7 @@ package net.fabricmc.fabric.api.datagen.v1.provider;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.minecraft.core.Registry;
+import net.minecraft.data.BuiltinRegistries;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.tags.TagsProvider;
 import net.minecraft.resources.ResourceLocation;
@@ -25,8 +26,11 @@ import net.minecraft.tags.Tag;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.level.levelgen.synth.NormalNoise;
 import net.minecraft.world.level.material.Fluid;
 import org.jetbrains.annotations.Nullable;
 
@@ -177,20 +181,38 @@ public abstract class FabricTagProvider<T> extends TagsProvider<T> {
 	}
 
 	/**
-	 * Extend this class to create {@link Registry} tags in the "/blocks" tag directory.
-	 */
-	public abstract static class RegistryTagProvider extends FabricTagProvider<Registry<?>> {
-		public RegistryTagProvider(FabricDataGenerator dataGenerator) {
-			super(dataGenerator, (Registry<Registry<?>>) Registry.REGISTRY, "registries", "Registry Tags");
-		}
-	}
-
-	/**
-	 * Extend this class to create {@link MobEffect} tags in the "/blocks" tag directory.
+	 * Extend this class to create {@link MobEffect} tags in the "/mob_effects" tag directory.
 	 */
 	public abstract static class MobEffectTagProvider extends FabricTagProvider<MobEffect> {
 		public MobEffectTagProvider(FabricDataGenerator dataGenerator) {
 			super(dataGenerator, Registry.MOB_EFFECT, "mob_effects", "Mob Effect Tags");
+		}
+	}
+
+	/**
+	 * Extend this class to create {@link DimensionType} tags in the "worldgen/biomes" tag directory.
+	 */
+	public abstract static class ExpandedBiomeTagProvider extends FabricTagProvider<Biome> {
+		public ExpandedBiomeTagProvider(FabricDataGenerator dataGenerator) {
+			super(dataGenerator, BuiltinRegistries.BIOME, "worldgen/biomes", "Expanded Biome Tags");
+		}
+	}
+
+	/**
+	 * Extend this class to create {@link Biome} tags in the "/biomes" tag directory.
+	 */
+	public abstract static class BiomeTagProvider extends FabricTagProvider<Biome> {
+		public BiomeTagProvider(FabricDataGenerator dataGenerator) {
+			super(dataGenerator, BuiltinRegistries.BIOME, "biomes", "Biome Tags");
+		}
+	}
+
+	/**
+	 * Extend this class to create {@link NormalNoise.NoiseParameters} tags in the "worldgen/biomes" tag directory.
+	 */
+	public abstract static class NoiseTagProvider extends FabricTagProvider<NormalNoise.NoiseParameters> {
+		public NoiseTagProvider(FabricDataGenerator dataGenerator) {
+			super(dataGenerator, BuiltinRegistries.NOISE, "worldgen/noises", "Noise Tags");
 		}
 	}
 
