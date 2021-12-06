@@ -16,18 +16,21 @@
 
 package io.github.vampirestudios.vampirelib.api;
 
-import net.minecraft.core.Registry;
-import net.minecraft.data.BuiltinRegistries;
-import net.minecraft.tags.Tag;
-import net.minecraft.world.effect.MobEffect;
-import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.level.dimension.DimensionType;
-import net.minecraft.world.level.levelgen.synth.NormalNoise;
-
+import io.github.vampirestudios.vampirelib.api.datagen.CustomFabricTagBuilder;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
-
-import io.github.vampirestudios.vampirelib.api.datagen.CustomFabricTagBuilder;
+import net.minecraft.client.Minecraft;
+import net.minecraft.core.Registry;
+import net.minecraft.data.BuiltinRegistries;
+import net.minecraft.data.tags.TagsProvider;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.tags.Tag;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.dimension.DimensionType;
+import net.minecraft.world.level.levelgen.NoiseGeneratorSettings;
+import net.minecraft.world.level.levelgen.synth.NormalNoise;
 
 public class CustomTagProviders {
 	/**
@@ -44,15 +47,47 @@ public class CustomTagProviders {
 	}
 
 	/**
-	 * Extend this class to create {@link DimensionType} tags in the "worldgen/biomes" tag directory.
+	 * Extend this class to create {@link DimensionType} tags in the "biomes" tag directory.
 	 */
 	public abstract static class ExpandedBiomeTagProvider extends FabricTagProvider<Biome> {
 		protected ExpandedBiomeTagProvider(FabricDataGenerator dataGenerator) {
-			super(dataGenerator, BuiltinRegistries.BIOME, "worldgen/biomes", "Expanded Biome Tags");
+			super(dataGenerator, BuiltinRegistries.BIOME, "biomes", "Biome Tags");
 		}
 
-		public CustomFabricTagBuilder<Biome> tagCustom(Tag.Named<Biome> tag) {
-			return new CustomFabricTagBuilder(super.tag(tag));
+		public ResourceKeyTagBuilder<Biome> tagCustom(Tag.Named<Biome> tag) {
+			return new ResourceKeyTagBuilder<>(super.tag(tag), this.registry);
+		}
+	}
+
+	public abstract static class NoiseSettingsTagProvider extends FabricTagProvider<NoiseGeneratorSettings> {
+		protected NoiseSettingsTagProvider(FabricDataGenerator dataGenerator) {
+			super(dataGenerator, BuiltinRegistries.NOISE_GENERATOR_SETTINGS, "worldgen/noise_settings", "Noise Settings Tags");
+		}
+
+		public ResourceKeyTagBuilder<NoiseGeneratorSettings> tagCustom(Tag.Named<NoiseGeneratorSettings> tag) {
+			return new ResourceKeyTagBuilder<>(super.tag(tag), this.registry);
+		}
+	}
+
+	public abstract static class DimensionTypeTagProvider extends FabricTagProvider<DimensionType> {
+		protected DimensionTypeTagProvider(FabricDataGenerator dataGenerator) {
+			super(dataGenerator, Minecraft.getInstance().getSingleplayerServer().overworld().registryAccess()
+				.registryOrThrow(Registry.DIMENSION_TYPE_REGISTRY), "worldgen/dimension_type", "Dimension Type Tags");
+		}
+
+		public ResourceKeyTagBuilder<DimensionType> tagCustom(Tag.Named<DimensionType> tag) {
+			return new ResourceKeyTagBuilder<>(super.tag(tag), this.registry);
+		}
+	}
+
+	public abstract static class DimensionTagProvider extends FabricTagProvider<Level> {
+		protected DimensionTagProvider(FabricDataGenerator dataGenerator) {
+			super(dataGenerator, Minecraft.getInstance().getSingleplayerServer().overworld().registryAccess()
+				.registryOrThrow(Registry.DIMENSION_REGISTRY), "worldgen/dimension", "Dimension Tags");
+		}
+
+		public ResourceKeyTagBuilder<Level> tagCustom(Tag.Named<Level> tag) {
+			return new ResourceKeyTagBuilder<>(super.tag(tag), this.registry);
 		}
 	}
 
@@ -66,6 +101,47 @@ public class CustomTagProviders {
 
 		public CustomFabricTagBuilder<NormalNoise.NoiseParameters> tagCustom(Tag.Named<NormalNoise.NoiseParameters> tag) {
 			return new CustomFabricTagBuilder(super.tag(tag));
+		}
+	}
+
+	public static class ResourceKeyTagBuilder<T> extends CustomFabricTagBuilder<T> {
+		private final TagsProvider.TagAppender<T> parent;
+		private final Registry<T> registry;
+
+		public ResourceKeyTagBuilder(TagsProvider.TagAppender<T> parent, Registry<T> registry) {
+			super(parent);
+			this.parent = parent;
+			this.registry = registry;
+		}
+
+		public ResourceKeyTagBuilder<T> add(ResourceKey<T> element) {
+			parent.add(getValue(element));
+			return this;
+		}
+
+		public T getValue(ResourceKey<T> biome) {
+			return registry.get(biome);
+		}
+
+		/**
+		 * Add another tag to this tag.
+		 *
+		 * @return the {@link ResourceKeyTagBuilder} instance
+		 */
+		@SafeVarargs
+		public final ResourceKeyTagBuilder<T> addTags(Tag.Named<T>... values) {
+			for (Tag.Named<T> value : values) {
+				this.addTag(value);
+			}
+			return this;
+		}
+
+		@SafeVarargs
+		public final ResourceKeyTagBuilder<T> add(ResourceKey<T>... toAdd) {
+			for (ResourceKey<T> value : toAdd) {
+				this.add(getValue(value));
+			}
+			return this;
 		}
 	}
 }

@@ -677,10 +677,12 @@
 
 package io.github.vampirestudios.vampirelib.init;
 
-import net.minecraft.client.renderer.RenderType;
+import net.fabricmc.fabric.api.tag.ExpandedTagFactory;
+import net.fabricmc.fabric.api.tag.TagFactory;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.Tag;
 import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.decoration.Motive;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.alchemy.Potion;
@@ -690,9 +692,6 @@ import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.levelgen.NoiseGeneratorSettings;
-
-import net.fabricmc.fabric.api.tag.ExpandedTagFactory;
-import net.fabricmc.fabric.api.tag.TagFactory;
 
 public class VTags {
 
@@ -835,6 +834,8 @@ public class VTags {
 		public static final Tag.Named<Block> NEEDS_WOOD_TOOL = tag("needs_wood_tool");
 		public static final Tag.Named<Block> NEEDS_GOLD_TOOL = tag("needs_gold_tool");
 		public static final Tag.Named<Block> NEEDS_NETHERITE_TOOL = tag("needs_netherite_tool");
+
+		public static final Tag.Named<Block> LADDERS = tag("ladders");
 
         public static Tag.Named<Block> tag(String id) {
             return TagFactory.BLOCK.create(new ResourceLocation("c", id));
@@ -1047,6 +1048,14 @@ public class VTags {
 		public static final Tag.Named<Item> STORAGE_BLOCKS_REDSTONE = tag("storage_blocks/redstone");
 		public static final Tag.Named<Item> STRING = tag("string");
 
+		public static final Tag.Named<Item> BUCKETS_WATER = tag("buckets/water");
+		public static final Tag.Named<Item> BUCKETS_LAVA = tag("buckets/lava");
+		public static final Tag.Named<Item> BUCKETS_MILK = tag("buckets/milk");
+		public static final Tag.Named<Item> BUCKETS_POWDER_SNOW = tag("buckets/powder_snow");
+		public static final Tag.Named<Item> BUCKETS = tag("buckets");
+
+		public static final Tag.Named<Item> LADDERS = tag("ladders");
+
         public static Tag.Named<Item> tag(String id) {
             return TagFactory.ITEM.create(new ResourceLocation("c", id));
         }
@@ -1054,73 +1063,84 @@ public class VTags {
 
     public static class Biomes {
         // Tags specifying aquatic biomes
-        public static final Tag.Named<Biome> OCEANS = tag("water/oceans");
-        public static final Tag.Named<Biome> SHALLOW_OCEANS = tag("water/oceans/shallow");
-        public static final Tag.Named<Biome> DEEP_OCEANS = tag("water/oceans/deep");
-        public static final Tag.Named<Biome> RIVERS = tag("water/rivers");
-        public static final Tag.Named<Biome> WATER = tag("water");
 
-        // Tags specifying generic types of biomes
-        public static final Tag.Named<Biome> BADLANDS = tag("badlands");
-        public static final Tag.Named<Biome> BEACHES = tag("beaches");
-        public static final Tag.Named<Biome> DESERTS = tag("deserts");
-        public static final Tag.Named<Biome> FORESTS = tag("forests");
-        public static final Tag.Named<Biome> BIRCH_FORESTS = tag("forests/birch");
-        public static final Tag.Named<Biome> DARK_FORESTS = tag("forests/dark");
-        public static final Tag.Named<Biome> JUNGLE_FORESTS = tag("forests/jungles");
-        public static final Tag.Named<Biome> BAMBOO_JUNGLE_FORESTS = tag("forests/jungles/bamboo");
-        public static final Tag.Named<Biome> NETHER_FORESTS = tag("forests/nether");
-        public static final Tag.Named<Biome> OAK_FORESTS = tag("forests/oak");
-        public static final Tag.Named<Biome> TAIGA_FORESTS = tag("forests/taigas");
-        public static final Tag.Named<Biome> GRASSLANDS = tag("grasslands"); // plains and savannas
-        public static final Tag.Named<Biome> MUSHROOM = tag("mushroom");
-        public static final Tag.Named<Biome> MOUNTAINS = tag("mountains");
-        public static final Tag.Named<Biome> PLAINS = tag("plains");
-        public static final Tag.Named<Biome> SAVANNAS = tag("savannas");
-        public static final Tag.Named<Biome> SNOWY = tag("snowy"); // indicates that a biome has snow and/or ice
-        public static final Tag.Named<Biome> SWAMPS = tag("swamps");
-        public static final Tag.Named<Biome> VOIDS = tag("voids");
+		// Tags specifying that a biome is a variant of a normal biome
+		public static final Tag.Named<Biome> RARE = tag("rare");
+		public static final Tag.Named<Biome> PLATEAUS = tag("plateaus"); // plateau variants of other biomes
+		public static final Tag.Named<Biome> HILLS = tag("hills"); // hills variants of other biomes
 
-        // Tags specifying that a biome generates in a vanilla dimension. Specifying none of these indicates that the biome only generates in a modded dimension
-        public static final Tag.Named<Biome> OVERWORLD = tag("overworld");
-        public static final Tag.Named<Biome> NETHER = tag("nether");
-        public static final Tag.Named<Biome> END = tag("end");
+		// Tags specifying aquatic biomes
+		public static final Tag.Named<Biome> OCEANS = tag("water/oceans");
+		public static final Tag.Named<Biome> SHALLOW_OCEANS = tag("water/oceans/shallow");
+		public static final Tag.Named<Biome> DEEP_OCEANS = tag("water/oceans/deep");
+		public static final Tag.Named<Biome> RIVERS = tag("water/rivers");
+		public static final Tag.Named<Biome> WATER = tag("water");
+
+		// Tags specifying generic types of biomes
+		public static final Tag.Named<Biome> BADLANDS = tag("badlands");
+		public static final Tag.Named<Biome> BEACHES = tag("beaches");
+		public static final Tag.Named<Biome> DESERTS = tag("deserts");
+		public static final Tag.Named<Biome> FORESTS = tag("forests");
+		public static final Tag.Named<Biome> BIRCH_FORESTS = tag("forests/birch");
+		public static final Tag.Named<Biome> DARK_FORESTS = tag("forests/dark");
+		public static final Tag.Named<Biome> JUNGLE_FORESTS = tag("forests/jungles");
+		public static final Tag.Named<Biome> BAMBOO_JUNGLE_FORESTS = tag("forests/jungles/bamboo");
+		public static final Tag.Named<Biome> NETHER_FORESTS = tag("forests/nether");
+		public static final Tag.Named<Biome> OAK_FORESTS = tag("forests/oak");
+		public static final Tag.Named<Biome> TAIGA_FORESTS = tag("forests/taigas");
+		public static final Tag.Named<Biome> GRASSLANDS = tag("grasslands"); // plains and savannas
+		public static final Tag.Named<Biome> MUSHROOM = tag("mushroom");
+		public static final Tag.Named<Biome> MOUNTAINS = tag("mountains");
+		public static final Tag.Named<Biome> PEAKS = tag("peaks");
+		public static final Tag.Named<Biome> PLAINS = tag("plains");
+		public static final Tag.Named<Biome> SAVANNAS = tag("savannas");
+		public static final Tag.Named<Biome> SNOWY = tag("snowy"); // indicates that a biome has snow and/or ice
+		public static final Tag.Named<Biome> SLOPES = tag("slopes");
+		public static final Tag.Named<Biome> SWAMPS = tag("swamps");
+		public static final Tag.Named<Biome> VOIDS = tag("voids");
+
+		// Tags specifying that a biome generates in a vanilla dimension. Specifying none of these indicates that the biome only generates in a modded dimension
+		public static final Tag.Named<Biome> OVERWORLD = tag("overworld");
+		public static final Tag.Named<Biome> OVERWORLD_SURFACE = tag("overworld/surface");
+		public static final Tag.Named<Biome> OVERWORLD_UNDERGROUND = tag("overworld/underground");
+		public static final Tag.Named<Biome> NETHER = tag("nether");
+		public static final Tag.Named<Biome> END = tag("end");
 
         private static Tag.Named<Biome> tag(String name) {
-            return ExpandedTagFactory.BIOME_EXPANDED.create(new ResourceLocation("c", name));
+            return TagFactory.BIOME.create(new ResourceLocation("c", name));
         }
     }
 
     public static class NoiseSettings {
-        public static final Tag<NoiseGeneratorSettings> AMPLIFIED = tag("amplified");
-        public static final Tag<NoiseGeneratorSettings> CAVES = tag("caves");
-        public static final Tag<NoiseGeneratorSettings> END = tag("end");
-        public static final Tag<NoiseGeneratorSettings> FLOATING_ISLANDS = tag("floating_islands");
-        public static final Tag<NoiseGeneratorSettings> NETHER = tag("nether");
-        public static final Tag<NoiseGeneratorSettings> OVERWORLD = tag("overworld");
+		public static final Tag.Named<NoiseGeneratorSettings> AMPLIFIED = tag("amplified");
+		public static final Tag.Named<NoiseGeneratorSettings> CAVES = tag("caves");
+		public static final Tag.Named<NoiseGeneratorSettings> END = tag("end");
+		public static final Tag.Named<NoiseGeneratorSettings> FLOATING_ISLANDS = tag("floating_islands");
+		public static final Tag.Named<NoiseGeneratorSettings> NETHER = tag("nether");
+		public static final Tag.Named<NoiseGeneratorSettings> OVERWORLD = tag("overworld");
 
-        private static Tag<NoiseGeneratorSettings> tag(String name) {
+        private static Tag.Named<NoiseGeneratorSettings> tag(String name) {
             return ExpandedTagFactory.NOISE_SETTINGS.create(new ResourceLocation("c", name));
         }
     }
 
     public static class DimensionTypes {
-        public static final Tag<DimensionType> END = tag("end");
-        public static final Tag<DimensionType> NETHER = tag("nether");
-        public static final Tag<DimensionType> OVERWORLD = tag("overworld");
-        public static final Tag<DimensionType> OVERWORLD_CAVES = tag("overworld/caves");
+		public static final Tag.Named<DimensionType> END = tag("end");
+		public static final Tag.Named<DimensionType> NETHER = tag("nether");
+		public static final Tag.Named<DimensionType> OVERWORLD = tag("overworld");
+		public static final Tag.Named<DimensionType> OVERWORLD_CAVES = tag("overworld/caves");
 
-        private static Tag<DimensionType> tag(String name) {
+        private static Tag.Named<DimensionType> tag(String name) {
             return ExpandedTagFactory.DIMENSION_TYPE.create(new ResourceLocation("c", name));
         }
     }
 
     public static class Dimensions {
-        public static final Tag<Level> END = tag("end");
-        public static final Tag<Level> NETHER = tag("nether");
-        public static final Tag<Level> OVERWORLD = tag("overworld");
+		public static final Tag.Named<Level> END = tag("end");
+		public static final Tag.Named<Level> NETHER = tag("nether");
+		public static final Tag.Named<Level> OVERWORLD = tag("overworld");
 
-        private static Tag<Level> tag(String name) {
+        private static Tag.Named<Level> tag(String name) {
             return ExpandedTagFactory.DIMENSIONS.create(new ResourceLocation("c", name));
         }
     }
@@ -1189,5 +1209,14 @@ public class VTags {
             return ExpandedTagFactory.MOTIVES.create(new ResourceLocation("c", name));
         }
     }
+
+	public static class Entities {
+		public static final Tag.Named<EntityType<?>> MILKABLE = tag("milkable");
+		public static final Tag.Named<EntityType<?>> MUSHROOM_COWS = tag("mushroom_cows");
+
+		private static Tag.Named<EntityType<?>> tag(String name) {
+			return TagFactory.ENTITY_TYPE.create(new ResourceLocation("c", name));
+		}
+	}
 
 }

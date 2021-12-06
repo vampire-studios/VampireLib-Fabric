@@ -22,7 +22,6 @@ import net.minecraft.world.entity.decoration.Motive;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.levelgen.NoiseGeneratorSettings;
 import net.minecraft.world.level.levelgen.carver.ConfiguredWorldCarver;
@@ -37,7 +36,6 @@ import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 public abstract class ExpandedTagFactory<T> implements TagFactory<T> {
 	public static final TagFactory<Level> DIMENSIONS = TagFactory.of(Registry.DIMENSION_REGISTRY, "tags/dimensions");
 	public static final TagFactory<DimensionType> DIMENSION_TYPE = TagFactory.of(Registry.DIMENSION_TYPE_REGISTRY, "tags/dimension_types");
-	public static final TagFactory<Biome> BIOME_EXPANDED = TagFactory.of(Registry.BIOME_REGISTRY, "tags/worldgen/biomes");
 	public static final TagFactory<ConfiguredWorldCarver<?>> CONFIGURED_CARVER = TagFactory.of(Registry.CONFIGURED_CARVER_REGISTRY, "tags/worldgen/configured_carvers");
 	public static final TagFactory<ConfiguredFeature<?, ?>> CONFIGURED_FEATURE = TagFactory.of(Registry.CONFIGURED_FEATURE_REGISTRY, "tags/worldgen/configured_features");
 	public static final TagFactory<ConfiguredStructureFeature<?, ?>> CONFIGURED_STRUCTURE_FEATURE = TagFactory.of(Registry.CONFIGURED_STRUCTURE_FEATURE_REGISTRY, "tags/worldgen/configured_structure_features");

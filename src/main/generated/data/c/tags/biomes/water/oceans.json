@@ -1,0 +1,7 @@
+{
+  "replace": false,
+  "values": [
+    "#c:water/oceans/deep",
+    "#c:water/oceans/shallow"
+  ]
+}

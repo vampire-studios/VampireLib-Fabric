@@ -1,10 +1,9 @@
 package io.github.vampirestudios.vampirelib.api.datagen;
 
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
 import net.minecraft.data.tags.TagsProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.Tag;
-
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
 
 public class CustomFabricTagBuilder<T> extends TagsProvider.TagAppender<T> {
     private final TagsProvider.TagAppender<T> parent;
