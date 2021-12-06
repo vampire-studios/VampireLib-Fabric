@@ -17,6 +17,10 @@
 package net.fabricmc.fabric.api.tag;
 
 import net.minecraft.core.Registry;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.entity.decoration.Motive;
+import net.minecraft.world.item.alchemy.Potion;
+import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.dimension.DimensionType;
@@ -26,8 +30,6 @@ import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.ConfiguredStructureFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
-import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorList;
-import net.minecraft.world.level.levelgen.synth.NormalNoise;
 
 /**
  * A factory for accessing datapack tags.
@@ -44,4 +46,8 @@ public abstract class ExpandedTagFactory<T> implements TagFactory<T> {
 	public static final TagFactory<NoiseGeneratorSettings> NOISE_SETTINGS = TagFactory.of(Registry.NOISE_GENERATOR_SETTINGS_REGISTRY, "tags/worldgen/noise_settings");
 	public static final TagFactory<PlacedFeature> PLACED_FEATURE = TagFactory.of(Registry.PLACED_FEATURE_REGISTRY, "tags/worldgen/placed_features");
 //	public static final TagFactory<StructureProcessorList> PROCESSOR_LIST = TagFactory.of(Registry.PROCESSOR_LIST_REGISTRY, "tags/worldgen/processor_lists");
+	public static final TagFactory<MobEffect> MOB_EFFECTS = TagFactory.of(Registry.MOB_EFFECT_REGISTRY, "tags/mob_effects");
+	public static final TagFactory<Enchantment> ENCHANTMENTS = TagFactory.of(Registry.ENCHANTMENT_REGISTRY, "tags/enchantments");
+	public static final TagFactory<Potion> POTIONS = TagFactory.of(Registry.POTION_REGISTRY, "tags/potions");
+	public static final TagFactory<Motive> MOTIVES = TagFactory.of(Registry.MOTIVE_REGISTRY, "tags/motives");
 }

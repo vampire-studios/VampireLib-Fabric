@@ -677,30 +677,13 @@
 
 package io.github.vampirestudios.vampirelib.utils.registry;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Consumer;
+
 import com.swordglowsblue.artifice.api.Artifice;
-import io.github.vampirestudios.vampirelib.blocks.*;
-import io.github.vampirestudios.vampirelib.boat.CustomBoatEntity;
-import io.github.vampirestudios.vampirelib.boat.CustomBoatInfo;
-import io.github.vampirestudios.vampirelib.client.VampireLibClient;
-import io.github.vampirestudios.vampirelib.client.renderer.CustomBoatEntityRenderer;
-import io.github.vampirestudios.vampirelib.init.VEntityModelLayers;
-import io.github.vampirestudios.vampirelib.items.CustomBoatItem;
-import io.github.vampirestudios.vampirelib.utils.ArtificeGenerationHelper;
-import io.github.vampirestudios.vampirelib.utils.Utils;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
-import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootTablesProvider;
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
-import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
-import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
-import net.fabricmc.fabric.api.registry.FlammableBlockRegistry;
-import net.fabricmc.fabric.api.registry.FuelRegistry;
-import net.fabricmc.fabric.api.registry.StrippableBlockRegistry;
-import net.fabricmc.fabric.api.tag.TagFactory;
-import net.fabricmc.fabric.impl.blockrenderlayer.BlockRenderLayerMapImpl;
-import net.fabricmc.loader.api.FabricLoader;
+import org.apache.commons.lang3.text.WordUtils;
+
 import net.minecraft.client.model.BoatModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.renderer.RenderType;
@@ -709,7 +692,11 @@ import net.minecraft.data.loot.BlockLoot;
 import net.minecraft.data.models.BlockModelGenerators;
 import net.minecraft.data.models.blockstates.MultiVariantGenerator;
 import net.minecraft.data.models.blockstates.VariantProperties;
-import net.minecraft.data.models.model.*;
+import net.minecraft.data.models.model.ModelLocationUtils;
+import net.minecraft.data.models.model.ModelTemplates;
+import net.minecraft.data.models.model.TextureMapping;
+import net.minecraft.data.models.model.TextureSlot;
+import net.minecraft.data.models.model.TexturedModel;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
@@ -734,14 +721,52 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.HugeFungusConfiguration;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
-import org.apache.commons.lang3.text.WordUtils;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Consumer;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootTablesProvider;
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
+import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
+import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
+import net.fabricmc.fabric.api.registry.FlammableBlockRegistry;
+import net.fabricmc.fabric.api.registry.FuelRegistry;
+import net.fabricmc.fabric.api.registry.StrippableBlockRegistry;
+import net.fabricmc.fabric.api.tag.TagFactory;
+import net.fabricmc.fabric.impl.blockrenderlayer.BlockRenderLayerMapImpl;
+import net.fabricmc.loader.api.FabricLoader;
+
+import io.github.vampirestudios.vampirelib.api.FabricLanguageProvider;
+import io.github.vampirestudios.vampirelib.api.datagen.CustomBlockTagProvider;
+import io.github.vampirestudios.vampirelib.blocks.BaseBlock;
+import io.github.vampirestudios.vampirelib.blocks.BaseLogAndWoodBlock;
+import io.github.vampirestudios.vampirelib.blocks.ButtonBaseBlock;
+import io.github.vampirestudios.vampirelib.blocks.CustomLadderBlock;
+import io.github.vampirestudios.vampirelib.blocks.DoorBaseBlock;
+import io.github.vampirestudios.vampirelib.blocks.FenceBaseBlock;
+import io.github.vampirestudios.vampirelib.blocks.FenceGateBaseBlock;
+import io.github.vampirestudios.vampirelib.blocks.FlowerPotBaseBlock;
+import io.github.vampirestudios.vampirelib.blocks.FungusBaseBlock;
+import io.github.vampirestudios.vampirelib.blocks.LeavesBaseBlock;
+import io.github.vampirestudios.vampirelib.blocks.PressurePlateBaseBlock;
+import io.github.vampirestudios.vampirelib.blocks.SaplingBaseBlock;
+import io.github.vampirestudios.vampirelib.blocks.SlabBaseBlock;
+import io.github.vampirestudios.vampirelib.blocks.StairsBaseBlock;
+import io.github.vampirestudios.vampirelib.blocks.TrapdoorBaseBlock;
+import io.github.vampirestudios.vampirelib.boat.CustomBoatEntity;
+import io.github.vampirestudios.vampirelib.boat.CustomBoatInfo;
+import io.github.vampirestudios.vampirelib.client.VampireLibClient;
+import io.github.vampirestudios.vampirelib.client.renderer.CustomBoatEntityRenderer;
+import io.github.vampirestudios.vampirelib.init.VEntityModelLayers;
+import io.github.vampirestudios.vampirelib.items.CustomBoatItem;
+import io.github.vampirestudios.vampirelib.utils.ArtificeGenerationHelper;
+import io.github.vampirestudios.vampirelib.utils.Utils;
 
 import static net.minecraft.data.loot.BlockLoot.createSingleItemTableWithSilkTouch;
-import static net.minecraft.data.models.BlockModelGenerators.*;
+import static net.minecraft.data.models.BlockModelGenerators.createDoor;
+import static net.minecraft.data.models.BlockModelGenerators.createHorizontalFacingDispatch;
+import static net.minecraft.data.models.BlockModelGenerators.createSimpleBlock;
+import static net.minecraft.data.models.BlockModelGenerators.createTrapdoor;
 import static net.minecraft.data.recipes.RecipeProvider.has;
 
 public class WoodRegistry {
@@ -904,36 +929,36 @@ public class WoodRegistry {
         return boatItem;
     }
 
-    public void generateBlockTags(FabricTagProvider.BlockTagProvider blockTags) {
-        blockTags.tag(logsTag).add(log, strippedLog, wood, strippedWood);
-        blockTags.tag(BlockTags.LOGS).addTag(logsTag);
-        blockTags.tag(BlockTags.PLANKS).add(planks);
-        if (leaves != null && !mushroomLike) blockTags.tag(BlockTags.LEAVES).add(leaves);
-        if (leaves != null && mushroomLike) blockTags.tag(BlockTags.WART_BLOCKS).add(leaves);
-        if (ladder != null) blockTags.tag(BlockTags.CLIMBABLE).add(ladder);
-        if (trapdoor != null) blockTags.tag(BlockTags.WOODEN_TRAPDOORS).add(trapdoor);
-        if (button != null) blockTags.tag(BlockTags.WOODEN_BUTTONS).add(button);
-        if (door != null) blockTags.tag(BlockTags.WOODEN_DOORS).add(door);
-        if (sapling != null) blockTags.tag(BlockTags.SAPLINGS).add(sapling);
-        if (pottedSapling != null) blockTags.tag(BlockTags.FLOWER_POTS).add(pottedSapling);
-        if (fence != null) blockTags.tag(BlockTags.WOODEN_FENCES).add(fence);
-        if (fenceGate != null) blockTags.tag(BlockTags.FENCE_GATES).add(fenceGate);
-        if (pressurePlate != null) blockTags.tag(BlockTags.PRESSURE_PLATES).add(pressurePlate);
-        if (slab != null) blockTags.tag(BlockTags.WOODEN_SLABS).add(slab);
-        if (stairs != null) blockTags.tag(BlockTags.WOODEN_STAIRS).add(stairs);
+    public void generateBlockTags(CustomBlockTagProvider blockTags) {
+        blockTags.tagCustom(logsTag).add(log, strippedLog, wood, strippedWood);
+        blockTags.tagCustom(BlockTags.LOGS).addTag(logsTag);
+        blockTags.tagCustom(BlockTags.PLANKS).add(planks);
+        if (leaves != null && !mushroomLike) blockTags.tagCustom(BlockTags.LEAVES).add(leaves);
+        if (leaves != null && mushroomLike) blockTags.tagCustom(BlockTags.WART_BLOCKS).add(leaves);
+        if (ladder != null) blockTags.tagCustom(BlockTags.CLIMBABLE).add(ladder);
+        if (trapdoor != null) blockTags.tagCustom(BlockTags.WOODEN_TRAPDOORS).add(trapdoor);
+        if (button != null) blockTags.tagCustom(BlockTags.WOODEN_BUTTONS).add(button);
+        if (door != null) blockTags.tagCustom(BlockTags.WOODEN_DOORS).add(door);
+        if (sapling != null) blockTags.tagCustom(BlockTags.SAPLINGS).add(sapling);
+        if (pottedSapling != null) blockTags.tagCustom(BlockTags.FLOWER_POTS).add(pottedSapling);
+        if (fence != null) blockTags.tagCustom(BlockTags.WOODEN_FENCES).add(fence);
+        if (fenceGate != null) blockTags.tagCustom(BlockTags.FENCE_GATES).add(fenceGate);
+        if (pressurePlate != null) blockTags.tagCustom(BlockTags.PRESSURE_PLATES).add(pressurePlate);
+        if (slab != null) blockTags.tagCustom(BlockTags.WOODEN_SLABS).add(slab);
+        if (stairs != null) blockTags.tagCustom(BlockTags.WOODEN_STAIRS).add(stairs);
         if (flammable) {
-            blockTags.tag(BlockTags.LOGS_THAT_BURN).addTag(logsTag);
+            blockTags.tagCustom(BlockTags.LOGS_THAT_BURN).addTag(logsTag);
         } else {
-            if (ladder != null) blockTags.tag(BlockTags.NON_FLAMMABLE_WOOD).add(ladder);
-            if (trapdoor != null) blockTags.tag(BlockTags.NON_FLAMMABLE_WOOD).add(trapdoor);
-            if (button != null) blockTags.tag(BlockTags.NON_FLAMMABLE_WOOD).add(button);
-            if (door != null) blockTags.tag(BlockTags.NON_FLAMMABLE_WOOD).add(door);
-            if (fence != null) blockTags.tag(BlockTags.NON_FLAMMABLE_WOOD).add(fence);
-            if (fenceGate != null) blockTags.tag(BlockTags.NON_FLAMMABLE_WOOD).add(fenceGate);
-            if (pressurePlate != null) blockTags.tag(BlockTags.NON_FLAMMABLE_WOOD).add(pressurePlate);
-            if (slab != null) blockTags.tag(BlockTags.NON_FLAMMABLE_WOOD).add(slab);
-            if (stairs != null) blockTags.tag(BlockTags.NON_FLAMMABLE_WOOD).add(stairs);
-            if (bookshelf != null) blockTags.tag(BlockTags.NON_FLAMMABLE_WOOD).add(bookshelf);
+            if (ladder != null) blockTags.tagCustom(BlockTags.NON_FLAMMABLE_WOOD).add(ladder);
+            if (trapdoor != null) blockTags.tagCustom(BlockTags.NON_FLAMMABLE_WOOD).add(trapdoor);
+            if (button != null) blockTags.tagCustom(BlockTags.NON_FLAMMABLE_WOOD).add(button);
+            if (door != null) blockTags.tagCustom(BlockTags.NON_FLAMMABLE_WOOD).add(door);
+            if (fence != null) blockTags.tagCustom(BlockTags.NON_FLAMMABLE_WOOD).add(fence);
+            if (fenceGate != null) blockTags.tagCustom(BlockTags.NON_FLAMMABLE_WOOD).add(fenceGate);
+            if (pressurePlate != null) blockTags.tagCustom(BlockTags.NON_FLAMMABLE_WOOD).add(pressurePlate);
+            if (slab != null) blockTags.tagCustom(BlockTags.NON_FLAMMABLE_WOOD).add(slab);
+            if (stairs != null) blockTags.tagCustom(BlockTags.NON_FLAMMABLE_WOOD).add(stairs);
+            if (bookshelf != null) blockTags.tagCustom(BlockTags.NON_FLAMMABLE_WOOD).add(bookshelf);
         }
     }
 
@@ -963,12 +988,12 @@ public class WoodRegistry {
 
 		TextureMapping leavesMapping = TextureMapping.cube(new ResourceLocation(name.getNamespace(), String.format("wood_sets/%s/leaves", name.getPath())));
 
-		TextureMapping saplingMapping = TextureMapping.cross(new ResourceLocation(name.getNamespace(), String.format("wood_sets/%s/sapling", name.getPath())));
-		TextureMapping saplingItemMapping = TextureMapping.layer0(
-			new ResourceLocation(name.getNamespace(), String.format("wood_sets/%s/sapling", name.getPath()))
-		);
-		TextureMapping saplingPlantMapping = TextureMapping.singleSlot(TextureSlot.PLANT,
-			new ResourceLocation(name.getNamespace(), String.format("wood_sets/%s/potted_sapling", name.getPath())));
+//		TextureMapping saplingMapping = TextureMapping.cross(new ResourceLocation(name.getNamespace(), String.format("wood_sets/%s/sapling", name.getPath())));
+//		TextureMapping saplingItemMapping = TextureMapping.layer0(
+//			new ResourceLocation(name.getNamespace(), String.format("wood_sets/%s/sapling", name.getPath()))
+//		);
+//		TextureMapping saplingPlantMapping = TextureMapping.singleSlot(TextureSlot.PLANT,
+//			new ResourceLocation(name.getNamespace(), String.format("wood_sets/%s/potted_sapling", name.getPath())));
 
 		TextureMapping planksMapping = TextureMapping.cube(new ResourceLocation(name.getNamespace(), String.format("wood_sets/%s/planks", name.getPath())));
 
@@ -1013,14 +1038,14 @@ public class WoodRegistry {
             blockStateModelGenerator.createSimpleFlatItemModel(ladder);
             ModelTemplates.FLAT_ITEM.create(ModelLocationUtils.getModelLocation(ladder), ladderItemMapping, blockStateModelGenerator.modelOutput);
         }
-        if (sapling != null) {
-			blockStateModelGenerator.createCrossBlock(sapling, BlockModelGenerators.TintState.NOT_TINTED, saplingMapping);
-			ModelTemplates.FLAT_ITEM.create(ModelLocationUtils.getModelLocation(sapling), saplingItemMapping, blockStateModelGenerator.modelOutput);
-        }
-		if (pottedSapling != null) {
-			ResourceLocation resourceLocation = BlockModelGenerators.TintState.NOT_TINTED.getCrossPot().create(pottedSapling, saplingPlantMapping, blockStateModelGenerator.modelOutput);
-			blockStateModelGenerator.blockStateOutput.accept(createSimpleBlock(pottedSapling, resourceLocation));
-		}
+//        if (sapling != null) {
+//			blockStateModelGenerator.createCrossBlock(sapling, BlockModelGenerators.TintState.NOT_TINTED, saplingMapping);
+//			ModelTemplates.FLAT_ITEM.create(ModelLocationUtils.getModelLocation(sapling), saplingItemMapping, blockStateModelGenerator.modelOutput);
+//        }
+//		if (pottedSapling != null) {
+//			ResourceLocation resourceLocation = BlockModelGenerators.TintState.NOT_TINTED.getCrossPot().create(pottedSapling, saplingPlantMapping, blockStateModelGenerator.modelOutput);
+//			blockStateModelGenerator.blockStateOutput.accept(createSimpleBlock(pottedSapling, resourceLocation));
+//		}
         if (bookshelf != null) {
             ResourceLocation resourceLocation = ModelTemplates.CUBE_COLUMN.create(bookshelf, bookshelfMapping, blockStateModelGenerator.modelOutput);
             blockStateModelGenerator.blockStateOutput.accept(createSimpleBlock(bookshelf, resourceLocation));

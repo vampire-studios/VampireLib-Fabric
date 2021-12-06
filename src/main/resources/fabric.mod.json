@@ -23,25 +23,26 @@
       "io.github.vampirestudios.vampirelib.client.network.BoatSpawnNetworkHandler::register",
       "io.github.vampirestudios.vampirelib.client.VampireLibClient"
     ],
-		"fabric-datagen": [
-			"io.github.vampirestudios.vampirelib.VampireLibDataGen"
-		]
+    "fabric-datagen": [
+      "io.github.vampirestudios.vampirelib.VampireLibDataGen"
+    ]
   },
   "mixins": [
-    "vampirelib.mixins.json",
-    "fabric-data-generation-api-v1.mixins.json"
+    "vampirelib.mixins.json"
   ],
   "accessWidener": "vampirelib.accesswidener",
   "depends": {
-    "fabricloader": ">=0.11.6",
-    "java": ">=16"
+    "fabricloader": ">=0.12.8",
+    "java": ">=17"
   },
   "custom": {
     "modmenu": {
       "links": {
-        "modmenu.discord": "https://discord.gg/2HKGqJE"
+        "modmenu.discord": "https://discord.gg/63hmSTxyDA"
       },
-      "badges": [ "library" ],
+      "badges": [
+        "library"
+      ],
       "parent": {
         "id": "vampire-studios-mods",
         "name": "Vampire Studios' Mods",

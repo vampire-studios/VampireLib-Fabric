@@ -677,17 +677,22 @@
 
 package io.github.vampirestudios.vampirelib.init;
 
-import io.github.vampirestudios.vampirelib.VampireLib;
-import net.fabricmc.fabric.api.tag.ExpandedTagFactory;
-import net.fabricmc.fabric.api.tag.TagFactory;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.Tag;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.entity.decoration.Motive;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.alchemy.Potion;
+import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.levelgen.NoiseGeneratorSettings;
+
+import net.fabricmc.fabric.api.tag.ExpandedTagFactory;
+import net.fabricmc.fabric.api.tag.TagFactory;
 
 public class VTags {
 
@@ -832,7 +837,7 @@ public class VTags {
 		public static final Tag.Named<Block> NEEDS_NETHERITE_TOOL = tag("needs_netherite_tool");
 
         public static Tag.Named<Block> tag(String id) {
-            return TagFactory.BLOCK.create(new ResourceLocation(VampireLib.INSTANCE.modId(), id));
+            return TagFactory.BLOCK.create(new ResourceLocation("c", id));
         }
     }
 
@@ -1043,50 +1048,49 @@ public class VTags {
 		public static final Tag.Named<Item> STRING = tag("string");
 
         public static Tag.Named<Item> tag(String id) {
-            return TagFactory.ITEM.create(new ResourceLocation(VampireLib.INSTANCE.modId(), id));
+            return TagFactory.ITEM.create(new ResourceLocation("c", id));
         }
     }
 
     public static class Biomes {
         // Tags specifying aquatic biomes
-        public static final Tag<Biome> OCEANS = tag("water/oceans");
-        public static final Tag<Biome> SHALLOW_OCEANS = tag("water/oceans/shallow");
-        public static final Tag<Biome> DEEP_OCEANS = tag("water/oceans/deep");
-        public static final Tag<Biome> RIVERS = tag("water/rivers");
-        public static final Tag<Biome> WATER = tag("water");
+        public static final Tag.Named<Biome> OCEANS = tag("water/oceans");
+        public static final Tag.Named<Biome> SHALLOW_OCEANS = tag("water/oceans/shallow");
+        public static final Tag.Named<Biome> DEEP_OCEANS = tag("water/oceans/deep");
+        public static final Tag.Named<Biome> RIVERS = tag("water/rivers");
+        public static final Tag.Named<Biome> WATER = tag("water");
 
         // Tags specifying generic types of biomes
-        public static final Tag<Biome> BADLANDS = tag("badlands");
-        public static final Tag<Biome> BEACHES = tag("beaches");
-        public static final Tag<Biome> DESERTS = tag("deserts");
-        public static final Tag<Biome> FORESTS = tag("forests");
-        public static final Tag<Biome> BIRCH_FORESTS = tag("forests/birch");
-        public static final Tag<Biome> DARK_FORESTS = tag("forests/dark");
-        public static final Tag<Biome> JUNGLE_FORESTS = tag("forests/jungles");
-        public static final Tag<Biome> BAMBOO_JUNGLE_FORESTS = tag("forests/jungles/bamboo");
-        public static final Tag<Biome> NETHER_FORESTS = tag("forests/nether");
-        public static final Tag<Biome> OAK_FORESTS = tag("forests/oak");
-        public static final Tag<Biome> TAIGA_FORESTS = tag("forests/taigas");
-        public static final Tag<Biome> GRASSLANDS = tag("grasslands"); // plains and savannas
-        public static final Tag<Biome> MUSHROOM = tag("mushroom");
-        public static final Tag<Biome> MOUNTAINS = tag("mountains");
-        public static final Tag<Biome> PLAINS = tag("plains");
-        public static final Tag<Biome> SAVANNAS = tag("savannas");
-        public static final Tag<Biome> SNOWY = tag("snowy"); // indicates that a biome has snow and/or ice
-        public static final Tag<Biome> SWAMPS = tag("swamps");
-        public static final Tag<Biome> VOIDS = tag("voids");
+        public static final Tag.Named<Biome> BADLANDS = tag("badlands");
+        public static final Tag.Named<Biome> BEACHES = tag("beaches");
+        public static final Tag.Named<Biome> DESERTS = tag("deserts");
+        public static final Tag.Named<Biome> FORESTS = tag("forests");
+        public static final Tag.Named<Biome> BIRCH_FORESTS = tag("forests/birch");
+        public static final Tag.Named<Biome> DARK_FORESTS = tag("forests/dark");
+        public static final Tag.Named<Biome> JUNGLE_FORESTS = tag("forests/jungles");
+        public static final Tag.Named<Biome> BAMBOO_JUNGLE_FORESTS = tag("forests/jungles/bamboo");
+        public static final Tag.Named<Biome> NETHER_FORESTS = tag("forests/nether");
+        public static final Tag.Named<Biome> OAK_FORESTS = tag("forests/oak");
+        public static final Tag.Named<Biome> TAIGA_FORESTS = tag("forests/taigas");
+        public static final Tag.Named<Biome> GRASSLANDS = tag("grasslands"); // plains and savannas
+        public static final Tag.Named<Biome> MUSHROOM = tag("mushroom");
+        public static final Tag.Named<Biome> MOUNTAINS = tag("mountains");
+        public static final Tag.Named<Biome> PLAINS = tag("plains");
+        public static final Tag.Named<Biome> SAVANNAS = tag("savannas");
+        public static final Tag.Named<Biome> SNOWY = tag("snowy"); // indicates that a biome has snow and/or ice
+        public static final Tag.Named<Biome> SWAMPS = tag("swamps");
+        public static final Tag.Named<Biome> VOIDS = tag("voids");
 
         // Tags specifying that a biome generates in a vanilla dimension. Specifying none of these indicates that the biome only generates in a modded dimension
-        public static final Tag<Biome> OVERWORLD = tag("overworld");
-        public static final Tag<Biome> NETHER = tag("nether");
-        public static final Tag<Biome> END = tag("end");
+        public static final Tag.Named<Biome> OVERWORLD = tag("overworld");
+        public static final Tag.Named<Biome> NETHER = tag("nether");
+        public static final Tag.Named<Biome> END = tag("end");
 
-        private static Tag<Biome> tag(String name) {
-            return ExpandedTagFactory.BIOME_EXPANDED.create(new ResourceLocation(VampireLib.INSTANCE.modId(), name));
+        private static Tag.Named<Biome> tag(String name) {
+            return ExpandedTagFactory.BIOME_EXPANDED.create(new ResourceLocation("c", name));
         }
     }
 
-    /** Tags for the "noise_settings" data files that include the list of structure placement entries used by dimensions **/
     public static class NoiseSettings {
         public static final Tag<NoiseGeneratorSettings> AMPLIFIED = tag("amplified");
         public static final Tag<NoiseGeneratorSettings> CAVES = tag("caves");
@@ -1096,7 +1100,7 @@ public class VTags {
         public static final Tag<NoiseGeneratorSettings> OVERWORLD = tag("overworld");
 
         private static Tag<NoiseGeneratorSettings> tag(String name) {
-            return ExpandedTagFactory.NOISE_SETTINGS.create(new ResourceLocation(VampireLib.INSTANCE.modId(), name));
+            return ExpandedTagFactory.NOISE_SETTINGS.create(new ResourceLocation("c", name));
         }
     }
 
@@ -1107,7 +1111,7 @@ public class VTags {
         public static final Tag<DimensionType> OVERWORLD_CAVES = tag("overworld/caves");
 
         private static Tag<DimensionType> tag(String name) {
-            return ExpandedTagFactory.DIMENSION_TYPE.create(new ResourceLocation(VampireLib.INSTANCE.modId(), name));
+            return ExpandedTagFactory.DIMENSION_TYPE.create(new ResourceLocation("c", name));
         }
     }
 
@@ -1117,7 +1121,72 @@ public class VTags {
         public static final Tag<Level> OVERWORLD = tag("overworld");
 
         private static Tag<Level> tag(String name) {
-            return ExpandedTagFactory.DIMENSIONS.create(new ResourceLocation(VampireLib.INSTANCE.modId(), name));
+            return ExpandedTagFactory.DIMENSIONS.create(new ResourceLocation("c", name));
+        }
+    }
+
+    public static class MobEffects {
+        public static final Tag<MobEffect> NEGATIVES = tag("negatives");
+        public static final Tag<MobEffect> POSITIVES = tag("positives");
+
+        public static final Tag<MobEffect> INSTANT = tag("instant");
+        public static final Tag<MobEffect> LASTING = tag("lasting");
+
+        private static Tag<MobEffect> tag(String name) {
+            return ExpandedTagFactory.MOB_EFFECTS.create(new ResourceLocation("c", name));
+        }
+    }
+
+    public static class Enchantments {
+        public static final Tag<Enchantment> TOOL_ENCHANTMENTS = tag("tools");
+        public static final Tag<Enchantment> PICKAXE_ENCHANTMENTS = tag("tools/pickaxes");
+        public static final Tag<Enchantment> AXE_ENCHANTMENTS = tag("tools/axes");
+        public static final Tag<Enchantment> HOE_ENCHANTMENTS = tag("tools/hoes");
+        public static final Tag<Enchantment> SHOVEL_ENCHANTMENTS = tag("tools/shovels");
+
+        public static final Tag<Enchantment> WEAPON_ENCHANTMENTS = tag("weapons");
+        public static final Tag<Enchantment> SWORD_ENCHANTMENTS = tag("weapons/sword");
+
+        public static final Tag<Enchantment> BOW_ENCHANTMENTS = tag("range/bows");
+        public static final Tag<Enchantment> CROSSBOW_ENCHANTMENTS = tag("range/crossbows");
+        public static final Tag<Enchantment> TRIDENT_ENCHANTMENTS = tag("range/tridents");
+
+        public static final Tag<Enchantment> CURSES = tag("curses");
+
+        public static final Tag<Enchantment> ARMOR_ENCHANTMENTS = tag("armors");
+        public static final Tag<Enchantment> HEAD_ENCHANTMENTS = tag("armors/head");
+        public static final Tag<Enchantment> CHEST_ENCHANTMENTS = tag("armors/chest");
+        public static final Tag<Enchantment> LEGS_ENCHANTMENTS = tag("armors/legs");
+        public static final Tag<Enchantment> FEET_ENCHANTMENTS = tag("armors/feet");
+
+        private static Tag<Enchantment> tag(String name) {
+            return ExpandedTagFactory.ENCHANTMENTS.create(new ResourceLocation("c", name));
+        }
+    }
+
+    public static class Potions {
+        public static final Tag<Potion> NEGATIVE_POTIONS = tag("negatives");
+        public static final Tag<Potion> POSITIVE_POTIONS = tag("positives");
+
+        public static final Tag<Potion> INSTANT_POTIONS = tag("instant");
+        public static final Tag<Potion> LASTING_POTIONS = tag("lasting");
+
+        private static Tag<Potion> tag(String name) {
+            return ExpandedTagFactory.POTIONS.create(new ResourceLocation("c", name));
+        }
+    }
+
+    public static class Motives {
+        public static final Tag<Motive> ONE_X_ONE = tag("1x1");
+        public static final Tag<Motive> TWO_X_ONE = tag("2x1");
+        public static final Tag<Motive> ONE_X_TWO = tag("1x2");
+        public static final Tag<Motive> TWO_X_TWO = tag("2x2");
+        public static final Tag<Motive> FOUR_X_TWO = tag("4x2");
+        public static final Tag<Motive> FOUR_X_THREE = tag("4x3");
+        public static final Tag<Motive> FOUR_X_FOUR = tag("4x4");
+
+        private static Tag<Motive> tag(String name) {
+            return ExpandedTagFactory.MOTIVES.create(new ResourceLocation("c", name));
         }
     }
 

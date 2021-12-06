@@ -1,4 +1,6 @@
 #version 150
+
+#moj_import <fog.glsl>
 #moj_import <fog.glsl>
 
 uniform sampler2D Sampler0;
@@ -39,11 +41,11 @@ bool isEmissive(float alpha) {
 
 void main() {
 	vec4 tex = texture(Sampler0, texCoord0);
+	vec4 color = tex * ColorModulator;
 	if (tex.a < 0.1) {
         discard;
     }
-	vec4 color = tex * ColorModulator;
-	color.rgb = mix(overlayColor.rgb, color.rgb, overlayColor.a);
+//	color.rgb = mix(overlayColor.rgb, color.rgb, overlayColor.a);
 	vec4 vertex = vertexColor * lightMapColor;
 	if (isEmissive(tex.a)) {
 		vec3 hsv = rgbToHSV(vertex.rgb);
