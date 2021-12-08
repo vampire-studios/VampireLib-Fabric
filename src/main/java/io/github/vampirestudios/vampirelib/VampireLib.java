@@ -677,18 +677,20 @@
 
 package io.github.vampirestudios.vampirelib;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import net.minecraft.SharedConstants;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.item.ItemStack;
+
+import net.fabricmc.fabric.api.event.player.UseBlockCallback;
+
 import io.github.vampirestudios.vampirelib.api.BasicModClass;
 import io.github.vampirestudios.vampirelib.api.ConvertibleBlockPair;
 import io.github.vampirestudios.vampirelib.utils.Rands;
 import io.github.vampirestudios.vampirelib.utils.registry.BlockChiseler;
 import io.github.vampirestudios.vampirelib.utils.registry.WoodRegistry;
-import net.fabricmc.fabric.api.event.player.UseBlockCallback;
-import net.minecraft.SharedConstants;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.item.ItemStack;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class VampireLib extends BasicModClass {
     public static final VampireLib INSTANCE = new VampireLib();
@@ -749,24 +751,24 @@ public class VampireLib extends BasicModClass {
 
 			//Nether
 			TEST_NETHER_WOOD = WoodRegistry.of(identifier("test_nether"))
-				.defaultBlocks().mushroomLike().build();
+                .mushroomLike().defaultBlocks().build();
 			TEST_NETHER_WOOD1 = WoodRegistry.of(identifier("test1_nether"))
-				.defaultBlocksColoredLeaves().mushroomLike().build();
+                .mushroomLike().defaultBlocksColoredLeaves().build();
 
 			TEST_NETHER_WOOD2 = WoodRegistry.of(identifier("test2_nether"))
-				.defaultBlocks().defaultExtraBlocks().mushroomLike().build();
+                .mushroomLike().defaultBlocks().defaultExtraBlocks().build();
 			TEST_NETHER_WOOD3 = WoodRegistry.of(identifier("test3_nether"))
-				.defaultBlocksColoredLeaves().defaultExtraBlocks().mushroomLike().build();
+                .mushroomLike().defaultBlocksColoredLeaves().defaultExtraBlocks().build();
 
 			TEST_NETHER_WOOD4 = WoodRegistry.of(identifier("test4_nether"))
-				.defaultBlocks().defaultExtraBlocks().ladder().mushroomLike().build();
+                .mushroomLike().defaultBlocks().defaultExtraBlocks().ladder().build();
 			TEST_NETHER_WOOD5 = WoodRegistry.of(identifier("test5_nether"))
-				.defaultBlocksColoredLeaves().defaultExtraBlocks().ladder().mushroomLike().build();
+                .mushroomLike().defaultBlocksColoredLeaves().defaultExtraBlocks().ladder().build();
 
 			TEST_NETHER_WOOD6 = WoodRegistry.of(identifier("test6_nether"))
-				.defaultBlocks().defaultExtraBlocks().ladder().bookshelf().mushroomLike().build();
+                .mushroomLike().defaultBlocks().defaultExtraBlocks().ladder().bookshelf().build();
 			TEST_NETHER_WOOD7 = WoodRegistry.of(identifier("test7_nether"))
-				.defaultBlocksColoredLeaves().defaultExtraBlocks().ladder().bookshelf().mushroomLike().build();
+                .mushroomLike().defaultBlocksColoredLeaves().defaultExtraBlocks().ladder().bookshelf().build();
 		}
 
         for (ConvertibleBlockPair convertibleBlock : CONVERTIBLE_BLOCKS) {

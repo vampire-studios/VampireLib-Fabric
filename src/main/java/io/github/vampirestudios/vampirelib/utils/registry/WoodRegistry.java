@@ -986,7 +986,7 @@ public class WoodRegistry {
 			.put(TextureSlot.SIDE, new ResourceLocation(name.getNamespace(), String.format("wood_sets/%s/stripped_log", name.getPath())))
 			.put(TextureSlot.END, new ResourceLocation(name.getNamespace(), String.format("wood_sets/%s/stripped_log_top", name.getPath())));
 
-		TextureMapping leavesMapping = TextureMapping.cube(new ResourceLocation(name.getNamespace(), String.format("wood_sets/%s/leaves", name.getPath())));
+		TextureMapping leavesMapping = TextureMapping.cube(new ResourceLocation(name.getNamespace(), String.format("wood_sets/%s/%s", name.getPath(), mushroomLike ? "wart_block" : "leaves")));
 
 //		TextureMapping saplingMapping = TextureMapping.cross(new ResourceLocation(name.getNamespace(), String.format("wood_sets/%s/sapling", name.getPath())));
 //		TextureMapping saplingItemMapping = TextureMapping.layer0(
@@ -1015,7 +1015,11 @@ public class WoodRegistry {
 
         blockStateModelGenerator.new WoodProvider(logMapping).logWithHorizontal(log).wood(wood);
         blockStateModelGenerator.new WoodProvider(strippedLogMapping).logWithHorizontal(strippedLog).wood(strippedWood);
-        if (leaves != null) blockStateModelGenerator.createTrivialBlock(leaves, TexturedModel.createDefault(block -> leavesMapping, ModelTemplates.LEAVES));
+        if (leaves != null) {
+            blockStateModelGenerator.createTrivialBlock(leaves, TexturedModel.createDefault(block -> leavesMapping, mushroomLike ? ModelTemplates.CUBE_ALL : ModelTemplates.LEAVES));
+            ResourceLocation resourceLocation = ModelLocationUtils.getModelLocation(leaves);
+            blockStateModelGenerator.delegateItemModel(leaves, resourceLocation);
+        }
         if (door != null) {
             ResourceLocation resourceLocation = ModelTemplates.DOOR_BOTTOM.create(door, doorMapping, blockStateModelGenerator.modelOutput);
             ResourceLocation resourceLocation2 = ModelTemplates.DOOR_BOTTOM_HINGE.create(door, doorMapping, blockStateModelGenerator.modelOutput);
@@ -1031,7 +1035,11 @@ public class WoodRegistry {
             blockStateModelGenerator.blockStateOutput.accept(createTrapdoor(trapdoor, resourceLocation, resourceLocation2, resourceLocation3));
             blockStateModelGenerator.delegateItemModel(trapdoor, resourceLocation2);
         }
-		if (planks != null) blockStateModelGenerator.createTrivialBlock(planks, TexturedModel.createDefault(block -> planksMapping, ModelTemplates.CUBE_ALL));
+		if (planks != null) {
+            blockStateModelGenerator.createTrivialBlock(planks, TexturedModel.createDefault(block -> planksMapping, ModelTemplates.CUBE_ALL));
+            ResourceLocation resourceLocation = ModelLocationUtils.getModelLocation(planks);
+            blockStateModelGenerator.delegateItemModel(planks, resourceLocation);
+        }
         if (ladder != null) {
             blockStateModelGenerator.blockStateOutput.accept(MultiVariantGenerator.multiVariant(ladder, net.minecraft.data.models.blockstates.Variant.variant()
                 .with(VariantProperties.MODEL, ModelLocationUtils.getModelLocation(Blocks.LADDER))).with(createHorizontalFacingDispatch()));
@@ -1049,6 +1057,8 @@ public class WoodRegistry {
         if (bookshelf != null) {
             ResourceLocation resourceLocation = ModelTemplates.CUBE_COLUMN.create(bookshelf, bookshelfMapping, blockStateModelGenerator.modelOutput);
             blockStateModelGenerator.blockStateOutput.accept(createSimpleBlock(bookshelf, resourceLocation));
+            ResourceLocation resourceLocationItem = ModelLocationUtils.getModelLocation(bookshelf);
+            blockStateModelGenerator.delegateItemModel(bookshelf, resourceLocationItem);
         }
         if (fence != null) {
 			ResourceLocation resourceLocation = ModelTemplates.FENCE_POST.create(fence, planksMapping, blockStateModelGenerator.modelOutput);
@@ -1063,16 +1073,19 @@ public class WoodRegistry {
 			ResourceLocation resourceLocation3 = ModelTemplates.FENCE_GATE_WALL_OPEN.create(fenceGate, planksMapping, blockStateModelGenerator.modelOutput);
 			ResourceLocation resourceLocation4 = ModelTemplates.FENCE_GATE_WALL_CLOSED.create(fenceGate, planksMapping, blockStateModelGenerator.modelOutput);
 			blockStateModelGenerator.blockStateOutput.accept(BlockModelGenerators.createFenceGate(fenceGate, resourceLocation, resourceLocation2, resourceLocation3, resourceLocation4));
+            blockStateModelGenerator.delegateItemModel(fenceGate, resourceLocation2);
 		}
 		if (pressurePlate != null) {
 			ResourceLocation resourceLocation = ModelTemplates.PRESSURE_PLATE_UP.create(pressurePlate, planksMapping, blockStateModelGenerator.modelOutput);
 			ResourceLocation resourceLocation2 = ModelTemplates.PRESSURE_PLATE_DOWN.create(pressurePlate, planksMapping, blockStateModelGenerator.modelOutput);
 			blockStateModelGenerator.blockStateOutput.accept(BlockModelGenerators.createPressurePlate(pressurePlate, resourceLocation, resourceLocation2));
+            blockStateModelGenerator.delegateItemModel(pressurePlate, resourceLocation);
 		}
 		if (slab != null) {
 			ResourceLocation resourceLocation = ModelTemplates.SLAB_TOP.create(slab, planksMapping, blockStateModelGenerator.modelOutput);
 			ResourceLocation resourceLocation2 = ModelTemplates.SLAB_BOTTOM.create(slab, planksMapping, blockStateModelGenerator.modelOutput);
 			blockStateModelGenerator.blockStateOutput.accept(BlockModelGenerators.createSlab(slab, resourceLocation, resourceLocation2, ModelLocationUtils.getModelLocation(planks)));
+            blockStateModelGenerator.delegateItemModel(slab, resourceLocation);
 		}
 		if (stairs != null) {
 			ResourceLocation resourceLocation = ModelTemplates.STAIRS_INNER.create(stairs, planksMapping, blockStateModelGenerator.modelOutput);
@@ -1245,25 +1258,28 @@ public class WoodRegistry {
         public Builder leaves() {
             String leavesName = woodRegistry.mushroomLike ? "_wart_block" : "_leaves";
             Block block = woodRegistry.mushroomLike ? Blocks.WARPED_WART_BLOCK : Blocks.FLOWERING_AZALEA_LEAVES;
+            CreativeModeTab creativeModeTab = woodRegistry.mushroomLike ? CreativeModeTab.TAB_BUILDING_BLOCKS : CreativeModeTab.TAB_DECORATIONS;
             woodRegistry.leaves = registryHelper.blocks().registerBlock(new LeavesBaseBlock(block), name.getPath() + leavesName,
-                CreativeModeTab.TAB_DECORATIONS);
+                creativeModeTab);
             return this;
         }
 
         public Builder leaves(String nameIn) {
             String leavesName = woodRegistry.mushroomLike ? "_wart_block" : "_leaves";
             Block block = woodRegistry.mushroomLike ? Blocks.WARPED_WART_BLOCK : Blocks.FLOWERING_AZALEA_LEAVES;
+            CreativeModeTab creativeModeTab = woodRegistry.mushroomLike ? CreativeModeTab.TAB_BUILDING_BLOCKS : CreativeModeTab.TAB_DECORATIONS;
             woodRegistry.leaves = registryHelper.blocks().registerBlock(new LeavesBaseBlock(block), nameIn + leavesName,
-                CreativeModeTab.TAB_DECORATIONS);
+                creativeModeTab);
             return this;
         }
 
         public Builder leaves(String... nameIn) {
             String leavesName = woodRegistry.mushroomLike ? "_wart_block" : "_leaves";
             Block block = woodRegistry.mushroomLike ? Blocks.WARPED_WART_BLOCK : Blocks.FLOWERING_AZALEA_LEAVES;
+            CreativeModeTab creativeModeTab = woodRegistry.mushroomLike ? CreativeModeTab.TAB_BUILDING_BLOCKS : CreativeModeTab.TAB_DECORATIONS;
             for (String name : nameIn) {
                 woodRegistry.leaves = registryHelper.blocks().registerBlock(new LeavesBaseBlock(block), name + leavesName,
-                    CreativeModeTab.TAB_DECORATIONS);
+                    creativeModeTab);
                 availableLeaves.add(name + leavesName);
             }
             return this;
@@ -1272,8 +1288,9 @@ public class WoodRegistry {
         public Builder coloredLeaves() {
             String leavesName = woodRegistry.mushroomLike ? "_wart_block" : "_leaves";
             Block block = woodRegistry.mushroomLike ? Blocks.WARPED_WART_BLOCK : Blocks.FLOWERING_AZALEA_LEAVES;
+            CreativeModeTab creativeModeTab = woodRegistry.mushroomLike ? CreativeModeTab.TAB_BUILDING_BLOCKS : CreativeModeTab.TAB_DECORATIONS;
             woodRegistry.leaves = registryHelper.blocks().registerBlock(new LeavesBaseBlock(block), name.getPath() + leavesName,
-                CreativeModeTab.TAB_DECORATIONS);
+                creativeModeTab);
             VampireLibClient.ColoredLeaves coloredLeaves = new VampireLibClient.ColoredLeaves(woodRegistry.leaves, false, 0);
             VampireLibClient.COLORED_LEAVES.add(coloredLeaves);
             return this;
@@ -1282,8 +1299,9 @@ public class WoodRegistry {
         public Builder coloredLeaves(int color) {
             String leavesName = woodRegistry.mushroomLike ? "_wart_block" : "_leaves";
             Block block = woodRegistry.mushroomLike ? Blocks.WARPED_WART_BLOCK : Blocks.FLOWERING_AZALEA_LEAVES;
+            CreativeModeTab creativeModeTab = woodRegistry.mushroomLike ? CreativeModeTab.TAB_BUILDING_BLOCKS : CreativeModeTab.TAB_DECORATIONS;
             woodRegistry.leaves = registryHelper.blocks().registerBlock(new LeavesBaseBlock(block), name.getPath() + leavesName,
-                CreativeModeTab.TAB_DECORATIONS);
+                creativeModeTab);
             VampireLibClient.ColoredLeaves coloredLeaves = new VampireLibClient.ColoredLeaves(woodRegistry.leaves, true, color);
             VampireLibClient.COLORED_LEAVES.add(coloredLeaves);
             return this;
@@ -1292,8 +1310,9 @@ public class WoodRegistry {
         public Builder coloredLeaves(String nameIn) {
             String leavesName = woodRegistry.mushroomLike ? "_wart_block" : "_leaves";
             Block block = woodRegistry.mushroomLike ? Blocks.WARPED_WART_BLOCK : Blocks.FLOWERING_AZALEA_LEAVES;
+            CreativeModeTab creativeModeTab = woodRegistry.mushroomLike ? CreativeModeTab.TAB_BUILDING_BLOCKS : CreativeModeTab.TAB_DECORATIONS;
             woodRegistry.leaves = registryHelper.blocks().registerBlock(new LeavesBaseBlock(block), nameIn + leavesName,
-                CreativeModeTab.TAB_DECORATIONS);
+                creativeModeTab);
             VampireLibClient.ColoredLeaves coloredLeaves = new VampireLibClient.ColoredLeaves(woodRegistry.leaves, false, 0xFFF);
             VampireLibClient.COLORED_LEAVES.add(coloredLeaves);
             return this;
@@ -1302,9 +1321,10 @@ public class WoodRegistry {
         public Builder coloredLeaves(String... nameIn) {
             String leavesName = woodRegistry.mushroomLike ? "_wart_block" : "_leaves";
             Block block = woodRegistry.mushroomLike ? Blocks.WARPED_WART_BLOCK : Blocks.FLOWERING_AZALEA_LEAVES;
+            CreativeModeTab creativeModeTab = woodRegistry.mushroomLike ? CreativeModeTab.TAB_BUILDING_BLOCKS : CreativeModeTab.TAB_DECORATIONS;
             for (String name : nameIn) {
                 woodRegistry.leaves = registryHelper.blocks().registerBlock(new LeavesBaseBlock(block), name + leavesName,
-                    CreativeModeTab.TAB_DECORATIONS);
+                    creativeModeTab);
                 VampireLibClient.ColoredLeaves coloredLeaves = new VampireLibClient.ColoredLeaves(woodRegistry.leaves, false, 0xFFF);
                 VampireLibClient.COLORED_LEAVES.add(coloredLeaves);
                 availableLeaves.add(name + leavesName);
@@ -1315,8 +1335,9 @@ public class WoodRegistry {
         public Builder coloredLeaves(String nameIn, int color) {
             String leavesName = woodRegistry.mushroomLike ? "_wart_block" : "_leaves";
             Block block = woodRegistry.mushroomLike ? Blocks.WARPED_WART_BLOCK : Blocks.FLOWERING_AZALEA_LEAVES;
+            CreativeModeTab creativeModeTab = woodRegistry.mushroomLike ? CreativeModeTab.TAB_BUILDING_BLOCKS : CreativeModeTab.TAB_DECORATIONS;
             woodRegistry.leaves = registryHelper.blocks().registerBlock(new LeavesBaseBlock(block), nameIn + leavesName,
-                CreativeModeTab.TAB_DECORATIONS);
+                creativeModeTab);
             VampireLibClient.ColoredLeaves coloredLeaves = new VampireLibClient.ColoredLeaves(woodRegistry.leaves, true, color);
             VampireLibClient.COLORED_LEAVES.add(coloredLeaves);
             return this;
@@ -1325,9 +1346,10 @@ public class WoodRegistry {
         public Builder coloredLeaves(int color, String... nameIn) {
             String leavesName = woodRegistry.mushroomLike ? "_wart_block" : "_leaves";
             Block block = woodRegistry.mushroomLike ? Blocks.WARPED_WART_BLOCK : Blocks.FLOWERING_AZALEA_LEAVES;
+            CreativeModeTab creativeModeTab = woodRegistry.mushroomLike ? CreativeModeTab.TAB_BUILDING_BLOCKS : CreativeModeTab.TAB_DECORATIONS;
             for (String name : nameIn) {
                 woodRegistry.leaves = registryHelper.blocks().registerBlock(new LeavesBaseBlock(block), name + leavesName,
-                    CreativeModeTab.TAB_DECORATIONS);
+                    creativeModeTab);
                 VampireLibClient.ColoredLeaves coloredLeaves = new VampireLibClient.ColoredLeaves(woodRegistry.leaves, false, color);
                 VampireLibClient.COLORED_LEAVES.add(coloredLeaves);
                 availableLeaves.add(name + leavesName);
@@ -1338,9 +1360,10 @@ public class WoodRegistry {
         public Builder coloredLeaves(ColoredLeavesBlock... coloredLeavesBlocks) {
             String leavesName = woodRegistry.mushroomLike ? "_wart_block" : "_leaves";
             Block block = woodRegistry.mushroomLike ? Blocks.WARPED_WART_BLOCK : Blocks.FLOWERING_AZALEA_LEAVES;
+            CreativeModeTab creativeModeTab = woodRegistry.mushroomLike ? CreativeModeTab.TAB_BUILDING_BLOCKS : CreativeModeTab.TAB_DECORATIONS;
             for (ColoredLeavesBlock coloredLeavesBlock : coloredLeavesBlocks) {
                 woodRegistry.leaves = registryHelper.blocks().registerBlock(new LeavesBaseBlock(block), coloredLeavesBlock.name + leavesName,
-                    CreativeModeTab.TAB_DECORATIONS);
+                    creativeModeTab);
                 VampireLibClient.ColoredLeaves coloredLeaves = new VampireLibClient.ColoredLeaves(woodRegistry.leaves, true, coloredLeavesBlock.color);
                 VampireLibClient.COLORED_LEAVES.add(coloredLeaves);
                 availableLeaves.add(coloredLeavesBlock.name + leavesName);
@@ -1371,8 +1394,8 @@ public class WoodRegistry {
         }
 
         public Builder pottedSapling(String nameIn) {
-            woodRegistry.pottedSapling = registryHelper.blocks().registerBlock(new FlowerPotBaseBlock(woodRegistry.sapling),
-                "potted_" + nameIn + (!woodRegistry.mushroomLike ? "_sapling" : "_fungus"), CreativeModeTab.TAB_DECORATIONS);
+            woodRegistry.pottedSapling = registryHelper.blocks().registerBlockWithoutItem("potted_" + nameIn + (!woodRegistry.mushroomLike ?
+                    "_sapling" : "_fungus"), new FlowerPotBaseBlock(woodRegistry.sapling));
             return this;
         }
 
