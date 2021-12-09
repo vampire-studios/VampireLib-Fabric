@@ -677,20 +677,18 @@
 
 package io.github.vampirestudios.vampirelib;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import net.minecraft.SharedConstants;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.item.ItemStack;
-
-import net.fabricmc.fabric.api.event.player.UseBlockCallback;
-
 import io.github.vampirestudios.vampirelib.api.BasicModClass;
 import io.github.vampirestudios.vampirelib.api.ConvertibleBlockPair;
 import io.github.vampirestudios.vampirelib.utils.Rands;
 import io.github.vampirestudios.vampirelib.utils.registry.BlockChiseler;
 import io.github.vampirestudios.vampirelib.utils.registry.WoodRegistry;
+import net.fabricmc.fabric.api.event.player.UseBlockCallback;
+import net.minecraft.SharedConstants;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.item.ItemStack;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class VampireLib extends BasicModClass {
     public static final VampireLib INSTANCE = new VampireLib();
@@ -717,7 +715,7 @@ public class VampireLib extends BasicModClass {
 	public static WoodRegistry TEST_NETHER_WOOD7;
 
     public VampireLib() {
-        super("vampirelib", "VampireLib", "4.3.0+build.3");
+        super("vampirelib", "VampireLib", "4.4.0+build.1");
     }
 
     @Override
