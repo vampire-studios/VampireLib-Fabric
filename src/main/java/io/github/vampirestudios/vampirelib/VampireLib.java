@@ -694,7 +694,7 @@ public class VampireLib extends BasicModClass {
     public static final VampireLib INSTANCE = new VampireLib();
 
     public static final List<ConvertibleBlockPair> CONVERTIBLE_BLOCKS = new ArrayList<>();
-	public static final boolean TEST_CONTENT_ENABLED = true;
+	public static final boolean TEST_CONTENT_ENABLED = false;
 
     public static WoodRegistry TEST_WOOD;
     public static WoodRegistry TEST_WOOD1;
@@ -715,7 +715,7 @@ public class VampireLib extends BasicModClass {
 	public static WoodRegistry TEST_NETHER_WOOD7;
 
     public VampireLib() {
-        super("vampirelib", "VampireLib", "4.4.1+build.1");
+        super("vampirelib", "VampireLib", "4.5.0+build.1");
     }
 
     @Override

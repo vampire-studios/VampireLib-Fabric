@@ -17,11 +17,12 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "io.github.vampirestudios.vampirelib.VampireLib"
+      "io.github.vampirestudios.vampirelib.VampireLib",
+			"io.github.vampirestudios.vampirelib.impl.boat.TerraformBoatInitializer"
     ],
     "client": [
-      "io.github.vampirestudios.vampirelib.client.network.BoatSpawnNetworkHandler::register",
-      "io.github.vampirestudios.vampirelib.client.VampireLibClient"
+      "io.github.vampirestudios.vampirelib.client.VampireLibClient",
+			"io.github.vampirestudios.vampirelib.impl.boat.client.TerraformBoatClientInitializer"
     ],
     "fabric-datagen": [
       "io.github.vampirestudios.vampirelib.VampireLibDataGen"
