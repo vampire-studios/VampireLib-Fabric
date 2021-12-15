@@ -28,7 +28,9 @@
     ]
   },
   "mixins": [
-    "vampirelib.mixins.json"
+    "vampirelib.mixins.json",
+		"boats.mixins.json",
+		"signs.mixins.json"
   ],
   "accessWidener": "vampirelib.accesswidener",
   "depends": {

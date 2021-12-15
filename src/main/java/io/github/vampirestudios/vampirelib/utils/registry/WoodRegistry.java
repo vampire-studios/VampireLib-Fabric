@@ -677,26 +677,31 @@
 
 package io.github.vampirestudios.vampirelib.utils.registry;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Consumer;
-
-import com.swordglowsblue.artifice.api.Artifice;
-import org.apache.commons.lang3.text.WordUtils;
-
-import net.minecraft.client.model.BoatModel;
-import net.minecraft.client.model.geom.ModelLayerLocation;
+import io.github.vampirestudios.vampirelib.api.FabricLanguageProvider;
+import io.github.vampirestudios.vampirelib.api.boat.TerraformBoatType;
+import io.github.vampirestudios.vampirelib.api.boat.TerraformBoatTypeRegistry;
+import io.github.vampirestudios.vampirelib.api.boat.item.TerraformBoatItemHelper;
+import io.github.vampirestudios.vampirelib.api.datagen.CustomBlockTagProvider;
+import io.github.vampirestudios.vampirelib.blocks.*;
+import io.github.vampirestudios.vampirelib.client.VampireLibClient;
+import io.github.vampirestudios.vampirelib.utils.Utils;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootTablesProvider;
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
+import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
+import net.fabricmc.fabric.api.registry.FlammableBlockRegistry;
+import net.fabricmc.fabric.api.registry.FuelRegistry;
+import net.fabricmc.fabric.api.registry.StrippableBlockRegistry;
+import net.fabricmc.fabric.api.tag.TagFactory;
+import net.fabricmc.fabric.impl.blockrenderlayer.BlockRenderLayerMapImpl;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.Registry;
 import net.minecraft.data.loot.BlockLoot;
 import net.minecraft.data.models.BlockModelGenerators;
 import net.minecraft.data.models.blockstates.MultiVariantGenerator;
 import net.minecraft.data.models.blockstates.VariantProperties;
-import net.minecraft.data.models.model.ModelLocationUtils;
-import net.minecraft.data.models.model.ModelTemplates;
-import net.minecraft.data.models.model.TextureMapping;
-import net.minecraft.data.models.model.TextureSlot;
-import net.minecraft.data.models.model.TexturedModel;
+import net.minecraft.data.models.model.*;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
@@ -704,9 +709,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.Tag;
-import net.minecraft.world.entity.EntityDimensions;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.vehicle.Boat;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
@@ -721,52 +723,14 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.HugeFungusConfiguration;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
+import org.apache.commons.lang3.text.WordUtils;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
-import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootTablesProvider;
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
-import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
-import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
-import net.fabricmc.fabric.api.registry.FlammableBlockRegistry;
-import net.fabricmc.fabric.api.registry.FuelRegistry;
-import net.fabricmc.fabric.api.registry.StrippableBlockRegistry;
-import net.fabricmc.fabric.api.tag.TagFactory;
-import net.fabricmc.fabric.impl.blockrenderlayer.BlockRenderLayerMapImpl;
-import net.fabricmc.loader.api.FabricLoader;
-
-import io.github.vampirestudios.vampirelib.api.FabricLanguageProvider;
-import io.github.vampirestudios.vampirelib.api.datagen.CustomBlockTagProvider;
-import io.github.vampirestudios.vampirelib.blocks.BaseBlock;
-import io.github.vampirestudios.vampirelib.blocks.BaseLogAndWoodBlock;
-import io.github.vampirestudios.vampirelib.blocks.ButtonBaseBlock;
-import io.github.vampirestudios.vampirelib.blocks.CustomLadderBlock;
-import io.github.vampirestudios.vampirelib.blocks.DoorBaseBlock;
-import io.github.vampirestudios.vampirelib.blocks.FenceBaseBlock;
-import io.github.vampirestudios.vampirelib.blocks.FenceGateBaseBlock;
-import io.github.vampirestudios.vampirelib.blocks.FlowerPotBaseBlock;
-import io.github.vampirestudios.vampirelib.blocks.FungusBaseBlock;
-import io.github.vampirestudios.vampirelib.blocks.LeavesBaseBlock;
-import io.github.vampirestudios.vampirelib.blocks.PressurePlateBaseBlock;
-import io.github.vampirestudios.vampirelib.blocks.SaplingBaseBlock;
-import io.github.vampirestudios.vampirelib.blocks.SlabBaseBlock;
-import io.github.vampirestudios.vampirelib.blocks.StairsBaseBlock;
-import io.github.vampirestudios.vampirelib.blocks.TrapdoorBaseBlock;
-import io.github.vampirestudios.vampirelib.boat.CustomBoatEntity;
-import io.github.vampirestudios.vampirelib.boat.CustomBoatInfo;
-import io.github.vampirestudios.vampirelib.client.VampireLibClient;
-import io.github.vampirestudios.vampirelib.client.renderer.CustomBoatEntityRenderer;
-import io.github.vampirestudios.vampirelib.init.VEntityModelLayers;
-import io.github.vampirestudios.vampirelib.items.CustomBoatItem;
-import io.github.vampirestudios.vampirelib.utils.ArtificeGenerationHelper;
-import io.github.vampirestudios.vampirelib.utils.Utils;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Consumer;
 
 import static net.minecraft.data.loot.BlockLoot.createSingleItemTableWithSilkTouch;
-import static net.minecraft.data.models.BlockModelGenerators.createDoor;
-import static net.minecraft.data.models.BlockModelGenerators.createHorizontalFacingDispatch;
-import static net.minecraft.data.models.BlockModelGenerators.createSimpleBlock;
-import static net.minecraft.data.models.BlockModelGenerators.createTrapdoor;
+import static net.minecraft.data.models.BlockModelGenerators.*;
 import static net.minecraft.data.recipes.RecipeProvider.has;
 
 public class WoodRegistry {
@@ -793,7 +757,7 @@ public class WoodRegistry {
     private Block pressurePlate;
     private Block ladder;
     private Item boatItem;
-    private EntityType<CustomBoatEntity> boatEntity;
+    private TerraformBoatType boatType;
 
     public Tag.Named<Block> logsTag;
     public Tag.Named<Item> logsItemTag;
@@ -837,7 +801,11 @@ public class WoodRegistry {
         return new WoodRegistry.Builder().of(name, fungusGenerator);
     }
 
-    public Block log() {
+	public ResourceLocation name() {
+		return name;
+	}
+
+	public Block log() {
         return log;
     }
 
@@ -1380,8 +1348,8 @@ public class WoodRegistry {
         }
 
         public Builder pottedSapling() {
-            woodRegistry.pottedSapling = registryHelper.blocks().registerBlock(new FlowerPotBaseBlock(woodRegistry.sapling),
-                "potted_" + name.getPath() + (!woodRegistry.mushroomLike ? "_sapling" : "_fungus"), CreativeModeTab.TAB_DECORATIONS);
+			woodRegistry.pottedSapling = registryHelper.blocks().registerBlockWithoutItem("potted_" + name.getPath() + (!woodRegistry.mushroomLike ? "_sapling" : "_fungus"),
+				new FlowerPotBaseBlock(woodRegistry.sapling));
             return this;
         }
 
@@ -1394,8 +1362,8 @@ public class WoodRegistry {
         }
 
         public Builder pottedSapling(String nameIn) {
-            woodRegistry.pottedSapling = registryHelper.blocks().registerBlockWithoutItem("potted_" + nameIn + (!woodRegistry.mushroomLike ?
-                    "_sapling" : "_fungus"), new FlowerPotBaseBlock(woodRegistry.sapling));
+			woodRegistry.pottedSapling = registryHelper.blocks().registerBlockWithoutItem("potted_" + nameIn + (!woodRegistry.mushroomLike ?
+					"_sapling" : "_fungus"), new FlowerPotBaseBlock(woodRegistry.sapling));
             return this;
         }
 
@@ -1416,8 +1384,8 @@ public class WoodRegistry {
 
         public Builder pottedSapling(String... names) {
             for (String saplingName : names) {
-                woodRegistry.pottedSapling = registryHelper.blocks().registerBlock(new FlowerPotBaseBlock(woodRegistry.sapling),
-                    "potted_" + saplingName + (!woodRegistry.mushroomLike ? "_sapling" : "_fungus"), CreativeModeTab.TAB_DECORATIONS);
+                woodRegistry.pottedSapling = registryHelper.blocks().registerBlockWithoutItem("potted_" + saplingName + (!woodRegistry.mushroomLike ? "_sapling" : "_fungus"),
+					new FlowerPotBaseBlock(woodRegistry.sapling));
             }
             return this;
         }
@@ -1444,28 +1412,28 @@ public class WoodRegistry {
         }
 
         public Builder door() {
-            Block block = woodRegistry.mushroomLike ? Blocks.WARPED_FENCE_GATE : Blocks.DARK_OAK_FENCE_GATE;
+            Block block = woodRegistry.mushroomLike ? Blocks.WARPED_DOOR : Blocks.DARK_OAK_DOOR;
             woodRegistry.door = registryHelper.blocks().registerBlock(new DoorBaseBlock(block, BlockBehaviour.Properties.copy(woodRegistry.planks)),
                 name.getPath() + "_door", CreativeModeTab.TAB_REDSTONE);
             return this;
         }
 
         public Builder trapdoor() {
-            Block block = woodRegistry.mushroomLike ? Blocks.WARPED_FENCE_GATE : Blocks.DARK_OAK_FENCE_GATE;
+            Block block = woodRegistry.mushroomLike ? Blocks.WARPED_TRAPDOOR : Blocks.DARK_OAK_TRAPDOOR;
             woodRegistry.trapdoor = registryHelper.blocks().registerBlock(new TrapdoorBaseBlock(block, BlockBehaviour.Properties.copy(woodRegistry.planks)),
                 name.getPath() + "_trapdoor", CreativeModeTab.TAB_REDSTONE);
             return this;
         }
 
         public Builder button() {
-            Block block = woodRegistry.mushroomLike ? Blocks.WARPED_FENCE_GATE : Blocks.DARK_OAK_FENCE_GATE;
+            Block block = woodRegistry.mushroomLike ? Blocks.WARPED_BUTTON : Blocks.DARK_OAK_BUTTON;
             woodRegistry.button = registryHelper.blocks().registerBlock(new ButtonBaseBlock(true, block, BlockBehaviour.Properties.copy(woodRegistry.planks)),
                 name.getPath() + "_button", CreativeModeTab.TAB_REDSTONE);
             return this;
         }
 
         public Builder pressurePlate(PressurePlateBlock.Sensitivity type) {
-            Block block = woodRegistry.mushroomLike ? Blocks.WARPED_FENCE_GATE : Blocks.DARK_OAK_FENCE_GATE;
+            Block block = woodRegistry.mushroomLike ? Blocks.WARPED_PRESSURE_PLATE : Blocks.DARK_OAK_PRESSURE_PLATE;
             woodRegistry.pressurePlate = registryHelper.blocks().registerBlock(new PressurePlateBaseBlock(block, BlockBehaviour.Properties.copy(woodRegistry.planks), type),
                 name.getPath() + "_pressure_plate", CreativeModeTab.TAB_REDSTONE);
             return this;
@@ -1478,8 +1446,8 @@ public class WoodRegistry {
         }
 
         public Builder boat() {
-            woodRegistry.boatItem = registryHelper.items().registerItem(name.getPath() + "_boat", new CustomBoatItem(() -> woodRegistry.boatEntity, new Item.Properties().stacksTo(1).tab(CreativeModeTab.TAB_TRANSPORTATION)));
-            woodRegistry.boatEntity = Registry.register(Registry.ENTITY_TYPE, Utils.appendToPath(name, "_boat"), FabricEntityTypeBuilder.<CustomBoatEntity>create(MobCategory.MISC, (entity, world) -> new CustomBoatEntity(entity, world, new CustomBoatInfo(woodRegistry.boatItem, woodRegistry.planks.asItem(), Utils.appendAndPrependToPath(name, "textures/entity/boat/", ".png"), boatType))).dimensions(EntityDimensions.fixed(1.375F, 0.5625F)).build());
+			woodRegistry.boatItem = TerraformBoatItemHelper.registerBoatItem(Utils.appendToPath(name, "_boat"), () -> woodRegistry.boatType);
+			woodRegistry.boatType = Registry.register(TerraformBoatTypeRegistry.INSTANCE, name, new TerraformBoatType.Builder().item(woodRegistry.boatItem).build());
             return this;
         }
 
@@ -1559,125 +1527,6 @@ public class WoodRegistry {
             }
 
             if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
-                if (generateAssets) {
-                    Artifice.registerAssetPack(name, clientResourcePackBuilder -> {
-                        String logName = woodRegistry.mushroomLike ? "_stem" : "_log";
-                        String woodSuffix = woodRegistry.mushroomLike ? "_hyphae" : "_wood";
-                        if (woodRegistry.log != null || woodRegistry.strippedLog != null) {
-                            ArtificeGenerationHelper.generatePillarBlockState(clientResourcePackBuilder, Utils.appendToPath(name, logName));
-                            ArtificeGenerationHelper.generateColumnBlockModel(clientResourcePackBuilder, Utils.appendToPath(name, logName), Utils.appendToPath(name, logName + "_top"), Utils.appendToPath(name, logName));
-                            ArtificeGenerationHelper.generateBlockItemModel(clientResourcePackBuilder, Utils.appendToPath(name, logName));
-
-                            ArtificeGenerationHelper.generatePillarBlockState(clientResourcePackBuilder, Utils.appendAndPrependToPath(name, "stripped_", logName));
-                            ArtificeGenerationHelper.generateColumnBlockModel(clientResourcePackBuilder, Utils.appendAndPrependToPath(name, "stripped_", logName), Utils.appendAndPrependToPath(name, "stripped_", logName + "_top"), Utils.appendAndPrependToPath(name, "stripped_", logName));
-                            ArtificeGenerationHelper.generateBlockItemModel(clientResourcePackBuilder, Utils.appendAndPrependToPath(name, "stripped_", logName));
-                        }
-                        if (woodRegistry.wood != null || woodRegistry.strippedWood != null) {
-                            ArtificeGenerationHelper.generatePillarBlockState(clientResourcePackBuilder, Utils.appendToPath(name, woodSuffix));
-                            ArtificeGenerationHelper.generateAllBlockModel(clientResourcePackBuilder, Utils.appendToPath(name, woodSuffix), Utils.appendToPath(name, logName));
-                            ArtificeGenerationHelper.generateBlockItemModel(clientResourcePackBuilder, Utils.appendToPath(name, woodSuffix));
-
-                            ArtificeGenerationHelper.generatePillarBlockState(clientResourcePackBuilder, Utils.appendAndPrependToPath(name, "stripped_", woodSuffix));
-                            ArtificeGenerationHelper.generateAllBlockModel(clientResourcePackBuilder, Utils.appendAndPrependToPath(name, "stripped_", woodSuffix), Utils.appendAndPrependToPath(name, "stripped_", logName));
-                            ArtificeGenerationHelper.generateBlockItemModel(clientResourcePackBuilder, Utils.appendAndPrependToPath(name, "stripped_", woodSuffix));
-                        }
-
-                        if (woodRegistry.planks != null && !preRegisteredPlanks) {
-                            ArtificeGenerationHelper.generateBasicBlockState(clientResourcePackBuilder, Utils.appendToPath(name, "_planks"));
-                            ArtificeGenerationHelper.generateAllBlockModel(clientResourcePackBuilder, Utils.appendToPath(name, "_planks"), Utils.appendToPath(name, "_planks"));
-                            ArtificeGenerationHelper.generateBlockItemModel(clientResourcePackBuilder, Utils.appendToPath(name, "_planks"));
-                        }
-
-                        if (woodRegistry.bookshelf != null) {
-                            ArtificeGenerationHelper.generateBasicBlockState(clientResourcePackBuilder, Utils.appendToPath(name, "_bookshelf"));
-                            ArtificeGenerationHelper.generateColumnBlockModel(clientResourcePackBuilder, Utils.appendToPath(name, "_bookshelf"), Utils.appendToPath(name, "_planks"), Utils.appendToPath(name, "_bookshelf"));
-                            ArtificeGenerationHelper.generateBlockItemModel(clientResourcePackBuilder, Utils.appendToPath(name, "_bookshelf"));
-                        }
-
-                        if (woodRegistry.leaves != null) {
-                            if (!availableLeaves.isEmpty()) {
-                                for (String leaves : availableLeaves) {
-                                    ResourceLocation leavesName = new ResourceLocation(name.getNamespace(), leaves);
-                                    ArtificeGenerationHelper.generateBasicBlockState(clientResourcePackBuilder, leavesName);
-                                    ArtificeGenerationHelper.generateAllBlockModel(clientResourcePackBuilder, leavesName, leavesName);
-                                    ArtificeGenerationHelper.generateBlockItemModel(clientResourcePackBuilder, leavesName);
-                                }
-                            } else {
-                                ArtificeGenerationHelper.generateBasicBlockState(clientResourcePackBuilder, Utils.appendToPath(name, "_leaves"));
-                                ArtificeGenerationHelper.generateAllBlockModel(clientResourcePackBuilder, Utils.appendToPath(name, "_leaves"));
-                                ArtificeGenerationHelper.generateBlockItemModel(clientResourcePackBuilder, Utils.appendToPath(name, "_leaves"));
-                            }
-                        }
-
-                        if (woodRegistry.sapling != null) {
-                            if (!availableSaplings.isEmpty()) {
-                                for (String sapling : availableSaplings) {
-                                    ResourceLocation saplingName = new ResourceLocation(name.getNamespace(), sapling);
-                                    ArtificeGenerationHelper.generateBasicBlockState(clientResourcePackBuilder, saplingName);
-                                    ArtificeGenerationHelper.generateCrossBlockModel(clientResourcePackBuilder, saplingName);
-                                    ArtificeGenerationHelper.generateSimpleItemModel(clientResourcePackBuilder, saplingName, Utils.prependToPath(saplingName, "block/"));
-                                }
-                            } else {
-                                ArtificeGenerationHelper.generateBasicBlockState(clientResourcePackBuilder, Utils.appendToPath(name, "_leaves"));
-                                ArtificeGenerationHelper.generateAllBlockModel(clientResourcePackBuilder, Utils.appendToPath(name, "_leaves"));
-                                ArtificeGenerationHelper.generateBlockItemModel(clientResourcePackBuilder, Utils.appendToPath(name, "_leaves"));
-                            }
-                        }
-
-                        if (woodRegistry.boatItem != null) {
-                            ArtificeGenerationHelper.generateSimpleItemModel(clientResourcePackBuilder, Utils.appendToPath(name, "_boat"));
-                        }
-
-                        if (woodRegistry.ladder != null) {
-                            ArtificeGenerationHelper.generateFacingBlockState(clientResourcePackBuilder, Utils.appendToPath(name, "_ladder"));
-                            ArtificeGenerationHelper.generateLadderBlockModel(clientResourcePackBuilder, Utils.appendToPath(name, "_ladder"));
-                            ArtificeGenerationHelper.generateSimpleItemModel(clientResourcePackBuilder, Utils.appendToPath(name, "_ladder"), Utils.appendAndPrependToPath(name, "block/", "_ladder"));
-                        }
-
-                        if (woodRegistry.slab != null) {
-                            ArtificeGenerationHelper.generateSlabBlockState(clientResourcePackBuilder, Utils.appendToPath(name, "_slab"), Utils.appendToPath(name, "_planks"));
-                            ArtificeGenerationHelper.generateSlabBlockModels(clientResourcePackBuilder, Utils.appendToPath(name, "_slab"), Utils.appendAndPrependToPath(name, "block/", "_planks"));
-                            ArtificeGenerationHelper.generateBlockItemModel(clientResourcePackBuilder, Utils.appendToPath(name, "_slab"));
-                        }
-
-                        if (woodRegistry.stairs != null) {
-                            ArtificeGenerationHelper.generateStairsBlockState(clientResourcePackBuilder, Utils.appendToPath(name, "_stairs"));
-                            ArtificeGenerationHelper.generateStairsBlockModels(clientResourcePackBuilder, Utils.appendToPath(name, "_stairs"), Utils.appendAndPrependToPath(name, "block/", "_planks"));
-                            ArtificeGenerationHelper.generateBlockItemModel(clientResourcePackBuilder, Utils.appendToPath(name, "_stairs"));
-                        }
-
-                        if (woodRegistry.fence != null) {
-                            ArtificeGenerationHelper.generateFenceBlockState(clientResourcePackBuilder, Utils.appendToPath(name, "_fence"));
-                            ArtificeGenerationHelper.generateFenceBlockModels(clientResourcePackBuilder, Utils.appendToPath(name, "_fence"), Utils.appendAndPrependToPath(name, "block/", "_planks"));
-                            ArtificeGenerationHelper.generateBlockItemModel(clientResourcePackBuilder, Utils.appendToPath(name, "_fence"), Utils.appendToPath(name, "_fence_inventory"));
-                        }
-
-                        if (woodRegistry.fenceGate != null) {
-                            ArtificeGenerationHelper.generateFenceGateBlockState(clientResourcePackBuilder, Utils.appendToPath(name, "_fence_gate"));
-                            ArtificeGenerationHelper.generateFenceGateBlockModels(clientResourcePackBuilder, Utils.appendToPath(name, "_fence_gate"), Utils.appendAndPrependToPath(name, "block/", "_planks"));
-                            ArtificeGenerationHelper.generateBlockItemModel(clientResourcePackBuilder, Utils.appendToPath(name, "_fence_gate"));
-                        }
-
-                        if (woodRegistry.door != null) {
-                            ArtificeGenerationHelper.generateDoorBlockState(clientResourcePackBuilder, Utils.appendToPath(name, "_door"));
-                            ArtificeGenerationHelper.generateDoorBlockModels(clientResourcePackBuilder, Utils.appendToPath(name, "_door"), Utils.appendAndPrependToPath(name, "block/", "_door_top"), Utils.appendAndPrependToPath(name, "block/", "_door_bottom"));
-                            ArtificeGenerationHelper.generateSimpleItemModel(clientResourcePackBuilder, Utils.appendToPath(name, "_door"));
-                        }
-
-                        if (woodRegistry.trapdoor != null) {
-                            ArtificeGenerationHelper.generateTrapdoorBlockState(clientResourcePackBuilder, Utils.appendToPath(name, "_trapdoor"));
-                            ArtificeGenerationHelper.generateTrapdoorBlockModels(clientResourcePackBuilder, Utils.appendToPath(name, "_trapdoor"), Utils.appendAndPrependToPath(name, "block/", "_trapdoor"));
-                            ArtificeGenerationHelper.generateBlockItemModel(clientResourcePackBuilder, Utils.appendToPath(name, "_trapdoor"), Utils.appendToPath(name, "_trapdoor_bottom"));
-                        }
-                        /*new Thread(() -> {
-                            try {
-                                clientResourcePackBuilder.dumpResources("test", "assets");
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                        }).start();*/
-                    });
-                }
                 if (woodRegistry.leaves != null) {
                     BlockRenderLayerMapImpl.INSTANCE.putBlock(woodRegistry.leaves, RenderType.cutoutMipped());
                 }
@@ -1689,11 +1538,6 @@ public class WoodRegistry {
                 }
                 if (woodRegistry.trapdoor != null) {
                     BlockRenderLayerMapImpl.INSTANCE.putBlock(woodRegistry.trapdoor, RenderType.cutoutMipped());
-                }
-                if (woodRegistry.boatItem != null) {
-                    ModelLayerLocation entityModelLayer = VEntityModelLayers.createBoat(name);
-                    EntityModelLayerRegistry.registerModelLayer(entityModelLayer, BoatModel::createBodyModel);
-                    EntityRendererRegistry.register(woodRegistry.boatEntity, ctx -> new CustomBoatEntityRenderer(entityModelLayer, ctx));
                 }
             }
 

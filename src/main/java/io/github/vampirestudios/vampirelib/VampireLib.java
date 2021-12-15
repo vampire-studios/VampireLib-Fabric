@@ -694,7 +694,7 @@ public class VampireLib extends BasicModClass {
     public static final VampireLib INSTANCE = new VampireLib();
 
     public static final List<ConvertibleBlockPair> CONVERTIBLE_BLOCKS = new ArrayList<>();
-	public static final boolean TEST_CONTENT_ENABLED = false;
+	public static final boolean TEST_CONTENT_ENABLED = true;
 
     public static WoodRegistry TEST_WOOD;
     public static WoodRegistry TEST_WOOD1;
@@ -715,7 +715,7 @@ public class VampireLib extends BasicModClass {
 	public static WoodRegistry TEST_NETHER_WOOD7;
 
     public VampireLib() {
-        super("vampirelib", "VampireLib", "4.4.0+build.1");
+        super("vampirelib", "VampireLib", "4.4.1+build.1");
     }
 
     @Override
@@ -728,45 +728,45 @@ public class VampireLib extends BasicModClass {
         if (TEST_CONTENT_ENABLED) {
 			//Overworld
 			TEST_WOOD = WoodRegistry.of(identifier("test"))
-				.defaultBlocks().build();
+				.defaultBlocks().boat().build();
 			TEST_WOOD1 = WoodRegistry.of(identifier("test1"))
-				.defaultBlocksColoredLeaves().build();
+				.defaultBlocksColoredLeaves().boat().build();
 
 			TEST_WOOD2 = WoodRegistry.of(identifier("test2"))
-				.defaultBlocks().defaultExtraBlocks().build();
+				.defaultBlocks().defaultExtraBlocks().boat().build();
 			TEST_WOOD3 = WoodRegistry.of(identifier("test3"))
-				.defaultBlocksColoredLeaves().defaultExtraBlocks().build();
+				.defaultBlocksColoredLeaves().defaultExtraBlocks().boat().build();
 
 			TEST_WOOD4 = WoodRegistry.of(identifier("test4"))
-				.defaultBlocks().defaultExtraBlocks().ladder().build();
+				.defaultBlocks().defaultExtraBlocks().ladder().boat().build();
 			TEST_WOOD5 = WoodRegistry.of(identifier("test5"))
-				.defaultBlocksColoredLeaves().defaultExtraBlocks().ladder().build();
+				.defaultBlocksColoredLeaves().defaultExtraBlocks().ladder().boat().build();
 
 			TEST_WOOD6 = WoodRegistry.of(identifier("test6"))
-				.defaultBlocks().defaultExtraBlocks().ladder().bookshelf().build();
+				.defaultBlocks().defaultExtraBlocks().ladder().bookshelf().boat().build();
 			TEST_WOOD7 = WoodRegistry.of(identifier("test7"))
-				.defaultBlocksColoredLeaves().defaultExtraBlocks().ladder().bookshelf().build();
+				.defaultBlocksColoredLeaves().defaultExtraBlocks().ladder().bookshelf().boat().build();
 
 			//Nether
 			TEST_NETHER_WOOD = WoodRegistry.of(identifier("test_nether"))
-                .mushroomLike().defaultBlocks().build();
+                .mushroomLike().defaultBlocks().boat().build();
 			TEST_NETHER_WOOD1 = WoodRegistry.of(identifier("test1_nether"))
-                .mushroomLike().defaultBlocksColoredLeaves().build();
+                .mushroomLike().defaultBlocksColoredLeaves().boat().build();
 
 			TEST_NETHER_WOOD2 = WoodRegistry.of(identifier("test2_nether"))
-                .mushroomLike().defaultBlocks().defaultExtraBlocks().build();
+                .mushroomLike().defaultBlocks().defaultExtraBlocks().boat().build();
 			TEST_NETHER_WOOD3 = WoodRegistry.of(identifier("test3_nether"))
-                .mushroomLike().defaultBlocksColoredLeaves().defaultExtraBlocks().build();
+                .mushroomLike().defaultBlocksColoredLeaves().defaultExtraBlocks().boat().build();
 
 			TEST_NETHER_WOOD4 = WoodRegistry.of(identifier("test4_nether"))
-                .mushroomLike().defaultBlocks().defaultExtraBlocks().ladder().build();
+                .mushroomLike().defaultBlocks().defaultExtraBlocks().ladder().boat().build();
 			TEST_NETHER_WOOD5 = WoodRegistry.of(identifier("test5_nether"))
-                .mushroomLike().defaultBlocksColoredLeaves().defaultExtraBlocks().ladder().build();
+                .mushroomLike().defaultBlocksColoredLeaves().defaultExtraBlocks().ladder().boat().build();
 
 			TEST_NETHER_WOOD6 = WoodRegistry.of(identifier("test6_nether"))
-                .mushroomLike().defaultBlocks().defaultExtraBlocks().ladder().bookshelf().build();
+                .mushroomLike().defaultBlocks().defaultExtraBlocks().ladder().bookshelf().boat().build();
 			TEST_NETHER_WOOD7 = WoodRegistry.of(identifier("test7_nether"))
-                .mushroomLike().defaultBlocksColoredLeaves().defaultExtraBlocks().ladder().bookshelf().build();
+                .mushroomLike().defaultBlocksColoredLeaves().defaultExtraBlocks().ladder().bookshelf().boat().build();
 		}
 
         for (ConvertibleBlockPair convertibleBlock : CONVERTIBLE_BLOCKS) {
