@@ -680,8 +680,10 @@ package io.github.vampirestudios.vampirelib.utils.registry;
 import io.github.vampirestudios.vampirelib.api.FabricLanguageProvider;
 import io.github.vampirestudios.vampirelib.api.boat.TerraformBoatType;
 import io.github.vampirestudios.vampirelib.api.boat.TerraformBoatTypeRegistry;
+import io.github.vampirestudios.vampirelib.api.boat.client.TerraformBoatClientHelper;
 import io.github.vampirestudios.vampirelib.api.boat.item.TerraformBoatItemHelper;
 import io.github.vampirestudios.vampirelib.api.datagen.CustomBlockTagProvider;
+import io.github.vampirestudios.vampirelib.api.datagen.CustomFabricTagBuilder;
 import io.github.vampirestudios.vampirelib.blocks.*;
 import io.github.vampirestudios.vampirelib.client.VampireLibClient;
 import io.github.vampirestudios.vampirelib.utils.Utils;
@@ -765,6 +767,10 @@ public class WoodRegistry {
     private boolean flammable = true;
     private boolean mushroomLike = false;
 
+	private final List<String> availableLeaves = new ArrayList<>();
+	private final List<String> availableSaplings = new ArrayList<>();
+	private final List<String> availablePottedSaplings = new ArrayList<>();
+
     private WoodRegistry(ResourceLocation name) {
         this(name, null, null);
     }
@@ -803,6 +809,14 @@ public class WoodRegistry {
 
 	public ResourceLocation name() {
 		return name;
+	}
+
+	public List<String> availableLeaves() {
+		return availableLeaves;
+	}
+
+	public List<String> availableSaplings() {
+		return availableSaplings;
 	}
 
 	public Block log() {
@@ -901,6 +915,18 @@ public class WoodRegistry {
         blockTags.tagCustom(logsTag).add(log, strippedLog, wood, strippedWood);
         blockTags.tagCustom(BlockTags.LOGS).addTag(logsTag);
         blockTags.tagCustom(BlockTags.PLANKS).add(planks);
+		if (!availableLeaves.isEmpty() && !mushroomLike) {
+			availableLeaves.forEach(s ->  {
+				Block block = Registry.BLOCK.get(new ResourceLocation(name.getNamespace(), s));
+				blockTags.tagCustom(BlockTags.LEAVES).add(block);
+			});
+		}
+		if (!availableLeaves.isEmpty() && mushroomLike) {
+			availableLeaves.forEach(s ->  {
+				Block block = Registry.BLOCK.get(new ResourceLocation(name.getNamespace(), s));
+				blockTags.tagCustom(BlockTags.WART_BLOCKS).add(block);
+			});
+		}
         if (leaves != null && !mushroomLike) blockTags.tagCustom(BlockTags.LEAVES).add(leaves);
         if (leaves != null && mushroomLike) blockTags.tagCustom(BlockTags.WART_BLOCKS).add(leaves);
         if (ladder != null) blockTags.tagCustom(BlockTags.CLIMBABLE).add(ladder);
@@ -908,7 +934,19 @@ public class WoodRegistry {
         if (button != null) blockTags.tagCustom(BlockTags.WOODEN_BUTTONS).add(button);
         if (door != null) blockTags.tagCustom(BlockTags.WOODEN_DOORS).add(door);
         if (sapling != null) blockTags.tagCustom(BlockTags.SAPLINGS).add(sapling);
+		if (!availableSaplings.isEmpty()) {
+			availableSaplings.forEach(s ->  {
+				Block block = Registry.BLOCK.get(new ResourceLocation(name.getNamespace(), s));
+				blockTags.tagCustom(BlockTags.SAPLINGS).add(block);
+			});
+		}
         if (pottedSapling != null) blockTags.tagCustom(BlockTags.FLOWER_POTS).add(pottedSapling);
+		if (!availablePottedSaplings.isEmpty()) {
+			availablePottedSaplings.forEach(s ->  {
+				Block block = Registry.BLOCK.get(new ResourceLocation(name.getNamespace(), s));
+				blockTags.tagCustom(BlockTags.FLOWER_POTS).add(block);
+			});
+		}
         if (fence != null) blockTags.tagCustom(BlockTags.WOODEN_FENCES).add(fence);
         if (fenceGate != null) blockTags.tagCustom(BlockTags.FENCE_GATES).add(fenceGate);
         if (pressurePlate != null) blockTags.tagCustom(BlockTags.PRESSURE_PLATES).add(pressurePlate);
@@ -917,16 +955,17 @@ public class WoodRegistry {
         if (flammable) {
             blockTags.tagCustom(BlockTags.LOGS_THAT_BURN).addTag(logsTag);
         } else {
-            if (ladder != null) blockTags.tagCustom(BlockTags.NON_FLAMMABLE_WOOD).add(ladder);
-            if (trapdoor != null) blockTags.tagCustom(BlockTags.NON_FLAMMABLE_WOOD).add(trapdoor);
-            if (button != null) blockTags.tagCustom(BlockTags.NON_FLAMMABLE_WOOD).add(button);
-            if (door != null) blockTags.tagCustom(BlockTags.NON_FLAMMABLE_WOOD).add(door);
-            if (fence != null) blockTags.tagCustom(BlockTags.NON_FLAMMABLE_WOOD).add(fence);
-            if (fenceGate != null) blockTags.tagCustom(BlockTags.NON_FLAMMABLE_WOOD).add(fenceGate);
-            if (pressurePlate != null) blockTags.tagCustom(BlockTags.NON_FLAMMABLE_WOOD).add(pressurePlate);
-            if (slab != null) blockTags.tagCustom(BlockTags.NON_FLAMMABLE_WOOD).add(slab);
-            if (stairs != null) blockTags.tagCustom(BlockTags.NON_FLAMMABLE_WOOD).add(stairs);
-            if (bookshelf != null) blockTags.tagCustom(BlockTags.NON_FLAMMABLE_WOOD).add(bookshelf);
+			CustomFabricTagBuilder<Block> nonFlammableWoodTag = blockTags.tagCustom(BlockTags.NON_FLAMMABLE_WOOD);
+            if (ladder != null) nonFlammableWoodTag.add(ladder);
+            if (trapdoor != null) nonFlammableWoodTag.add(trapdoor);
+            if (button != null) nonFlammableWoodTag.add(button);
+            if (door != null) nonFlammableWoodTag.add(door);
+            if (fence != null) nonFlammableWoodTag.add(fence);
+            if (fenceGate != null) nonFlammableWoodTag.add(fenceGate);
+            if (pressurePlate != null) nonFlammableWoodTag.add(pressurePlate);
+            if (slab != null) nonFlammableWoodTag.add(slab);
+            if (stairs != null) nonFlammableWoodTag.add(stairs);
+            if (bookshelf != null) nonFlammableWoodTag.add(bookshelf);
         }
     }
 
@@ -988,6 +1027,14 @@ public class WoodRegistry {
             ResourceLocation resourceLocation = ModelLocationUtils.getModelLocation(leaves);
             blockStateModelGenerator.delegateItemModel(leaves, resourceLocation);
         }
+		if (!availableLeaves.isEmpty()) {
+			availableLeaves.forEach(s ->  {
+				Block block = Registry.BLOCK.get(new ResourceLocation(name.getNamespace(), s));
+				blockStateModelGenerator.createTrivialBlock(block, TexturedModel.createDefault(block1 -> leavesMapping, mushroomLike ? ModelTemplates.CUBE_ALL : ModelTemplates.LEAVES));
+				ResourceLocation resourceLocation = ModelLocationUtils.getModelLocation(block);
+				blockStateModelGenerator.delegateItemModel(block, resourceLocation);
+			});
+		}
         if (door != null) {
             ResourceLocation resourceLocation = ModelTemplates.DOOR_BOTTOM.create(door, doorMapping, blockStateModelGenerator.modelOutput);
             ResourceLocation resourceLocation2 = ModelTemplates.DOOR_BOTTOM_HINGE.create(door, doorMapping, blockStateModelGenerator.modelOutput);
@@ -1079,10 +1126,31 @@ public class WoodRegistry {
         languageProvider.addBlock(strippedWood, "Stripped " + translatedName + (mushroomLike ? " Hyphae" : " Wood"));
         languageProvider.addBlock(planks, translatedName + " Planks");
         if (sapling != null) languageProvider.addBlock(sapling, translatedName + (mushroomLike ? " Fungi" : " Sapling"));
+		if (!availableSaplings.isEmpty()) {
+			availableSaplings.forEach(s ->  {
+				String translatedName1 = WordUtils.capitalizeFully(s.replace("_", " "));
+				Block block = Registry.BLOCK.get(new ResourceLocation(name.getNamespace(), s));
+				languageProvider.addBlock(block, translatedName1 + (mushroomLike ? " Fungi" : " Sapling"));
+			});
+		}
         if (pottedSapling != null) languageProvider.addBlock(pottedSapling, "Potted " + translatedName + (mushroomLike ? " Fungi" : " Sapling"));
+		if (!availablePottedSaplings.isEmpty()) {
+			availablePottedSaplings.forEach(s ->  {
+				String translatedName1 = WordUtils.capitalizeFully(s.replace("_", " "));
+				Block block = Registry.BLOCK.get(new ResourceLocation(name.getNamespace(), s));
+				languageProvider.addBlock(block, "Potted " + translatedName1 + (mushroomLike ? " Fungi" : " Sapling"));
+			});
+		}
         if (trapdoor != null) languageProvider.addBlock(trapdoor, translatedName + " Trapdoor");
         if (door != null) languageProvider.addBlock(door, translatedName + " Door");
         if (leaves != null) languageProvider.addBlock(leaves, translatedName + (mushroomLike ? " Wart Block" : " Leaves"));
+		if (!availableLeaves.isEmpty()) {
+			availableLeaves.forEach(s ->  {
+				String translatedName1 = WordUtils.capitalizeFully(s.replace("_", " "));
+				Block block = Registry.BLOCK.get(new ResourceLocation(name.getNamespace(), s));
+				languageProvider.addBlock(block, translatedName1 + (mushroomLike ? " Wart Block" : " Leaves"));
+			});
+		}
         if (fence != null) languageProvider.addBlock(fence, translatedName + " Fence");
         if (fenceGate != null) languageProvider.addBlock(fenceGate, translatedName + " Fence Gate");
         if (button != null) languageProvider.addBlock(button, translatedName + " Button");
@@ -1098,13 +1166,40 @@ public class WoodRegistry {
         lootTablesProvider.dropSelf(wood);
         lootTablesProvider.dropSelf(strippedWood);
         lootTablesProvider.dropSelf(planks);
-        if (leaves != null && !mushroomLike) lootTablesProvider.add(leaves, block -> BlockLoot.createLeavesDrops(block, sapling, 0.05F, 0.0625F, 0.083333336F, 0.1F));
+        if (leaves != null && !mushroomLike) {
+			if (sapling != null) lootTablesProvider.add(leaves, block1 -> BlockLoot.createLeavesDrops(block1, sapling, 0.05F, 0.0625F, 0.083333336F, 0.1F));
+			else lootTablesProvider.dropSelf(leaves);
+		}
         if (leaves != null && mushroomLike) lootTablesProvider.dropSelf(leaves);
+		if (!availableLeaves.isEmpty() && !mushroomLike) {
+			availableLeaves.forEach(s ->  {
+				Block block = Registry.BLOCK.get(new ResourceLocation(name.getNamespace(), s));
+				if (!availableSaplings.isEmpty() && availableSaplings.contains(s.replace("_leaves", "_sapling"))) {
+					Block sapling = Registry.BLOCK.get(new ResourceLocation(name.getNamespace(), s.replace("_leaves", "_sapling")));
+					lootTablesProvider.add(block, block1 -> BlockLoot.createLeavesDrops(block1, sapling, 0.05F, 0.0625F, 0.083333336F, 0.1F));
+				} else {
+					if (sapling != null) lootTablesProvider.add(block, block1 -> BlockLoot.createLeavesDrops(block1, sapling, 0.05F, 0.0625F, 0.083333336F, 0.1F));
+					else lootTablesProvider.dropSelf(block);
+				}
+			});
+		}
+		if (!availableLeaves.isEmpty() && mushroomLike) {
+			availableLeaves.forEach(s ->  {
+				Block block = Registry.BLOCK.get(new ResourceLocation(name.getNamespace(), s));
+				lootTablesProvider.dropSelf(block);
+			});
+		}
         if (ladder != null) lootTablesProvider.dropSelf(ladder);
         if (trapdoor != null) lootTablesProvider.dropSelf(trapdoor);
         if (button != null) lootTablesProvider.dropSelf(button);
         if (door != null) lootTablesProvider.add(door, BlockLoot::createDoorTable);
         if (sapling != null) lootTablesProvider.dropSelf(sapling);
+		if (!availableSaplings.isEmpty()) {
+			availableSaplings.forEach(s ->  {
+				Block block = Registry.BLOCK.get(new ResourceLocation(name.getNamespace(), s));
+				lootTablesProvider.dropSelf(block);
+			});
+		}
         if (fence != null) lootTablesProvider.dropSelf(fence);
         if (fenceGate != null) lootTablesProvider.dropSelf(fenceGate);
         if (pressurePlate != null) lootTablesProvider.dropSelf(pressurePlate);
@@ -1129,14 +1224,9 @@ public class WoodRegistry {
     }
 
     public static class Builder {
-
-        private final Boat.Type boatType = Boat.Type.OAK;
-        private final List<String> availableLeaves = new ArrayList<>();
-        private final List<String> availableSaplings = new ArrayList<>();
         public ResourceLocation name;
         private WoodRegistry woodRegistry;
         private RegistryHelper registryHelper;
-        private boolean generateAssets = false;
         private boolean preRegisteredPlanks = false;
 
         public Builder of(ResourceLocation name) {
@@ -1145,6 +1235,20 @@ public class WoodRegistry {
             registryHelper = RegistryHelper.createRegistryHelper(name.getNamespace());
             return this;
         }
+
+		public Builder of(ResourceLocation name, AbstractTreeGrower saplingGenerator) {
+			this.name = name;
+			woodRegistry = new WoodRegistry(name, saplingGenerator);
+			registryHelper = RegistryHelper.createRegistryHelper(name.getNamespace());
+			return this;
+		}
+
+		public Builder of(ResourceLocation name, ConfiguredFeature<HugeFungusConfiguration, ?> fungusGenerator) {
+			this.name = name;
+			woodRegistry = new WoodRegistry(name, fungusGenerator);
+			registryHelper = RegistryHelper.createRegistryHelper(name.getNamespace());
+			return this;
+		}
 
         public Builder of(ResourceLocation name, Block planks) {
             this.name = name;
@@ -1156,19 +1260,25 @@ public class WoodRegistry {
             return this;
         }
 
-        public Builder of(ResourceLocation name, AbstractTreeGrower saplingGenerator) {
-            this.name = name;
-            woodRegistry = new WoodRegistry(name, saplingGenerator);
-            registryHelper = RegistryHelper.createRegistryHelper(name.getNamespace());
-            return this;
-        }
+		public Builder of(ResourceLocation name, Block planks, AbstractTreeGrower saplingGenerator) {
+			this.name = name;
+			woodRegistry = new WoodRegistry(name, saplingGenerator);
+			woodRegistry.planks = planks;
+			preRegisteredPlanks = true;
+			registryHelper = RegistryHelper.createRegistryHelper(name.getNamespace());
 
-        public Builder of(ResourceLocation name, ConfiguredFeature<HugeFungusConfiguration, ?> fungusGenerator) {
-            this.name = name;
-            woodRegistry = new WoodRegistry(name, fungusGenerator);
-            registryHelper = RegistryHelper.createRegistryHelper(name.getNamespace());
-            return this;
-        }
+			return this;
+		}
+
+		public Builder of(ResourceLocation name, Block planks, ConfiguredFeature<HugeFungusConfiguration, ?> fungusGenerator) {
+			this.name = name;
+			woodRegistry = new WoodRegistry(name, fungusGenerator);
+			woodRegistry.planks = planks;
+			preRegisteredPlanks = true;
+			registryHelper = RegistryHelper.createRegistryHelper(name.getNamespace());
+
+			return this;
+		}
 
         public Builder log() {
             String logName = woodRegistry.mushroomLike ? name.getPath() + "_stem" : this.name.getPath() + "_log";
@@ -1248,7 +1358,7 @@ public class WoodRegistry {
             for (String name : nameIn) {
                 woodRegistry.leaves = registryHelper.blocks().registerBlock(new LeavesBaseBlock(block), name + leavesName,
                     creativeModeTab);
-                availableLeaves.add(name + leavesName);
+                woodRegistry.availableLeaves.add(name + leavesName);
             }
             return this;
         }
@@ -1295,7 +1405,7 @@ public class WoodRegistry {
                     creativeModeTab);
                 VampireLibClient.ColoredLeaves coloredLeaves = new VampireLibClient.ColoredLeaves(woodRegistry.leaves, false, 0xFFF);
                 VampireLibClient.COLORED_LEAVES.add(coloredLeaves);
-                availableLeaves.add(name + leavesName);
+				woodRegistry.availableLeaves.add(name + leavesName);
             }
             return this;
         }
@@ -1320,7 +1430,7 @@ public class WoodRegistry {
                     creativeModeTab);
                 VampireLibClient.ColoredLeaves coloredLeaves = new VampireLibClient.ColoredLeaves(woodRegistry.leaves, false, color);
                 VampireLibClient.COLORED_LEAVES.add(coloredLeaves);
-                availableLeaves.add(name + leavesName);
+				woodRegistry.availableLeaves.add(name + leavesName);
             }
             return this;
         }
@@ -1334,7 +1444,7 @@ public class WoodRegistry {
                     creativeModeTab);
                 VampireLibClient.ColoredLeaves coloredLeaves = new VampireLibClient.ColoredLeaves(woodRegistry.leaves, true, coloredLeavesBlock.color);
                 VampireLibClient.COLORED_LEAVES.add(coloredLeaves);
-                availableLeaves.add(coloredLeavesBlock.name + leavesName);
+				woodRegistry.availableLeaves.add(coloredLeavesBlock.name + leavesName);
             }
             return this;
         }
@@ -1348,8 +1458,8 @@ public class WoodRegistry {
         }
 
         public Builder pottedSapling() {
-			woodRegistry.pottedSapling = registryHelper.blocks().registerBlockWithoutItem("potted_" + name.getPath() + (!woodRegistry.mushroomLike ? "_sapling" : "_fungus"),
-				new FlowerPotBaseBlock(woodRegistry.sapling));
+			woodRegistry.pottedSapling = registryHelper.blocks().registerBlockWithoutItem("potted_" + name.getPath() + (!woodRegistry.mushroomLike ?
+				"_sapling" : "_fungus"), new FlowerPotBaseBlock(woodRegistry.sapling));
             return this;
         }
 
@@ -1372,11 +1482,11 @@ public class WoodRegistry {
                 if (!woodRegistry.mushroomLike) {
                     woodRegistry.sapling = registryHelper.blocks().registerBlock(new SaplingBaseBlock(woodRegistry.saplingGenerator),
                         saplingName + "_sapling", CreativeModeTab.TAB_DECORATIONS);
-                    availableSaplings.add(saplingName + "_sapling");
+                    woodRegistry.availableSaplings.add(saplingName + "_sapling");
                 } else {
                     woodRegistry.sapling = registryHelper.blocks().registerBlock(new FungusBaseBlock(woodRegistry.fungusGenerator),
                         saplingName + "_fungus", CreativeModeTab.TAB_DECORATIONS);
-                    availableSaplings.add(saplingName + "_fungus");
+					woodRegistry.availableSaplings.add(saplingName + "_fungus");
                 }
             }
             return this;
@@ -1386,6 +1496,7 @@ public class WoodRegistry {
             for (String saplingName : names) {
                 woodRegistry.pottedSapling = registryHelper.blocks().registerBlockWithoutItem("potted_" + saplingName + (!woodRegistry.mushroomLike ? "_sapling" : "_fungus"),
 					new FlowerPotBaseBlock(woodRegistry.sapling));
+				woodRegistry.availablePottedSaplings.add(saplingName + (!woodRegistry.mushroomLike ? "_sapling" : "_fungus"));
             }
             return this;
         }
@@ -1448,6 +1559,7 @@ public class WoodRegistry {
         public Builder boat() {
 			woodRegistry.boatItem = TerraformBoatItemHelper.registerBoatItem(Utils.appendToPath(name, "_boat"), () -> woodRegistry.boatType);
 			woodRegistry.boatType = Registry.register(TerraformBoatTypeRegistry.INSTANCE, name, new TerraformBoatType.Builder().item(woodRegistry.boatItem).build());
+			if (FabricLoader.getInstance().getEnvironmentType().equals(EnvType.CLIENT)) TerraformBoatClientHelper.registerModelLayer(name);
             return this;
         }
 

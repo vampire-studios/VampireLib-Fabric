@@ -26,7 +26,7 @@ public class TerraformBoatEntityRenderer extends BoatRenderer {
 
 		this.texturesAndModels = TerraformBoatTypeRegistry.INSTANCE.entrySet().stream().collect(ImmutableMap.toImmutableMap(Map.Entry::getValue, entry -> {
 			ResourceLocation id = entry.getKey().location();
-			ResourceLocation textureId = new ResourceLocation(id.getNamespace(), "textures/entity/boat/" + id.getPath() + ".png");
+			ResourceLocation textureId = new ResourceLocation(id.getNamespace(), "textures/wood_types/" + id.getPath() + "/boat.png");
 
 			ModelLayerLocation layer = TerraformBoatClientHelper.getLayer(id);
 			BoatModel model = new BoatModel(context.bakeLayer(layer));

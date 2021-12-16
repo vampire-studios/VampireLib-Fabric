@@ -695,7 +695,7 @@ public class VampireLibClient extends BasicModClass {
     public static final List<ColoredLeaves> COLORED_LEAVES = new ArrayList<>();
 
     public VampireLibClient() {
-        super("vampirelib", "VampireLib", "4.5.0+build.1", true);
+        super("vampirelib", "VampireLib", "4.5.1+build.2", true);
     }
 
     @Override

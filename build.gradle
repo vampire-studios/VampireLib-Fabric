@@ -2,7 +2,7 @@ plugins {
 	id 'fabric-loom' version '0.10-SNAPSHOT'
 	id 'maven-publish'
 	id("io.github.juuxel.loom-quiltflower-mini") version "1.2.0"
-	id 'java'
+	id 'org.quiltmc.quilt-mappings-on-loom' version '3.1.1'
 }
 
 sourceCompatibility = targetCompatibility = JavaVersion.VERSION_17
@@ -63,10 +63,11 @@ repositories {
 dependencies {
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
 	mappings loom.layered {
-		officialMojangMappings() {
-			nameSyntheticMembers = false
+		it.addLayer(quiltMappings.mappings("org.quiltmc:quilt-mappings:1.18.1-rc3+build.4:v2")) // https://maven.quiltmc.org/#browse/browse:release
+		it.parchment("org.parchmentmc.data:parchment-1.18.1:BLEEDING-20211212.174449-1@zip") // https://ldtteam.jfrog.io/ui/native/parchmentmc-public/org/parchmentmc/data/parchment-1.18.1/BLEEDING-SNAPSHOT
+		it.officialMojangMappings {
+			setNameSyntheticMembers(false)
 		}
-		parchment("org.parchmentmc.data:parchment-1.17.1:2021.12.05@zip")
 	}
 
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"

@@ -684,6 +684,7 @@ import io.github.vampirestudios.vampirelib.utils.registry.BlockChiseler;
 import io.github.vampirestudios.vampirelib.utils.registry.WoodRegistry;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.minecraft.SharedConstants;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.ItemStack;
 
@@ -715,7 +716,7 @@ public class VampireLib extends BasicModClass {
 	public static WoodRegistry TEST_NETHER_WOOD7;
 
     public VampireLib() {
-        super("vampirelib", "VampireLib", "4.5.0+build.1");
+        super("vampirelib", "VampireLib", "4.5.1+build.2");
     }
 
     @Override
@@ -774,12 +775,16 @@ public class VampireLib extends BasicModClass {
                 ItemStack itemStack = player.getItemInHand(hand);
                 if (convertibleBlock.getConversionItem().matches(itemStack) && !world.isClientSide) {
                     if (world.getBlockState(hitResult.getBlockPos()).is(convertibleBlock.getOriginal())) {
+						if (convertibleBlock.getSound() != null) world.playSound(null, hitResult.getBlockPos(), convertibleBlock.getSound(),
+							SoundSource.BLOCKS, 1.0F, 1.0F);
                         world.setBlock(hitResult.getBlockPos(), convertibleBlock.getConverted().defaultBlockState(), 11);
                         itemStack.hurtAndBreak(1, player, playerEntity -> playerEntity.broadcastBreakEvent(hand));
                         return InteractionResult.SUCCESS;
                     }
                 } else if (convertibleBlock.getReversingItem() != null && convertibleBlock.getReversingItem().matches(itemStack) &&
                     !world.isClientSide &&world.getBlockState(hitResult.getBlockPos()).is(convertibleBlock.getConverted())) {
+					if (convertibleBlock.getSound() != null) world.playSound(null, hitResult.getBlockPos(), convertibleBlock.getSound(),
+						SoundSource.BLOCKS, 1.0F, 1.0F);
                     world.setBlock(hitResult.getBlockPos(), convertibleBlock.getOriginal().defaultBlockState(), 11);
                     itemStack.hurtAndBreak(1, player, playerEntity -> playerEntity.broadcastBreakEvent(hand));
                     return InteractionResult.SUCCESS;
