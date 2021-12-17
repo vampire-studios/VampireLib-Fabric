@@ -1,26 +1,27 @@
 {
-	"required": true,
-	"package": "io.github.vampirestudios.vampirelib.mixins",
-	"compatibilityLevel": "JAVA_16",
-	"mixins": [
-		"HandledScreenMixin",
-		"ItemInvokerMixin",
-		"MixinItemEntity",
-		"MixinLivingEntity",
-		"MixinMobSpawnerLogic",
-		"MixinServerPlayerEntity",
-		"MixinSpawnHelper",
-		"ServerPlayerEntityDamageMixin",
-		"SpawnEggItemAccessor",
-		"block.BlockEntityTypeMixin",
-		"block.StructureBlockBlockEntityMixin",
-		"block.UpdateStructureBlockC2SPacketMixin",
-		"item.MixinBookOnLectern"
-	],
-	"client": [
-		"client.TextureAtlasMixin"
-	],
-	"injectors": {
-		"defaultRequire": 1
-	}
+  "required": true,
+  "package": "io.github.vampirestudios.vampirelib.mixins",
+  "compatibilityLevel": "JAVA_16",
+  "mixins": [
+	"HandledScreenMixin",
+	"IngredientAccessor",
+	"ItemInvokerMixin",
+	"MixinItemEntity",
+	"MixinLivingEntity",
+	"MixinMobSpawnerLogic",
+	"MixinServerPlayerEntity",
+	"MixinSpawnHelper",
+	"ServerPlayerEntityDamageMixin",
+	"SpawnEggItemAccessor",
+	"block.BlockEntityTypeMixin",
+	"block.StructureBlockBlockEntityMixin",
+	"block.UpdateStructureBlockC2SPacketMixin",
+	"item.MixinBookOnLectern"
+  ],
+  "client": [
+	"client.TextureAtlasMixin"
+  ],
+  "injectors": {
+	"defaultRequire": 1
+  }
 }
