@@ -28,7 +28,6 @@ public abstract class BasicModClass implements ModInitializer, ClientModInitiali
 
 	private boolean printVersionMessage = true;
 
-	public static RegistryHelper REGISTRY_HELPER;
 	public static FeatureManager FEATURE_MANAGER;
 	private ConfigHolder<? extends CustomConfig> config;
 	private final Logger LOGGER;
@@ -49,9 +48,6 @@ public abstract class BasicModClass implements ModInitializer, ClientModInitiali
 		this.modId = modId.toLowerCase(Locale.ROOT);
 		this.modName = modName;
 		this.modVersion = modVersion;
-		if (!client) {
-			REGISTRY_HELPER = RegistryHelper.createRegistryHelper(this.modId);
-		}
 		LOGGER = LogManager.getLogger(this.modName + (client ? " Client" : ""));
 		FEATURE_MANAGER = FeatureManager.createFeatureManager(new ResourceLocation(this.modId,
 				"feature_manager" + Rands.getRandom().nextInt()));
@@ -100,10 +96,6 @@ public abstract class BasicModClass implements ModInitializer, ClientModInitiali
 	@Environment(EnvType.SERVER)
 	public void serverPostRegisterFeatures() {
 		FEATURE_MANAGER.initServer(modId());
-	}
-
-	public RegistryHelper registryHelper() {
-		return REGISTRY_HELPER;
 	}
 
 	public FeatureManager featureManager() {

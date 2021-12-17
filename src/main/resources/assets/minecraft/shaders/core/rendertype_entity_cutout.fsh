@@ -1,6 +1,4 @@
 #version 150
-
-#moj_import <fog.glsl>
 #moj_import <fog.glsl>
 
 uniform sampler2D Sampler0;
@@ -34,18 +32,18 @@ vec3 hsvToRGB(vec3 color) {
 	return color.z * mix(k.xxx, clamp(p - k.xxx, 0.0, 1.0), color.y);
 }
 
-// Value between 252 and 254
+// Value near 254
 bool isEmissive(float alpha) {
-	return 0.9883 < alpha && alpha < 0.9961;
+	return 0.9960 < alpha && alpha < 0.9962;
 }
 
 void main() {
 	vec4 tex = texture(Sampler0, texCoord0);
-	vec4 color = tex * ColorModulator;
 	if (tex.a < 0.1) {
-        discard;
-    }
-//	color.rgb = mix(overlayColor.rgb, color.rgb, overlayColor.a);
+		discard;
+	}
+	vec4 color = tex * ColorModulator;
+	color.rgb = mix(overlayColor.rgb, color.rgb, overlayColor.a);
 	vec4 vertex = vertexColor * lightMapColor;
 	if (isEmissive(tex.a)) {
 		vec3 hsv = rgbToHSV(vertex.rgb);

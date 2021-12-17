@@ -11,7 +11,6 @@ uniform vec4 FogColor;
 in float vertexDistance;
 in vec4 vertexColor;
 in vec2 texCoord0;
-in vec2 texCoord1;
 in vec4 normal;
 
 out vec4 fragColor;
@@ -31,16 +30,13 @@ vec3 hsvToRGB(vec3 color) {
 	return color.z * mix(k.xxx, clamp(p - k.xxx, 0.0, 1.0), color.y);
 }
 
-// Value between 252 and 254
+// Value near 254
 bool isEmissive(float alpha) {
-	return 0.9883 < alpha && alpha < 0.9961;
+	return 0.9960 < alpha && alpha < 0.9962;
 }
 
 void main() {
 	vec4 tex = texture(Sampler0, texCoord0);
-	if (tex.a < 0.1) {
-        discard;
-    }
 	vec4 color = tex * ColorModulator;
 	vec4 vertex = vertexColor;
 	if (isEmissive(tex.a)) {
@@ -49,5 +45,6 @@ void main() {
 		vertex.rgb = hsvToRGB(hsv);
 	}
 	color = linear_fog(color * vertex, vertexDistance, FogStart, FogEnd, FogColor);
+	color.a = 1.0;
 	fragColor = color;
 }
