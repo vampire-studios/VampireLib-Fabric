@@ -677,19 +677,17 @@
 
 package io.github.vampirestudios.vampirelib.client;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import io.github.vampirestudios.vampirelib.api.BasicModClass;
+import io.github.vampirestudios.vampirelib.utils.Rands;
+import net.fabricmc.fabric.impl.client.rendering.ColorProviderRegistryImpl;
 import net.minecraft.SharedConstants;
 import net.minecraft.client.color.block.BlockColor;
 import net.minecraft.client.color.item.ItemColor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 
-import net.fabricmc.fabric.impl.client.rendering.ColorProviderRegistryImpl;
-
-import io.github.vampirestudios.vampirelib.api.BasicModClass;
-import io.github.vampirestudios.vampirelib.utils.Rands;
+import java.util.ArrayList;
+import java.util.List;
 
 public class VampireLibClient extends BasicModClass {
 
@@ -697,7 +695,7 @@ public class VampireLibClient extends BasicModClass {
     public static final List<ColoredLeaves> COLORED_LEAVES = new ArrayList<>();
 
     public VampireLibClient() {
-        super("vampirelib", "VampireLib", "4.5.1+build.3", true);
+        super("vampirelib", "VampireLib", "4.5.2+build.1", true);
     }
 
     @Override
