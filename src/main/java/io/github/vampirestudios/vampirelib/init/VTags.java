@@ -704,6 +704,9 @@ public class VTags {
 		public static final Tag.Named<Block> CHESTS_TRAPPED = tag("chests/trapped");
 		public static final Tag.Named<Block> CHESTS_WOODEN = tag("chests/wooden");
 		public static final Tag.Named<Block> COBBLESTONE = tag("cobblestone");
+        public static final Tag.Named<Block> COBBLESTONE_NORMAL = tag("cobblestone/normal");
+        public static final Tag.Named<Block> COBBLESTONE_INFESTED = tag("cobblestone/infested");
+        public static final Tag.Named<Block> COBBLESTONE_MOSSY = tag("cobblestone/mossy");
 		public static final Tag.Named<Block> DIRT = tag("dirt");
 		public static final Tag.Named<Block> END_STONES = tag("end_stones");
 		public static final Tag.Named<Block> ENDERMAN_PLACE_ON_BLACKLIST = tag("enderman_place_on_blacklist");
@@ -853,6 +856,9 @@ public class VTags {
 		public static final Tag.Named<Item> CHESTS_TRAPPED = tag("chests/trapped");
 		public static final Tag.Named<Item> CHESTS_WOODEN = tag("chests/wooden");
 		public static final Tag.Named<Item> COBBLESTONE = tag("cobblestone");
+        public static final Tag.Named<Item> COBBLESTONE_NORMAL = tag("cobblestone/normal");
+        public static final Tag.Named<Item> COBBLESTONE_INFESTED = tag("cobblestone/infested");
+        public static final Tag.Named<Item> COBBLESTONE_MOSSY = tag("cobblestone/mossy");
 		public static final Tag.Named<Item> CROPS = tag("crops");
 		public static final Tag.Named<Item> CROPS_BEETROOT = tag("crops/beetroot");
 		public static final Tag.Named<Item> CROPS_CARROT = tag("crops/carrot");
