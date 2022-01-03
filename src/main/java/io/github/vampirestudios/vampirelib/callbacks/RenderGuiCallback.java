@@ -678,21 +678,24 @@
 package io.github.vampirestudios.vampirelib.callbacks;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.fabricmc.fabric.api.event.Event;
-import net.fabricmc.fabric.api.event.EventFactory;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.InteractionResult;
 
-public interface RenderGuiCallback {
-    Event<RenderGuiCallback> EVENT = EventFactory.createArrayBacked(RenderGuiCallback.class, (listeners) -> (client, matrices, mouseX, mouseY, delta) -> {
-        for (RenderGuiCallback listener : listeners) {
-            InteractionResult result = listener.interact(client, matrices, mouseX, mouseY, delta);
-            if (result != InteractionResult.PASS)
-                return result;
-        }
+import net.fabricmc.fabric.api.event.Event;
+import net.fabricmc.fabric.api.event.EventFactory;
 
-        return InteractionResult.PASS;
-    });
+public interface RenderGuiCallback {
+    Event<RenderGuiCallback> EVENT = EventFactory.createArrayBacked(RenderGuiCallback.class, listeners ->
+        (client, matrices, mouseX, mouseY, delta) -> {
+            for (RenderGuiCallback listener : listeners) {
+                InteractionResult result = listener.interact(client, matrices, mouseX, mouseY, delta);
+                if (result != InteractionResult.PASS)
+                    return result;
+            }
+
+            return InteractionResult.PASS;
+        });
 
     InteractionResult interact(Minecraft client, PoseStack matrices, int mouseX, int mouseY, float delta);
 }

@@ -1,9 +1,13 @@
 package io.github.vampirestudios.vampirelib.api.datagen;
 
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
 import net.minecraft.data.tags.TagsProvider;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.Tag;
+
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
+
+import io.github.vampirestudios.vampirelib.api.CustomTagProviders;
 
 public class CustomFabricTagBuilder<T> extends TagsProvider.TagAppender<T> {
     private final TagsProvider.TagAppender<T> parent;
@@ -80,4 +84,53 @@ public class CustomFabricTagBuilder<T> extends TagsProvider.TagAppender<T> {
         parent.addOptionalTag(id);
         return this;
     }
+
+    /**
+     * Add multiple elements to this tag.
+     *
+     * @return the {@link CustomFabricTagBuilder} instance
+     * @throws UnsupportedOperationException if the provider is an instance of {@link CustomTagProviders.DynamicRegistryTagProvider}
+     */
+    @SafeVarargs
+    @Override
+    public final CustomFabricTagBuilder<T> add(T... elements) {
+//        assertStaticRegistry();
+
+        for (T element : elements) {
+            add(element);
+        }
+
+        return this;
+    }
+
+    /**
+     * Add multiple elements to this tag.
+     *
+     * @return the {@link CustomFabricTagBuilder} instance
+     */
+    public CustomFabricTagBuilder<T> add(ResourceLocation... ids) {
+        for (ResourceLocation id : ids) {
+            add(id);
+        }
+        return this;
+    }
+
+    /**
+     * Add multiple elements to this tag.
+     *
+     * @return the {@link CustomFabricTagBuilder} instance
+     */
+    @SafeVarargs
+    public final CustomFabricTagBuilder<T> add(ResourceKey<? extends T>... registryKeys) {
+        for (ResourceKey<? extends T> registryKey : registryKeys) {
+            add(registryKey);
+        }
+        return this;
+    }
+
+//    private void assertStaticRegistry() {
+//        if (FabricTagProvider.this instanceof CustomTagProviders.DynamicRegistryTagProvider) {
+//            throw new UnsupportedOperationException("Adding object instances is not supported for DynamicRegistryTagProvider.");
+//        }
+//    }
 }

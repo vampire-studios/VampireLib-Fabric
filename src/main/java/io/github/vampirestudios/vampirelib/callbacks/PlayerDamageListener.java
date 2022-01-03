@@ -677,22 +677,22 @@
 
 package io.github.vampirestudios.vampirelib.callbacks;
 
-import net.fabricmc.fabric.api.event.Event;
-import net.fabricmc.fabric.api.event.EventFactory;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
 
+import net.fabricmc.fabric.api.event.Event;
+import net.fabricmc.fabric.api.event.EventFactory;
+
 public interface PlayerDamageListener {
-    Event<PlayerDamageListener> EVENT = EventFactory.createArrayBacked(PlayerDamageListener.class, listeners -> {
-        return (player, source, amount) -> {
+    Event<PlayerDamageListener> EVENT = EventFactory.createArrayBacked(PlayerDamageListener.class, listeners ->
+        (player, source, amount) -> {
             for (PlayerDamageListener listener : listeners) {
                 if (listener.onDamage(player, source, amount)) {
                     return true;
                 }
             }
             return false;
-        };
-    });
+        });
 
     boolean onDamage(ServerPlayer player, DamageSource source, float amount);
 }

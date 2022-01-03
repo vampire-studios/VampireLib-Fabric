@@ -677,19 +677,24 @@
 
 package io.github.vampirestudios.vampirelib;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import net.minecraft.SharedConstants;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.GameRules;
+import net.minecraft.world.level.block.state.BlockState;
+
+import net.fabricmc.fabric.api.event.player.UseBlockCallback;
+
 import io.github.vampirestudios.vampirelib.api.BasicModClass;
 import io.github.vampirestudios.vampirelib.api.ConvertibleBlockPair;
 import io.github.vampirestudios.vampirelib.utils.Rands;
 import io.github.vampirestudios.vampirelib.utils.registry.BlockChiseler;
 import io.github.vampirestudios.vampirelib.utils.registry.WoodRegistry;
-import net.fabricmc.fabric.api.event.player.UseBlockCallback;
-import net.minecraft.SharedConstants;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.item.ItemStack;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class VampireLib extends BasicModClass {
     public static final VampireLib INSTANCE = new VampireLib();
@@ -716,7 +721,7 @@ public class VampireLib extends BasicModClass {
 	public static WoodRegistry TEST_NETHER_WOOD7;
 
     public VampireLib() {
-        super("vampirelib", "VampireLib", "4.5.2+build.1");
+        super("vampirelib", "VampireLib", "4.5.2+build.5");
     }
 
     @Override
@@ -770,28 +775,57 @@ public class VampireLib extends BasicModClass {
                 .mushroomLike().defaultBlocksColoredLeaves().defaultExtraBlocks().ladder().bookshelf().boat().build();
 		}
 
-        for (ConvertibleBlockPair convertibleBlock : CONVERTIBLE_BLOCKS) {
-            UseBlockCallback.EVENT.register((player, world, hand, hitResult) -> {
-                ItemStack itemStack = player.getItemInHand(hand);
-                if (convertibleBlock.getConversionItem().matches(itemStack) && !world.isClientSide) {
-                    if (world.getBlockState(hitResult.getBlockPos()).is(convertibleBlock.getOriginal())) {
-						if (convertibleBlock.getSound() != null) world.playSound(null, hitResult.getBlockPos(), convertibleBlock.getSound(),
-							SoundSource.BLOCKS, 1.0F, 1.0F);
-                        world.setBlock(hitResult.getBlockPos(), convertibleBlock.getConverted().defaultBlockState(), 11);
+        UseBlockCallback.EVENT.register((player, world, hand, hitResult) -> {
+            if (!world.isClientSide) {
+                for (ConvertibleBlockPair convertibleBlock : CONVERTIBLE_BLOCKS) {
+                    ItemStack itemStack = player.getItemInHand(hand);
+                    BlockState blockState = world.getBlockState(hitResult.getBlockPos());
+                    if (convertibleBlock.getConversionItem().matches(itemStack)) {
+                        if (blockState.getBlock() == convertibleBlock.getOriginal()) {
+                            if (convertibleBlock.getSound() != null)
+                                world.playSound(null, hitResult.getBlockPos(), convertibleBlock.getSound(),
+                                    SoundSource.BLOCKS, 1.0F, 1.0F);
+
+                            if (convertibleBlock.getDroppedItem() != null) {
+                                ItemStack newStack = new ItemStack(convertibleBlock.getDroppedItem());
+                                if (!newStack.isEmpty() && world.getGameRules().getBoolean(GameRules.RULE_DOBLOCKDROPS)) {
+                                    ItemEntity itemEntity = new ItemEntity(world, hitResult.getBlockPos().getX() + 0.5, hitResult.getBlockPos().getY() + 0.5,
+                                        hitResult.getBlockPos().getZ() + 0.5, newStack);
+                                    itemEntity.setDefaultPickUpDelay();
+                                    world.addFreshEntity(itemEntity);
+                                }
+                            }
+
+                            world.setBlock(hitResult.getBlockPos(), convertibleBlock.getConverted()
+                                .withPropertiesOf(blockState), 11);
+                            itemStack.hurtAndBreak(1, player, playerEntity -> playerEntity.broadcastBreakEvent(hand));
+                            return InteractionResult.SUCCESS;
+                        }
+                    } else if (convertibleBlock.getReversingItem() != null && convertibleBlock.getReversingItem().matches(itemStack) &&
+                        blockState.is(convertibleBlock.getConverted())) {
+                        if (convertibleBlock.getSound() != null)
+                            world.playSound(null, hitResult.getBlockPos(), convertibleBlock.getSound(),
+                                SoundSource.BLOCKS, 1.0F, 1.0F);
+
+                        if (convertibleBlock.getDroppedItem() != null) {
+                            ItemStack newStack = new ItemStack(convertibleBlock.getDroppedItem());
+                            if (!newStack.isEmpty() && world.getGameRules().getBoolean(GameRules.RULE_DOBLOCKDROPS)) {
+                                ItemEntity itemEntity = new ItemEntity(world, hitResult.getBlockPos().getX() + 0.5, hitResult.getBlockPos().getY() + 0.5,
+                                    hitResult.getBlockPos().getZ() + 0.5, newStack);
+                                itemEntity.setDefaultPickUpDelay();
+                                world.addFreshEntity(itemEntity);
+                            }
+                        }
+
+                        world.setBlock(hitResult.getBlockPos(), convertibleBlock.getOriginal()
+                            .withPropertiesOf(blockState), 11);
                         itemStack.hurtAndBreak(1, player, playerEntity -> playerEntity.broadcastBreakEvent(hand));
                         return InteractionResult.SUCCESS;
                     }
-                } else if (convertibleBlock.getReversingItem() != null && convertibleBlock.getReversingItem().matches(itemStack) &&
-                    !world.isClientSide &&world.getBlockState(hitResult.getBlockPos()).is(convertibleBlock.getConverted())) {
-					if (convertibleBlock.getSound() != null) world.playSound(null, hitResult.getBlockPos(), convertibleBlock.getSound(),
-						SoundSource.BLOCKS, 1.0F, 1.0F);
-                    world.setBlock(hitResult.getBlockPos(), convertibleBlock.getOriginal().defaultBlockState(), 11);
-                    itemStack.hurtAndBreak(1, player, playerEntity -> playerEntity.broadcastBreakEvent(hand));
-                    return InteractionResult.SUCCESS;
                 }
-                return InteractionResult.PASS;
-            });
-        }
+            }
+            return InteractionResult.PASS;
+        });
     }
 
 }

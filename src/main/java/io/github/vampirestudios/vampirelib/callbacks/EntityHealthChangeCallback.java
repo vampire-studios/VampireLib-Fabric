@@ -677,18 +677,19 @@
 
 package io.github.vampirestudios.vampirelib.callbacks;
 
-import net.fabricmc.fabric.api.event.Event;
-import net.fabricmc.fabric.api.event.EventFactory;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
+
+import net.fabricmc.fabric.api.event.Event;
+import net.fabricmc.fabric.api.event.EventFactory;
 
 public interface EntityHealthChangeCallback {
     /**
      * Callback for entity health change. Triggered whenever the game updates the entity's health. Returns the entity
      * and it's new health
      */
-    Event<EntityHealthChangeCallback> EVENT = EventFactory.createArrayBacked(EntityHealthChangeCallback.class,
-        (listeners) -> (entity, health) -> {
+    Event<EntityHealthChangeCallback> EVENT = EventFactory.createArrayBacked(EntityHealthChangeCallback.class, listeners ->
+        (entity, health) -> {
             for (EntityHealthChangeCallback event : listeners) {
                 InteractionResult result = event.health(entity, health);
                 if (result != InteractionResult.PASS) {

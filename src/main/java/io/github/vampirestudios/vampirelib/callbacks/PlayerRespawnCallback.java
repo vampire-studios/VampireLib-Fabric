@@ -687,14 +687,14 @@ import net.fabricmc.fabric.api.event.EventFactory;
  * Represents a callback for when a {@link ServerPlayer} is respawned.
  *
  * <p>This occurs when a player dies, or changes dimensions, such as returning to the overworld from the end.
- *
  */
 public interface PlayerRespawnCallback {
-    Event<PlayerRespawnCallback> EVENT = EventFactory.createArrayBacked(PlayerRespawnCallback.class, (callbacks) -> (newPlayer, oldPlayer, alive) -> {
-        for (PlayerRespawnCallback callback : callbacks) {
-            callback.onRespawn(newPlayer, oldPlayer, alive);
-        }
-    });
+    Event<PlayerRespawnCallback> EVENT = EventFactory.createArrayBacked(PlayerRespawnCallback.class, callbacks ->
+        (newPlayer, oldPlayer, alive) -> {
+            for (PlayerRespawnCallback callback : callbacks) {
+                callback.onRespawn(newPlayer, oldPlayer, alive);
+            }
+        });
 
     /**
      * Called when a player respawns.

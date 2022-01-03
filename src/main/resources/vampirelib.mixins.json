@@ -3,25 +3,27 @@
   "package": "io.github.vampirestudios.vampirelib.mixins",
   "compatibilityLevel": "JAVA_16",
   "mixins": [
-	"HandledScreenMixin",
-	"IngredientAccessor",
-	"ItemInvokerMixin",
-	"MixinItemEntity",
-	"MixinLivingEntity",
-	"MixinMobSpawnerLogic",
-	"MixinServerPlayerEntity",
-	"MixinSpawnHelper",
-	"ServerPlayerEntityDamageMixin",
-	"SpawnEggItemAccessor",
-	"block.BlockEntityTypeMixin",
-	"block.StructureBlockBlockEntityMixin",
-	"block.UpdateStructureBlockC2SPacketMixin",
-	"item.MixinBookOnLectern"
+    "HandledScreenMixin",
+    "IngredientAccessor",
+    "ItemInvokerMixin",
+    "MixinItemEntity",
+    "MixinLivingEntity",
+    "MixinMobSpawnerLogic",
+    "MixinServerPlayerEntity",
+    "MixinSpawnHelper",
+    "ShapedRecipeResultAccessor",
+    "ServerPlayerEntityDamageMixin",
+    "ShapelessRecipeResultAccessor",
+    "SpawnEggItemAccessor",
+    "block.BlockEntityTypeMixin",
+    "block.StructureBlockBlockEntityMixin",
+    "block.UpdateStructureBlockC2SPacketMixin",
+    "item.MixinBookOnLectern"
   ],
   "client": [
-	"client.TextureAtlasMixin"
+    "client.TextureAtlasMixin"
   ],
   "injectors": {
-	"defaultRequire": 1
+    "defaultRequire": 1
   }
 }

@@ -678,13 +678,16 @@
 package io.github.vampirestudios.vampirelib.callbacks;
 
 import java.util.concurrent.atomic.AtomicReference;
-import net.fabricmc.fabric.api.event.Event;
-import net.fabricmc.fabric.api.event.EventFactory;
+
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.Vec3;
+
+import net.fabricmc.fabric.api.event.Event;
+import net.fabricmc.fabric.api.event.EventFactory;
+
 import io.github.vampirestudios.vampirelib.utils.EntitySpawnImpl;
 
 /**
@@ -694,16 +697,18 @@ public final class EntitySpawnCallback {
     /**
      * Callback for before the entity spawns. Use this to cancel, force succeed, or alter the entity spawning.
      */
-    public static final Event<EntitySpawnCallback.Pre> PRE = EventFactory.createArrayBacked(EntitySpawnCallback.Pre.class, listeners -> (original, entity, world, reason) -> EntitySpawnImpl.eventPre(original, entity, world, reason, listeners));
+    public static final Event<EntitySpawnCallback.Pre> PRE = EventFactory.createArrayBacked(EntitySpawnCallback.Pre.class, listeners ->
+        (original, entity, world, reason) -> EntitySpawnImpl.eventPre(original, entity, world, reason, listeners));
 
     /**
      * Callback for after the entity succeeds in spawning. Use this for general functions after an entity has spawned.
      */
-    public static final Event<EntitySpawnCallback.Post> POST = EventFactory.createArrayBacked(EntitySpawnCallback.Post.class, listeners -> (entity, level, pos, reason) -> {
-        for (EntitySpawnCallback.Post callback : listeners) {
-            callback.onEntitySpawnPost(entity, level, pos, reason);
-        }
-    });
+    public static final Event<EntitySpawnCallback.Post> POST = EventFactory.createArrayBacked(EntitySpawnCallback.Post.class, listeners ->
+        (entity, level, pos, reason) -> {
+            for (EntitySpawnCallback.Post callback : listeners) {
+                callback.onEntitySpawnPost(entity, level, pos, reason);
+            }
+        });
 
     /**
      * Callback for before the entity spawns. Use this to cancel, force succeed, or alter the entity spawning.
@@ -729,7 +734,6 @@ public final class EntitySpawnCallback {
     /**
      * Callback for after the entity succeeds in spawning. Use this for general functions after an entity has spawned.
      *
-     * @author Valoeghese
      */
     @FunctionalInterface
     public interface Post {

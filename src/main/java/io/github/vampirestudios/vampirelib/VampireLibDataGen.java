@@ -16,17 +16,16 @@
 
 package io.github.vampirestudios.vampirelib;
 
-import io.github.vampirestudios.vampirelib.api.CustomTagProviders;
-import io.github.vampirestudios.vampirelib.api.FabricLanguageProvider;
-import io.github.vampirestudios.vampirelib.api.datagen.CustomBlockTagProvider;
-import io.github.vampirestudios.vampirelib.api.datagen.CustomItemTagProvider;
-import io.github.vampirestudios.vampirelib.init.VTags;
-import io.github.vampirestudios.vampirelib.mixins.IngredientAccessor;
-import io.github.vampirestudios.vampirelib.utils.registry.WoodRegistry;
-import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
-import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockStateDefinitionProvider;
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipesProvider;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
+import java.util.function.Consumer;
+
 import net.minecraft.core.Registry;
 import net.minecraft.data.models.BlockModelGenerators;
 import net.minecraft.data.models.ItemModelGenerators;
@@ -44,20 +43,91 @@ import net.minecraft.world.item.crafting.Ingredient.ItemValue;
 import net.minecraft.world.item.crafting.Ingredient.TagValue;
 import net.minecraft.world.item.crafting.Ingredient.Value;
 import net.minecraft.world.level.ItemLike;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.dimension.DimensionType;
-import net.minecraft.world.level.levelgen.NoiseGeneratorSettings;
 
-import java.lang.reflect.Field;
-import java.nio.file.Path;
-import java.util.*;
-import java.util.function.Consumer;
+import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
+import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockStateDefinitionProvider;
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipesProvider;
+
+import io.github.vampirestudios.vampirelib.api.FabricLanguageProvider;
+import io.github.vampirestudios.vampirelib.api.datagen.CustomBlockTagProvider;
+import io.github.vampirestudios.vampirelib.api.datagen.CustomItemTagProvider;
+import io.github.vampirestudios.vampirelib.init.VTags;
+import io.github.vampirestudios.vampirelib.mixins.IngredientAccessor;
+import io.github.vampirestudios.vampirelib.mixins.ShapedRecipeResultAccessor;
+import io.github.vampirestudios.vampirelib.mixins.ShapelessRecipeResultAccessor;
+import io.github.vampirestudios.vampirelib.utils.registry.WoodRegistry;
 
 import static io.github.vampirestudios.vampirelib.VampireLib.TEST_CONTENT_ENABLED;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.*;
+import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.BARRELS;
+import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.BARRELS_WOODEN;
+import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.CHESTS;
+import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.CHESTS_ENDER;
+import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.CHESTS_TRAPPED;
+import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.CHESTS_WOODEN;
+import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.COBBLESTONE;
+import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.COBBLESTONE_INFESTED;
+import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.COBBLESTONE_MOSSY;
+import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.COBBLESTONE_NORMAL;
+import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.DIRT;
+import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.ENDERMAN_PLACE_ON_BLACKLIST;
+import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.END_STONES;
+import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.FENCES_NETHER_BRICK;
+import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.FENCES_WOODEN;
+import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.FENCE_GATES_WOODEN;
+import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.GLASS;
+import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.GLASS_COLORLESS;
+import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.GLASS_PANES;
+import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.GLASS_PANES_COLORLESS;
+import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.GLASS_SILICA;
+import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.GLASS_TINTED;
+import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.GRAVEL;
+import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.NETHERRACK;
+import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.OBSIDIAN;
+import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.ORES;
+import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.ORES_COAL;
+import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.ORES_COPPER;
+import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.ORES_DIAMOND;
+import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.ORES_EMERALD;
+import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.ORES_GOLD;
+import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.ORES_IN_GROUND_DEEPSLATE;
+import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.ORES_IN_GROUND_NETHERRACK;
+import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.ORES_IN_GROUND_STONE;
+import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.ORES_IRON;
+import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.ORES_LAPIS;
+import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.ORES_NETHERITE_SCRAP;
+import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.ORES_QUARTZ;
+import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.ORES_REDSTONE;
+import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.ORE_BEARING_GROUND_DEEPSLATE;
+import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.ORE_BEARING_GROUND_NETHERRACK;
+import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.ORE_BEARING_GROUND_STONE;
+import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.ORE_RATES_DENSE;
+import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.ORE_RATES_SINGULAR;
+import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.ORE_RATES_SPARSE;
+import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.SAND;
+import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.SANDSTONE;
+import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.SAND_COLORLESS;
+import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.SAND_RED;
+import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.STAINED_GLASS;
+import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.STAINED_GLASS_PANES;
+import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.STONE;
+import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.STORAGE_BLOCKS;
+import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.STORAGE_BLOCKS_AMETHYST;
+import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.STORAGE_BLOCKS_COAL;
+import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.STORAGE_BLOCKS_COPPER;
+import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.STORAGE_BLOCKS_DIAMOND;
+import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.STORAGE_BLOCKS_EMERALD;
+import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.STORAGE_BLOCKS_GOLD;
+import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.STORAGE_BLOCKS_IRON;
+import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.STORAGE_BLOCKS_LAPIS;
+import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.STORAGE_BLOCKS_NETHERITE;
+import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.STORAGE_BLOCKS_QUARTZ;
+import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.STORAGE_BLOCKS_RAW_COPPER;
+import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.STORAGE_BLOCKS_RAW_GOLD;
+import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.STORAGE_BLOCKS_RAW_IRON;
+import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.STORAGE_BLOCKS_REDSTONE;
 import static net.minecraft.tags.BlockTags.FENCES;
 import static net.minecraft.tags.BlockTags.FENCE_GATES;
 
@@ -72,7 +142,7 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
         }
         VBlockTagsProvider blockTagsProvider = dataGenerator.addProvider(VBlockTagsProvider::new);
         dataGenerator.addProvider(new VItemTagsProvider(dataGenerator, blockTagsProvider));
-        dataGenerator.addProvider(VBiomeTagsProvider::new);
+//        dataGenerator.addProvider(VBiomeTagsProvider::new);
         dataGenerator.addProvider(VRecipeReplacementProvider::new);
 //		dataGenerator.addProvider(VampireLibNoiseSettingsTagsProvider::new);
 //		dataGenerator.addProvider(VampireLibDimensionTagsProvider::new);
@@ -310,7 +380,7 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
 
     }
 
-    private static class VBiomeTagsProvider extends CustomTagProviders.ExpandedBiomeTagProvider {
+    /*private static class VBiomeTagsProvider extends CustomTagProviders.ExpandedBiomeTagProvider {
         private VBiomeTagsProvider(FabricDataGenerator dataGenerator) {
             super(dataGenerator);
         }
@@ -332,7 +402,7 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
                     Biomes.WINDSWEPT_SAVANNA, Biomes.ERODED_BADLANDS, Biomes.BAMBOO_JUNGLE, Biomes.MUSHROOM_FIELDS);
 
             this.tagCustom(VTags.Biomes.OCEANS)
-                .addTags(VTags.Biomes.DEEP_OCEANS, VTags.Biomes.SHALLOW_OCEANS);
+                .(VTags.Biomes.DEEP_OCEANS, VTags.Biomes.SHALLOW_OCEANS);
             this.tagCustom(VTags.Biomes.DEEP_OCEANS)
                 .add(Biomes.DEEP_COLD_OCEAN, Biomes.DEEP_FROZEN_OCEAN, Biomes.DEEP_LUKEWARM_OCEAN, Biomes.DEEP_OCEAN);
             this.tagCustom(VTags.Biomes.SHALLOW_OCEANS)
@@ -449,7 +519,7 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
             this.tagCustom(VTags.Biomes.END)
                 .add(Biomes.THE_END, Biomes.SMALL_END_ISLANDS, Biomes.END_BARRENS, Biomes.END_MIDLANDS, Biomes.END_HIGHLANDS);
         }
-    }
+    }*/
 
     private static class VItemTagsProvider extends CustomItemTagProvider {
         private VItemTagsProvider(FabricDataGenerator dataGenerator, CustomBlockTagProvider blockTagProvider) {
@@ -681,7 +751,7 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
         }
 
         private FinishedRecipe enhance(ShapelessRecipeBuilder.Result vanilla) {
-            List<Ingredient> ingredients = getField(ShapelessRecipeBuilder.Result.class, vanilla, 4);
+            List<Ingredient> ingredients = ((ShapelessRecipeResultAccessor)vanilla).getIngredients();
             boolean modified = false;
             for (int x = 0; x < ingredients.size(); x++) {
                 Ingredient ing = enhance(vanilla.getId(), ingredients.get(x));
@@ -694,7 +764,7 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
         }
 
         private FinishedRecipe enhance(ShapedRecipeBuilder.Result vanilla) {
-            Map<Character, Ingredient> ingredients = getField(ShapedRecipeBuilder.Result.class, vanilla, 5);
+            Map<Character, Ingredient> ingredients = ((ShapedRecipeResultAccessor)vanilla).getKey();
             boolean modified = false;
             for (Character x : ingredients.keySet()) {
                 Ingredient ing = enhance(vanilla.getId(), ingredients.get(x));
@@ -726,20 +796,9 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
             }
             return modified ? Ingredient.fromValues(items.stream()) : null;
         }
-
-        @SuppressWarnings("unchecked")
-        private <T, R> R getField(Class<T> clz, T inst, int index) {
-            Field fld = clz.getDeclaredFields()[index];
-            fld.setAccessible(true);
-            try {
-                return (R) fld.get(inst);
-            } catch (IllegalArgumentException | IllegalAccessException e) {
-                throw new RuntimeException(e);
-            }
-        }
     }
 
-    private static class VNoiseSettingsTagsProvider extends CustomTagProviders.NoiseSettingsTagProvider {
+    /*private static class VNoiseSettingsTagsProvider extends CustomTagProviders.NoiseSettingsTagProvider<NoiseGeneratorSettings> {
         private VNoiseSettingsTagsProvider(FabricDataGenerator dataGenerator) {
             super(dataGenerator);
         }
@@ -751,7 +810,7 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
 
         @Override
         protected void generateTags() {
-            this.tagCustom(VTags.NoiseSettings.AMPLIFIED).add(NoiseGeneratorSettings.AMPLIFIED);
+            this.getOrCreateTagBuilder(VTags.NoiseSettings.AMPLIFIED).add(NoiseGeneratorSettings.AMPLIFIED);
             this.tagCustom(VTags.NoiseSettings.CAVES).add(NoiseGeneratorSettings.CAVES);
             this.tagCustom(VTags.NoiseSettings.END).add(NoiseGeneratorSettings.END);
             this.tagCustom(VTags.NoiseSettings.FLOATING_ISLANDS).add(NoiseGeneratorSettings.FLOATING_ISLANDS);
@@ -799,5 +858,5 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
                 .add(DimensionType.OVERWORLD_LOCATION);
             this.tagCustom(VTags.DimensionTypes.OVERWORLD_CAVES).add(DimensionType.OVERWORLD_CAVES_LOCATION);
         }
-    }
+    }*/
 }

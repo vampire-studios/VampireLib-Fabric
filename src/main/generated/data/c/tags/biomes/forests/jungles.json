@@ -1,8 +1,0 @@
-{
-  "replace": false,
-  "values": [
-    "#c:forests/jungles/bamboo",
-    "minecraft:jungle",
-    "minecraft:sparse_jungle"
-  ]
-}

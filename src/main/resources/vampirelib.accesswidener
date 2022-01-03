@@ -41,3 +41,5 @@ transitive-accessible method net/minecraft/world/item/crafting/Ingredient fromVa
 transitive-accessible method net/minecraft/world/item/crafting/Ingredient$TagValue <init> (Lnet/minecraft/tags/Tag;)V
 
 transitive-accessible class net/minecraft/data/recipes/ShapedRecipeBuilder$Result
+
+transitive-extendable method net/minecraft/data/tags/TagsProvider$TagAppender add ([Ljava/lang/Object;)Lnet/minecraft/data/tags/TagsProvider$TagAppender;

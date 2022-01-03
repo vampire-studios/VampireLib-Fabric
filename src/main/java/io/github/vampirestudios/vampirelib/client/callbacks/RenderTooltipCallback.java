@@ -678,61 +678,61 @@
 package io.github.vampirestudios.vampirelib.client.callbacks;
 
 import java.util.List;
-import net.fabricmc.fabric.api.event.Event;
-import net.fabricmc.fabric.api.event.EventFactory;
+
+import com.mojang.blaze3d.vertex.PoseStack;
+
 import net.minecraft.client.gui.Font;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.world.item.ItemStack;
-import com.mojang.blaze3d.vertex.PoseStack;
+
+import net.fabricmc.fabric.api.event.Event;
+import net.fabricmc.fabric.api.event.EventFactory;
+
 import io.github.vampirestudios.vampirelib.client.TooltipRenderer;
 
 public interface RenderTooltipCallback {
 
     interface Pre {
-        Event<RenderTooltipCallback.Pre> EVENT = EventFactory.createArrayBacked(RenderTooltipCallback.Pre.class, (callbacks) -> {
-            return (tooltipRenderer) -> {
-                for (RenderTooltipCallback.Pre callback : callbacks) {
+        Event<RenderTooltipCallback.Pre> EVENT = EventFactory.createArrayBacked(RenderTooltipCallback.Pre.class, callbacks ->
+            tooltipRenderer -> {
+                for (Pre callback : callbacks) {
                     callback.preRender(tooltipRenderer);
                 }
-            };
-        });
+            });
 
         void preRender(TooltipRenderer.Pre tooltipRenderer);
     }
 
     interface PostText {
-        Event<RenderTooltipCallback.PostText> EVENT = EventFactory.createArrayBacked(RenderTooltipCallback.PostText.class, (callbacks) -> {
-            return (postText) -> {
-                for (RenderTooltipCallback.PostText callback : callbacks) {
+        Event<RenderTooltipCallback.PostText> EVENT = EventFactory.createArrayBacked(RenderTooltipCallback.PostText.class, callbacks ->
+            postText -> {
+                for (PostText callback : callbacks) {
                     callback.postText(postText);
                 }
-            };
-        });
+            });
 
         void postText(TooltipRenderer.PostText postText);
     }
 
     interface PostBackground {
-        Event<RenderTooltipCallback.PostBackground> EVENT = EventFactory.createArrayBacked(RenderTooltipCallback.PostBackground.class, (callbacks) -> {
-            return (postBackground) -> {
-                for (RenderTooltipCallback.PostBackground callback : callbacks) {
+        Event<RenderTooltipCallback.PostBackground> EVENT = EventFactory.createArrayBacked(RenderTooltipCallback.PostBackground.class, callbacks ->
+            postBackground -> {
+                for (PostBackground callback : callbacks) {
                     callback.postBackground(postBackground);
                 }
-            };
-        });
+            });
 
         void postBackground(TooltipRenderer.PostBackground postBackground);
     }
 
     interface Color {
-        Event<RenderTooltipCallback.Color> EVENT = EventFactory.createArrayBacked(RenderTooltipCallback.Color.class, (callbacks) -> {
-            return (stack, lines, matrixStack, x, y, textRenderer, background, borderStart, borderEnd) -> {
-                for (RenderTooltipCallback.Color callback : callbacks) {
+        Event<RenderTooltipCallback.Color> EVENT = EventFactory.createArrayBacked(RenderTooltipCallback.Color.class, callbacks ->
+            (stack, lines, matrixStack, x, y, textRenderer, background, borderStart, borderEnd) -> {
+                for (Color callback : callbacks) {
                     return callback.color(stack, lines, matrixStack, x, y, textRenderer, background, borderStart, borderEnd);
                 }
                 return new TooltipRenderer.Color(stack, lines, matrixStack, x, y, textRenderer, background, borderStart, borderEnd);
-            };
-        });
+            });
 
         TooltipRenderer.Color color(ItemStack stack, List<? extends FormattedCharSequence> textLines, PoseStack matrixStack, int x, int y, Font fr, int background, int borderStart, int borderEnd);
     }

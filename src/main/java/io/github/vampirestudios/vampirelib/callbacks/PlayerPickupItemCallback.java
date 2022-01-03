@@ -677,11 +677,12 @@
 
 package io.github.vampirestudios.vampirelib.callbacks;
 
-import net.fabricmc.fabric.api.event.Event;
-import net.fabricmc.fabric.api.event.EventFactory;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
+
+import net.fabricmc.fabric.api.event.Event;
+import net.fabricmc.fabric.api.event.EventFactory;
 
 /**
  * Callback for the player picking up an item entity.
@@ -693,8 +694,8 @@ import net.minecraft.world.entity.player.Player;
  * <li>FAIL cancels further processing and does not pick up the item.</ul>
  */
 public interface PlayerPickupItemCallback {
-    Event<PlayerPickupItemCallback> EVENT = EventFactory.createArrayBacked(PlayerPickupItemCallback.class,
-        (listeners) -> (player, entity) -> {
+    Event<PlayerPickupItemCallback> EVENT = EventFactory.createArrayBacked(PlayerPickupItemCallback.class, listeners ->
+        (player, entity) -> {
             for (PlayerPickupItemCallback event : listeners) {
                 InteractionResult result = event.interact(player, entity);
 

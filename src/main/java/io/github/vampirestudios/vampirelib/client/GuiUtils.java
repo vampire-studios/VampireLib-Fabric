@@ -679,14 +679,7 @@ package io.github.vampirestudios.vampirelib.client;
 
 import java.util.ArrayList;
 import java.util.List;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiComponent;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.network.chat.FormattedText;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.FormattedCharSequence;
-import net.minecraft.world.item.ItemStack;
+
 import org.lwjgl.opengl.GL11;
 
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -696,6 +689,16 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import com.mojang.math.Matrix4f;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.network.chat.FormattedText;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.FormattedCharSequence;
+import net.minecraft.world.item.ItemStack;
+
 import io.github.vampirestudios.vampirelib.client.callbacks.RenderTooltipCallback;
 
 /**
@@ -721,12 +724,12 @@ public class GuiUtils {
     }
 
     /**
-     * Draws a textured box of any size (smallest size is borderSize * 2 square) based on a fixed size textured box with continuous borders
+     * Draws a textured box of any size (the smallest size is borderSize * 2 square) based on a fixed size textured box with continuous borders
      * and filler. It is assumed that the desired texture ResourceLocation object has been bound using
      * Minecraft.getMinecraft().getTextureManager().bindTexture(resourceLocation).
      *
-     * @param x             x axis offset
-     * @param y             y axis offset
+     * @param x             x-axis offset
+     * @param y             y-axis offset
      * @param u             bound resource location image x offset
      * @param v             bound resource location image y offset
      * @param width         the desired box width
@@ -742,13 +745,13 @@ public class GuiUtils {
     }
 
     /**
-     * Draws a textured box of any size (smallest size is borderSize * 2 square) based on a fixed size textured box with continuous borders
+     * Draws a textured box of any size (the smallest size is borderSize * 2 square) based on a fixed size textured box with continuous borders
      * and filler. The provided ResourceLocation object will be bound using
      * Minecraft.getMinecraft().getTextureManager().bindTexture(resourceLocation).
      *
      * @param res           the ResourceLocation object that contains the desired image
-     * @param x             x axis offset
-     * @param y             y axis offset
+     * @param x             x-axis offset
+     * @param y             y-axis offset
      * @param u             bound resource location image x offset
      * @param v             bound resource location image y offset
      * @param width         the desired box width
@@ -764,13 +767,13 @@ public class GuiUtils {
     }
 
     /**
-     * Draws a textured box of any size (smallest size is borderSize * 2 square) based on a fixed size textured box with continuous borders
+     * Draws a textured box of any size (the smallest size is borderSize * 2 square) based on a fixed size textured box with continuous borders
      * and filler. The provided ResourceLocation object will be bound using
      * Minecraft.getMinecraft().getTextureManager().bindTexture(resourceLocation).
      *
      * @param res           the ResourceLocation object that contains the desired image
-     * @param x             x axis offset
-     * @param y             y axis offset
+     * @param x             x-axis offset
+     * @param y             y-axis offset
      * @param u             bound resource location image x offset
      * @param v             bound resource location image y offset
      * @param width         the desired box width
@@ -790,12 +793,12 @@ public class GuiUtils {
     }
 
     /**
-     * Draws a textured box of any size (smallest size is borderSize * 2 square) based on a fixed size textured box with continuous borders
+     * Draws a textured box of any size (the smallest size is borderSize * 2 square) based on a fixed size textured box with continuous borders
      * and filler. It is assumed that the desired texture ResourceLocation object has been bound using
      * Minecraft.getMinecraft().getTextureManager().bindTexture(resourceLocation).
      *
-     * @param x             x axis offset
-     * @param y             y axis offset
+     * @param x             x-axis offset
+     * @param y             y-axis offset
      * @param u             bound resource location image x offset
      * @param v             bound resource location image y offset
      * @param width         the desired box width
@@ -1034,7 +1037,7 @@ public class GuiUtils {
                  ++lineNumber) {
                 FormattedCharSequence line = textList.get(lineNumber);
                 if (line != null)
-                    font.drawInBatch(line, (float) tooltipX, (float) tooltipY, -1, true, mat, renderType, false, 0, 15728880);
+                    font.drawInBatch(line, tooltipX,  tooltipY, -1, true, mat, renderType, false, 0, 15728880);
 
                 if (lineNumber + 1 == titleLinesCount)
                     tooltipY += 2;
@@ -1053,14 +1056,14 @@ public class GuiUtils {
     }
 
     public static void drawGradientRect(Matrix4f mat, int zLevel, int left, int top, int right, int bottom, int startColor, int endColor) {
-        float startAlpha = (float) (startColor >> 24 & 255) / 255.0F;
-        float startRed = (float) (startColor >> 16 & 255) / 255.0F;
-        float startGreen = (float) (startColor >> 8 & 255) / 255.0F;
-        float startBlue = (float) (startColor & 255) / 255.0F;
-        float endAlpha = (float) (endColor >> 24 & 255) / 255.0F;
-        float endRed = (float) (endColor >> 16 & 255) / 255.0F;
-        float endGreen = (float) (endColor >> 8 & 255) / 255.0F;
-        float endBlue = (float) (endColor & 255) / 255.0F;
+        float startAlpha = (startColor >> 24 & 255) / 255.0F;
+        float startRed = (startColor >> 16 & 255) / 255.0F;
+        float startGreen = (startColor >> 8 & 255) / 255.0F;
+        float startBlue = (startColor & 255) / 255.0F;
+        float endAlpha = (endColor >> 24 & 255) / 255.0F;
+        float endRed = (endColor >> 16 & 255) / 255.0F;
+        float endGreen = (endColor >> 8 & 255) / 255.0F;
+        float endBlue = (endColor & 255) / 255.0F;
 
         RenderSystem.enableDepthTest();
         RenderSystem.disableTexture();
