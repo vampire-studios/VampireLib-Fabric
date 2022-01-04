@@ -736,6 +736,7 @@ import io.github.vampirestudios.vampirelib.api.datagen.CustomFabricTagBuilder;
 import io.github.vampirestudios.vampirelib.blocks.BaseBlock;
 import io.github.vampirestudios.vampirelib.blocks.BaseLogAndWoodBlock;
 import io.github.vampirestudios.vampirelib.blocks.ButtonBaseBlock;
+import io.github.vampirestudios.vampirelib.blocks.CompatBlock;
 import io.github.vampirestudios.vampirelib.blocks.CustomLadderBlock;
 import io.github.vampirestudios.vampirelib.blocks.DoorBaseBlock;
 import io.github.vampirestudios.vampirelib.blocks.FenceBaseBlock;
@@ -1374,7 +1375,8 @@ public class WoodRegistry {
             String leavesName = woodRegistry.mushroomLike ? "_wart_block" : "_leaves";
             Block block = woodRegistry.mushroomLike ? Blocks.WARPED_WART_BLOCK : Blocks.FLOWERING_AZALEA_LEAVES;
             CreativeModeTab creativeModeTab = woodRegistry.mushroomLike ? CreativeModeTab.TAB_BUILDING_BLOCKS : CreativeModeTab.TAB_DECORATIONS;
-            woodRegistry.leaves = registryHelper.blocks().registerBlock(new LeavesBaseBlock(block), name.getPath() + leavesName,
+            woodRegistry.leaves = registryHelper.blocks().registerBlock(woodRegistry.mushroomLike ? new CompatBlock(block) :
+                    new LeavesBaseBlock(block), name.getPath() + leavesName,
                 creativeModeTab);
             return this;
         }
