@@ -47,10 +47,8 @@ repositories {
 	maven { url = "https://raw.githubusercontent.com/vampire-studios/VampireStudiosMaven/main/" }
 	maven { url = "https://maven.shedaniel.me/" }
 	maven { url = uri("https://storage.googleapis.com/devan-maven/") }
-	maven {
-		name = "ParchmentMC"
-		url = "https://maven.parchmentmc.net/"
-	}
+	maven { url = "https://maven.parchmentmc.net/" }
+	maven { url = "https://maven.terraformersmc.com/" }
 }
 
 dependencies {
@@ -79,6 +77,9 @@ dependencies {
 	include ("io.github.vampirestudios:artifice:0.15.10+21w20a") {
 		exclude group: "net.fabricmc.fabric-api"
 	}
+
+	modImplementation "com.terraformersmc.terraform-api:terraform-wood-api-v1:2.0.2"
+	include "com.terraformersmc.terraform-api:terraform-wood-api-v1:2.0.2"
 }
 
 processResources {

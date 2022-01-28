@@ -678,12 +678,13 @@
 package io.github.vampirestudios.vampirelib.utils.registry;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import net.minecraft.util.StringRepresentable;
 
 public abstract class WoodTypeRegistry implements StringRepresentable {
-    public static ArrayList<WoodType> woodTypes = new ArrayList<>();
+    public static List<WoodType> woodTypes = new ArrayList<>();
 
     private static final Queue<ModdedTypeListener> listeners = new ConcurrentLinkedQueue<>();
 

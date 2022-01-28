@@ -675,16 +675,33 @@
  * <https://www.gnu.org/licenses/why-not-lgpl.html>.
  */
 
-package io.github.vampirestudios.vampirelib.init;
+package io.github.vampirestudios.vampirelib.blocks;
 
-import io.github.vampirestudios.vampirelib.utils.Utils;
-import net.minecraft.client.model.geom.ModelLayerLocation;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.NonNullList;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 
-public class VEntityModelLayers {
+import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 
-    public static ModelLayerLocation createBoat(ResourceLocation type) {
-        return new ModelLayerLocation(Utils.appendToPath(type, "boat/"), "main");
+import io.github.vampirestudios.vampirelib.api.VanillaTargetedItemGroupFiller;
+
+public class WartBlockBaseBlock extends Block {
+    private final VanillaTargetedItemGroupFiller FILLER;
+
+    public WartBlockBaseBlock(Block parent) {
+        super(FabricBlockSettings.copyOf(parent));
+        FILLER = new VanillaTargetedItemGroupFiller(parent.asItem());
+    }
+
+    public WartBlockBaseBlock() {
+        this(Blocks.WARPED_WART_BLOCK);
+    }
+
+    @Override
+    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> list) {
+        FILLER.fillItem(this.asItem(), group, list);
     }
 
 }

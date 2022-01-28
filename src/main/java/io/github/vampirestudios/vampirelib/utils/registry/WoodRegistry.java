@@ -681,6 +681,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
+import com.terraformersmc.terraform.boat.api.TerraformBoatType;
+import com.terraformersmc.terraform.boat.api.TerraformBoatTypeRegistry;
+import com.terraformersmc.terraform.boat.api.client.TerraformBoatClientHelper;
+import com.terraformersmc.terraform.boat.api.item.TerraformBoatItemHelper;
 import org.apache.commons.lang3.text.WordUtils;
 
 import net.minecraft.client.renderer.RenderType;
@@ -727,16 +731,11 @@ import net.fabricmc.fabric.impl.blockrenderlayer.BlockRenderLayerMapImpl;
 import net.fabricmc.loader.api.FabricLoader;
 
 import io.github.vampirestudios.vampirelib.api.FabricLanguageProvider;
-import io.github.vampirestudios.vampirelib.api.boat.TerraformBoatType;
-import io.github.vampirestudios.vampirelib.api.boat.TerraformBoatTypeRegistry;
-import io.github.vampirestudios.vampirelib.api.boat.client.TerraformBoatClientHelper;
-import io.github.vampirestudios.vampirelib.api.boat.item.TerraformBoatItemHelper;
 import io.github.vampirestudios.vampirelib.api.datagen.CustomBlockTagProvider;
 import io.github.vampirestudios.vampirelib.api.datagen.CustomFabricTagBuilder;
 import io.github.vampirestudios.vampirelib.blocks.BaseBlock;
 import io.github.vampirestudios.vampirelib.blocks.BaseLogAndWoodBlock;
 import io.github.vampirestudios.vampirelib.blocks.ButtonBaseBlock;
-import io.github.vampirestudios.vampirelib.blocks.CompatBlock;
 import io.github.vampirestudios.vampirelib.blocks.CustomLadderBlock;
 import io.github.vampirestudios.vampirelib.blocks.DoorBaseBlock;
 import io.github.vampirestudios.vampirelib.blocks.FenceBaseBlock;
@@ -749,6 +748,7 @@ import io.github.vampirestudios.vampirelib.blocks.SaplingBaseBlock;
 import io.github.vampirestudios.vampirelib.blocks.SlabBaseBlock;
 import io.github.vampirestudios.vampirelib.blocks.StairsBaseBlock;
 import io.github.vampirestudios.vampirelib.blocks.TrapdoorBaseBlock;
+import io.github.vampirestudios.vampirelib.blocks.WartBlockBaseBlock;
 import io.github.vampirestudios.vampirelib.client.VampireLibClient;
 import io.github.vampirestudios.vampirelib.utils.Utils;
 
@@ -1010,6 +1010,10 @@ public class WoodRegistry {
     }
 
     public void generateModels(BlockModelGenerators blockStateModelGenerator) {
+        this.generateModels(blockStateModelGenerator, false);
+    }
+
+    public void generateModels(BlockModelGenerators blockStateModelGenerator, boolean customPottedTexture) {
 		TextureMapping logMapping = new TextureMapping()
 			.put(TextureSlot.SIDE, new ResourceLocation(name.getNamespace(), String.format("wood_sets/%s/%s", name.getPath(), mushroomLike ? "stem" : "log")))
 			.put(TextureSlot.END, new ResourceLocation(name.getNamespace(), String.format("wood_sets/%s/%s_top", name.getPath(), mushroomLike ? "stem" : "log")));
@@ -1023,7 +1027,8 @@ public class WoodRegistry {
 		TextureMapping saplingMapping = TextureMapping.cross(new ResourceLocation(name.getNamespace(), String.format("wood_sets/%s/%s", name.getPath(),
             mushroomLike ? "fungi" : "sapling")));
 		TextureMapping saplingPlantMapping = TextureMapping.plant(new ResourceLocation(name.getNamespace(),
-            String.format("wood_sets/%s/potted_%s", name.getPath(), mushroomLike ? "fungi" : "sapling")));
+            customPottedTexture ? String.format("wood_sets/%s/potted_%s", name.getPath(), mushroomLike ? "fungi" : "sapling") :
+            String.format("wood_sets/%s/%s", name.getPath(), mushroomLike ? "fungi" : "sapling")));
 
 		TextureMapping planksMapping = TextureMapping.cube(new ResourceLocation(name.getNamespace(), String.format("wood_sets/%s/planks", name.getPath())));
 
@@ -1375,7 +1380,7 @@ public class WoodRegistry {
             String leavesName = woodRegistry.mushroomLike ? "_wart_block" : "_leaves";
             Block block = woodRegistry.mushroomLike ? Blocks.WARPED_WART_BLOCK : Blocks.FLOWERING_AZALEA_LEAVES;
             CreativeModeTab creativeModeTab = woodRegistry.mushroomLike ? CreativeModeTab.TAB_BUILDING_BLOCKS : CreativeModeTab.TAB_DECORATIONS;
-            woodRegistry.leaves = registryHelper.blocks().registerBlock(woodRegistry.mushroomLike ? new CompatBlock(block) :
+            woodRegistry.leaves = registryHelper.blocks().registerBlock(woodRegistry.mushroomLike ? new WartBlockBaseBlock(block) :
                     new LeavesBaseBlock(block), name.getPath() + leavesName,
                 creativeModeTab);
             return this;
@@ -1598,7 +1603,9 @@ public class WoodRegistry {
         public Builder boat() {
 			woodRegistry.boatItem = TerraformBoatItemHelper.registerBoatItem(Utils.appendToPath(name, "_boat"), () -> woodRegistry.boatType);
 			woodRegistry.boatType = Registry.register(TerraformBoatTypeRegistry.INSTANCE, name, new TerraformBoatType.Builder().item(woodRegistry.boatItem).build());
-			if (FabricLoader.getInstance().getEnvironmentType().equals(EnvType.CLIENT)) TerraformBoatClientHelper.registerModelLayer(name);
+			if (FabricLoader.getInstance().getEnvironmentType().equals(EnvType.CLIENT)) {
+                TerraformBoatClientHelper.registerModelLayer(name);
+            }
             return this;
         }
 
@@ -1696,7 +1703,6 @@ public class WoodRegistry {
         }
     }
 
-    public record ColoredLeavesBlock(String name, int color) {
-    }
+    public record ColoredLeavesBlock(String name, int color) {}
 
 }
