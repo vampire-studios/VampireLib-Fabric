@@ -128,9 +128,4 @@ public class CustomFabricTagBuilder<T> extends TagsProvider.TagAppender<T> {
         return this;
     }
 
-//    private void assertStaticRegistry() {
-//        if (FabricTagProvider.this instanceof CustomTagProviders.DynamicRegistryTagProvider) {
-//            throw new UnsupportedOperationException("Adding object instances is not supported for DynamicRegistryTagProvider.");
-//        }
-//    }
 }

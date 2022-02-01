@@ -685,6 +685,8 @@ import com.terraformersmc.terraform.boat.api.TerraformBoatType;
 import com.terraformersmc.terraform.boat.api.TerraformBoatTypeRegistry;
 import com.terraformersmc.terraform.boat.api.client.TerraformBoatClientHelper;
 import com.terraformersmc.terraform.boat.api.item.TerraformBoatItemHelper;
+import com.terraformersmc.terraform.sign.block.TerraformSignBlock;
+import com.terraformersmc.terraform.sign.block.TerraformWallSignBlock;
 import org.apache.commons.lang3.text.WordUtils;
 
 import net.minecraft.client.renderer.RenderType;
@@ -708,11 +710,13 @@ import net.minecraft.tags.Tag;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.SignItem;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.ComposterBlock;
 import net.minecraft.world.level.block.PressurePlateBlock;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.grower.AbstractTreeGrower;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
@@ -749,6 +753,7 @@ import io.github.vampirestudios.vampirelib.blocks.SlabBaseBlock;
 import io.github.vampirestudios.vampirelib.blocks.StairsBaseBlock;
 import io.github.vampirestudios.vampirelib.blocks.TrapdoorBaseBlock;
 import io.github.vampirestudios.vampirelib.blocks.WartBlockBaseBlock;
+import io.github.vampirestudios.vampirelib.blocks.entity.IBlockEntityType;
 import io.github.vampirestudios.vampirelib.client.VampireLibClient;
 import io.github.vampirestudios.vampirelib.utils.Utils;
 
@@ -781,7 +786,10 @@ public class WoodRegistry {
     private Block trapdoor;
     private Block button;
     private Block pressurePlate;
+    private Block sign;
+    private Block wallSign;
     private Block ladder;
+    private Item signItem;
     private Item boatItem;
     private TerraformBoatType boatType;
 
@@ -915,6 +923,14 @@ public class WoodRegistry {
         return ladder;
     }
 
+    public Block sign() {
+        return sign;
+    }
+
+    public Block wallSign() {
+        return wallSign;
+    }
+
     public AbstractTreeGrower saplingGenerator() {
         return saplingGenerator;
     }
@@ -929,6 +945,10 @@ public class WoodRegistry {
 
     public Tag.Named<Item> logsItemTag() {
         return logsItemTag;
+    }
+
+    public Item signItem() {
+        return signItem;
     }
 
     public Item boatItem() {
@@ -958,6 +978,8 @@ public class WoodRegistry {
         if (button != null) blockTags.tagCustom(BlockTags.WOODEN_BUTTONS).add(button);
         if (door != null) blockTags.tagCustom(BlockTags.WOODEN_DOORS).add(door);
         if (sapling != null) blockTags.tagCustom(BlockTags.SAPLINGS).add(sapling);
+        if (sign != null) blockTags.tagCustom(BlockTags.STANDING_SIGNS).add(sign);
+        if (wallSign != null) blockTags.tagCustom(BlockTags.WALL_SIGNS).add(wallSign);
 		if (!availableSaplings.isEmpty()) {
 			availableSaplings.forEach(s ->  {
 				Block block = Registry.BLOCK.get(new ResourceLocation(name.getNamespace(), s));
@@ -1007,6 +1029,8 @@ public class WoodRegistry {
         itemsTag.copy(BlockTags.WOODEN_SLABS, ItemTags.WOODEN_SLABS);
         itemsTag.copy(BlockTags.WOODEN_STAIRS, ItemTags.WOODEN_STAIRS);
         itemsTag.copy(BlockTags.NON_FLAMMABLE_WOOD, ItemTags.NON_FLAMMABLE_WOOD);
+        itemsTag.copy(BlockTags.WALL_SIGNS, ItemTags.SIGNS);
+        itemsTag.copy(BlockTags.STANDING_SIGNS, ItemTags.SIGNS);
     }
 
     public void generateModels(BlockModelGenerators blockStateModelGenerator) {
@@ -1032,18 +1056,13 @@ public class WoodRegistry {
 
 		TextureMapping planksMapping = TextureMapping.cube(new ResourceLocation(name.getNamespace(), String.format("wood_sets/%s/planks", name.getPath())));
 
+        TextureMapping signMapping = TextureMapping.cube(new ResourceLocation(name.getNamespace(), String.format("wood_sets/%s/sign", name.getPath())));
+
 		TextureMapping doorMapping = new TextureMapping()
 			.put(TextureSlot.TOP, new ResourceLocation(name.getNamespace(), String.format("wood_sets/%s/door_top", name.getPath())))
 			.put(TextureSlot.BOTTOM, new ResourceLocation(name.getNamespace(), String.format("wood_sets/%s/door_bottom", name.getPath())));
-		TextureMapping doorItemMapping = TextureMapping.layer0(
-			new ResourceLocation(name.getNamespace(), String.format("wood_sets/%s/door_item", name.getPath()))
-		);
 
 		TextureMapping trapdoorMapping = TextureMapping.defaultTexture(new ResourceLocation(name.getNamespace(), String.format("wood_sets/%s/trapdoor", name.getPath())));
-
-		TextureMapping ladderItemMapping = TextureMapping.layer0(
-			new ResourceLocation(name.getNamespace(), String.format("wood_sets/%s/ladder", name.getPath()))
-		);
 
 		TextureMapping bookshelfMapping = TextureMapping.column(
             new ResourceLocation(name.getNamespace(), String.format("wood_sets/%s/bookshelf", name.getPath())),
@@ -1074,8 +1093,12 @@ public class WoodRegistry {
             ResourceLocation resourceLocation2 = ModelTemplates.DOOR_BOTTOM_HINGE.create(door, doorMapping, blockStateModelGenerator.modelOutput);
             ResourceLocation resourceLocation3 = ModelTemplates.DOOR_TOP.create(door, doorMapping, blockStateModelGenerator.modelOutput);
             ResourceLocation resourceLocation4 = ModelTemplates.DOOR_TOP_HINGE.create(door, doorMapping, blockStateModelGenerator.modelOutput);
-            ModelTemplates.FLAT_ITEM.create(ModelLocationUtils.getModelLocation(door), doorItemMapping, blockStateModelGenerator.modelOutput);
             blockStateModelGenerator.blockStateOutput.accept(createDoor(door, resourceLocation, resourceLocation2, resourceLocation3, resourceLocation4));
+            ModelTemplates.FLAT_ITEM.create(ModelLocationUtils.getModelLocation(door.asItem()),
+                TextureMapping.layer0(new ResourceLocation(
+                    name.getNamespace(),
+                    String.format("wood_sets/%s/door_item", name.getPath())
+                )), blockStateModelGenerator.modelOutput);
         }
         if (trapdoor != null) {
             ResourceLocation resourceLocation = ModelTemplates.TRAPDOOR_TOP.create(trapdoor, trapdoorMapping, blockStateModelGenerator.modelOutput);
@@ -1091,7 +1114,7 @@ public class WoodRegistry {
         }
         if (ladder != null) {
             blockStateModelGenerator.blockStateOutput.accept(MultiVariantGenerator.multiVariant(ladder, net.minecraft.data.models.blockstates.Variant.variant()
-                .with(VariantProperties.MODEL, ModelLocationUtils.getModelLocation(Blocks.LADDER))).with(createHorizontalFacingDispatch()));
+                .with(VariantProperties.MODEL, ModelLocationUtils.getModelLocation(ladder))).with(createHorizontalFacingDispatch()));
             ModelTemplates.FLAT_ITEM.create(ModelLocationUtils.getModelLocation(ladder.asItem()),
                 TextureMapping.layer0(new ResourceLocation(
                     name.getNamespace(),
@@ -1145,6 +1168,24 @@ public class WoodRegistry {
 			blockStateModelGenerator.blockStateOutput.accept(BlockModelGenerators.createSlab(slab, resourceLocation2, resourceLocation, ModelLocationUtils.getModelLocation(planks)));
             blockStateModelGenerator.delegateItemModel(slab, resourceLocation2);
 		}
+        if (sign != null && wallSign != null && signItem != null) {
+            ResourceLocation resourceLocation = ModelTemplates.PARTICLE_ONLY.create(sign, signMapping, blockStateModelGenerator.modelOutput);
+            blockStateModelGenerator.blockStateOutput.accept(BlockModelGenerators.createSimpleBlock(sign, resourceLocation));
+            blockStateModelGenerator.blockStateOutput.accept(BlockModelGenerators.createSimpleBlock(wallSign, resourceLocation));
+            ModelTemplates.FLAT_ITEM.create(ModelLocationUtils.getModelLocation(sign.asItem()),
+                TextureMapping.layer0(new ResourceLocation(
+                    name.getNamespace(),
+                    String.format("wood_sets/%s/sign_item", name.getPath())
+                )), blockStateModelGenerator.modelOutput);
+            blockStateModelGenerator.skipAutoItemBlock(wallSign);
+        }
+        if (boatItem != null) {
+            ModelTemplates.FLAT_ITEM.create(ModelLocationUtils.getModelLocation(boatItem),
+                TextureMapping.layer0(new ResourceLocation(
+                    name.getNamespace(),
+                    String.format("wood_sets/%s/boat_item", name.getPath())
+                )), blockStateModelGenerator.modelOutput);
+        }
 		if (stairs != null) {
 			ResourceLocation resourceLocation = ModelTemplates.STAIRS_INNER.create(stairs, planksMapping, blockStateModelGenerator.modelOutput);
 			ResourceLocation resourceLocation2 = ModelTemplates.STAIRS_STRAIGHT.create(stairs, planksMapping, blockStateModelGenerator.modelOutput);
@@ -1201,6 +1242,8 @@ public class WoodRegistry {
         if (slab != null) languageProvider.addBlock(slab, translatedName + " Slab");
         if (stairs != null) languageProvider.addBlock(stairs, translatedName + " Stairs");
         if (bookshelf != null) languageProvider.addBlock(bookshelf, translatedName + " Bookshelf");
+        if (signItem != null) languageProvider.addBlock(sign, translatedName + " Sign");
+        if (boatItem != null) languageProvider.addItem(boatItem, translatedName + " Boat");
     }
 
     public void generateLoot(FabricBlockLootTablesProvider lootTablesProvider) {
@@ -1248,6 +1291,7 @@ public class WoodRegistry {
         if (pressurePlate != null) lootTablesProvider.dropSelf(pressurePlate);
         if (slab != null) lootTablesProvider.add(slab, BlockLoot::createSlabItemTable);
         if (stairs != null) lootTablesProvider.dropSelf(stairs);
+        if (sign != null) lootTablesProvider.dropSelf(sign);
         if (bookshelf != null) lootTablesProvider.add(bookshelf, blockx -> createSingleItemTableWithSilkTouch(blockx, Items.BOOK, ConstantValue.exactly(3.0F)));
     }
 
@@ -1263,6 +1307,8 @@ public class WoodRegistry {
         if (stairs != null) RecipeProvider.stairBuilder(stairs, Ingredient.of(planks));
         if (pressurePlate != null) RecipeProvider.pressurePlate(exporter, pressurePlate, planks);
         if (button != null) RecipeProvider.buttonBuilder(button, Ingredient.of(planks));
+        if (boatItem != null) RecipeProvider.woodenBoat(exporter, boatItem, planks);
+        if (signItem != null) RecipeProvider.signBuilder(signItem, Ingredient.of(planks));
         if (bookshelf != null) ShapedRecipeBuilder.shaped(bookshelf).define('#', planks).define('X', Items.BOOK).pattern("###").pattern("XXX").pattern("###").unlockedBy("has_book", has(Items.BOOK)).save(exporter);
     }
 
@@ -1413,8 +1459,7 @@ public class WoodRegistry {
             CreativeModeTab creativeModeTab = woodRegistry.mushroomLike ? CreativeModeTab.TAB_BUILDING_BLOCKS : CreativeModeTab.TAB_DECORATIONS;
             woodRegistry.leaves = registryHelper.blocks().registerBlock(new LeavesBaseBlock(block), name.getPath() + leavesName,
                 creativeModeTab);
-            VampireLibClient.ColoredLeaves coloredLeaves = new VampireLibClient.ColoredLeaves(woodRegistry.leaves, false, 0);
-            VampireLibClient.COLORED_LEAVES.add(coloredLeaves);
+            VampireLibClient.COLORED_LEAVES.add(new VampireLibClient.ColoredLeaves(woodRegistry.leaves, true));
             return this;
         }
 
@@ -1424,8 +1469,7 @@ public class WoodRegistry {
             CreativeModeTab creativeModeTab = woodRegistry.mushroomLike ? CreativeModeTab.TAB_BUILDING_BLOCKS : CreativeModeTab.TAB_DECORATIONS;
             woodRegistry.leaves = registryHelper.blocks().registerBlock(new LeavesBaseBlock(block), name.getPath() + leavesName,
                 creativeModeTab);
-            VampireLibClient.ColoredLeaves coloredLeaves = new VampireLibClient.ColoredLeaves(woodRegistry.leaves, true, color);
-            VampireLibClient.COLORED_LEAVES.add(coloredLeaves);
+            VampireLibClient.COLORED_LEAVES.add(new VampireLibClient.ColoredLeaves(woodRegistry.leaves, true, color));
             return this;
         }
 
@@ -1435,7 +1479,7 @@ public class WoodRegistry {
             CreativeModeTab creativeModeTab = woodRegistry.mushroomLike ? CreativeModeTab.TAB_BUILDING_BLOCKS : CreativeModeTab.TAB_DECORATIONS;
             woodRegistry.leaves = registryHelper.blocks().registerBlock(new LeavesBaseBlock(block), nameIn + leavesName,
                 creativeModeTab);
-            VampireLibClient.ColoredLeaves coloredLeaves = new VampireLibClient.ColoredLeaves(woodRegistry.leaves, false, 0xFFF);
+            VampireLibClient.ColoredLeaves coloredLeaves = new VampireLibClient.ColoredLeaves(woodRegistry.leaves, true);
             VampireLibClient.COLORED_LEAVES.add(coloredLeaves);
             return this;
         }
@@ -1447,8 +1491,7 @@ public class WoodRegistry {
             for (String name : nameIn) {
                 woodRegistry.leaves = registryHelper.blocks().registerBlock(new LeavesBaseBlock(block), name + leavesName,
                     creativeModeTab);
-                VampireLibClient.ColoredLeaves coloredLeaves = new VampireLibClient.ColoredLeaves(woodRegistry.leaves, false, 0xFFF);
-                VampireLibClient.COLORED_LEAVES.add(coloredLeaves);
+                VampireLibClient.COLORED_LEAVES.add(new VampireLibClient.ColoredLeaves(woodRegistry.leaves, true));
 				woodRegistry.availableLeaves.add(name + leavesName);
             }
             return this;
@@ -1460,8 +1503,7 @@ public class WoodRegistry {
             CreativeModeTab creativeModeTab = woodRegistry.mushroomLike ? CreativeModeTab.TAB_BUILDING_BLOCKS : CreativeModeTab.TAB_DECORATIONS;
             woodRegistry.leaves = registryHelper.blocks().registerBlock(new LeavesBaseBlock(block), nameIn + leavesName,
                 creativeModeTab);
-            VampireLibClient.ColoredLeaves coloredLeaves = new VampireLibClient.ColoredLeaves(woodRegistry.leaves, true, color);
-            VampireLibClient.COLORED_LEAVES.add(coloredLeaves);
+            VampireLibClient.COLORED_LEAVES.add(new VampireLibClient.ColoredLeaves(woodRegistry.leaves, true, color));
             return this;
         }
 
@@ -1472,8 +1514,7 @@ public class WoodRegistry {
             for (String name : nameIn) {
                 woodRegistry.leaves = registryHelper.blocks().registerBlock(new LeavesBaseBlock(block), name + leavesName,
                     creativeModeTab);
-                VampireLibClient.ColoredLeaves coloredLeaves = new VampireLibClient.ColoredLeaves(woodRegistry.leaves, false, color);
-                VampireLibClient.COLORED_LEAVES.add(coloredLeaves);
+                VampireLibClient.COLORED_LEAVES.add(new VampireLibClient.ColoredLeaves(woodRegistry.leaves, true, color));
 				woodRegistry.availableLeaves.add(name + leavesName);
             }
             return this;
@@ -1486,8 +1527,7 @@ public class WoodRegistry {
             for (ColoredLeavesBlock coloredLeavesBlock : coloredLeavesBlocks) {
                 woodRegistry.leaves = registryHelper.blocks().registerBlock(new LeavesBaseBlock(block), coloredLeavesBlock.name + leavesName,
                     creativeModeTab);
-                VampireLibClient.ColoredLeaves coloredLeaves = new VampireLibClient.ColoredLeaves(woodRegistry.leaves, true, coloredLeavesBlock.color);
-                VampireLibClient.COLORED_LEAVES.add(coloredLeaves);
+                VampireLibClient.COLORED_LEAVES.add(new VampireLibClient.ColoredLeaves(woodRegistry.leaves, true, coloredLeavesBlock.color));
 				woodRegistry.availableLeaves.add(coloredLeavesBlock.name + leavesName);
             }
             return this;
@@ -1600,6 +1640,15 @@ public class WoodRegistry {
             return this;
         }
 
+        public Builder sign() {
+            ResourceLocation signTexture = new ResourceLocation(name.getNamespace(), "wood_types/" + name.getPath() + "/sign");
+            woodRegistry.sign = registryHelper.blocks().registerBlockWithoutItem(name.getPath() + "_sign", new TerraformSignBlock(signTexture, FabricBlockSettings.copyOf(Blocks.OAK_SIGN)));
+            woodRegistry.wallSign = registryHelper.blocks().registerBlockWithoutItem(name.getPath() + "_wall_sign", new TerraformWallSignBlock(signTexture, FabricBlockSettings.copyOf(Blocks.OAK_WALL_SIGN)));
+            woodRegistry.signItem = registryHelper.items().registerItem(name.getPath() + "_sign", new SignItem(new Item.Properties().durability(16).tab(CreativeModeTab.TAB_DECORATIONS), woodRegistry.sign, woodRegistry.wallSign));
+            ((IBlockEntityType) BlockEntityType.SIGN).vl_addBlocks(woodRegistry.sign, woodRegistry.wallSign);
+            return this;
+        }
+
         public Builder boat() {
 			woodRegistry.boatItem = TerraformBoatItemHelper.registerBoatItem(Utils.appendToPath(name, "_boat"), () -> woodRegistry.boatType);
 			woodRegistry.boatType = Registry.register(TerraformBoatTypeRegistry.INSTANCE, name, new TerraformBoatType.Builder().item(woodRegistry.boatItem).build());
@@ -1628,7 +1677,7 @@ public class WoodRegistry {
         }
 
         public Builder defaultExtraBlocks() {
-            return this.fence().fenceGate().stairs().slab().door().trapdoor().button().pressurePlate(PressurePlateBlock.Sensitivity.EVERYTHING);
+            return this.fence().fenceGate().stairs().slab().door().trapdoor().button().pressurePlate(PressurePlateBlock.Sensitivity.EVERYTHING).sign();
         }
 
         public Builder defaultBlocksColoredLeaves() {

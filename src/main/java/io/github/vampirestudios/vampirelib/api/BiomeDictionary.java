@@ -19,26 +19,66 @@
 
 package io.github.vampirestudios.vampirelib.api;
 
+import java.util.ArrayDeque;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Deque;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
+
 import com.google.common.collect.ImmutableList;
+import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import net.minecraft.core.Registry;
 import net.minecraft.data.BuiltinRegistries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Biomes;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
-
-import static io.github.vampirestudios.vampirelib.api.BiomeDictionary.Type.*;
+import static io.github.vampirestudios.vampirelib.api.BiomeDictionary.Type.BEACH;
+import static io.github.vampirestudios.vampirelib.api.BiomeDictionary.Type.COLD;
+import static io.github.vampirestudios.vampirelib.api.BiomeDictionary.Type.CONIFEROUS;
+import static io.github.vampirestudios.vampirelib.api.BiomeDictionary.Type.DENSE;
+import static io.github.vampirestudios.vampirelib.api.BiomeDictionary.Type.DRY;
+import static io.github.vampirestudios.vampirelib.api.BiomeDictionary.Type.END;
+import static io.github.vampirestudios.vampirelib.api.BiomeDictionary.Type.FOREST;
+import static io.github.vampirestudios.vampirelib.api.BiomeDictionary.Type.HILLS;
+import static io.github.vampirestudios.vampirelib.api.BiomeDictionary.Type.HOT;
+import static io.github.vampirestudios.vampirelib.api.BiomeDictionary.Type.JUNGLE;
+import static io.github.vampirestudios.vampirelib.api.BiomeDictionary.Type.LUSH;
+import static io.github.vampirestudios.vampirelib.api.BiomeDictionary.Type.MESA;
+import static io.github.vampirestudios.vampirelib.api.BiomeDictionary.Type.MOUNTAIN;
+import static io.github.vampirestudios.vampirelib.api.BiomeDictionary.Type.MUSHROOM;
+import static io.github.vampirestudios.vampirelib.api.BiomeDictionary.Type.NETHER;
+import static io.github.vampirestudios.vampirelib.api.BiomeDictionary.Type.OCEAN;
+import static io.github.vampirestudios.vampirelib.api.BiomeDictionary.Type.OVERWORLD;
+import static io.github.vampirestudios.vampirelib.api.BiomeDictionary.Type.PLAINS;
+import static io.github.vampirestudios.vampirelib.api.BiomeDictionary.Type.PLATEAU;
+import static io.github.vampirestudios.vampirelib.api.BiomeDictionary.Type.RARE;
+import static io.github.vampirestudios.vampirelib.api.BiomeDictionary.Type.RIVER;
+import static io.github.vampirestudios.vampirelib.api.BiomeDictionary.Type.SANDY;
+import static io.github.vampirestudios.vampirelib.api.BiomeDictionary.Type.SAVANNA;
+import static io.github.vampirestudios.vampirelib.api.BiomeDictionary.Type.SNOWY;
+import static io.github.vampirestudios.vampirelib.api.BiomeDictionary.Type.SPARSE;
+import static io.github.vampirestudios.vampirelib.api.BiomeDictionary.Type.SPOOKY;
+import static io.github.vampirestudios.vampirelib.api.BiomeDictionary.Type.SWAMP;
+import static io.github.vampirestudios.vampirelib.api.BiomeDictionary.Type.UNDERGROUND;
+import static io.github.vampirestudios.vampirelib.api.BiomeDictionary.Type.VOID;
+import static io.github.vampirestudios.vampirelib.api.BiomeDictionary.Type.WASTELAND;
+import static io.github.vampirestudios.vampirelib.api.BiomeDictionary.Type.WET;
 
 public class BiomeDictionary {
 	private static final boolean DEBUG = false;
-	private static final Logger LOGGER = LogManager.getLogger();
+	private static final Logger LOGGER = LoggerFactory.getLogger(BiomeDictionary.class);
 
 	public static final class Type {
 		private static final Map<String, Type> byName = new TreeMap<>();

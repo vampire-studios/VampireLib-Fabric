@@ -29,7 +29,7 @@ public final class VanillaTargetedItemGroupFiller implements ItemGroupFiller {
 	@Override
 	public void fillItem(Item item, CreativeModeTab group, NonNullList<ItemStack> items) {
 		if (ItemStackUtils.isAllowedInTab(item, group)) {
-			OffsetValue offset = offsetMap.computeIfAbsent(group, (key) -> new OffsetValue());
+			OffsetValue offset = offsetMap.computeIfAbsent(group, key -> new OffsetValue());
 			Set<Item> itemsProcessed = offset.itemsProcessed;
 			if (itemsProcessed.contains(item)) {
 				offset.reset();

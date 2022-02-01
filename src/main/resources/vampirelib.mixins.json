@@ -11,8 +11,8 @@
     "MixinMobSpawnerLogic",
     "MixinServerPlayerEntity",
     "MixinSpawnHelper",
-    "ShapedRecipeResultAccessor",
     "ServerPlayerEntityDamageMixin",
+    "ShapedRecipeResultAccessor",
     "ShapelessRecipeResultAccessor",
     "SpawnEggItemAccessor",
     "block.BlockEntityTypeMixin",
@@ -21,6 +21,7 @@
     "item.MixinBookOnLectern"
   ],
   "client": [
+    "client.ShaderInstanceMixin",
     "client.TextureAtlasMixin"
   ],
   "injectors": {

@@ -5,8 +5,8 @@ import java.util.Locale;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.ConfigHolder;
 import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import net.minecraft.SharedConstants;
 import net.minecraft.resources.ResourceLocation;
@@ -18,7 +18,6 @@ import net.fabricmc.api.ModInitializer;
 
 import io.github.vampirestudios.vampirelib.modules.FeatureManager;
 import io.github.vampirestudios.vampirelib.utils.Rands;
-import io.github.vampirestudios.vampirelib.utils.registry.RegistryHelper;
 
 public abstract class BasicModClass implements ModInitializer, ClientModInitializer {
 
@@ -48,7 +47,7 @@ public abstract class BasicModClass implements ModInitializer, ClientModInitiali
 		this.modId = modId.toLowerCase(Locale.ROOT);
 		this.modName = modName;
 		this.modVersion = modVersion;
-		LOGGER = LogManager.getLogger(this.modName + (client ? " Client" : ""));
+		LOGGER = LoggerFactory.getLogger(this.modName + (client ? " Client" : ""));
 		FEATURE_MANAGER = FeatureManager.createFeatureManager(new ResourceLocation(this.modId,
 				"feature_manager" + Rands.getRandom().nextInt()));
 	}

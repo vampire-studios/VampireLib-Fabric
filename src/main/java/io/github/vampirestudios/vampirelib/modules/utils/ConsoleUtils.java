@@ -677,8 +677,8 @@
 
 package io.github.vampirestudios.vampirelib.modules.utils;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import io.github.vampirestudios.vampirelib.modules.FeatureManager;
 import io.github.vampirestudios.vampirelib.modules.api.ClientFeature;
@@ -691,7 +691,7 @@ import static io.github.vampirestudios.vampirelib.modules.FeatureManager.SERVER_
 
 public class ConsoleUtils {
 
-    protected static Logger LOGGER = LogManager.getFormatterLogger("[VampireLib: Console Utils]");
+    protected static Logger LOGGER = LoggerFactory.getLogger("[VampireLib: Console Utils]");
 
     public static void logCommonFeatures() {
         String moduleText;

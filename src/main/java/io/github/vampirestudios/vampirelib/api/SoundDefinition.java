@@ -1,384 +1,362 @@
 package io.github.vampirestudios.vampirelib.api;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
+import java.util.function.Supplier;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
+import org.apache.commons.lang3.Validate;
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
 
 /**
  * Contains all the data to completely define a sound event.
  */
 public final class SoundDefinition {
-    /**
-     * Identifies a specific sound that has to be played in a sound event, along with
-     * all the necessary parameters.
-     *
-     * <p>If any of the optional parameters (i.e. the ones that aren't required to
-     * obtain an instance of this class) are unset, their default values will be
-     * used instead. The list of defaults is available in the text that follows:</p>
-     *
-     * <ul>
-     *     <li>Volume: 1.0F</li>
-     *     <li>Pitch: 1.0F</li>
-     *     <li>Weight: 1</li>
-     *     <li>Stream: false</li>
-     *     <li>Attenuation Distance: 16</li>
-     *     <li>Preload: false</li>
-     * </ul>
-     */
-    public static final class Sound {
-        private static final SoundType DEFAULT_TYPE = SoundType.SOUND;
-        private static final float DEFAULT_VOLUME = 1.0F;
-        private static final float DEFAULT_PITCH = 1.0F;
-        private static final int DEFAULT_WEIGHT = 1;
-        private static final boolean DEFAULT_STREAM = false;
-        private static final int DEFAULT_ATTENUATION_DISTANCE = 16;
-        private static final boolean DEFAULT_PRELOAD = false;
 
-        private final ResourceLocation name;
-        private final SoundType type;
+    private final String soundId;
+    private final List<SoundBuilder> sounds;
+    private String subtitle;
 
-        // Optional parameters, available in specs
-        private float volume = DEFAULT_VOLUME;
-        private float pitch = DEFAULT_PITCH;
-        private int weight = DEFAULT_WEIGHT;
-        private boolean stream = DEFAULT_STREAM;
-        private int attenuationDistance = DEFAULT_ATTENUATION_DISTANCE;
-        private boolean preload = DEFAULT_PRELOAD;
-
-        private Sound(final ResourceLocation name, final SoundType type) {
-            this.name = name;
-            this.type = type;
-        }
-
-        /**
-         * Creates a new sound with the given name and type.
-         *
-         * @param name The name of the sound to create.
-         * @param type The type of sound to create.
-         */
-        public static Sound sound(final ResourceLocation name, final SoundType type) {
-            return new Sound(name, type);
-        }
-
-        /**
-         * Creates a new sound with the given name and type.
-         *
-         * @param name The name of the sound to create.
-         * @param type The type of sound to create.
-         */
-        public static Sound sound(final String name, final SoundType type) {
-            return new Sound(ResourceLocation.tryParse(name), type);
-        }
-
-        /**
-         * Sets the volume of this specific sound.
-         *
-         * <p>The volume of a sound represents how <strong>loud</strong> the sound is when played.</p>
-         *
-         * @param volume The volume to set. It must be higher than 0.
-         * @return This sound for chaining.
-         */
-        public Sound volume(final double volume) {
-            return this.volume((float) volume);
-        }
-
-        /**
-         * Sets the volume of this specific sound.
-         *
-         * <p>The volume of a sound represents how <strong>loud</strong> the sound is when played.</p>
-         *
-         * @param volume The volume to set. It must be higher than 0.
-         * @return This sound for chaining.
-         */
-        public Sound volume(final float volume) {
-            // Wiki specifies that volume cannot be higher than 1.0F, but I don't see any checks in vanilla nor in the
-            // original specs (https://www.reddit.com/r/Minecraft/comments/1ont25/snapshot_13w42a_has_been_released/cctryvp/)
-            // Set at own risk
-            if (volume <= 0.0F) {
-                throw new IllegalArgumentException("Volume must be positive for sound " + this.name + ", but instead got " + volume);
-            }
-            this.volume = volume;
-            return this;
-        }
-
-        /**
-         * Sets the pitch of this specific sound.
-         *
-         * <p>The pitch of a sound represents how <strong>high</strong> or <strong>low</strong> the sound is
-         * when played.</p>
-         *
-         * @param pitch The pitch to set. It must be higher than 0.
-         * @return This sound for chaining.
-         */
-        public Sound pitch(final double pitch) {
-            return this.pitch((float) pitch);
-        }
-
-        /**
-         * Sets the pitch of this specific sound.
-         *
-         * <p>The pitch of a sound represents how <strong>high</strong> or <strong>low</strong> the sound is
-         * when played.</p>
-         *
-         * @param pitch The pitch to set. It must be higher than 0.
-         * @return This sound for chaining.
-         */
-        public Sound pitch(final float pitch) {
-            if (pitch <= 0.0F) {
-                throw new IllegalArgumentException("Pitch must be positive for sound " + this.name + ", but instead got " + pitch);
-            }
-            this.pitch = pitch;
-            return this;
-        }
-
-        /**
-         * Sets the weight of this specific sound.
-         *
-         * <p>The weight represents how likely it is for this sound to be played when the respective
-         * event is triggered. This value is ignored when there is only one sound per event.</p>
-         *
-         * @param weight The weight to set. It must be higher than 0.
-         * @return This sound for chaining.
-         */
-        public Sound weight(final int weight) {
-            if (weight <= 0) {
-                throw new IllegalArgumentException("Weight has to be a positive number in sound " + this.name + ", but instead got " + weight);
-            }
-            this.weight = weight;
-            return this;
-        }
-
-        /**
-         * Sets this sound to a streamed sound.
-         *
-         * <p>In this context, streaming refers to reading the file on disk as needed instead of
-         * loading the whole set in memory. This is useful in case of longer sounds, like records
-         * and music (usually more than a minute).</p>
-         *
-         * <p>This is equivalent to a call to {@link #stream(boolean)} with a value of true.</p>
-         *
-         * @return This sound for chaining
-         */
-        public Sound stream() {
-            return this.stream(true);
-        }
-
-        /**
-         * Sets whether this sound should be streamed or not.
-         *
-         * <p>In this context, streaming refers to reading the file on disk as needed instead of
-         * loading the whole set in memory. This is useful in case of longer sounds, like records
-         * and music (usually more than a minute).</p>
-         *
-         * @param stream Whether the sound should be streamed or not.
-         * @return This sound for chaining.
-         */
-        public Sound stream(final boolean stream) {
-            this.stream = stream;
-            return this;
-        }
-
-        /**
-         * Sets the attenuation distance of the sound.
-         *
-         * <p>This represents how far this sound will be heard, in blocks. While the specs don't
-         * require so, it is suggested to keep this value positive.</p>
-         *
-         * @param attenuationDistance The attenuation distance to set.
-         * @return This sound for chaining.
-         */
-        public Sound attenuationDistance(final int attenuationDistance) {
-            this.attenuationDistance = attenuationDistance;
-            return this;
-        }
-
-        /**
-         * Marks this sound as needing to be preloaded.
-         *
-         * <p>A preloaded sound identifies a sound that is loaded in memory as soon as the resource
-         * pack is loaded, without having to wait for the sound to be ready to stream. It is suggested
-         * to keep this to {@code false}, unless you are using it for a highly recurring sound (e.g.
-         * underwater ambient sounds).</p>
-         *
-         * <p>This is equivalent to a call to {@link #preload(boolean)} with a value of true.</p>
-         *
-         * @return This sound for chaining.
-         */
-        public Sound preload() {
-            return this.preload(true);
-        }
-
-        /**
-         * Sets whether this sound should be preloaded or not.
-         *
-         * <p>A preloaded sound identifies a sound that is loaded in memory as soon as the resource
-         * pack is loaded, without having to wait for the sound to be ready to stream. It is suggested
-         * to keep this to {@code false}, unless you are using it for a highly recurring sound (e.g.
-         * underwater ambient sounds).</p>
-         *
-         * @param preload Whether the sound should be preloaded or not.
-         * @return This sound for chaining.
-         */
-        public Sound preload(final boolean preload) {
-            this.preload = preload;
-            return this;
-        }
-
-        ResourceLocation name() {
-            return this.name;
-        }
-
-        SoundType type() {
-            return this.type;
-        }
-
-        JsonElement serialize() {
-            if (this.canBeInShortForm()) {
-                return new JsonPrimitive(this.stripMcPrefix(this.name));
-            }
-
-            final JsonObject object = new JsonObject();
-            object.addProperty("name", this.stripMcPrefix(this.name));
-            if (this.type != DEFAULT_TYPE) object.addProperty("type", this.type.jsonString);
-            if (this.volume != DEFAULT_VOLUME) object.addProperty("volume", this.volume);
-            if (this.pitch != DEFAULT_PITCH) object.addProperty("pitch", this.pitch);
-            if (this.weight != DEFAULT_WEIGHT) object.addProperty("weight", this.weight);
-            if (this.stream != DEFAULT_STREAM) object.addProperty("stream", this.stream);
-            if (this.preload != DEFAULT_PRELOAD) object.addProperty("preload", this.preload);
-            if (this.attenuationDistance != DEFAULT_ATTENUATION_DISTANCE)
-                object.addProperty("attenuation_distance", this.attenuationDistance);
-            return object;
-        }
-
-        private boolean canBeInShortForm() {
-            return this.type == DEFAULT_TYPE &&
-                    this.volume == DEFAULT_VOLUME &&
-                    this.pitch == DEFAULT_PITCH &&
-                    this.weight == DEFAULT_WEIGHT &&
-                    this.stream == DEFAULT_STREAM &&
-                    this.attenuationDistance == DEFAULT_ATTENUATION_DISTANCE &&
-                    this.preload == DEFAULT_PRELOAD;
-        }
-
-        private String stripMcPrefix(final ResourceLocation name) {
-            return "minecraft".equals(name.getNamespace()) ? name.getPath() : name.toString();
-        }
+    private SoundDefinition(String soundId) {
+        this.soundId = soundId;
+        this.sounds = new ArrayList<>();
     }
 
     /**
-     * Represents the type of sound that the {@link Sound} object represents.
+     * @return A new JSON representing this sound
      */
-    public enum SoundType {
-        /**
-         * Identifies a "normal" sound.
-         *
-         * <p>In a "normal" sound, the {@code name} is considered a file name, which
-         * the game attempts to load from the currently loaded resource packs.</p>
-         */
-        SOUND("sound"),
-        /**
-         * Identifies a "redirect" sound.
-         *
-         * <p>In a "redirect" sound, the {@code name} of the sound is treated as the
-         * name of another {@code SoundEvent}, which will be queried. Processing is
-         * then deferred to that specific sound event, recursively as needed.</p>
-         */
-        EVENT("event");
+    public JsonObject toJson() {
+        Validate.isTrue(!this.sounds.isEmpty(), "At least one sound file must be defined");
 
-        private final String jsonString;
+        JsonObject json = new JsonObject();
+        if (this.subtitle != null)
+            json.addProperty("subtitle", this.subtitle);
 
-        SoundType(final String jsonString) {
-            this.jsonString = jsonString;
-        }
-    }
+        JsonArray soundsJson = new JsonArray();
+        this.sounds.forEach(sound -> soundsJson.add(sound.toJson()));
+        json.add("sounds", soundsJson);
 
-    private final List<Sound> sounds = new ArrayList<>();
-    private boolean replace = false;
-    private String subtitle = null;
-
-    private SoundDefinition() {
+        return json;
     }
 
     /**
-     * Creates a new {@link SoundDefinition}, which will host a set of
-     * {@link Sound}s and the necessary parameters.
+     * @return The id of this sound. The namespace is retrieved from the location of the <code>sounds.json</code> file
      */
-    public static SoundDefinition definition() {
-        return new SoundDefinition();
+    public String getSoundId() {
+        return soundId;
     }
 
     /**
-     * Sets whether this definition should replace any other definition for the
-     * same sound event previously applied, rather than overwriting it.
-     *
-     * @param replace Whether this definition replaces or not.
-     * @return This definition for chaining.
+     * @return All the sound files to associate with this sound instance
      */
-    public SoundDefinition replace(final boolean replace) {
-        this.replace = replace;
-        return this;
+    public List<SoundBuilder> getSounds() {
+        return sounds;
     }
 
     /**
-     * Sets the language key for the subtitle that will be displayed whenever this
-     * sound is being played.
-     *
-     * <p>The subtitle is optional and the game will skip displaying it if it
-     * isn't present.</p>
-     *
-     * @param subtitle The subtitle to display, or null to disable.
-     * @return This definition for chaining.
+     * @return The subtitle to display when this sound is played
      */
-    public SoundDefinition subtitle(@Nullable final String subtitle) {
-        this.subtitle = subtitle;
-        return this;
+    @Nullable
+    public String getSubtitle() {
+        return subtitle;
     }
 
     /**
-     * Adds the given sound to this sound definition.
+     * Adds the specified sound file to this instance.
      *
-     * @param sound The sound to add.
-     * @return This definition for chaining.
+     * @param sound The sound to add
      */
-    public SoundDefinition with(final Sound sound) {
+    public SoundDefinition addSound(SoundBuilder sound) {
         this.sounds.add(sound);
         return this;
     }
 
     /**
-     * Adds the given sounds to this sound definition.
+     * Sets the subtitle to display when this sound is played.
      *
-     * @param sounds The sounds to add.
-     * @return This definition for chaining.
+     * @param subtitle The subtitle or <code>null</code> to remove the text
      */
-    public SoundDefinition with(final Sound... sounds) {
-        this.sounds.addAll(Arrays.asList(sounds));
+    public SoundDefinition subtitle(@Nullable String subtitle) {
+        this.subtitle = subtitle;
         return this;
     }
 
-    List<Sound> soundList() {
-        return this.sounds;
+    /**
+     * Creates a new sound definition for the specified sound event. Also adds a sound file to the definition based on the name of the sound
+     * <p><b><i>NOTE: THE NAMESPACE OF THE SOUND IS IGNORED AND WILL BE ASSIGNED TO THE ONE IN THE {@link FabricSoundProvider}</i></b>
+     *
+     * @param sound The sound to create a full definition for
+     */
+    public static SoundDefinition forSound(Supplier<SoundEvent> sound) {
+        return definition(sound).addSound(SoundDefinition.sound(sound));
     }
 
-    JsonObject serialize() {
-        if (this.sounds.isEmpty()) {
-            throw new IllegalStateException("Unable to serialize a sound definition that has no sounds!");
+    /**
+     * Creates a new sound definition for the specified sound event.
+     * <p><b><i>NOTE: THE NAMESPACE OF THE SOUND IS IGNORED AND WILL BE ASSIGNED TO THE ONE IN THE {@link FabricSoundProvider}</i></b>
+     *
+     * @param sound The sound to create a definition for
+     */
+    public static SoundDefinition definition(Supplier<SoundEvent> sound) {
+        return new SoundDefinition(sound.get().getLocation().getPath());
+    }
+
+    /**
+     * Creates a new sound definition for the specified sound.
+     *
+     * @param sound The sound to create a definition for
+     */
+    public static SoundDefinition definition(String sound) {
+        return new SoundDefinition(sound);
+    }
+
+    /**
+     * Creates a new sound file definition for the specified sound. The file path is <code>namespace:sounds/id/of/sound.ogg</code>
+     *
+     * @param sound The sound to get a file for
+     */
+    public static SoundBuilder sound(Supplier<SoundEvent> sound) {
+        return new SoundBuilder(new ResourceLocation(sound.get().getLocation().getNamespace(), sound.get().getLocation().getPath().replaceAll("\\.", "/")));
+    }
+
+    /**
+     * Creates a new sound file definition for file at the specified path
+     *
+     * @param path The path to the sound file to add, excluding <code>sounds/</code>
+     */
+    public static SoundBuilder sound(ResourceLocation path) {
+        return new SoundDefinition.SoundBuilder(path);
+    }
+
+    /**
+     * Constructs sound files for {@link SoundDefinition}.
+     *
+     * @author Ocelot
+     * @since 1.0.0
+     */
+    public static class SoundBuilder {
+
+        private final ResourceLocation path;
+        private float volume;
+        private float pitch;
+        private int weight;
+        private SoundType type;
+        private boolean preload;
+        private boolean stream;
+        private int attenuationDistance;
+
+        public SoundBuilder(ResourceLocation path) {
+            this.path = path;
+            this.volume = 1.0F;
+            this.pitch = 1.0F;
+            this.weight = 1;
+            this.type = SoundType.FILE;
+            this.preload = false;
+            this.stream = false;
+            this.attenuationDistance = 16;
         }
 
-        final JsonObject object = new JsonObject();
-        if (this.replace) object.addProperty("replace", true);
-        if (this.subtitle != null) object.addProperty("subtitle", this.subtitle);
-        final JsonArray sounds = new JsonArray();
-        this.sounds.stream().map(Sound::serialize).forEach(sounds::add);
-        object.add("sounds", sounds);
-        return object;
+        /**
+         * @return A new JSON representing this sound file
+         */
+        public JsonElement toJson() {
+            Validate.isTrue(this.volume > 0.0F, "Invalid volume");
+            Validate.isTrue(this.pitch > 0.0F, "Invalid pitch");
+            Validate.isTrue(this.weight > 0, "Invalid weight");
+
+            if (this.volume == 1.0F && this.pitch == 1.0F && this.weight == 1 && this.type == SoundType.FILE && !this.preload && !this.stream && this.attenuationDistance == 16)
+                return new JsonPrimitive(this.path.toString());
+
+            JsonObject json = new JsonObject();
+            json.addProperty("name", this.path.toString());
+            if (this.volume != 1.0F)
+                json.addProperty("volume", this.volume);
+            if (this.pitch != 1.0F)
+                json.addProperty("pitch", this.pitch);
+            if (this.weight != 1)
+                json.addProperty("weight", this.weight);
+            if (this.type != SoundType.FILE)
+                json.addProperty("type", this.type.name().toLowerCase(Locale.ROOT));
+            if (this.preload)
+                json.addProperty("preload", true);
+            if (this.stream)
+                json.addProperty("stream", true);
+            if (this.attenuationDistance != 16)
+                json.addProperty("attenuation_distance", this.attenuationDistance);
+
+            return json;
+        }
+
+        /**
+         * @return The path to the actual <code>ogg</code> file, excluding <code>sounds/</code>
+         */
+        public ResourceLocation getPath() {
+            return path;
+        }
+
+        /**
+         * @return The volume factor of the sound. Default is 1.0
+         */
+        public float getVolume() {
+            return volume;
+        }
+
+        /**
+         * @return The pitch factor of the sound. Default is 1.0
+         */
+        public float getPitch() {
+            return pitch;
+        }
+
+        /**
+         * @return The weight of this sound playing. This is only used when multiple files are defined to set probability for each file. Default is 1
+         */
+        public int getWeight() {
+            return weight;
+        }
+
+        /**
+         * @return The type of file this is. Default is {@link SoundType#EVENT}
+         */
+        public SoundType getType() {
+            return type;
+        }
+
+        /**
+         * @return Whether to preload this file when the game loads. Default is false
+         */
+        public boolean isPreload() {
+            return preload;
+        }
+
+        /**
+         * @return Whether to stream this file. Default is false
+         */
+        public boolean isStream() {
+            return stream;
+        }
+
+        /**
+         * @return The distance the sound is able to be heard from. Default is 16
+         */
+        public int getAttenuationDistance() {
+            return attenuationDistance;
+        }
+
+        /**
+         * Sets the volume factor for this sound.
+         *
+         * @param volume The new volume multiplier
+         */
+        public SoundBuilder volume(float volume) {
+            this.volume = volume;
+            return this;
+        }
+
+        /**
+         * Sets the pitch factor for this sound.
+         *
+         * @param pitch The new pitch multiplier
+         */
+        public SoundBuilder pitch(float pitch) {
+            this.pitch = pitch;
+            return this;
+        }
+
+        /**
+         * Sets the weight for this file. Higher weights increase the chance of this being chosen when multiple sounds files are defined.
+         *
+         * @param weight The new weight value
+         */
+        public SoundBuilder weight(int weight) {
+            this.weight = weight;
+            return this;
+        }
+
+        /**
+         * Sets how the value of <code>name</code> is interpreted by Minecraft.
+         *
+         * @param type The new type
+         * @see SoundType
+         */
+        public SoundBuilder type(SoundType type) {
+            this.type = type;
+            return this;
+        }
+
+        /**
+         * Causes this sound to be loaded when resources reload.
+         */
+        public SoundBuilder preload() {
+            this.preload = true;
+            return this;
+        }
+
+        /**
+         * Sets whether to load this sound when resources reload.
+         *
+         * @param preload Whether to preload or not
+         */
+        public SoundBuilder preload(boolean preload) {
+            this.preload = preload;
+            return this;
+        }
+
+        /**
+         * Causes this sound to be streamed from disc instead of loading the entire file.
+         * <p><b><i>NOTE: THIS WILL NOT ALLOW MODIFICATION OF THE SOUND THROUGH SOUND INSTANCES</i></b>
+         * <p>To be able to modify the sound, use {@link #preload()} instead
+         */
+        public SoundBuilder stream() {
+            this.stream = true;
+            return this;
+        }
+
+        /**
+         * Sets whether to stream this sound from disc instead of loading the entire file.
+         * <p><b><i>NOTE: THIS WILL NOT ALLOW MODIFICATION OF THE SOUND THROUGH SOUND INSTANCES</i></b>
+         * <p>To be able to modify the sound, use {@link #preload()} instead
+         *
+         * @param stream Whether to stream the file or not
+         */
+        public SoundBuilder stream(boolean stream) {
+            this.stream = stream;
+            return this;
+        }
+
+        /**
+         * Sets the maximum distance to be able to hear the sound from.
+         * <p>Used by nether portals and redstone components to decrease listening distance
+         *
+         * @param attenuationDistance The new distance to hear sounds from
+         */
+        public SoundBuilder attenuationDistance(int attenuationDistance) {
+            this.attenuationDistance = attenuationDistance;
+            return this;
+        }
+    }
+
+    /**
+     * Defines how a sound is interpreted by Minecraft.
+     *
+     * @author Ocelot
+     * @since 1.0.0
+     */
+    public enum SoundType {
+        /**
+         * <code>file</code> causes the value of <code>name</code> in {@link SoundBuilder} to be interpreted as the path to a literal sound file.
+         */
+        FILE,
+        /**
+         * <code>event</code> causes the value of <code>name</code> in {@link SoundBuilder} to be interpreted as the id of a registered sound event.
+         */
+        EVENT
     }
 }

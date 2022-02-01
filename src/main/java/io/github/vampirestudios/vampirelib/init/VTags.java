@@ -677,8 +677,6 @@
 
 package io.github.vampirestudios.vampirelib.init;
 
-import net.fabricmc.fabric.api.tag.ExpandedTagFactory;
-import net.fabricmc.fabric.api.tag.TagFactory;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.Tag;
 import net.minecraft.world.effect.MobEffect;
@@ -692,6 +690,9 @@ import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.levelgen.NoiseGeneratorSettings;
+
+import net.fabricmc.fabric.api.tag.ExpandedTagFactory;
+import net.fabricmc.fabric.api.tag.TagFactory;
 
 public class VTags {
 
@@ -1064,6 +1065,16 @@ public class VTags {
 
         public static Tag.Named<Item> tag(String id) {
             return TagFactory.ITEM.create(new ResourceLocation("c", id));
+        }
+    }
+
+    public static class EntityTypes {
+
+        public static final Tag.Named<EntityType<?>> BOSSES = tag("bosses");
+        public static final Tag.Named<EntityType<?>> CONSTRUCTS = tag("constructs");
+
+        private static Tag.Named<EntityType<?>> tag(String name) {
+            return TagFactory.ENTITY_TYPE.create(new ResourceLocation("c", name));
         }
     }
 

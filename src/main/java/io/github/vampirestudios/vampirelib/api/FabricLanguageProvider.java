@@ -16,17 +16,17 @@
 
 package io.github.vampirestudios.vampirelib.api;
 
-import java.io.BufferedWriter;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Map;
-import java.util.Objects;
 import java.util.TreeMap;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import org.apache.commons.lang3.text.translate.JavaUnicodeEscaper;
+import com.google.gson.JsonElement;
+import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.HashCache;
@@ -46,12 +46,13 @@ import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
  * <p>Register an instance of the class with {@link FabricDataGenerator#addProvider} in a {@link net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint}
  */
 public abstract class FabricLanguageProvider implements DataProvider {
-	private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+	private static final Logger LOGGER = LoggerFactory.getLogger(FabricLanguageProvider.class);
+	private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
+
 	private final Map<String, String> data = new TreeMap<>();
+	protected final FabricDataGenerator dataGenerator;
 	private final String modId;
 	private final String locale;
-
-	protected final FabricDataGenerator dataGenerator;
 
 	protected FabricLanguageProvider(FabricDataGenerator dataGenerator, String locale) {
 		this.dataGenerator = dataGenerator;
@@ -119,28 +120,26 @@ public abstract class FabricLanguageProvider implements DataProvider {
 			throw new IllegalStateException("Duplicate translation key " + key);
 	}
 
+	/**
+	 * Registers all translations to be placed inside the lang file.
+	 */
+	protected abstract void registerTranslations();
+
 	@Override
-	public void run(HashCache cache) throws IOException {
-		String data = GSON.toJson(this.data);
-		data = JavaUnicodeEscaper.outsideOf(0, 0x7f).translate(data); // Escape unicode after the fact so that it's not double escaped by GSON
-		String hash = DataProvider.SHA1.hashUnencodedChars(data).toString();
-		if (!Objects.equals(cache.getHash(getOutputPath()), hash) || !Files.exists(getOutputPath())) {
-			Files.createDirectories(getOutputPath().getParent());
+	public void run(@NotNull HashCache cache) throws IOException {
+		this.registerTranslations();
 
-			try (BufferedWriter bufferedwriter = Files.newBufferedWriter(getOutputPath())) {
-				bufferedwriter.write(data);
-			}
+		Path path = this.dataGenerator.getOutputFolder().resolve("assets/" + this.modId + "/lang/" + this.locale + ".json");
+		try {
+			JsonElement json = GSON.toJsonTree(this.data);
+			DataProvider.save(GSON, cache, json, path);
+		} catch (IOException e) {
+			LOGGER.error("Couldn't save {}", path, e);
 		}
-
-		cache.putNew(getOutputPath(), hash);
-	}
-
-	private Path getOutputPath() {
-		return dataGenerator.getOutputFolder().resolve("assets/%s/lang/%s.json".formatted(modId, locale));
 	}
 
 	@Override
 	public String getName() {
-		return "Languages: " + locale;
+		return "Language: " + locale;
 	}
 }

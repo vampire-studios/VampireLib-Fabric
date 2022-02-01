@@ -40,10 +40,8 @@ public abstract class ExpandedTagFactory<T> implements TagFactory<T> {
 	public static final TagFactory<ConfiguredFeature<?, ?>> CONFIGURED_FEATURE = TagFactory.of(Registry.CONFIGURED_FEATURE_REGISTRY, "tags/worldgen/configured_features");
 	public static final TagFactory<ConfiguredStructureFeature<?, ?>> CONFIGURED_STRUCTURE_FEATURE = TagFactory.of(Registry.CONFIGURED_STRUCTURE_FEATURE_REGISTRY, "tags/worldgen/configured_structure_features");
 	public static final TagFactory<Feature<?>> FEATURE = TagFactory.of(Registry.FEATURE_REGISTRY, "tags/worldgen/features");
-//	public static final TagFactory<NormalNoise.NoiseParameters> NOISE = TagFactory.of(Registry.NOISE_REGISTRY, "tags/worldgen/noises");
 	public static final TagFactory<NoiseGeneratorSettings> NOISE_SETTINGS = TagFactory.of(Registry.NOISE_GENERATOR_SETTINGS_REGISTRY, "tags/worldgen/noise_settings");
 	public static final TagFactory<PlacedFeature> PLACED_FEATURE = TagFactory.of(Registry.PLACED_FEATURE_REGISTRY, "tags/worldgen/placed_features");
-//	public static final TagFactory<StructureProcessorList> PROCESSOR_LIST = TagFactory.of(Registry.PROCESSOR_LIST_REGISTRY, "tags/worldgen/processor_lists");
 	public static final TagFactory<MobEffect> MOB_EFFECTS = TagFactory.of(Registry.MOB_EFFECT_REGISTRY, "tags/mob_effects");
 	public static final TagFactory<Enchantment> ENCHANTMENTS = TagFactory.of(Registry.ENCHANTMENT_REGISTRY, "tags/enchantments");
 	public static final TagFactory<Potion> POTIONS = TagFactory.of(Registry.POTION_REGISTRY, "tags/potions");

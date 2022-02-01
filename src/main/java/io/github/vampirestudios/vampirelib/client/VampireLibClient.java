@@ -681,10 +681,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.SharedConstants;
-import net.minecraft.client.color.block.BlockColor;
-import net.minecraft.client.color.item.ItemColor;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.BiomeColors;
+import net.minecraft.world.level.FoliageColor;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 
 import net.fabricmc.fabric.impl.client.rendering.ColorProviderRegistryImpl;
 
@@ -693,11 +694,10 @@ import io.github.vampirestudios.vampirelib.utils.Rands;
 
 public class VampireLibClient extends BasicModClass {
 
-    public static final VampireLibClient INSTANCE = new VampireLibClient();
     public static final List<ColoredLeaves> COLORED_LEAVES = new ArrayList<>();
 
     public VampireLibClient() {
-        super("vampirelib", "VampireLib", "4.5.3+build.1", true);
+        super("vampirelib", "VampireLib", "4.6.0+build.1", true);
     }
 
     @Override
@@ -706,16 +706,14 @@ public class VampireLibClient extends BasicModClass {
         getLogger().info(String.format("%s running %s v%s on client-side for %s", Rands.chance(15) ? "Your are" : (Rands.chance(15) ? "You're" : "You are"),
             modName(), modVersion(), SharedConstants.getCurrentVersion().getName()));
         COLORED_LEAVES.forEach(coloredLeaves -> {
-            if (!coloredLeaves.customColor) {
-                ColorProviderRegistryImpl.BLOCK.register((block, world, pos, layer) -> {
-                    BlockColor provider = ColorProviderRegistryImpl.BLOCK.get(Blocks.OAK_LEAVES);
-                    return provider == null ? -1 : provider.getColor(block, world, pos, layer);
-                }, coloredLeaves.leavesBlock);
+            if (coloredLeaves.usesBiomeColor) {
+                ColorProviderRegistryImpl.BLOCK.register((block, world, pos, layer) -> world != null && pos != null ?
+                    BiomeColors.getAverageFoliageColor(world, pos) : FoliageColor.getDefaultColor(), coloredLeaves.leavesBlock);
                 ColorProviderRegistryImpl.ITEM.register((item, layer) -> {
-                    ItemColor provider = ColorProviderRegistryImpl.ITEM.get(Blocks.OAK_LEAVES);
-                    return provider == null ? -1 : provider.getColor(item, layer);
+                    BlockState blockState = coloredLeaves.leavesBlock.defaultBlockState();
+                    return Minecraft.getInstance().getBlockColors().getColor(blockState, null, null, layer);
                 }, coloredLeaves.leavesBlock);
-            } else {
+            } else if (coloredLeaves.customColor) {
                 ColorProviderRegistryImpl.BLOCK.register((block, world, pos, layer) -> coloredLeaves.color, coloredLeaves.leavesBlock);
                 ColorProviderRegistryImpl.ITEM.register((item, layer) -> coloredLeaves.color, coloredLeaves.leavesBlock);
             }
@@ -727,11 +725,21 @@ public class VampireLibClient extends BasicModClass {
         private final Block leavesBlock;
         private final boolean customColor;
         private final int color;
+        private final boolean usesBiomeColor;
 
         public ColoredLeaves(Block leavesBlock, boolean customColor, int color) {
+            this(leavesBlock, customColor, color, false);
+        }
+
+        public ColoredLeaves(Block leavesBlock, boolean usesBiomeColor) {
+            this(leavesBlock, false, 0, usesBiomeColor);
+        }
+
+        public ColoredLeaves(Block leavesBlock, boolean customColor, int color, boolean usesBiomeColor) {
             this.leavesBlock = leavesBlock;
             this.customColor = customColor;
             this.color = color;
+            this.usesBiomeColor = usesBiomeColor;
         }
 
         public Block getLeavesBlock() {
@@ -740,6 +748,10 @@ public class VampireLibClient extends BasicModClass {
 
         public boolean isCustomColor() {
             return customColor;
+        }
+
+        public boolean usesBiomeColor() {
+            return usesBiomeColor;
         }
 
         public int getColor() {

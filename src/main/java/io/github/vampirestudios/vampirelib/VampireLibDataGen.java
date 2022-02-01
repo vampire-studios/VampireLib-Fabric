@@ -34,6 +34,7 @@ import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.data.recipes.ShapelessRecipeBuilder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.Tag;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -53,6 +54,7 @@ import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipesProvider;
 
 import io.github.vampirestudios.vampirelib.api.FabricLanguageProvider;
 import io.github.vampirestudios.vampirelib.api.datagen.CustomBlockTagProvider;
+import io.github.vampirestudios.vampirelib.api.datagen.VEntityTagProvider;
 import io.github.vampirestudios.vampirelib.api.datagen.CustomItemTagProvider;
 import io.github.vampirestudios.vampirelib.init.VTags;
 import io.github.vampirestudios.vampirelib.mixins.IngredientAccessor;
@@ -144,6 +146,7 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
         dataGenerator.addProvider(new VItemTagsProvider(dataGenerator, blockTagsProvider));
 //        dataGenerator.addProvider(VBiomeTagsProvider::new);
         dataGenerator.addProvider(VRecipeReplacementProvider::new);
+        dataGenerator.addProvider(VEntityTypeTagsProvider::new);
 //		dataGenerator.addProvider(VampireLibNoiseSettingsTagsProvider::new);
 //		dataGenerator.addProvider(VampireLibDimensionTagsProvider::new);
 //		dataGenerator.addProvider(VampireLibDimensionTypeTagsProvider::new);
@@ -189,6 +192,10 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
     private static class WoodTypeEnglishLanguageProvider extends FabricLanguageProvider {
         private WoodTypeEnglishLanguageProvider(FabricDataGenerator dataGenerator) {
             super(dataGenerator, "en_us");
+        }
+
+        @Override
+        public void registerTranslations() {
             addWoodTypeLang(VampireLib.TEST_WOOD);
             addWoodTypeLang(VampireLib.TEST_WOOD1);
             addWoodTypeLang(VampireLib.TEST_WOOD2);
@@ -216,6 +223,10 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
     private static class WoodTypeFrenchLanguageProvider extends FabricLanguageProvider {
         private WoodTypeFrenchLanguageProvider(FabricDataGenerator dataGenerator) {
             super(dataGenerator, "fr_fr");
+        }
+
+        @Override
+        public void registerTranslations() {
             addWoodTypeLang(VampireLib.TEST_WOOD);
             addWoodTypeLang(VampireLib.TEST_WOOD1);
             addWoodTypeLang(VampireLib.TEST_WOOD2);
@@ -693,6 +704,18 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
             } catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException e) {
                 throw new IllegalStateException(VTags.Items.class.getName() + " is missing tag name: " + name);
             }
+        }
+    }
+
+    private static class VEntityTypeTagsProvider extends VEntityTagProvider {
+        public VEntityTypeTagsProvider(FabricDataGenerator dataGenerator) {
+            super(dataGenerator);
+        }
+
+        @Override
+        protected void generateTags() {
+            tag(VTags.EntityTypes.BOSSES).add(EntityType.ENDER_DRAGON, EntityType.WITHER);
+            tag(VTags.EntityTypes.CONSTRUCTS).add(EntityType.ELDER_GUARDIAN, EntityType.GUARDIAN, EntityType.IRON_GOLEM, EntityType.SNOW_GOLEM);
         }
     }
 

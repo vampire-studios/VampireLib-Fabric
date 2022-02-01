@@ -142,6 +142,7 @@ fd0992ea3429743f6e2f9d91ca5502890895b0d2 data\vampirelib\recipes\shears.json
 650a50a1c9b7dfb77e16c8b580e902161de521f8 data\vampirelib\advancements\recipes\decorations\crimson_sign.json
 c4b065674be12154b12d81338c5635c664eced91 data\vampirelib\recipes\golden_leggings.json
 58d2bce7a03b7ae018ef86b6513faa56930123de data\vampirelib\advancements\recipes\tools\wooden_pickaxe.json
+83b1a84ef6e536406d0b34fd4b6026f7578b8985 data\c\tags\entity_types\constructs.json
 f79dcfdf3502e70c5c5ba440172fd63268f28c8f data\c\tags\blocks\cobblestone.json
 e291f5e285956a7e4367883addc8e7660d06dad2 data\vampirelib\advancements\recipes\redstone\heavy_weighted_pressure_plate.json
 c75d4c5520db19556466863c6e8846850cbe9f31 data\vampirelib\advancements\recipes\decorations\spruce_sign.json
@@ -181,6 +182,7 @@ d13f2ba3db000d70d0454c7b48faf0f80bd97171 data\vampirelib\advancements\recipes\de
 02179f8b547a6a4a6dc4ead27e3d6930912dc7d2 data\c\tags\items\ores_in_ground\netherrack.json
 7d02c26582d0d3aa24d6d14ac4269b75a9dbbdca data\c\tags\items\storage_blocks\gold.json
 cbbead670e392a8314df367c62e50c7d0faf1c3b data\vampirelib\advancements\recipes\building_blocks\mossy_cobblestone_from_moss_block.json
+a146b12bd54e947d6cbf3c5c4538c0d2b085f1de data\c\tags\entity_types\bosses.json
 bc203f09dd7f48965d146d0bd035fb904cb75e7d data\c\tags\blocks\barrels\wooden.json
 26cb7901a2e9976259cd1cadce21a8df2f0f62b2 data\vampirelib\recipes\mossy_cobblestone_from_moss_block.json
 abbe68c5507951a8b501cafa4f37d829ff2d5dc7 data\c\tags\blocks\glass\red.json

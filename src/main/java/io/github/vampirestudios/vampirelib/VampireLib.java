@@ -721,7 +721,7 @@ public class VampireLib extends BasicModClass {
 	public static WoodRegistry TEST_NETHER_WOOD7;
 
     public VampireLib() {
-        super("vampirelib", "VampireLib", "4.5.3+build.1");
+        super("vampirelib", "VampireLib", "4.6.0+build.1");
     }
 
     @Override
@@ -730,6 +730,7 @@ public class VampireLib extends BasicModClass {
         getLogger().info(String.format("%s running %s v%s for %s", Rands.chance(15) ? "Your are" : (Rands.chance(15) ? "You're" : "You are"),
             modName(), modVersion(), SharedConstants.getCurrentVersion().getName()));
         BlockChiseler.setup();
+//        VShaderTypes.init();
 
         if (TEST_CONTENT_ENABLED) {
 			//Overworld
