@@ -685,7 +685,6 @@ import com.terraformersmc.terraform.boat.api.TerraformBoatType;
 import com.terraformersmc.terraform.boat.api.TerraformBoatTypeRegistry;
 import com.terraformersmc.terraform.boat.api.client.TerraformBoatClientHelper;
 import com.terraformersmc.terraform.boat.api.item.TerraformBoatItemHelper;
-import com.terraformersmc.terraform.sign.block.TerraformSignBlock;
 import com.terraformersmc.terraform.sign.block.TerraformWallSignBlock;
 import org.apache.commons.lang3.text.WordUtils;
 
@@ -742,6 +741,7 @@ import io.github.vampirestudios.vampirelib.blocks.BaseLogAndWoodBlock;
 import io.github.vampirestudios.vampirelib.blocks.ButtonBaseBlock;
 import io.github.vampirestudios.vampirelib.blocks.CustomLadderBlock;
 import io.github.vampirestudios.vampirelib.blocks.DoorBaseBlock;
+import io.github.vampirestudios.vampirelib.blocks.ExpandedTerraformSignBlock;
 import io.github.vampirestudios.vampirelib.blocks.FenceBaseBlock;
 import io.github.vampirestudios.vampirelib.blocks.FenceGateBaseBlock;
 import io.github.vampirestudios.vampirelib.blocks.FlowerPotBaseBlock;
@@ -1097,7 +1097,7 @@ public class WoodRegistry {
             ModelTemplates.FLAT_ITEM.create(ModelLocationUtils.getModelLocation(door.asItem()),
                 TextureMapping.layer0(new ResourceLocation(
                     name.getNamespace(),
-                    String.format("wood_sets/%s/door_item", name.getPath())
+                    String.format("wood_sets/%s/door", name.getPath())
                 )), blockStateModelGenerator.modelOutput);
         }
         if (trapdoor != null) {
@@ -1641,8 +1641,10 @@ public class WoodRegistry {
         }
 
         public Builder sign() {
+            Block baseBlock = woodRegistry.mushroomLike ? Blocks.WARPED_SIGN : Blocks.DARK_OAK_SIGN;
+
             ResourceLocation signTexture = new ResourceLocation(name.getNamespace(), "wood_types/" + name.getPath() + "/sign");
-            woodRegistry.sign = registryHelper.blocks().registerBlockWithoutItem(name.getPath() + "_sign", new TerraformSignBlock(signTexture, FabricBlockSettings.copyOf(Blocks.OAK_SIGN)));
+            woodRegistry.sign = registryHelper.blocks().registerBlockWithoutItem(name.getPath() + "_sign", new ExpandedTerraformSignBlock(baseBlock, signTexture, FabricBlockSettings.copyOf(Blocks.OAK_SIGN)));
             woodRegistry.wallSign = registryHelper.blocks().registerBlockWithoutItem(name.getPath() + "_wall_sign", new TerraformWallSignBlock(signTexture, FabricBlockSettings.copyOf(Blocks.OAK_WALL_SIGN)));
             woodRegistry.signItem = registryHelper.items().registerItem(name.getPath() + "_sign", new SignItem(new Item.Properties().durability(16).tab(CreativeModeTab.TAB_DECORATIONS), woodRegistry.sign, woodRegistry.wallSign));
             ((IBlockEntityType) BlockEntityType.SIGN).vl_addBlocks(woodRegistry.sign, woodRegistry.wallSign);
@@ -1677,11 +1679,16 @@ public class WoodRegistry {
         }
 
         public Builder defaultExtraBlocks() {
-            return this.fence().fenceGate().stairs().slab().door().trapdoor().button().pressurePlate(PressurePlateBlock.Sensitivity.EVERYTHING).sign();
+            return this.fence().fenceGate().stairs().slab().door().trapdoor().button()
+                .pressurePlate(PressurePlateBlock.Sensitivity.EVERYTHING).sign().boat();
         }
 
         public Builder defaultBlocksColoredLeaves() {
             return this.defaultLogsAndWoods().planks().coloredLeaves().sapling().pottedSapling();
+        }
+
+        public Builder defaultBlocksColoredLeaves(int color) {
+            return this.defaultLogsAndWoods().planks().coloredLeaves(color).sapling().pottedSapling();
         }
 
         public WoodRegistry build() {
