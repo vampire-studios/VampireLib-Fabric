@@ -681,21 +681,21 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import io.github.vampirestudios.vampirelib.callbacks.EntityHealthChangeCallback;
+
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
+
+import io.github.vampirestudios.vampirelib.callbacks.EntityHealthChangeCallback;
 
 @Mixin(LivingEntity.class)
 public abstract class MixinLivingEntity {
     /**
      * Callback injector for monitoring entity health changes.
      */
-    @Inject(at = @At("INVOKE"), method = "setHealth(F)V", cancellable = true)
+    @Inject(method = "setHealth", at = @At("HEAD"), cancellable = true)
     private void entityHealthChange(float health, CallbackInfo ci) {
         InteractionResult result = EntityHealthChangeCallback.EVENT.invoker().health(((LivingEntity) (Object) this), health);
-        if (result == InteractionResult.FAIL) {
-            ci.cancel();
-        }
+        if (result == InteractionResult.FAIL) ci.cancel();
     }
 
 }

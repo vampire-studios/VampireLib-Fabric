@@ -693,11 +693,8 @@ import io.github.vampirestudios.vampirelib.callbacks.PlayerDropItemCallback;
 public class MixinServerPlayerEntity {
     @Inject(method = "drop(Lnet/minecraft/world/item/ItemStack;ZZ)Lnet/minecraft/world/entity/item/ItemEntity;", at = @At("HEAD"), cancellable = true)
     private void onPlayerDropItem(final ItemStack stack, final boolean dropAtFeet, final boolean saveThrower, final CallbackInfoReturnable<ItemEntity> info) {
-        ServerPlayer player = (ServerPlayer) (Object) this;
+        ServerPlayer player = ServerPlayer.class.cast(this);
         InteractionResult result = PlayerDropItemCallback.EVENT.invoker().interact(player, stack);
-
-        if (result == InteractionResult.FAIL) {
-            info.cancel();
-        }
+        if (result == InteractionResult.FAIL) info.cancel();
     }
 }

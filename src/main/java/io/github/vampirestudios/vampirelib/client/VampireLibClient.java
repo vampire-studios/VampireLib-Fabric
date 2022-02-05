@@ -697,7 +697,7 @@ public class VampireLibClient extends BasicModClass {
     public static final List<ColoredLeaves> COLORED_LEAVES = new ArrayList<>();
 
     public VampireLibClient() {
-        super("vampirelib", "VampireLib", "4.6.1+build.1", true);
+        super("vampirelib", "VampireLib", "4.7.0+build.1", true);
     }
 
     @Override
@@ -740,18 +740,6 @@ public class VampireLibClient extends BasicModClass {
             this.customColor = customColor;
             this.color = color;
             this.usesBiomeColor = usesBiomeColor;
-        }
-
-        public Block getLeavesBlock() {
-            return leavesBlock;
-        }
-
-        public boolean isCustomColor() {
-            return customColor;
-        }
-
-        public boolean usesBiomeColor() {
-            return usesBiomeColor;
         }
 
         public int getColor() {

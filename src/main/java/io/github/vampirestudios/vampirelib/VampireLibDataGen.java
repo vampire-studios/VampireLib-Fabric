@@ -54,8 +54,8 @@ import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipesProvider;
 
 import io.github.vampirestudios.vampirelib.api.FabricLanguageProvider;
 import io.github.vampirestudios.vampirelib.api.datagen.CustomBlockTagProvider;
-import io.github.vampirestudios.vampirelib.api.datagen.VEntityTagProvider;
 import io.github.vampirestudios.vampirelib.api.datagen.CustomItemTagProvider;
+import io.github.vampirestudios.vampirelib.api.datagen.VEntityTagProvider;
 import io.github.vampirestudios.vampirelib.init.VTags;
 import io.github.vampirestudios.vampirelib.mixins.IngredientAccessor;
 import io.github.vampirestudios.vampirelib.mixins.ShapedRecipeResultAccessor;
@@ -70,6 +70,7 @@ import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.CHESTS_ENDER
 import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.CHESTS_TRAPPED;
 import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.CHESTS_WOODEN;
 import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.COBBLESTONE;
+import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.COBBLESTONE_DEEPSLATE;
 import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.COBBLESTONE_INFESTED;
 import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.COBBLESTONE_MOSSY;
 import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.COBBLESTONE_NORMAL;
@@ -144,12 +145,8 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
         }
         VBlockTagsProvider blockTagsProvider = dataGenerator.addProvider(VBlockTagsProvider::new);
         dataGenerator.addProvider(new VItemTagsProvider(dataGenerator, blockTagsProvider));
-//        dataGenerator.addProvider(VBiomeTagsProvider::new);
         dataGenerator.addProvider(VRecipeReplacementProvider::new);
         dataGenerator.addProvider(VEntityTypeTagsProvider::new);
-//		dataGenerator.addProvider(VampireLibNoiseSettingsTagsProvider::new);
-//		dataGenerator.addProvider(VampireLibDimensionTagsProvider::new);
-//		dataGenerator.addProvider(VampireLibDimensionTypeTagsProvider::new);
     }
 
     //Wood Type Test Generation
@@ -301,10 +298,11 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
             tagCustom(CHESTS_TRAPPED).add(Blocks.TRAPPED_CHEST);
             tagCustom(CHESTS_WOODEN).add(Blocks.CHEST, Blocks.TRAPPED_CHEST);
             tagCustom(CHESTS).addTags(CHESTS_ENDER, CHESTS_TRAPPED, CHESTS_WOODEN);
-            tagCustom(COBBLESTONE).addTags(COBBLESTONE_NORMAL, COBBLESTONE_INFESTED, COBBLESTONE_MOSSY);
+            tagCustom(COBBLESTONE).addTags(COBBLESTONE_NORMAL, COBBLESTONE_INFESTED, COBBLESTONE_MOSSY, COBBLESTONE_DEEPSLATE);
             tagCustom(COBBLESTONE_NORMAL).add(Blocks.COBBLESTONE);
             tagCustom(COBBLESTONE_INFESTED).add(Blocks.INFESTED_COBBLESTONE);
             tagCustom(COBBLESTONE_MOSSY).add(Blocks.MOSSY_COBBLESTONE);
+            tagCustom(COBBLESTONE_DEEPSLATE).add(Blocks.COBBLED_DEEPSLATE);
             tagCustom(DIRT).add(Blocks.DIRT, Blocks.GRASS_BLOCK, Blocks.COARSE_DIRT, Blocks.PODZOL, Blocks.MYCELIUM, Blocks.ROOTED_DIRT);
             tagCustom(END_STONES).add(Blocks.END_STONE);
             tagCustom(ENDERMAN_PLACE_ON_BLACKLIST);
@@ -547,10 +545,10 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
             copy(VTags.Blocks.CHESTS_ENDER, VTags.Items.CHESTS_ENDER);
             copy(VTags.Blocks.CHESTS_TRAPPED, VTags.Items.CHESTS_TRAPPED);
             copy(VTags.Blocks.CHESTS_WOODEN, VTags.Items.CHESTS_WOODEN);
-            copy(VTags.Blocks.COBBLESTONE, VTags.Items.COBBLESTONE);
             copy(VTags.Blocks.COBBLESTONE_NORMAL, VTags.Items.COBBLESTONE_NORMAL);
             copy(VTags.Blocks.COBBLESTONE_INFESTED, VTags.Items.COBBLESTONE_INFESTED);
             copy(VTags.Blocks.COBBLESTONE_MOSSY, VTags.Items.COBBLESTONE_MOSSY);
+            copy(VTags.Blocks.COBBLESTONE_DEEPSLATE, VTags.Items.COBBLESTONE_DEEPSLATE);
             tagCustom(VTags.Items.CROPS).addTags(VTags.Items.CROPS_BEETROOT, VTags.Items.CROPS_CARROT, VTags.Items.CROPS_NETHER_WART, VTags.Items.CROPS_POTATO, VTags.Items.CROPS_WHEAT);
             tagCustom(VTags.Items.CROPS_BEETROOT).add(Items.BEETROOT);
             tagCustom(VTags.Items.CROPS_CARROT).add(Items.CARROT);
@@ -715,7 +713,53 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
         @Override
         protected void generateTags() {
             tag(VTags.EntityTypes.BOSSES).add(EntityType.ENDER_DRAGON, EntityType.WITHER);
-            tag(VTags.EntityTypes.CONSTRUCTS).add(EntityType.ELDER_GUARDIAN, EntityType.GUARDIAN, EntityType.IRON_GOLEM, EntityType.SNOW_GOLEM);
+            tag(VTags.EntityTypes.DRAGONS).add(EntityType.ENDER_DRAGON);
+            tag(VTags.EntityTypes.DRACONIC_MOBS).add(EntityType.ENDER_DRAGON);
+
+            tag(VTags.EntityTypes.GUARDIANS).add(EntityType.IRON_GOLEM, EntityType.SNOW_GOLEM);
+            tag(VTags.EntityTypes.GOLEMS).add(EntityType.IRON_GOLEM, EntityType.SNOW_GOLEM);
+            tag(VTags.EntityTypes.ILLAGERS).add(EntityType.PILLAGER, EntityType.ILLUSIONER, EntityType.VINDICATOR, EntityType.EVOKER);
+            tag(VTags.EntityTypes.BIG_NOSES).addTag(VTags.EntityTypes.ILLAGERS).add(EntityType.WITCH, EntityType.VILLAGER, EntityType.ZOMBIE_VILLAGER);
+            tag(VTags.EntityTypes.RAIDERS).add(EntityType.PILLAGER, EntityType.VINDICATOR, EntityType.EVOKER, EntityType.RAVAGER, EntityType.WITCH);
+
+            tag(VTags.EntityTypes.ANIMALS).add(EntityType.COW, EntityType.PIG, EntityType.SHEEP, EntityType.RAVAGER, EntityType.WITCH);
+            tag(VTags.EntityTypes.ARTHROPODS).add(EntityType.SPIDER, EntityType.BEE, EntityType.SILVERFISH);
+            tag(VTags.EntityTypes.GHOSTS).add(EntityType.VEX);
+
+            tag(VTags.EntityTypes.BEARS).add(EntityType.PANDA, EntityType.POLAR_BEAR);
+            tag(VTags.EntityTypes.BOVINES).add(EntityType.COW, EntityType.MOOSHROOM);
+            tag(VTags.EntityTypes.CAMELIDS).add(EntityType.LLAMA);
+            tag(VTags.EntityTypes.CANINES).add(EntityType.FOX, EntityType.WOLF);
+            tag(VTags.EntityTypes.CAPRINES).add(EntityType.GOAT);
+            tag(VTags.EntityTypes.EQUINES).add(EntityType.DONKEY, EntityType.HORSE, EntityType.MULE);
+            tag(VTags.EntityTypes.FELINES).add(EntityType.CAT, EntityType.OCELOT);
+            tag(VTags.EntityTypes.FOWLS).addTag(VTags.EntityTypes.FOWLS_LAND);
+            tag(VTags.EntityTypes.FOWLS_LAND).add(EntityType.CHICKEN);
+            tag(VTags.EntityTypes.SWINES).add(EntityType.HOGLIN, EntityType.PIG);
+            tag(VTags.EntityTypes.MILKABLE).add(EntityType.COW, EntityType.MOOSHROOM, EntityType.GOAT);
+            tag(VTags.EntityTypes.MUSHROOM_COWS).add(EntityType.MOOSHROOM);
+
+            /*
+             * Many of these mob types do not appear in vanilla Minecraft, and are thus left empty here
+             */
+            tagCustom(VTags.EntityTypes.ELEMENTAL_MOBS).addTags(VTags.EntityTypes.ELEMENTAL_MOBS_FIRE, VTags.EntityTypes.ELEMENTAL_MOBS_ICE, VTags.EntityTypes.ELEMENTAL_MOBS_METAL);
+            tag(VTags.EntityTypes.ELEMENTAL_MOBS_FIRE).add(EntityType.BLAZE);
+            tag(VTags.EntityTypes.ELEMENTAL_MOBS_ICE).add(EntityType.SNOW_GOLEM);
+            tag(VTags.EntityTypes.ELEMENTAL_MOBS_METAL).add(EntityType.IRON_GOLEM);
+
+            tagCustom(VTags.EntityTypes.ELEMENTAL_ATTACKS).addTags(VTags.EntityTypes.ELEMENTAL_ATTACKS_ELECTRIC, VTags.EntityTypes.ELEMENTAL_ATTACKS_FIRE, VTags.EntityTypes.ELEMENTAL_ATTACKS_ICE);
+            tag(VTags.EntityTypes.ELEMENTAL_ATTACKS_ELECTRIC).add(EntityType.LIGHTNING_BOLT);
+            tag(VTags.EntityTypes.ELEMENTAL_ATTACKS_FIRE).add(EntityType.FIREBALL, EntityType.SMALL_FIREBALL);
+            tag(VTags.EntityTypes.ELEMENTAL_ATTACKS_ICE).add(EntityType.SNOWBALL);
+
+            tag(VTags.EntityTypes.CREEPERS).add(EntityType.CREEPER);
+            tag(VTags.EntityTypes.ZOMBIES).add(EntityType.ZOMBIE, EntityType.ZOMBIE_VILLAGER, EntityType.HUSK, EntityType.DROWNED, EntityType.ZOMBIFIED_PIGLIN);
+            tag(VTags.EntityTypes.SKELETONS).add(EntityType.SKELETON, EntityType.WITHER_SKELETON, EntityType.STRAY);
+
+            tag(VTags.EntityTypes.FISHES).add(EntityType.COD, EntityType.PUFFERFISH, EntityType.SALMON, EntityType.TROPICAL_FISH);
+            tag(VTags.EntityTypes.SQUIDS).add(EntityType.SQUID, EntityType.GLOW_SQUID);
+            tag(VTags.EntityTypes.UNDERWATER_MOBS).addTag(VTags.EntityTypes.FISHES).addTag(VTags.EntityTypes.SQUIDS)
+                .add(EntityType.DOLPHIN, EntityType.AXOLOTL, EntityType.DROWNED);
         }
     }
 
@@ -744,7 +788,8 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
             replace(Items.DIAMOND,  VTags.Items.GEMS_DIAMOND);
             replace(Items.EMERALD,  VTags.Items.GEMS_EMERALD);
             replace(Items.CHEST,  VTags.Items.CHESTS_WOODEN);
-            replace(Blocks.COBBLESTONE,  VTags.Items.COBBLESTONE_NORMAL);
+            replace(Blocks.COBBLESTONE, VTags.Items.COBBLESTONE_NORMAL);
+            replace(Blocks.COBBLED_DEEPSLATE, VTags.Items.COBBLESTONE_DEEPSLATE);
 
             exclude(Blocks.GOLD_BLOCK);
             exclude(Items.GOLD_NUGGET);

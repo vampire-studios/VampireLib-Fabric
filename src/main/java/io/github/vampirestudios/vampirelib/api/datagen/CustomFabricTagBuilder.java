@@ -67,7 +67,8 @@ public class CustomFabricTagBuilder<T> extends TagsProvider.TagAppender<T> {
      *
      * @return the {@link FabricTagProvider.FabricTagBuilder} instance
      */
-    public CustomFabricTagBuilder<T> addTags(Tag.Named<T>... values) {
+    @SafeVarargs
+    public final CustomFabricTagBuilder<T> addTags(Tag.Named<T>... values) {
         for (Tag.Named<T> value : values) {
             this.addTag(value);
         }

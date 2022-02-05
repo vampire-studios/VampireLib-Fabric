@@ -675,66 +675,140 @@
  * <https://www.gnu.org/licenses/why-not-lgpl.html>.
  */
 
-package io.github.vampirestudios.vampirelib.client.callbacks;
+package io.github.vampirestudios.vampirelib.callbacks.client;
 
 import java.util.List;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 
-import net.minecraft.client.gui.Font;
-import net.minecraft.util.FormattedCharSequence;
+import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
 
-import io.github.vampirestudios.vampirelib.client.TooltipRenderer;
-
 public interface RenderTooltipCallback {
+    /**
+     * @see Item#append(ItemStack, List, TooltipFlag)
+     */
+    Event<Item> ITEM = EventFactory.createArrayBacked(Item.class, listeners ->
+        (itemStack, lines, flag) -> {
+            for (Item event : listeners) {
+                event.append(itemStack, lines, flag);
+            }
+        });
+    /**
+     * @see Render#renderTooltip(PoseStack, List, int, int)
+     */
+    Event<Render> RENDER_PRE = EventFactory.createArrayBacked(Render.class, listeners ->
+        (matrices, text, x, y) -> {
+            for (Render event : listeners) {
+                InteractionResult result = event.renderTooltip(matrices, text, x, y);
+                if (result != InteractionResult.PASS) return result;
+            }
+            return InteractionResult.PASS;
+        });
+    /**
+     * @see RenderModifyPosition#renderTooltip(PoseStack, PositionContext)
+     */
+    Event<RenderModifyPosition> RENDER_MODIFY_POSITION = EventFactory.createArrayBacked(RenderModifyPosition.class, listeners ->
+        (matrices, context) -> {
+            for (RenderModifyPosition event : listeners) {
+                event.renderTooltip(matrices, context);
+            }
+        });
+    /**
+     * @see RenderModifyColor#renderTooltip(PoseStack, int, int, ColorContext)
+     */
+    Event<RenderModifyColor> RENDER_MODIFY_COLOR = EventFactory.createArrayBacked(RenderModifyColor.class, listeners ->
+        (matrices, x, y, context) -> {
+            for (RenderModifyColor event : listeners) {
+                event.renderTooltip(matrices, x, y, context);
+            }
+        });
 
-    interface Pre {
-        Event<RenderTooltipCallback.Pre> EVENT = EventFactory.createArrayBacked(RenderTooltipCallback.Pre.class, callbacks ->
-            tooltipRenderer -> {
-                for (Pre callback : callbacks) {
-                    callback.preRender(tooltipRenderer);
-                }
-            });
-
-        void preRender(TooltipRenderer.Pre tooltipRenderer);
+    @Environment(EnvType.CLIENT)
+    interface Item {
+        /**
+         * Invoked whenever an item tooltip is rendered.
+         * Equivalent to Forge's {@code ItemTooltipEvent} event and
+         * Fabric's {@code ItemTooltipCallback}.
+         *
+         * @param stack The rendered stack.
+         * @param lines The mutable list of tooltip components.
+         * @param flag  A flag indicating if advanced mode is active.
+         */
+        void append(ItemStack stack, List<Component> lines, TooltipFlag flag);
     }
 
-    interface PostText {
-        Event<RenderTooltipCallback.PostText> EVENT = EventFactory.createArrayBacked(RenderTooltipCallback.PostText.class, callbacks ->
-            postText -> {
-                for (PostText callback : callbacks) {
-                    callback.postText(postText);
-                }
-            });
-
-        void postText(TooltipRenderer.PostText postText);
+    @Environment(EnvType.CLIENT)
+    interface Render {
+        /**
+         * Invoked before the tooltip for a tooltip is rendered.
+         *
+         * @param matrices The pose stack.
+         * @param texts    The mutable list of components that are rendered.
+         * @param x        The x-coordinate of the tooltip.
+         * @param y        The y-coordinate of the tooltip.
+         * @return A {@link InteractionResult} determining the outcome of the event,
+         * the execution of the vanilla tooltip rendering may be cancelled by the result.
+         */
+        InteractionResult renderTooltip(PoseStack matrices, List<? extends ClientTooltipComponent> texts, int x, int y);
     }
 
-    interface PostBackground {
-        Event<RenderTooltipCallback.PostBackground> EVENT = EventFactory.createArrayBacked(RenderTooltipCallback.PostBackground.class, callbacks ->
-            postBackground -> {
-                for (PostBackground callback : callbacks) {
-                    callback.postBackground(postBackground);
-                }
-            });
-
-        void postBackground(TooltipRenderer.PostBackground postBackground);
+    @Environment(EnvType.CLIENT)
+    interface RenderModifyPosition {
+        /**
+         * Event to manipulate the position of the tooltip.
+         *
+         * @param matrices The pose stack.
+         * @param context  The current position context.
+         */
+        void renderTooltip(PoseStack matrices, PositionContext context);
     }
 
-    interface Color {
-        Event<RenderTooltipCallback.Color> EVENT = EventFactory.createArrayBacked(RenderTooltipCallback.Color.class, callbacks ->
-            (stack, lines, matrixStack, x, y, textRenderer, background, borderStart, borderEnd) -> {
-                for (Color callback : callbacks) {
-                    return callback.color(stack, lines, matrixStack, x, y, textRenderer, background, borderStart, borderEnd);
-                }
-                return new TooltipRenderer.Color(stack, lines, matrixStack, x, y, textRenderer, background, borderStart, borderEnd);
-            });
+    @Environment(EnvType.CLIENT)
+    interface RenderModifyColor {
+        /**
+         * Event to manipulate the color of the tooltip.
+         *
+         * @param matrices The pose stack.
+         * @param x        The x-coordinate of the tooltip.
+         * @param y        The y-coordinate of the tooltip.
+         * @param context  The current color context.
+         */
+        void renderTooltip(PoseStack matrices, int x, int y, ColorContext context);
+    }
 
-        TooltipRenderer.Color color(ItemStack stack, List<? extends FormattedCharSequence> textLines, PoseStack matrixStack, int x, int y, Font fr, int background, int borderStart, int borderEnd);
+    @Environment(EnvType.CLIENT)
+    interface PositionContext {
+        int getTooltipX();
+
+        void setTooltipX(int x);
+
+        int getTooltipY();
+
+        void setTooltipY(int y);
+    }
+
+    @Environment(EnvType.CLIENT)
+    interface ColorContext {
+        int getBackgroundColor();
+
+        void setBackgroundColor(int color);
+
+        int getOutlineGradientTopColor();
+
+        void setOutlineGradientTopColor(int color);
+
+        int getOutlineGradientBottomColor();
+
+        void setOutlineGradientBottomColor(int color);
     }
 
 }

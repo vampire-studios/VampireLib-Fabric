@@ -692,9 +692,7 @@ public interface EntityHealthChangeCallback {
         (entity, health) -> {
             for (EntityHealthChangeCallback event : listeners) {
                 InteractionResult result = event.health(entity, health);
-                if (result != InteractionResult.PASS) {
-                    return result;
-                }
+                if (result != InteractionResult.PASS) return result;
             }
             return InteractionResult.PASS;
         });

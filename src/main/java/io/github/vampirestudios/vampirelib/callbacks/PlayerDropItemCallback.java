@@ -698,12 +698,8 @@ public interface PlayerDropItemCallback {
         (player, stack) -> {
             for (PlayerDropItemCallback event : listeners) {
                 InteractionResult result = event.interact(player, stack);
-
-                if (result != InteractionResult.PASS) {
-                    return result;
-                }
+                if (result != InteractionResult.PASS) return result;
             }
-
             return InteractionResult.PASS;
         }
     );

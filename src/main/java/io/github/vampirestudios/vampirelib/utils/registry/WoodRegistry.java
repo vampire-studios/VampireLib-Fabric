@@ -1069,25 +1069,37 @@ public class WoodRegistry {
 			new ResourceLocation(name.getNamespace(), String.format("wood_sets/%s/planks", name.getPath()))
         );
 
-        blockStateModelGenerator.new WoodProvider(logMapping).logWithHorizontal(log).wood(wood);
-        blockStateModelGenerator.new WoodProvider(strippedLogMapping).logWithHorizontal(strippedLog).wood(strippedWood);
-        blockStateModelGenerator.delegateItemModel(log, ModelLocationUtils.getModelLocation(log));
-        blockStateModelGenerator.delegateItemModel(wood, ModelLocationUtils.getModelLocation(wood));
-        blockStateModelGenerator.delegateItemModel(strippedLog, ModelLocationUtils.getModelLocation(strippedLog));
-        blockStateModelGenerator.delegateItemModel(strippedWood, ModelLocationUtils.getModelLocation(strippedWood));
-        if (leaves != null) {
-            blockStateModelGenerator.createTrivialBlock(leaves, TexturedModel.createDefault(block -> leavesMapping, mushroomLike ? ModelTemplates.CUBE_ALL : ModelTemplates.LEAVES));
-            ResourceLocation resourceLocation = ModelLocationUtils.getModelLocation(leaves);
-            blockStateModelGenerator.delegateItemModel(leaves, resourceLocation);
+        if (log != null) {
+            blockStateModelGenerator.new WoodProvider(logMapping).logWithHorizontal(log);
+            blockStateModelGenerator.delegateItemModel(log, ModelLocationUtils.getModelLocation(log));
+        }
+        if (wood != null) {
+            blockStateModelGenerator.new WoodProvider(logMapping).wood(wood);
+            blockStateModelGenerator.delegateItemModel(wood, ModelLocationUtils.getModelLocation(wood));
+        }
+        if (strippedLog != null) {
+            blockStateModelGenerator.new WoodProvider(logMapping).logWithHorizontal(strippedLog);
+            blockStateModelGenerator.delegateItemModel(strippedLog, ModelLocationUtils.getModelLocation(strippedLog));
+        }
+        if (strippedWood != null) {
+            blockStateModelGenerator.new WoodProvider(logMapping).wood(strippedWood);
+            blockStateModelGenerator.delegateItemModel(strippedWood, ModelLocationUtils.getModelLocation(strippedWood));
         }
 		if (!availableLeaves.isEmpty()) {
 			availableLeaves.forEach(s ->  {
+                TextureMapping leaves2Mapping = TextureMapping.cube(new ResourceLocation(name.getNamespace(), String.format("wood_sets/%s/%s", name.getPath(), s)));
 				Block block = Registry.BLOCK.get(new ResourceLocation(name.getNamespace(), s));
-				blockStateModelGenerator.createTrivialBlock(block, TexturedModel.createDefault(block1 -> leavesMapping, mushroomLike ? ModelTemplates.CUBE_ALL : ModelTemplates.LEAVES));
+				blockStateModelGenerator.createTrivialBlock(block, TexturedModel.createDefault(block1 -> leaves2Mapping, mushroomLike ? ModelTemplates.CUBE_ALL : ModelTemplates.LEAVES));
 				ResourceLocation resourceLocation = ModelLocationUtils.getModelLocation(block);
 				blockStateModelGenerator.delegateItemModel(block, resourceLocation);
 			});
-		}
+		} else {
+            if (leaves != null) {
+                blockStateModelGenerator.createTrivialBlock(leaves, TexturedModel.createDefault(block -> leavesMapping, mushroomLike ? ModelTemplates.CUBE_ALL : ModelTemplates.LEAVES));
+                ResourceLocation resourceLocation = ModelLocationUtils.getModelLocation(leaves);
+                blockStateModelGenerator.delegateItemModel(leaves, resourceLocation);
+            }
+        }
         if (door != null) {
             ResourceLocation resourceLocation = ModelTemplates.DOOR_BOTTOM.create(door, doorMapping, blockStateModelGenerator.modelOutput);
             ResourceLocation resourceLocation2 = ModelTemplates.DOOR_BOTTOM_HINGE.create(door, doorMapping, blockStateModelGenerator.modelOutput);
@@ -1121,20 +1133,47 @@ public class WoodRegistry {
                     String.format("wood_sets/%s/ladder", name.getPath())
                 )), blockStateModelGenerator.modelOutput);
         }
-        if (sapling != null) {
-            ResourceLocation resourceLocation = BlockModelGenerators.TintState.NOT_TINTED.getCross()
-                .create(sapling, saplingMapping, blockStateModelGenerator.modelOutput);
-            blockStateModelGenerator.blockStateOutput.accept(createSimpleBlock(sapling, resourceLocation));
-            ModelTemplates.FLAT_ITEM.create(ModelLocationUtils.getModelLocation(sapling.asItem()),
-                TextureMapping.layer0(new ResourceLocation(
-                    name.getNamespace(),
-                    String.format("wood_sets/%s/%s", name.getPath(), mushroomLike ? "fungi" : "sapling")
-                )), blockStateModelGenerator.modelOutput);
+        if (!availableSaplings.isEmpty()) {
+            availableSaplings.forEach(s ->  {
+                TextureMapping sapling2Mapping = TextureMapping.cross(new ResourceLocation(name.getNamespace(), String.format("wood_sets/%s/%s", name.getPath(),
+                    mushroomLike ? "fungi" : "sapling")));
+                ResourceLocation resourceLocation = BlockModelGenerators.TintState.NOT_TINTED.getCross()
+                    .create(sapling, sapling2Mapping, blockStateModelGenerator.modelOutput);
+                blockStateModelGenerator.blockStateOutput.accept(createSimpleBlock(sapling, resourceLocation));
+                ModelTemplates.FLAT_ITEM.create(ModelLocationUtils.getModelLocation(sapling.asItem()),
+                    TextureMapping.layer0(new ResourceLocation(
+                        name.getNamespace(),
+                        String.format("wood_sets/%s/%s", name.getPath(), mushroomLike ? "fungi" : "sapling")
+                    )), blockStateModelGenerator.modelOutput);
+            });
+        } else {
+            if (sapling != null) {
+                ResourceLocation resourceLocation = BlockModelGenerators.TintState.NOT_TINTED.getCross()
+                    .create(sapling, saplingMapping, blockStateModelGenerator.modelOutput);
+                blockStateModelGenerator.blockStateOutput.accept(createSimpleBlock(sapling, resourceLocation));
+                ModelTemplates.FLAT_ITEM.create(ModelLocationUtils.getModelLocation(sapling.asItem()),
+                    TextureMapping.layer0(new ResourceLocation(
+                        name.getNamespace(),
+                        String.format("wood_sets/%s/%s", name.getPath(), mushroomLike ? "fungi" : "sapling")
+                    )), blockStateModelGenerator.modelOutput);
+            }
         }
-		if (pottedSapling != null) {
-			ResourceLocation resourceLocation = BlockModelGenerators.TintState.NOT_TINTED.getCrossPot().create(pottedSapling, saplingPlantMapping, blockStateModelGenerator.modelOutput);
-			blockStateModelGenerator.blockStateOutput.accept(createSimpleBlock(pottedSapling, resourceLocation));
-		}
+        if (!availablePottedSaplings.isEmpty()) {
+            availablePottedSaplings.forEach(s ->  {
+                TextureMapping sapling2PlantMapping = TextureMapping.plant(new ResourceLocation(name.getNamespace(),
+                    customPottedTexture ? String.format("wood_sets/%s/potted_%s", name.getPath(), mushroomLike ? "fungi" : "sapling") :
+                        String.format("wood_sets/%s/%s", name.getPath(), mushroomLike ? "fungi" : "sapling")));
+                ResourceLocation resourceLocation = BlockModelGenerators.TintState.NOT_TINTED.getCrossPot().create(pottedSapling, sapling2PlantMapping,
+                    blockStateModelGenerator.modelOutput);
+                blockStateModelGenerator.blockStateOutput.accept(createSimpleBlock(pottedSapling, resourceLocation));
+            });
+        } else {
+            if (pottedSapling != null) {
+                ResourceLocation resourceLocation = BlockModelGenerators.TintState.NOT_TINTED.getCrossPot().create(pottedSapling, saplingPlantMapping, blockStateModelGenerator.modelOutput);
+                blockStateModelGenerator.blockStateOutput.accept(createSimpleBlock(pottedSapling, resourceLocation));
+            }
+        }
+
         if (bookshelf != null) {
             ResourceLocation resourceLocation = ModelTemplates.CUBE_COLUMN.create(bookshelf, bookshelfMapping, blockStateModelGenerator.modelOutput);
             blockStateModelGenerator.blockStateOutput.accept(createSimpleBlock(bookshelf, resourceLocation));
@@ -1204,37 +1243,40 @@ public class WoodRegistry {
 
     public void generateLang(FabricLanguageProvider languageProvider) {
         String translatedName = WordUtils.capitalizeFully(name.getPath().replace("_", " "));
-        languageProvider.addBlock(log, translatedName + (mushroomLike ? " Stem" : " Log"));
-        languageProvider.addBlock(strippedLog, "Stripped " + translatedName + (mushroomLike ? " Stem" : " Log"));
-        languageProvider.addBlock(wood, translatedName + (mushroomLike ? " Hyphae" : " Wood"));
-        languageProvider.addBlock(strippedWood, "Stripped " + translatedName + (mushroomLike ? " Hyphae" : " Wood"));
-        languageProvider.addBlock(planks, translatedName + " Planks");
-        if (sapling != null) languageProvider.addBlock(sapling, translatedName + (mushroomLike ? " Fungi" : " Sapling"));
+        if (log != null) languageProvider.addBlock(log, translatedName + (mushroomLike ? " Stem" : " Log"));
+        if (strippedLog != null) languageProvider.addBlock(strippedLog, "Stripped " + translatedName + (mushroomLike ? " Stem" : " Log"));
+        if (wood != null) languageProvider.addBlock(wood, translatedName + (mushroomLike ? " Hyphae" : " Wood"));
+        if (strippedWood != null) languageProvider.addBlock(strippedWood, "Stripped " + translatedName + (mushroomLike ? " Hyphae" : " Wood"));
+        if (planks != null) languageProvider.addBlock(planks, translatedName + " Planks");
 		if (!availableSaplings.isEmpty()) {
 			availableSaplings.forEach(s ->  {
 				String translatedName1 = WordUtils.capitalizeFully(s.replace("_", " "));
 				Block block = Registry.BLOCK.get(new ResourceLocation(name.getNamespace(), s));
 				languageProvider.addBlock(block, translatedName1 + (mushroomLike ? " Fungi" : " Sapling"));
 			});
-		}
-        if (pottedSapling != null) languageProvider.addBlock(pottedSapling, "Potted " + translatedName + (mushroomLike ? " Fungi" : " Sapling"));
+		} else {
+            if (sapling != null) languageProvider.addBlock(sapling, translatedName + (mushroomLike ? " Fungi" : " Sapling"));
+        }
 		if (!availablePottedSaplings.isEmpty()) {
 			availablePottedSaplings.forEach(s ->  {
 				String translatedName1 = WordUtils.capitalizeFully(s.replace("_", " "));
 				Block block = Registry.BLOCK.get(new ResourceLocation(name.getNamespace(), s));
 				languageProvider.addBlock(block, "Potted " + translatedName1 + (mushroomLike ? " Fungi" : " Sapling"));
 			});
-		}
+		} else {
+            if (pottedSapling != null) languageProvider.addBlock(pottedSapling, "Potted " + translatedName + (mushroomLike ? " Fungi" : " Sapling"));
+        }
         if (trapdoor != null) languageProvider.addBlock(trapdoor, translatedName + " Trapdoor");
         if (door != null) languageProvider.addBlock(door, translatedName + " Door");
-        if (leaves != null) languageProvider.addBlock(leaves, translatedName + (mushroomLike ? " Wart Block" : " Leaves"));
 		if (!availableLeaves.isEmpty()) {
 			availableLeaves.forEach(s ->  {
 				String translatedName1 = WordUtils.capitalizeFully(s.replace("_", " "));
 				Block block = Registry.BLOCK.get(new ResourceLocation(name.getNamespace(), s));
-				languageProvider.addBlock(block, translatedName1 + (mushroomLike ? " Wart Block" : " Leaves"));
+				languageProvider.addBlock(block, translatedName1);
 			});
-		}
+		} else {
+            if (leaves != null) languageProvider.addBlock(leaves, translatedName + (mushroomLike ? " Wart Block" : " Leaves"));
+        }
         if (fence != null) languageProvider.addBlock(fence, translatedName + " Fence");
         if (fenceGate != null) languageProvider.addBlock(fenceGate, translatedName + " Fence Gate");
         if (button != null) languageProvider.addBlock(button, translatedName + " Button");
@@ -1247,16 +1289,11 @@ public class WoodRegistry {
     }
 
     public void generateLoot(FabricBlockLootTablesProvider lootTablesProvider) {
-        lootTablesProvider.dropSelf(log);
-        lootTablesProvider.dropSelf(strippedLog);
-        lootTablesProvider.dropSelf(wood);
-        lootTablesProvider.dropSelf(strippedWood);
-        lootTablesProvider.dropSelf(planks);
-        if (leaves != null && !mushroomLike) {
-			if (sapling != null) lootTablesProvider.add(leaves, block1 -> BlockLoot.createLeavesDrops(block1, sapling, 0.05F, 0.0625F, 0.083333336F, 0.1F));
-			else lootTablesProvider.dropSelf(leaves);
-		}
-        if (leaves != null && mushroomLike) lootTablesProvider.dropSelf(leaves);
+        if (log != null) lootTablesProvider.dropSelf(log);
+        if (strippedLog != null) lootTablesProvider.dropSelf(strippedLog);
+        if (wood != null) lootTablesProvider.dropSelf(wood);
+        if (strippedWood != null) lootTablesProvider.dropSelf(strippedWood);
+        if (planks != null) lootTablesProvider.dropSelf(planks);
 		if (!availableLeaves.isEmpty() && !mushroomLike) {
 			availableLeaves.forEach(s ->  {
 				Block block = Registry.BLOCK.get(new ResourceLocation(name.getNamespace(), s));
@@ -1268,13 +1305,20 @@ public class WoodRegistry {
 					else lootTablesProvider.dropSelf(block);
 				}
 			});
-		}
+		} else {
+            if (leaves != null && !mushroomLike) {
+                if (sapling != null) lootTablesProvider.add(leaves, block1 -> BlockLoot.createLeavesDrops(block1, sapling, 0.05F, 0.0625F, 0.083333336F, 0.1F));
+                else lootTablesProvider.dropSelf(leaves);
+            }
+        }
 		if (!availableLeaves.isEmpty() && mushroomLike) {
 			availableLeaves.forEach(s ->  {
 				Block block = Registry.BLOCK.get(new ResourceLocation(name.getNamespace(), s));
 				lootTablesProvider.dropSelf(block);
 			});
-		}
+		} else {
+            if (leaves != null && mushroomLike) lootTablesProvider.dropSelf(leaves);
+        }
         if (ladder != null) lootTablesProvider.dropSelf(ladder);
         if (trapdoor != null) lootTablesProvider.dropSelf(trapdoor);
         if (button != null) lootTablesProvider.dropSelf(button);
@@ -1296,20 +1340,20 @@ public class WoodRegistry {
     }
 
     public void generateRecipes(Consumer<FinishedRecipe> exporter) {
-        RecipeProvider.planksFromLogs(exporter, planks, logsItemTag);
-        RecipeProvider.woodFromLogs(exporter, wood, log);
-        RecipeProvider.woodFromLogs(exporter, strippedWood, strippedLog);
-        if (trapdoor != null) RecipeProvider.trapdoorBuilder(trapdoor, Ingredient.of(planks));
-        if (door != null) RecipeProvider.doorBuilder(door, Ingredient.of(planks));
-        if (fence != null) RecipeProvider.fenceBuilder(fence, Ingredient.of(planks));
-        if (fenceGate != null) RecipeProvider.fenceGateBuilder(fenceGate, Ingredient.of(planks));
-        if (slab != null) RecipeProvider.slab(exporter, slab, planks);
-        if (stairs != null) RecipeProvider.stairBuilder(stairs, Ingredient.of(planks));
-        if (pressurePlate != null) RecipeProvider.pressurePlate(exporter, pressurePlate, planks);
-        if (button != null) RecipeProvider.buttonBuilder(button, Ingredient.of(planks));
-        if (boatItem != null) RecipeProvider.woodenBoat(exporter, boatItem, planks);
-        if (signItem != null) RecipeProvider.signBuilder(signItem, Ingredient.of(planks));
-        if (bookshelf != null) ShapedRecipeBuilder.shaped(bookshelf).define('#', planks).define('X', Items.BOOK).pattern("###").pattern("XXX").pattern("###").unlockedBy("has_book", has(Items.BOOK)).save(exporter);
+        if (planks != null && logsItemTag != null) RecipeProvider.planksFromLogs(exporter, planks, logsItemTag);
+        if (wood != null && log != null) RecipeProvider.woodFromLogs(exporter, wood, log);
+        if (strippedWood != null && strippedLog != null) RecipeProvider.woodFromLogs(exporter, strippedWood, strippedLog);
+        if (trapdoor != null && planks != null) RecipeProvider.trapdoorBuilder(trapdoor, Ingredient.of(planks));
+        if (door != null && planks != null) RecipeProvider.doorBuilder(door, Ingredient.of(planks));
+        if (fence != null && planks != null) RecipeProvider.fenceBuilder(fence, Ingredient.of(planks));
+        if (fenceGate != null && planks != null) RecipeProvider.fenceGateBuilder(fenceGate, Ingredient.of(planks));
+        if (slab != null && planks != null) RecipeProvider.slab(exporter, slab, planks);
+        if (stairs != null && planks != null) RecipeProvider.stairBuilder(stairs, Ingredient.of(planks));
+        if (pressurePlate != null && planks != null) RecipeProvider.pressurePlate(exporter, pressurePlate, planks);
+        if (button != null && planks != null) RecipeProvider.buttonBuilder(button, Ingredient.of(planks));
+        if (boatItem != null && planks != null) RecipeProvider.woodenBoat(exporter, boatItem, planks);
+        if (signItem != null && planks != null) RecipeProvider.signBuilder(signItem, Ingredient.of(planks));
+        if (bookshelf != null && planks != null) ShapedRecipeBuilder.shaped(bookshelf).define('#', planks).define('X', Items.BOOK).pattern("###").pattern("XXX").pattern("###").unlockedBy("has_book", has(Items.BOOK)).save(exporter);
     }
 
     public static class Builder {
