@@ -681,6 +681,7 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ItemLike;
 
 import io.github.vampirestudios.vampirelib.mixins.ItemInvokerMixin;
 
@@ -693,7 +694,7 @@ public class ItemStackUtils {
      * @param items The list of {@link ItemStack}s.
      * @return The index of the specified item in the list, or -1 if it was not in the list.
      */
-	public static int findIndexOfItem(Item item, NonNullList<ItemStack> items) {
+	public static int findIndexOfItem(ItemLike item, NonNullList<ItemStack> items) {
 		for (int i = 0; i < items.size(); i++) {
 			if (items.get(i).getItem() == item) {
 				return i;

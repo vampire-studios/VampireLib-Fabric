@@ -677,6 +677,8 @@
 
 package io.github.vampirestudios.vampirelib.blocks;
 
+import org.jetbrains.annotations.NotNull;
+
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.CreativeModeTab;
@@ -695,11 +697,11 @@ public class CustomLadderBlock extends LadderBlock {
     public CustomLadderBlock() {
         super(BlockBehaviour.Properties.of(Material.SAND).strength(0.4F).sound(SoundType.LADDER));
         registerDefaultState(this.defaultBlockState().setValue(FACING, Direction.NORTH).setValue(WATERLOGGED, false));
-        FILLER = new VanillaTargetedItemGroupFiller(Blocks.LADDER.asItem());
+        FILLER = new VanillaTargetedItemGroupFiller(Blocks.LADDER);
     }
 
     @Override
-    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> list) {
+    public void fillItemCategory(@NotNull CreativeModeTab group, @NotNull NonNullList<ItemStack> list) {
         FILLER.fillItem(this.asItem(), group, list);
     }
 

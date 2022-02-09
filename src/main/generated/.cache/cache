@@ -29,7 +29,6 @@ f8ef7474e497c0dee44535fd857f142c1b09c54c data\c\tags\blocks\ores\netherite_scrap
 2681d707759b82b71f5a5393bdfd54d892b17deb data\vampirelib\recipes\heavy_weighted_pressure_plate.json
 f8ef7474e497c0dee44535fd857f142c1b09c54c data\c\tags\items\ores\netherite_scrap.json
 da3c454eb2fd5f03c2b5fe8abc666ea50582a2e6 data\c\tags\blocks\glass_panes\yellow.json
-45c340851ffc5dd9adb7152d69df98ae6572e81d data\vampirelib\recipes\cobbled_deepslate_stairs.json
 d53aebb7435613e4af43127d051c8d802f62b31d data\vampirelib\advancements\recipes\decorations\lodestone.json
 5f160170a743f711fd31b60e2bbaa8219a69e4a5 data\vampirelib\recipes\black_banner.json
 82bf3bb0d99df6321581339c8f0fc79ceef53e09 data\vampirelib\advancements\recipes\decorations\jungle_fence.json
@@ -116,6 +115,7 @@ ff376c5596dc93b8bfc72f11bf8716c0aa8433e9 data\c\tags\blocks\cobblestone\infested
 c5f48a264ff6f7e03204ec08562edacbe11b6ade data\vampirelib\recipes\netherite_ingot.json
 c88dbfddaea10459256f7ef16d98c2ec4bd7c50c data\vampirelib\recipes\diamond_leggings.json
 a196e8666a96ecd5b075286e64400263a0b748db data\vampirelib\recipes\golden_apple.json
+84ec3375e319d2cdc93c9e9f892bbc82cd076ae5 data\c\tags\entity_types\buildable_mobs.json
 dd61bc03bc89098e100e5f9b8da2ce1f595fdea9 data\c\tags\blocks\ore_bearing_ground\deepslate.json
 c589fc0ea5d8368b1dc31eb18f7e5bcc9147ecb5 data\vampirelib\recipes\clock.json
 8e5830482c1e3598a0e6b173526a565221243f08 data\vampirelib\advancements\recipes\combat\stone_sword.json
@@ -162,7 +162,6 @@ ec673d18a43da1179ba2b066f27ee71947ddef22 data\c\tags\items\dyes\pink.json
 9b1a08d2523b977f1de9f4ad8bf401cb574dcc0f data\vampirelib\advancements\recipes\decorations\white_banner.json
 528be5d875036ad3e665d808957ce67d2ea89f9d data\c\tags\items\seeds.json
 af9f325ca59b093ce06046d0dbedb60164090659 data\vampirelib\recipes\ladder.json
-574999be8d31a93aed334963dca50a78c5f9b9a4 data\c\tags\entity_types\draconic_mobs.json
 ffc89a9dcdbec60d23e7d92f8be32f3ab47b6c0a data\c\tags\items\dyes\black.json
 999b381181160fa57b8dbce224b45fc263bfd983 data\c\tags\blocks\glass_panes\pink.json
 ca51fa3bd2fe5587c1208569eb41d4652320435f data\c\tags\blocks\sandstone.json
@@ -244,8 +243,8 @@ d88897b7b8ddacae2426a7be2dfe81ddd49551ca data\c\tags\items\dyes.json
 af3711a6b0c7848e609b559f133e7a4a85f41f30 data\vampirelib\advancements\recipes\building_blocks\polished_deepslate.json
 5248498aa07bbe3c6e7b2febbc3b36cff64cda35 data\c\tags\items\ingots\nether_brick.json
 89e9eb120f09c0652180e6feed9cc4256c2bf5a6 data\vampirelib\advancements\recipes\redstone\iron_door.json
-f10290e9155809dbc804ab0e26ea99d4b514799c data\vampirelib\recipes\warped_sign.json
 0a0d5e91903f9d0b7869187cf83c4ec31a47b087 data\vampirelib\recipes\crimson_fence_gate.json
+f10290e9155809dbc804ab0e26ea99d4b514799c data\vampirelib\recipes\warped_sign.json
 90ae6d9ac5c1213b958019d990103ce2ae342ae5 data\vampirelib\advancements\recipes\redstone\jungle_fence_gate.json
 c75a116ac1028bcaa2ca15a4d43592246cb2ee22 data\c\tags\blocks\glass_panes\black.json
 7fe7a16838e2b52d47bfa9fafafc6463904cff96 data\c\tags\entity_types\big_noses.json
@@ -331,7 +330,7 @@ c882d195f524c02b6cac31b07c59b9a4ac834439 data\c\tags\items\dyes\lime.json
 fea447bbd6851765006ac3a284e7861a202b55a6 data\c\tags\items\seeds\beetroot.json
 c2d73f6aa1b41fef6a565cb60b92de8e388085de data\vampirelib\recipes\iron_trapdoor.json
 05a23543fd2e307bdeb6ee089a8b923240f7f166 data\c\tags\items\glass\tinted.json
-eb018e8032c05dd9e2f78b1f4533eddb7a1c458b data\c\tags\entity_types\equines.json
+b30ce8a2d83d85941c24300744507e80fd99557a data\c\tags\entity_types\equines.json
 ef746ca4126e7c5e7f5634f93f1efb0718779dbb data\c\tags\items\dyes\yellow.json
 3eeb43dd74e330aca9fd61fb5967579bcd6e2a15 data\c\tags\items\gems.json
 50e97df35e7309fbd5feb8f4161ce7888cf962ad data\c\tags\items\gravel.json
@@ -347,7 +346,6 @@ d65c425e740dc833f29d16606a1171825876be0d data\c\tags\items\cobblestone\normal.js
 abbe68c5507951a8b501cafa4f37d829ff2d5dc7 data\c\tags\items\glass\red.json
 79237c9f77752f3a3e1dd76ff24ca9a5200b166a data\c\tags\blocks\ore_rates\dense.json
 931d34190c8b828b0374c841befb02c6d8851828 data\c\tags\entity_types\caprines.json
-be4f43db8eae4b51cd23b9917cf35c59d89f0c8f data\vampirelib\recipes\cobbled_deepslate_wall.json
 50fdb7ea38282b34ad2886abeefe9e543e95ae0b data\vampirelib\advancements\recipes\transportation\activator_rail.json
 e0e7f020a64bc03661c76be063a1f073f3a67436 data\vampirelib\recipes\polished_deepslate.json
 b39f2808662b49e1b8f810535fc5d55b4b3a1bff data\c\tags\entity_types\elemental_mobs\metal.json
@@ -377,7 +375,6 @@ e0caad4e932f3bdda708aa0b3802e5c782461ec2 data\c\tags\items\glass_panes\cyan.json
 d6b610f4c888d430cf3e3db339bdf1872d76e36c data\vampirelib\recipes\iron_helmet.json
 6ab44492b68d0cbadb1bd9f9afbb8728f18b398c data\vampirelib\advancements\recipes\transportation\minecart.json
 da224bef898b0e0ae3a3d70cef8f5e60bdf06d54 data\vampirelib\recipes\jukebox.json
-9210df09a8bcb9ddd6a03e0fcaab71dcc69079f6 data\vampirelib\advancements\recipes\decorations\cobbled_deepslate_wall.json
 7dea0a82e04b3b46473e3f12348bf81a17133de0 data\vampirelib\recipes\iron_shovel.json
 fa5ea230c4169a3450fa12d1861ec7cff57da3cf data\vampirelib\recipes\lime_banner.json
 d0d39bddaac0ae53ee2203b9047ab3d216a6a57a data\vampirelib\advancements\recipes\decorations\jungle_sign.json
@@ -470,9 +467,7 @@ e5aede672c5b9063e2b7fd86bba3274510b378f6 data\vampirelib\recipes\iron_axe.json
 2fe7c51a1b31a67463204ab0fc3e2b59a32ef7ac data\c\tags\items\feathers.json
 64382c7d434efa6154d4ebe7654bab2568a60caf data\c\tags\items\ingots\iron.json
 013b1ceb4339cd785ee64c94a389d9cf76e7e7fd data\vampirelib\advancements\recipes\tools\diamond_axe.json
-573a12b30ead1c27048bb59694ed38ae028bda0d data\vampirelib\advancements\recipes\building_blocks\cobbled_deepslate_slab.json
 e9188730c56fc5df0a88fa72b9709e8e275ba48a data\c\tags\entity_types\elemental_attacks\ice.json
-93a1b14189a42d7b2f00119dc4ccbf07cb73488b data\vampirelib\recipes\cobbled_deepslate_slab.json
 093f634783e1835842bc7ec4600fbf6d8f5628ad data\c\tags\blocks\glass\black.json
 947daae2caccd46afa22788ab681f8fc9e8afa7e data\c\tags\blocks\glass_panes\red.json
 259ce907c1e47b207b185dea6afb20508122c943 data\c\tags\blocks\glass\green.json
@@ -538,7 +533,7 @@ e3413dd2a51e4e30683a6eed7d8bbdd2151547f8 data\vampirelib\advancements\recipes\tr
 2ae3da28db34f0221c2aac866885e4eb96436b7b data\c\tags\blocks\glass\brown.json
 6055bb13f5b6d813bb3941d6e12965de7f760787 data\c\tags\items\fences\wooden.json
 1fcba05015cc67ddd94f34bb0792e7f94dac5ade data\vampirelib\advancements\recipes\redstone\dispenser.json
-df2ecca875eb44a682ab244e8a4a51915e46bdb5 data\c\tags\entity_types\ghosts.json
+525bf5bb8a4aac52b3b5b998d767e4edee84b352 data\c\tags\entity_types\ghosts.json
 30765a5d8c3aaa0012e2864a62732453793647ee data\vampirelib\recipes\iron_hoe.json
 609322708c04c70ba0c6c552c2c7477a9d2d7604 data\vampirelib\advancements\recipes\decorations\ladder.json
 ede59b1d22abbaea6a8eb2956062ab64c890c8cc data\c\tags\blocks\glass\light_gray.json
@@ -553,7 +548,7 @@ cf85bc6b8b9d3fe2baf408731225de9c050763b8 data\c\tags\entity_types\elemental_mobs
 f9a7b288b3b769cdc6469c21325951937857da74 data\c\tags\items\storage_blocks\redstone.json
 967bdbc5b40798b914f7f72c826f840b6afe9e01 data\vampirelib\advancements\recipes\decorations\warped_sign.json
 93edb343a0357f66be318197090004ae37f0e237 data\vampirelib\recipes\bow.json
-c589adc0836277859b9939f90cea6a643d21af79 data\c\tags\entity_types\guardians.json
+83cef3ace4e4ca204d9c6108c24a0e823a140e06 data\c\tags\entity_types\guardians.json
 503d91d94bc05c19308d1115a64d737aa5df5916 data\c\tags\items\glass\magenta.json
 6055bb13f5b6d813bb3941d6e12965de7f760787 data\c\tags\blocks\fences\wooden.json
 1eb19a4422a0c11cc0f18a5d39a9b26ab1d1fe70 data\c\tags\blocks\storage_blocks\raw_iron.json
@@ -570,7 +565,6 @@ bdc8d0f21ea8bd40978275da8519d985f78fab61 data\vampirelib\recipes\detector_rail.j
 0135c7a8c0d2445d7a9fbc44fa78434b68ffed32 data\vampirelib\recipes\diamond_shovel.json
 b15f7cfa940a69508a46e22d885435499394ccce data\c\tags\items\gems\emerald.json
 f69d2ea1a489c2f120dad077b9e6dfbdc9971dd2 data\vampirelib\advancements\recipes\combat\iron_helmet.json
-c92f88bc0408c6040974fa67d312a89ab9a38049 data\vampirelib\advancements\recipes\building_blocks\cobbled_deepslate_stairs.json
 ab66316f80e1885e1a1ea338990fb035a63ba940 data\vampirelib\recipes\crimson_sign.json
 7db6ff62972e574981f3ba29781526220618fc04 data\c\tags\items\leather.json
 e813f7c6f2437e36e1dbf6b25145a50ae8c9ce02 data\vampirelib\advancements\recipes\decorations\item_frame.json

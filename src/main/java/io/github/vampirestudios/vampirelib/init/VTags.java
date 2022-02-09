@@ -1073,11 +1073,11 @@ public class VTags {
     public static class EntityTypes {
 
         public static final Tag.Named<EntityType<?>> BOSSES = tag("bosses");
-        public static final Tag.Named<EntityType<?>> DRACONIC_MOBS = tag("draconic_mobs");
         public static final Tag.Named<EntityType<?>> DRAGONS = tag("dragons");
 
         public static final Tag.Named<EntityType<?>> GUARDIANS = tag("guardians");
         public static final Tag.Named<EntityType<?>> GOLEMS = tag("golems");
+        public static final Tag.Named<EntityType<?>> BUILDABLE_MOBS = tag("buildable_mobs");
 
         public static final Tag.Named<EntityType<?>> BIG_NOSES = tag("big_noses");
         public static final Tag.Named<EntityType<?>> ILLAGERS = tag("illagers");

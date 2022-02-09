@@ -12,9 +12,15 @@ import io.github.vampirestudios.vampirelib.callbacks.PlayerEvents;
 
 @Mixin(Player.class)
 public class PlayerMixin {
-    @Inject(method = "isScoping", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "isScoping", at = @At("RETURN"), cancellable = true)
     public void isScoping(CallbackInfoReturnable<Boolean> cir) {
-        InteractionResult result = PlayerEvents.SCOPING.invoker().onPlayerScoping((Player)(Object)this);
-        if (result == InteractionResult.FAIL) cir.cancel();
+        boolean currentScoping = cir.getReturnValue();
+        if (currentScoping != PlayerEvents.oldScoping) {
+            PlayerEvents.oldScoping = currentScoping;
+            InteractionResult result = PlayerEvents.SCOPING.invoker().onPlayerScoping(currentScoping, (Player)(Object)this);
+            if (result == InteractionResult.FAIL) PlayerEvents.oldScoping = !currentScoping;
+            System.out.println(currentScoping);
+        }
+        cir.setReturnValue(PlayerEvents.oldScoping);
     }
 }

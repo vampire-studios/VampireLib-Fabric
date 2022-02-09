@@ -684,9 +684,12 @@ import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
 
 public final class PlayerEvents {
-    public static final Event<PlayerEvents.Scoping> SCOPING = EventFactory.createArrayBacked(PlayerEvents.Scoping.class, listeners -> player -> {
+
+    public static boolean oldScoping;
+
+    public static final Event<PlayerEvents.Scoping> SCOPING = EventFactory.createArrayBacked(PlayerEvents.Scoping.class, listeners -> (scoping, player) -> {
         for (PlayerEvents.Scoping event : listeners) {
-            InteractionResult result = event.onPlayerScoping(player);
+            InteractionResult result = event.onPlayerScoping(scoping, player);
             if (result != InteractionResult.PASS) {
                 return result;
             }
@@ -695,6 +698,6 @@ public final class PlayerEvents {
     });
 
     public interface Scoping {
-        InteractionResult onPlayerScoping(Player player);
+        InteractionResult onPlayerScoping(boolean scoping, Player player);
     }
 }

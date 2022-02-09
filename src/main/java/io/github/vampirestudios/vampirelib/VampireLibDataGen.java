@@ -714,24 +714,25 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
         protected void generateTags() {
             tag(VTags.EntityTypes.BOSSES).add(EntityType.ENDER_DRAGON, EntityType.WITHER);
             tag(VTags.EntityTypes.DRAGONS).add(EntityType.ENDER_DRAGON);
-            tag(VTags.EntityTypes.DRACONIC_MOBS).add(EntityType.ENDER_DRAGON);
 
-            tag(VTags.EntityTypes.GUARDIANS).add(EntityType.IRON_GOLEM, EntityType.SNOW_GOLEM);
+            tag(VTags.EntityTypes.GUARDIANS).add(EntityType.ELDER_GUARDIAN, EntityType.GUARDIAN);
             tag(VTags.EntityTypes.GOLEMS).add(EntityType.IRON_GOLEM, EntityType.SNOW_GOLEM);
             tag(VTags.EntityTypes.ILLAGERS).add(EntityType.PILLAGER, EntityType.ILLUSIONER, EntityType.VINDICATOR, EntityType.EVOKER);
             tag(VTags.EntityTypes.BIG_NOSES).addTag(VTags.EntityTypes.ILLAGERS).add(EntityType.WITCH, EntityType.VILLAGER, EntityType.ZOMBIE_VILLAGER);
             tag(VTags.EntityTypes.RAIDERS).add(EntityType.PILLAGER, EntityType.VINDICATOR, EntityType.EVOKER, EntityType.RAVAGER, EntityType.WITCH);
 
+            tag(VTags.EntityTypes.BUILDABLE_MOBS).add(EntityType.IRON_GOLEM, EntityType.SNOW_GOLEM, EntityType.WITHER);
+
             tag(VTags.EntityTypes.ANIMALS).add(EntityType.COW, EntityType.PIG, EntityType.SHEEP, EntityType.RAVAGER, EntityType.WITCH);
             tag(VTags.EntityTypes.ARTHROPODS).add(EntityType.SPIDER, EntityType.BEE, EntityType.SILVERFISH);
-            tag(VTags.EntityTypes.GHOSTS).add(EntityType.VEX);
+            tag(VTags.EntityTypes.GHOSTS).add(EntityType.VEX, EntityType.GHAST);
 
             tag(VTags.EntityTypes.BEARS).add(EntityType.PANDA, EntityType.POLAR_BEAR);
             tag(VTags.EntityTypes.BOVINES).add(EntityType.COW, EntityType.MOOSHROOM);
             tag(VTags.EntityTypes.CAMELIDS).add(EntityType.LLAMA);
             tag(VTags.EntityTypes.CANINES).add(EntityType.FOX, EntityType.WOLF);
             tag(VTags.EntityTypes.CAPRINES).add(EntityType.GOAT);
-            tag(VTags.EntityTypes.EQUINES).add(EntityType.DONKEY, EntityType.HORSE, EntityType.MULE);
+            tag(VTags.EntityTypes.EQUINES).add(EntityType.DONKEY, EntityType.HORSE, EntityType.ZOMBIE_HORSE, EntityType.SKELETON_HORSE, EntityType.MULE);
             tag(VTags.EntityTypes.FELINES).add(EntityType.CAT, EntityType.OCELOT);
             tag(VTags.EntityTypes.FOWLS).addTag(VTags.EntityTypes.FOWLS_LAND);
             tag(VTags.EntityTypes.FOWLS_LAND).add(EntityType.CHICKEN);
@@ -764,8 +765,8 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
     }
 
     private static class VRecipeReplacementProvider extends FabricRecipesProvider {
-        private Map<Item, Tag<Item>> replacements = new HashMap<>();
-        private Set<ResourceLocation> excludes = new HashSet<>();
+        private final Map<Item, Tag<Item>> replacements = new HashMap<>();
+        private final Set<ResourceLocation> excludes = new HashSet<>();
 
         private VRecipeReplacementProvider(FabricDataGenerator dataGenerator) {
             super(dataGenerator);
@@ -802,6 +803,9 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
             exclude(Blocks.COBBLESTONE_STAIRS);
             exclude(Blocks.COBBLESTONE_SLAB);
             exclude(Blocks.COBBLESTONE_WALL);
+            exclude(Blocks.COBBLED_DEEPSLATE_STAIRS);
+            exclude(Blocks.COBBLED_DEEPSLATE_SLAB);
+            exclude(Blocks.COBBLED_DEEPSLATE_WALL);
 
             buildCraftingRecipes(vanilla -> {
                 FinishedRecipe modified = enhance(vanilla);
