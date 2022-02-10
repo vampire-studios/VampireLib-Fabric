@@ -1404,7 +1404,7 @@ public class WoodRegistry {
         if (slab != null) lootTablesProvider.add(slab, BlockLoot::createSlabItemTable);
         if (stairs != null) lootTablesProvider.dropSelf(stairs);
         if (sign != null) lootTablesProvider.dropSelf(sign);
-        if (bookshelf != null) lootTablesProvider.add(bookshelf, blockx -> createSingleItemTableWithSilkTouch(blockx, Items.BOOK, ConstantValue.exactly(3.0F)));
+        if (bookshelf != null) lootTablesProvider.add(bookshelf, block -> createSingleItemTableWithSilkTouch(block, Items.BOOK, ConstantValue.exactly(3.0F)));
     }
 
     public void generateRecipes(Consumer<FinishedRecipe> exporter) {
