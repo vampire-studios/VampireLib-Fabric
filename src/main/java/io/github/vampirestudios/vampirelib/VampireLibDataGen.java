@@ -33,6 +33,7 @@ import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.data.recipes.ShapelessRecipeBuilder;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.tags.Tag;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.DyeColor;
@@ -712,55 +713,101 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
 
         @Override
         protected void generateTags() {
-            tag(VTags.EntityTypes.BOSSES).add(EntityType.ENDER_DRAGON, EntityType.WITHER);
+            tag(VTags.EntityTypes.BOSSES).addTag(VTags.EntityTypes.DRAGONS).add(EntityType.WITHER);
+
             tag(VTags.EntityTypes.DRAGONS).add(EntityType.ENDER_DRAGON);
 
-            tag(VTags.EntityTypes.GUARDIANS).add(EntityType.ELDER_GUARDIAN, EntityType.GUARDIAN);
             tag(VTags.EntityTypes.GOLEMS).add(EntityType.IRON_GOLEM, EntityType.SNOW_GOLEM);
-            tag(VTags.EntityTypes.ILLAGERS).add(EntityType.PILLAGER, EntityType.ILLUSIONER, EntityType.VINDICATOR, EntityType.EVOKER);
+
+            tag(VTags.EntityTypes.BUILDABLE_MOBS).addTag(VTags.EntityTypes.GOLEMS).add(EntityType.WITHER);
+
             tag(VTags.EntityTypes.BIG_NOSES).addTag(VTags.EntityTypes.ILLAGERS).add(EntityType.WITCH, EntityType.VILLAGER, EntityType.ZOMBIE_VILLAGER);
-            tag(VTags.EntityTypes.RAIDERS).add(EntityType.PILLAGER, EntityType.VINDICATOR, EntityType.EVOKER, EntityType.RAVAGER, EntityType.WITCH);
-
-            tag(VTags.EntityTypes.BUILDABLE_MOBS).add(EntityType.IRON_GOLEM, EntityType.SNOW_GOLEM, EntityType.WITHER);
-
-            tag(VTags.EntityTypes.ANIMALS).add(EntityType.COW, EntityType.PIG, EntityType.SHEEP, EntityType.RAVAGER, EntityType.WITCH);
-            tag(VTags.EntityTypes.ARTHROPODS).add(EntityType.SPIDER, EntityType.BEE, EntityType.SILVERFISH);
-            tag(VTags.EntityTypes.GHOSTS).add(EntityType.VEX, EntityType.GHAST);
-
-            tag(VTags.EntityTypes.BEARS).add(EntityType.PANDA, EntityType.POLAR_BEAR);
-            tag(VTags.EntityTypes.BOVINES).add(EntityType.COW, EntityType.MOOSHROOM);
-            tag(VTags.EntityTypes.CAMELIDS).add(EntityType.LLAMA);
-            tag(VTags.EntityTypes.CANINES).add(EntityType.FOX, EntityType.WOLF);
-            tag(VTags.EntityTypes.CAPRINES).add(EntityType.GOAT);
-            tag(VTags.EntityTypes.EQUINES).add(EntityType.DONKEY, EntityType.HORSE, EntityType.ZOMBIE_HORSE, EntityType.SKELETON_HORSE, EntityType.MULE);
-            tag(VTags.EntityTypes.FELINES).add(EntityType.CAT, EntityType.OCELOT);
-            tag(VTags.EntityTypes.FOWLS).addTag(VTags.EntityTypes.FOWLS_LAND);
-            tag(VTags.EntityTypes.FOWLS_LAND).add(EntityType.CHICKEN);
-            tag(VTags.EntityTypes.SWINES).add(EntityType.HOGLIN, EntityType.PIG);
-            tag(VTags.EntityTypes.MILKABLE).add(EntityType.COW, EntityType.MOOSHROOM, EntityType.GOAT);
-            tag(VTags.EntityTypes.MUSHROOM_COWS).add(EntityType.MOOSHROOM);
+            tag(VTags.EntityTypes.ILLAGERS).add(EntityType.PILLAGER, EntityType.ILLUSIONER, EntityType.VINDICATOR, EntityType.EVOKER);
 
             /*
              * Many of these mob types do not appear in vanilla Minecraft, and are thus left empty here
              */
-            tagCustom(VTags.EntityTypes.ELEMENTAL_MOBS).addTags(VTags.EntityTypes.ELEMENTAL_MOBS_FIRE, VTags.EntityTypes.ELEMENTAL_MOBS_ICE, VTags.EntityTypes.ELEMENTAL_MOBS_METAL);
-            tag(VTags.EntityTypes.ELEMENTAL_MOBS_FIRE).add(EntityType.BLAZE);
-            tag(VTags.EntityTypes.ELEMENTAL_MOBS_ICE).add(EntityType.SNOW_GOLEM);
-            tag(VTags.EntityTypes.ELEMENTAL_MOBS_METAL).add(EntityType.IRON_GOLEM);
+            tagCustom(VTags.EntityTypes.ELEMENTAL).addTags(VTags.EntityTypes.ELEMENTAL_FIRE, VTags.EntityTypes.ELEMENTAL_ICE,
+                VTags.EntityTypes.ELEMENTAL_METAL);
+            tag(VTags.EntityTypes.ELEMENTAL_FIRE).add(EntityType.BLAZE);
+            tag(VTags.EntityTypes.ELEMENTAL_ICE).add(EntityType.SNOW_GOLEM);
+            tag(VTags.EntityTypes.ELEMENTAL_METAL).add(EntityType.IRON_GOLEM);
 
-            tagCustom(VTags.EntityTypes.ELEMENTAL_ATTACKS).addTags(VTags.EntityTypes.ELEMENTAL_ATTACKS_ELECTRIC, VTags.EntityTypes.ELEMENTAL_ATTACKS_FIRE, VTags.EntityTypes.ELEMENTAL_ATTACKS_ICE);
+            tagCustom(VTags.EntityTypes.ELEMENTAL_ATTACKS).addTags(VTags.EntityTypes.ELEMENTAL_ATTACKS_ELECTRIC, VTags.EntityTypes.ELEMENTAL_ATTACKS_FIRE,
+                VTags.EntityTypes.ELEMENTAL_ATTACKS_ICE);
             tag(VTags.EntityTypes.ELEMENTAL_ATTACKS_ELECTRIC).add(EntityType.LIGHTNING_BOLT);
             tag(VTags.EntityTypes.ELEMENTAL_ATTACKS_FIRE).add(EntityType.FIREBALL, EntityType.SMALL_FIREBALL);
             tag(VTags.EntityTypes.ELEMENTAL_ATTACKS_ICE).add(EntityType.SNOWBALL);
 
-            tag(VTags.EntityTypes.CREEPERS).add(EntityType.CREEPER);
-            tag(VTags.EntityTypes.ZOMBIES).add(EntityType.ZOMBIE, EntityType.ZOMBIE_VILLAGER, EntityType.HUSK, EntityType.DROWNED, EntityType.ZOMBIFIED_PIGLIN);
-            tag(VTags.EntityTypes.SKELETONS).add(EntityType.SKELETON, EntityType.WITHER_SKELETON, EntityType.STRAY);
+            tag(VTags.EntityTypes.ARTHROPODS).add(EntityType.BEE, EntityType.CAVE_SPIDER, EntityType.ENDERMITE, EntityType.SILVERFISH, EntityType.SPIDER);
 
-            tag(VTags.EntityTypes.FISHES).add(EntityType.COD, EntityType.PUFFERFISH, EntityType.SALMON, EntityType.TROPICAL_FISH);
-            tag(VTags.EntityTypes.SQUIDS).add(EntityType.SQUID, EntityType.GLOW_SQUID);
-            tag(VTags.EntityTypes.UNDERWATER_MOBS).addTag(VTags.EntityTypes.FISHES).addTag(VTags.EntityTypes.SQUIDS)
-                .add(EntityType.DOLPHIN, EntityType.AXOLOTL, EntityType.DROWNED);
+            tag(VTags.EntityTypes.AVIANS).addTag(VTags.EntityTypes.AVIANS_FOWLS).add(EntityType.PARROT);
+            tag(VTags.EntityTypes.AVIANS_FOWLS).add(EntityType.CHICKEN);
+
+            tag(VTags.EntityTypes.AQUATIC).add(EntityType.AXOLOTL, EntityType.COD, EntityType.DOLPHIN, EntityType.ELDER_GUARDIAN,
+                EntityType.GLOW_SQUID, EntityType.GUARDIAN, EntityType.PUFFERFISH, EntityType.SALMON, EntityType.SQUID,
+                EntityType.TROPICAL_FISH, EntityType.TURTLE); // TODO Add frog and tadpole tags when they come to Minecraft Java
+            tag(VTags.EntityTypes.FISH).add(EntityType.COD, EntityType.PUFFERFISH, EntityType.SALMON, EntityType.TROPICAL_FISH);
+            tag(VTags.EntityTypes.CEPHALOPODS).add(EntityType.GLOW_SQUID, EntityType.SQUID);
+            tag(VTags.EntityTypes.GUARDIANS).add(EntityType.ELDER_GUARDIAN, EntityType.GUARDIAN);
+
+            tag(VTags.EntityTypes.REPTILES).add(EntityType.TURTLE);
+
+            tagCustom(VTags.EntityTypes.MAMMALS)
+                .addTags(VTags.EntityTypes.MAMMALS_BOVINES, VTags.EntityTypes.MAMMALS_CAMELIDS, VTags.EntityTypes.MAMMALS_CANIDS,
+                    VTags.EntityTypes.MAMMALS_CAPRINES, VTags.EntityTypes.MAMMALS_EQUINES, VTags.EntityTypes.MAMMALS_FELINES,
+                    VTags.EntityTypes.MAMMALS_SWINES, VTags.EntityTypes.MAMMALS_URSIDS
+                ).add(EntityType.BAT, EntityType.RABBIT);
+            tag(VTags.EntityTypes.MAMMALS_BOVINES).addTag(VTags.EntityTypes.MAMMALS_BOVINES_CATTLE).add(EntityType.SHEEP);
+            tag(VTags.EntityTypes.MAMMALS_BOVINES_CATTLE).add(EntityType.COW, EntityType.MOOSHROOM);
+            tag(VTags.EntityTypes.MAMMALS_CAMELIDS).add(EntityType.LLAMA, EntityType.TRADER_LLAMA);
+            tag(VTags.EntityTypes.MAMMALS_CANIDS).add(EntityType.FOX, EntityType.WOLF);
+            tag(VTags.EntityTypes.MAMMALS_CAPRINES).add(EntityType.GOAT);
+            tag(VTags.EntityTypes.MAMMALS_EQUINES).add(EntityType.DONKEY, EntityType.HORSE, EntityType.ZOMBIE_HORSE,
+                EntityType.SKELETON_HORSE, EntityType.MULE);
+            tag(VTags.EntityTypes.MAMMALS_FELINES).add(EntityType.CAT, EntityType.OCELOT);
+            tag(VTags.EntityTypes.MAMMALS_SWINES).add(EntityType.HOGLIN, EntityType.PIG);
+            tag(VTags.EntityTypes.MAMMALS_URSIDS).add(EntityType.PANDA, EntityType.POLAR_BEAR);
+
+            tag(VTags.EntityTypes.GHOSTS).add(EntityType.VEX, EntityType.PHANTOM, EntityType.GHAST);
+
+            tagCustom(VTags.EntityTypes.MILKABLE).addTags(VTags.EntityTypes.MAMMALS_BOVINES_CATTLE, VTags.EntityTypes.MAMMALS_CAPRINES);
+            tag(VTags.EntityTypes.MUSHROOM_COWS).add(EntityType.MOOSHROOM);
+
+            tag(VTags.EntityTypes.BLIND_MOBS).add();
+
+            tagCustom(VTags.EntityTypes.FLYING).addTags(VTags.EntityTypes.BOSSES, VTags.EntityTypes.GHOSTS).add(EntityType.BAT, EntityType.BEE,
+                EntityType.ENDER_DRAGON, EntityType.PARROT, EntityType.WITHER);
+            tagCustom(VTags.EntityTypes.LAND).addTags(VTags.EntityTypes.CREEPERS, VTags.EntityTypes.SKELETONS, VTags.EntityTypes.ZOMBIES)
+                .add(EntityType.BLAZE, EntityType.CAT, EntityType.CAVE_SPIDER, EntityType.CHICKEN, EntityType.DONKEY, EntityType.ENDERMAN,
+                    EntityType.ENDERMITE, EntityType.EVOKER, EntityType.FOX, EntityType.GOAT, EntityType.HOGLIN, EntityType.HORSE, EntityType.ILLUSIONER,
+                    EntityType.IRON_GOLEM, EntityType.LLAMA, EntityType.MAGMA_CUBE, EntityType.MULE, EntityType.OCELOT, EntityType.PANDA, EntityType.PIG,
+                    EntityType.PIGLIN, EntityType.PIGLIN_BRUTE, EntityType.PILLAGER, EntityType.PLAYER, EntityType.POLAR_BEAR, EntityType.RABBIT,
+                    EntityType.RAVAGER, EntityType.SHEEP, EntityType.SHULKER, EntityType.SILVERFISH, EntityType.SLIME, EntityType.SNOW_GOLEM, EntityType.SPIDER,
+                    EntityType.TRADER_LLAMA, EntityType.VILLAGER, EntityType.VINDICATOR, EntityType.WANDERING_TRADER, EntityType.WITCH, EntityType.WOLF
+                );
+
+            tag(VTags.EntityTypes.VOLCANIC).add(EntityType.STRIDER);
+            tag(VTags.EntityTypes.HELL_MOBS).addTag(VTags.EntityTypes.VOLCANIC)
+                .add(EntityType.MAGMA_CUBE, EntityType.GHAST, EntityType.PIGLIN, EntityType.PIGLIN_BRUTE,
+                    EntityType.BLAZE, EntityType.WITHER_SKELETON, EntityType.ZOMBIFIED_PIGLIN, EntityType.HOGLIN
+                );
+
+            tagCustom(VTags.EntityTypes.ENEMIES).addTags(VTags.EntityTypes.BOSSES, VTags.EntityTypes.CREEPERS, EntityTypeTags.RAIDERS)
+                .add(EntityType.BLAZE, EntityType.CAVE_SPIDER, EntityType.DROWNED, EntityType.ELDER_GUARDIAN, EntityType.ENDERMAN, EntityType.ENDERMITE,
+                    EntityType.GHAST, EntityType.GUARDIAN, EntityType.HOGLIN, EntityType.HUSK, EntityType.MAGMA_CUBE, EntityType.PHANTOM, EntityType.PIGLIN,
+                    EntityType.PIGLIN_BRUTE, EntityType.SHULKER, EntityType.SILVERFISH, EntityType.SKELETON, EntityType.SLIME, EntityType.SPIDER, EntityType.STRAY,
+                    EntityType.VEX, EntityType.WITHER_SKELETON, EntityType.ZOGLIN, EntityType.ZOMBIE, EntityType.ZOMBIE_VILLAGER, EntityType.ZOMBIFIED_PIGLIN
+                );
+            tag(VTags.EntityTypes.CREEPERS).add(EntityType.CREEPER);
+
+            tagCustom(VTags.EntityTypes.UNDEAD).addTags(VTags.EntityTypes.SKELETONS, VTags.EntityTypes.ZOMBIES)
+                .add(EntityType.PHANTOM, EntityType.WITHER);
+            tag(VTags.EntityTypes.SKELETONS).addTag(EntityTypeTags.SKELETONS).add(EntityType.SKELETON_HORSE);
+            tag(VTags.EntityTypes.ZOMBIES).add(EntityType.DROWNED, EntityType.HUSK, EntityType.ZOGLIN, EntityType.ZOMBIE,
+                EntityType.ZOMBIE_HORSE, EntityType.ZOMBIE_VILLAGER, EntityType.ZOMBIFIED_PIGLIN);
+
+            tag(VTags.EntityTypes.NPC).add(EntityType.PIGLIN, EntityType.VILLAGER, EntityType.WANDERING_TRADER);
         }
     }
 

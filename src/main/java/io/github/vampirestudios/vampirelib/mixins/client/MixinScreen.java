@@ -21,19 +21,19 @@ import io.github.vampirestudios.vampirelib.callbacks.client.RenderTooltipCallbac
 import io.github.vampirestudios.vampirelib.callbacks.client.TooltipEventColorContextImpl;
 import io.github.vampirestudios.vampirelib.callbacks.client.TooltipEventPositionContextImpl;
 
-@Mixin(Screen.class)
+@Mixin(value = Screen.class, priority = 1100)
 public abstract class MixinScreen {
     @Unique
-    private static final ThreadLocal<TooltipEventPositionContextImpl> tooltipPositionContext = ThreadLocal.withInitial(TooltipEventPositionContextImpl::new);
+    private static final ThreadLocal<TooltipEventPositionContextImpl> vl_tooltipPositionContext = ThreadLocal.withInitial(TooltipEventPositionContextImpl::new);
     @Unique
-    private static final ThreadLocal<TooltipEventColorContextImpl> tooltipColorContext = ThreadLocal.withInitial(TooltipEventColorContextImpl::new);
+    private static final ThreadLocal<TooltipEventColorContextImpl> vl_tooltipColorContext = ThreadLocal.withInitial(TooltipEventColorContextImpl::new);
 
     @Inject(method = "renderTooltipInternal", at = @At("HEAD"), cancellable = true)
-    private void renderTooltip(PoseStack poseStack, List<? extends ClientTooltipComponent> list, int x, int y, CallbackInfo ci) {
+    private void vl_renderTooltip(PoseStack poseStack, List<? extends ClientTooltipComponent> list, int x, int y, CallbackInfo ci) {
         if (!list.isEmpty()) {
-            var colorContext = tooltipColorContext.get();
+            var colorContext = vl_tooltipColorContext.get();
             colorContext.reset();
-            var positionContext = tooltipPositionContext.get();
+            var positionContext = vl_tooltipPositionContext.get();
             positionContext.reset(x, y);
             InteractionResult result = RenderTooltipCallback.RENDER_PRE.invoker().renderTooltip(poseStack, list, x, y);
             if (result == InteractionResult.FAIL) {
@@ -47,29 +47,29 @@ public abstract class MixinScreen {
     
     @ModifyVariable(method = "renderTooltipInternal",
             at = @At(value = "HEAD"), ordinal = 0, argsOnly = true)
-    private int modifyTooltipX(int original) {
-        return tooltipPositionContext.get().getTooltipX();
+    private int vl_modifyTooltipX(int original) {
+        return vl_tooltipPositionContext.get().getTooltipX();
     }
     
     @ModifyVariable(method = "renderTooltipInternal",
             at = @At(value = "HEAD"), ordinal = 1, argsOnly = true)
-    private int modifyTooltipY(int original) {
-        return tooltipPositionContext.get().getTooltipY();
+    private int vl_modifyTooltipY(int original) {
+        return vl_tooltipPositionContext.get().getTooltipY();
     }
     
     @ModifyConstant(method = "renderTooltipInternal", constant = @Constant(intValue = 0xf0100010))
-    private int modifyTooltipBackgroundColor(int original) {
-        return tooltipColorContext.get().getBackgroundColor();
+    private int vl_modifyTooltipBackgroundColor(int original) {
+        return vl_tooltipColorContext.get().getBackgroundColor();
     }
     
     @ModifyConstant(method = "renderTooltipInternal", constant = @Constant(intValue = 0x505000ff))
-    private int modifyTooltipOutlineGradientTopColor(int original) {
-        return tooltipColorContext.get().getOutlineGradientTopColor();
+    private int vl_modifyTooltipOutlineGradientTopColor(int original) {
+        return vl_tooltipColorContext.get().getOutlineGradientTopColor();
     }
     
     @ModifyConstant(method = "renderTooltipInternal", constant = @Constant(intValue = 0x5028007f))
-    private int modifyTooltipOutlineGradientBottomColor(int original) {
-        return tooltipColorContext.get().getOutlineGradientBottomColor();
+    private int vl_modifyTooltipOutlineGradientBottomColor(int original) {
+        return vl_tooltipColorContext.get().getOutlineGradientBottomColor();
     }
 
 }

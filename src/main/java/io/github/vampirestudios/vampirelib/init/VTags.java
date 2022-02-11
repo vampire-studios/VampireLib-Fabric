@@ -1071,44 +1071,33 @@ public class VTags {
     }
 
     public static class EntityTypes {
-
         public static final Tag.Named<EntityType<?>> BOSSES = tag("bosses");
+
+        /**
+         * Mobs that are dragons, draconic, or close enough to being dragons
+         */
         public static final Tag.Named<EntityType<?>> DRAGONS = tag("dragons");
 
-        public static final Tag.Named<EntityType<?>> GUARDIANS = tag("guardians");
         public static final Tag.Named<EntityType<?>> GOLEMS = tag("golems");
+
+        /**
+         * Mobs that are build with blocks and then summoned
+         */
         public static final Tag.Named<EntityType<?>> BUILDABLE_MOBS = tag("buildable_mobs");
 
         public static final Tag.Named<EntityType<?>> BIG_NOSES = tag("big_noses");
         public static final Tag.Named<EntityType<?>> ILLAGERS = tag("illagers");
-        public static final Tag.Named<EntityType<?>> RAIDERS = tag("raiders");
-
-        public static final Tag.Named<EntityType<?>> ANIMALS = tag("animals");
-        public static final Tag.Named<EntityType<?>> ARTHROPODS = tag("arthropods");
-        public static final Tag.Named<EntityType<?>> GHOSTS = tag("ghosts");
-
-        public static final Tag.Named<EntityType<?>> BEARS = tag("bears");
-        public static final Tag.Named<EntityType<?>> BOVINES = tag("bovines");
-        public static final Tag.Named<EntityType<?>> CAMELIDS = tag("camelids");
-        public static final Tag.Named<EntityType<?>> CANINES = tag("canines");
-        public static final Tag.Named<EntityType<?>> CAPRINES = tag("caprines");
-        public static final Tag.Named<EntityType<?>> EQUINES = tag("equines");
-        public static final Tag.Named<EntityType<?>> FELINES = tag("felines");
-        public static final Tag.Named<EntityType<?>> FOWLS = tag("fowls");
-        public static final Tag.Named<EntityType<?>> FOWLS_LAND = tag("fowls/land");
-        public static final Tag.Named<EntityType<?>> SWINES = tag("swines");
-        public static final Tag.Named<EntityType<?>> MILKABLE = tag("milkable");
-        public static final Tag.Named<EntityType<?>> MUSHROOM_COWS = tag("mushroom_cows");
 
         /**
          * Mobs that are logically composed of an element
          * If your mob is made of a different element, and you want cross-compatibility between mods, feel free to make a new tag
          * If your mob is made of a combination of elements, feel free to add all appropriate tags to it
          */
-        public static final Tag.Named<EntityType<?>> ELEMENTAL_MOBS = tag("elemental_mobs");
-        public static final Tag.Named<EntityType<?>> ELEMENTAL_MOBS_FIRE = tag("elemental_mobs/fire");
-        public static final Tag.Named<EntityType<?>> ELEMENTAL_MOBS_ICE = tag("elemental_mobs/ice");
-        public static final Tag.Named<EntityType<?>> ELEMENTAL_MOBS_METAL = tag("elemental_mobs/metal");
+        public static final Tag.Named<EntityType<?>> ELEMENTAL = tag("elemental");
+        public static final Tag.Named<EntityType<?>> ELEMENTAL_FIRE = tag("elemental/fire");
+        public static final Tag.Named<EntityType<?>> ELEMENTAL_ICE = tag("elemental/ice");
+        public static final Tag.Named<EntityType<?>> ELEMENTAL_METAL = tag("elemental/metal");
+
         /**
          * Attack entities that have logical elemental properties
          * If your attack entity is made of a different element, and you want cross-compatibility between mods, feel free to make a new tag
@@ -1119,13 +1108,61 @@ public class VTags {
         public static final Tag.Named<EntityType<?>> ELEMENTAL_ATTACKS_FIRE = tag("elemental_attacks/fire");
         public static final Tag.Named<EntityType<?>> ELEMENTAL_ATTACKS_ICE = tag("elemental_attacks/ice");
 
-        public static final Tag.Named<EntityType<?>> CREEPERS = tag("creepers");
-        public static final Tag.Named<EntityType<?>> ZOMBIES = tag("zombies");
-        public static final Tag.Named<EntityType<?>> SKELETONS = tag("skeletons");
+        public static final Tag.Named<EntityType<?>> ARTHROPODS = tag("animals/arthropods");
 
-        public static final Tag.Named<EntityType<?>> UNDERWATER_MOBS = tag("underwater_mobs");
-        public static final Tag.Named<EntityType<?>> FISHES = tag("fishes");
-        public static final Tag.Named<EntityType<?>> SQUIDS = tag("squids");
+        public static final Tag.Named<EntityType<?>> AVIANS = tag("avians");
+        public static final Tag.Named<EntityType<?>> AVIANS_FOWLS = tag("avians/fowls");
+
+        //Mobs which are living in the water
+        public static final Tag.Named<EntityType<?>> AQUATIC = tag("aquatic");
+        public static final Tag.Named<EntityType<?>> FISH = tag("aquatic/fish");
+        public static final Tag.Named<EntityType<?>> CEPHALOPODS = tag("aquatic/cephalopods");
+        public static final Tag.Named<EntityType<?>> GUARDIANS = tag("aquatic/guardians");
+
+        public static final Tag.Named<EntityType<?>> REPTILES = tag("reptiles");
+
+        public static final Tag.Named<EntityType<?>> MAMMALS = tag("mammals");
+        public static final Tag.Named<EntityType<?>> MAMMALS_BOVINES = tag("mammals/bovines");
+        public static final Tag.Named<EntityType<?>> MAMMALS_BOVINES_CATTLE = tag("mammals/bovines_cattle");
+        public static final Tag.Named<EntityType<?>> MAMMALS_CAMELIDS = tag("mammals/camelids");
+        public static final Tag.Named<EntityType<?>> MAMMALS_CANIDS = tag("mammals/canids");
+        public static final Tag.Named<EntityType<?>> MAMMALS_CAPRINES = tag("mammals/caprines");
+        public static final Tag.Named<EntityType<?>> MAMMALS_EQUINES = tag("mammals/equines");
+        public static final Tag.Named<EntityType<?>> MAMMALS_FELINES = tag("mammals/felines");
+        public static final Tag.Named<EntityType<?>> MAMMALS_SWINES = tag("mammals/swines");
+        public static final Tag.Named<EntityType<?>> MAMMALS_URSIDS = tag("mammals/ursids");
+
+        public static final Tag.Named<EntityType<?>> GHOSTS = tag("ghosts");
+
+        public static final Tag.Named<EntityType<?>> MILKABLE = tag("milkable");
+        public static final Tag.Named<EntityType<?>> MUSHROOM_COWS = tag("mushroom_cows");
+
+        public static final Tag.Named<EntityType<?>> BLIND_MOBS = tag("blind_mobs");
+
+        public static final Tag.Named<EntityType<?>> FLYING = tag("flying");
+        public static final Tag.Named<EntityType<?>> LAND = tag("land");
+
+        /**
+         * Mobs that prefer to live in lava
+         */
+        public static final Tag.Named<EntityType<?>> VOLCANIC = tag("volcanic");
+
+        public static final Tag.Named<EntityType<?>> HELL_MOBS = tag("hell_mobs");
+
+        /**
+         * Mobs that are meant to be antagonistic to the player
+         */
+        public static final Tag.Named<EntityType<?>> ENEMIES = tag("enemies");
+        public static final Tag.Named<EntityType<?>> CREEPERS = tag("creepers");
+
+        public static final Tag.Named<EntityType<?>> UNDEAD = tag("undead");
+        public static final Tag.Named<EntityType<?>> SKELETONS = tag("undead/skeletons");
+        public static final Tag.Named<EntityType<?>> ZOMBIES = tag("undead/zombies");
+
+        /**
+         * Mobs that simulate an intelligent, independent relationship of some sort with the player
+         */
+        public static final Tag.Named<EntityType<?>> NPC = tag("npc");
 
         private static Tag.Named<EntityType<?>> tag(String name) {
             return TagFactory.ENTITY_TYPE.create(new ResourceLocation("c", name));

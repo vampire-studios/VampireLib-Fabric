@@ -1145,11 +1145,11 @@ public class WoodRegistry {
             blockStateModelGenerator.delegateItemModel(wood, ModelLocationUtils.getModelLocation(wood));
         }
         if (strippedLog != null) {
-            blockStateModelGenerator.new WoodProvider(logMapping).logWithHorizontal(strippedLog);
+            blockStateModelGenerator.new WoodProvider(strippedLogMapping).logWithHorizontal(strippedLog);
             blockStateModelGenerator.delegateItemModel(strippedLog, ModelLocationUtils.getModelLocation(strippedLog));
         }
         if (strippedWood != null) {
-            blockStateModelGenerator.new WoodProvider(logMapping).wood(strippedWood);
+            blockStateModelGenerator.new WoodProvider(strippedLogMapping).wood(strippedWood);
             blockStateModelGenerator.delegateItemModel(strippedWood, ModelLocationUtils.getModelLocation(strippedWood));
         }
 		if (!availableLeaves.isEmpty()) {
