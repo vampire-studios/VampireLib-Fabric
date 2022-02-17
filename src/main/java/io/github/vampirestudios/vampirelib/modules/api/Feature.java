@@ -677,8 +677,6 @@
 
 package io.github.vampirestudios.vampirelib.modules.api;
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
 import net.minecraft.resources.ResourceLocation;
 
 public abstract class Feature {
@@ -706,21 +704,6 @@ public abstract class Feature {
 
     public String getName() {
         return name;
-    }
-
-    public void configure(JsonObject obj) {
-    }
-
-    public final JsonObject getConfig() {
-        JsonObject obj = new JsonObject();
-        obj.add("enabled", new JsonPrimitive(isEnabled()));
-        obj.add("registryName", new JsonPrimitive(getRegistryName().toString()));
-        obj.add("name", new JsonPrimitive(getName()));
-        writeToConfig(obj);
-        return obj;
-    }
-
-    public void writeToConfig(JsonObject obj) {
     }
 
 }

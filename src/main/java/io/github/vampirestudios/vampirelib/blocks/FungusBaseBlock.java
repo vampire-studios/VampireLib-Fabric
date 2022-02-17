@@ -1,5 +1,6 @@
 package io.github.vampirestudios.vampirelib.blocks;
 
+import net.minecraft.core.Holder;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
@@ -18,7 +19,7 @@ public class FungusBaseBlock extends FungusBlock {
     private final VanillaTargetedItemGroupFiller FILLER;
 
     public FungusBaseBlock(ConfiguredFeature<HugeFungusConfiguration, ?> supplier) {
-        super(BlockBehaviour.Properties.of(Material.PLANT, MaterialColor.COLOR_CYAN).instabreak().noCollission().sound(SoundType.FUNGUS), () -> supplier);
+        super(BlockBehaviour.Properties.of(Material.PLANT, MaterialColor.COLOR_CYAN).instabreak().noCollission().sound(SoundType.FUNGUS), () -> Holder.direct(supplier));
         FILLER = new VanillaTargetedItemGroupFiller(Blocks.WARPED_FUNGUS.asItem());
     }
 

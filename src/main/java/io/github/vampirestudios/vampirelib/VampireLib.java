@@ -681,7 +681,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.SharedConstants;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
@@ -743,6 +746,7 @@ public class VampireLib extends BasicModClass {
             modName(), modVersion(), SharedConstants.getCurrentVersion().getName()));
         BlockChiseler.setup();
 //        VShaderTypes.init();
+        TagKey.create(ResourceKey.createRegistryKey(new ResourceLocation("root")), new ResourceLocation("testing"));
 
         if (TEST_CONTENT_ENABLED) {
 			//Overworld

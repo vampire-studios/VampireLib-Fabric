@@ -1,7 +1,0 @@
-{
-  "replace": false,
-  "values": [
-    "#c:mammals/bovines_cattle",
-    "#c:mammals/caprines"
-  ]
-}

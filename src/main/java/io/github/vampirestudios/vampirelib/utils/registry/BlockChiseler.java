@@ -686,7 +686,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedDeque;
-import net.fabricmc.fabric.api.event.player.UseBlockCallback;
+
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -697,6 +697,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Property;
+
+import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 
 public class BlockChiseler {
 
@@ -737,7 +739,7 @@ public class BlockChiseler {
                 BlockState hitBlockState = world.getBlockState(hitResult.getBlockPos());
                 ItemStack heldStack = player.getItemInHand(hand);
                 for (Map.Entry<Tag<Item>, Set<ChiselEntry>> toolToEntries : toolTagsToEntries.entrySet()) {
-                    if (!toolToEntries.getKey().contains(heldStack.getItem()))
+                    if (!toolToEntries.getKey().getValues().contains(heldStack.getItem()))
                         continue;
                     for (ChiselEntry chiselEntry : toolToEntries.getValue()) {
                         Block newBlock;

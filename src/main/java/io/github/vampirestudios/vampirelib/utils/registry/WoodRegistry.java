@@ -707,7 +707,7 @@ import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.tags.Tag;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
@@ -733,13 +733,11 @@ import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.fabricmc.fabric.api.registry.FlammableBlockRegistry;
 import net.fabricmc.fabric.api.registry.FuelRegistry;
 import net.fabricmc.fabric.api.registry.StrippableBlockRegistry;
-import net.fabricmc.fabric.api.tag.TagFactory;
 import net.fabricmc.fabric.impl.blockrenderlayer.BlockRenderLayerMapImpl;
 import net.fabricmc.loader.api.FabricLoader;
 
+import io.github.vampirestudios.vampirelib.api.CustomTagProviders;
 import io.github.vampirestudios.vampirelib.api.FabricLanguageProvider;
-import io.github.vampirestudios.vampirelib.api.datagen.CustomBlockTagProvider;
-import io.github.vampirestudios.vampirelib.api.datagen.CustomFabricTagBuilder;
 import io.github.vampirestudios.vampirelib.blocks.BaseBeehiveBlock;
 import io.github.vampirestudios.vampirelib.blocks.BaseBlock;
 import io.github.vampirestudios.vampirelib.blocks.BaseLogAndWoodBlock;
@@ -811,8 +809,8 @@ public class WoodRegistry {
     private Item boatItem;
     private TerraformBoatType boatType;
 
-    public Tag.Named<Block> logsTag;
-    public Tag.Named<Item> logsItemTag;
+    public TagKey<Block> logsTag;
+    public TagKey<Item> logsItemTag;
 
     private boolean flammable = true;
     private boolean mushroomLike = false;
@@ -839,8 +837,8 @@ public class WoodRegistry {
         this.name = name;
         this.saplingGenerator = saplingGenerator;
         this.fungusGenerator = fungusGenerator;
-        this.logsTag = TagFactory.BLOCK.create(Utils.appendToPath(name, "_logs"));
-        this.logsItemTag = TagFactory.ITEM.create(Utils.appendToPath(name, "_logs"));
+//        this.logsTag = TagFactory.BLOCK.create(Utils.appendToPath(name, "_logs"));
+//        this.logsItemTag = TagFactory.ITEM.create(Utils.appendToPath(name, "_logs"));
     }
 
     public static WoodRegistry.Builder of(ResourceLocation name) {
@@ -999,11 +997,11 @@ public class WoodRegistry {
         return fungusGenerator;
     }
 
-    public Tag.Named<Block> logsTag() {
+    public TagKey<Block> logsTag() {
         return logsTag;
     }
 
-    public Tag.Named<Item> logsItemTag() {
+    public TagKey<Item> logsItemTag() {
         return logsItemTag;
     }
 
@@ -1015,7 +1013,7 @@ public class WoodRegistry {
         return boatItem;
     }
 
-    public void generateBlockTags(CustomBlockTagProvider blockTags) {
+    public void generateBlockTags(CustomTagProviders.CustomBlockTagProvider blockTags) {
         if (log != null) blockTags.tagCustom(logsTag).add(log);
         if (strippedLog != null) blockTags.tagCustom(logsTag).add(strippedLog);
         if (wood != null) blockTags.tagCustom(logsTag).add(wood);
@@ -1066,7 +1064,7 @@ public class WoodRegistry {
         if (flammable) {
             blockTags.tagCustom(BlockTags.LOGS_THAT_BURN).addTag(logsTag);
         } else {
-			CustomFabricTagBuilder<Block> nonFlammableWoodTag = blockTags.tagCustom(BlockTags.NON_FLAMMABLE_WOOD);
+			CustomTagProviders<Block>.CustomFabricTagBuilder<Block> nonFlammableWoodTag = blockTags.tagCustom(BlockTags.NON_FLAMMABLE_WOOD);
             if (ladder != null) nonFlammableWoodTag.add(ladder);
             if (trapdoor != null) nonFlammableWoodTag.add(trapdoor);
             if (button != null) nonFlammableWoodTag.add(button);
@@ -1408,7 +1406,7 @@ public class WoodRegistry {
     }
 
     public void generateRecipes(Consumer<FinishedRecipe> exporter) {
-        if (planks != null && logsItemTag != null) RecipeProvider.planksFromLogs(exporter, planks, logsItemTag);
+//        if (planks != null && logsItemTag != null) RecipeProvider.planksFromLogs(exporter, planks, logsItemTag);
         if (wood != null && log != null) RecipeProvider.woodFromLogs(exporter, wood, log);
         if (strippedWood != null && strippedLog != null) RecipeProvider.woodFromLogs(exporter, strippedWood, strippedLog);
         if (trapdoor != null && planks != null) RecipeProvider.trapdoorBuilder(trapdoor, Ingredient.of(planks));
