@@ -731,15 +731,14 @@ public record RegistryHelper(String modId) {
 
         public Block registerBlock(Block block, String name, CreativeModeTab itemGroup) {
             Registry.register(Registry.BLOCK, new ResourceLocation(modId, name), block);
-            BlockItem item = new BlockItem(block, new Item.Properties().tab(itemGroup));
-            item.registerBlocks(Item.BY_BLOCK, item);
-            Registry.register(Registry.ITEM, new ResourceLocation(modId, name), item);
+            Registry.register(Registry.ITEM, new ResourceLocation(modId, name), new BlockItem(block, new Item.Properties().tab(itemGroup)));
             return block;
         }
 
         public Block registerBlockWithWallBlock(Block block, Block wallBlock, String name) {
             Registry.register(Registry.BLOCK, new ResourceLocation(modId, name), block);
-            Registry.register(Registry.ITEM, new ResourceLocation(modId, name), new StandingAndWallBlockItem(block, wallBlock, new Item.Properties().tab(CreativeModeTab.TAB_DECORATIONS)));
+            Registry.register(Registry.ITEM, new ResourceLocation(modId, name), new StandingAndWallBlockItem(block, wallBlock, new Item.Properties()
+                .tab(CreativeModeTab.TAB_DECORATIONS)));
             return block;
         }
 
@@ -801,7 +800,8 @@ public record RegistryHelper(String modId) {
         }
 
         public Item registerSpawnEgg(String name, EntityType<? extends Mob> entity, int primaryColor, int secondaryColor) {
-            Item item = registerItem(name + "_spawn_egg", new SpawnEggItem(entity, primaryColor, secondaryColor, new Item.Properties().tab(CreativeModeTab.TAB_MISC)));
+            Item item = registerItem(name + "_spawn_egg", new SpawnEggItem(entity, primaryColor, secondaryColor, new Item.Properties()
+                .tab(CreativeModeTab.TAB_MISC)));
             SpawnEggItemAccessor.getBY_ID().put(entity, (SpawnEggItem) item);
             return item;
         }

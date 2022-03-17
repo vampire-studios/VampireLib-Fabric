@@ -685,9 +685,7 @@ import com.terraformersmc.terraform.boat.api.TerraformBoatType;
 import com.terraformersmc.terraform.boat.api.TerraformBoatTypeRegistry;
 import com.terraformersmc.terraform.boat.api.client.TerraformBoatClientHelper;
 import com.terraformersmc.terraform.boat.api.item.TerraformBoatItemHelper;
-import com.terraformersmc.terraform.leaves.block.LeafPileBlock;
 import com.terraformersmc.terraform.sign.block.TerraformWallSignBlock;
-import com.terraformersmc.terraform.wood.block.QuarterLogBlock;
 import org.apache.commons.lang3.text.WordUtils;
 
 import net.minecraft.client.renderer.RenderType;
@@ -722,13 +720,11 @@ import net.minecraft.world.level.block.grower.AbstractTreeGrower;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.HugeFungusConfiguration;
-import net.minecraft.world.level.material.MaterialColor;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootTablesProvider;
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.fabricmc.fabric.api.registry.FlammableBlockRegistry;
 import net.fabricmc.fabric.api.registry.FuelRegistry;
@@ -1078,7 +1074,7 @@ public class WoodRegistry {
         }
     }
 
-    public void generateItemTags(FabricTagProvider.ItemTagProvider itemsTag) {
+    public void generateItemTags(CustomTagProviders.CustomItemTagProvider itemsTag) {
         itemsTag.copy(logsTag, logsItemTag);
         itemsTag.copy(BlockTags.LOGS, ItemTags.LOGS);
         itemsTag.copy(BlockTags.LOGS_THAT_BURN, ItemTags.LOGS_THAT_BURN);
@@ -1757,172 +1753,6 @@ public class WoodRegistry {
             return this;
         }
 
-        /*public Builder chest() {
-            woodRegistry.chest = registryHelper.blocks().registerBlock(new ChestBlock(BlockBehaviour.Properties.copy(Blocks.BEEHIVE)),
-                name.getPath() + "_chest", CreativeModeTab.TAB_DECORATIONS);
-            ((IBlockEntityType) BlockEntityType.BEEHIVE).vl_addBlocks(woodRegistry.beehive);
-            return this;
-        }
-
-        public Builder trappedChest() {
-            woodRegistry.trappedChest = registryHelper.blocks().registerBlock(new BaseBeehiveBlock(BlockBehaviour.Properties.copy(Blocks.BEEHIVE)),
-                name.getPath() + "_trapped_chest", CreativeModeTab.TAB_DECORATIONS);
-            ((IBlockEntityType) BlockEntityType.BEEHIVE).vl_addBlocks(woodRegistry.beehive);
-            return this;
-        }*/
-
-        public Builder leafPile() {
-            String variant = woodRegistry.mushroomLike ? "_wart_pile" : "_leaf_pile";
-            woodRegistry.leafPile = registryHelper.blocks().registerBlock(new LeafPileBlock(BlockBehaviour.Properties.copy(Blocks.OAK_LEAVES)),
-                name.getPath() + variant, CreativeModeTab.TAB_DECORATIONS);
-            return this;
-        }
-
-        public Builder leafPile(String name) {
-            String variant = woodRegistry.mushroomLike ? "_wart_pile" : "_leaf_pile";
-            woodRegistry.leafPile = registryHelper.blocks().registerBlock(new LeafPileBlock(BlockBehaviour.Properties.copy(Blocks.OAK_LEAVES)),
-                name + variant, CreativeModeTab.TAB_DECORATIONS);
-            return this;
-        }
-
-        public Builder leafPile(String... names) {
-            String variant = woodRegistry.mushroomLike ? "_wart_pile" : "_leaf_pile";
-            for (String name : names) {
-                woodRegistry.leafPile = registryHelper.blocks().registerBlock(new LeafPileBlock(BlockBehaviour.Properties.copy(Blocks.OAK_LEAVES)),
-                    name + variant, CreativeModeTab.TAB_DECORATIONS);
-                woodRegistry.availableLeafPiles.add(name + variant);
-            }
-            return this;
-        }
-
-        public Builder leafPile(int color) {
-            String variant = woodRegistry.mushroomLike ? "_wart_pile" : "_leaf_pile";
-            woodRegistry.leafPile = registryHelper.blocks().registerBlock(new LeafPileBlock(BlockBehaviour.Properties.copy(Blocks.OAK_LEAVES)),
-                name.getPath() + variant, CreativeModeTab.TAB_DECORATIONS);
-            VampireLibClient.COLORED_LEAVES.add(new VampireLibClient.ColoredLeaves(woodRegistry.leafPile, true, color));
-            return this;
-        }
-
-        public Builder leafPile(int color, String name) {
-            String variant = woodRegistry.mushroomLike ? "_wart_pile" : "_leaf_pile";
-            woodRegistry.leafPile = registryHelper.blocks().registerBlock(new LeafPileBlock(BlockBehaviour.Properties.copy(Blocks.OAK_LEAVES)),
-                name + variant, CreativeModeTab.TAB_DECORATIONS);
-            VampireLibClient.COLORED_LEAVES.add(new VampireLibClient.ColoredLeaves(woodRegistry.leafPile, true, color));
-            return this;
-        }
-
-        public Builder leafPile(int color, String... names) {
-            String variant = woodRegistry.mushroomLike ? "_wart_pile" : "_leaf_pile";
-            for (String name : names) {
-                woodRegistry.leafPile = registryHelper.blocks().registerBlock(new LeafPileBlock(BlockBehaviour.Properties.copy(Blocks.OAK_LEAVES)),
-                    name + variant, CreativeModeTab.TAB_DECORATIONS);
-                woodRegistry.availableLeafPiles.add(name + variant);
-                VampireLibClient.COLORED_LEAVES.add(new VampireLibClient.ColoredLeaves(woodRegistry.leafPile, true, color));
-            }
-            return this;
-        }
-
-        public Builder leafPile(ColoredBlock... coloredBlocks) {
-            String variant = woodRegistry.mushroomLike ? "_wart_pile" : "_leaf_pile";
-            for (ColoredBlock coloredBlock : coloredBlocks) {
-                woodRegistry.leafPile = registryHelper.blocks().registerBlock(new LeafPileBlock(BlockBehaviour.Properties.copy(Blocks.OAK_LEAVES)),
-                    coloredBlock.name + variant, CreativeModeTab.TAB_DECORATIONS);
-                woodRegistry.availableLeafPiles.add(coloredBlock.name + variant);
-                VampireLibClient.COLORED_LEAVES.add(new VampireLibClient.ColoredLeaves(woodRegistry.leafPile, true, coloredBlock.color));
-            }
-            return this;
-        }
-
-        /*public Builder smallLog() {
-            String variant = woodRegistry.mushroomLike ? "_small_stem" : "_small_log";
-            woodRegistry.smallLog = registryHelper.blocks().registerBlock(new SmallLogBlock(woodRegistry.leaves, null, BlockBehaviour.Properties.copy(Blocks.OAK_LOG)),
-                name.getPath() + variant, CreativeModeTab.TAB_BUILDING_BLOCKS);
-            return this;
-        }
-
-        public Builder smallLog(String name) {
-            String variant = woodRegistry.mushroomLike ? "_small_stem" : "_small_log";
-            woodRegistry.leafPile = registryHelper.blocks().registerBlock(new SmallLogBlock(woodRegistry.leaves, null, BlockBehaviour.Properties.copy(Blocks.OAK_LOG)),
-                name + variant, CreativeModeTab.TAB_BUILDING_BLOCKS);
-            return this;
-        }
-
-        public Builder smallLog(String... names) {
-            String variant = woodRegistry.mushroomLike ? "_small_stem" : "_small_log";
-            for (String name : names) {
-                woodRegistry.leafPile = registryHelper.blocks().registerBlock(new SmallLogBlock(woodRegistry.leaves, null, BlockBehaviour.Properties.copy(Blocks.OAK_LOG)),
-                    name + variant, CreativeModeTab.TAB_BUILDING_BLOCKS);
-                woodRegistry.availableSmallLogs.add(name + variant);
-            }
-            return this;
-        }
-
-        public Builder smallLog(int color) {
-            String variant = woodRegistry.mushroomLike ? "_small_stem" : "_small_log";
-            woodRegistry.leafPile = registryHelper.blocks().registerBlock(new SmallLogBlock(woodRegistry.leaves, null, BlockBehaviour.Properties.copy(Blocks.OAK_LOG)),
-                name.getPath() + variant, CreativeModeTab.TAB_BUILDING_BLOCKS);
-            VampireLibClient.COLORED_LEAVES.add(new VampireLibClient.ColoredLeaves(woodRegistry.leafPile, true, color));
-            return this;
-        }
-
-        public Builder smallLog(int color, String name) {
-            String variant = woodRegistry.mushroomLike ? "_small_stem" : "_small_log";
-            woodRegistry.leafPile = registryHelper.blocks().registerBlock(new SmallLogBlock(woodRegistry.leaves, null, BlockBehaviour.Properties.copy(Blocks.OAK_LOG)),
-                name + variant, CreativeModeTab.TAB_BUILDING_BLOCKS);
-            VampireLibClient.COLORED_LEAVES.add(new VampireLibClient.ColoredLeaves(woodRegistry.leafPile, true, color));
-            return this;
-        }
-
-        public Builder smallLog(int color, String... names) {
-            String variant = woodRegistry.mushroomLike ? "_small_stem" : "_small_log";
-            for (String name : names) {
-                woodRegistry.smallLog = registryHelper.blocks().registerBlock(new SmallLogBlock(woodRegistry.leaves, null, BlockBehaviour.Properties.copy(Blocks.OAK_LOG)),
-                    name + variant, CreativeModeTab.TAB_BUILDING_BLOCKS);
-                woodRegistry.availableSmallLogs.add(name + variant);
-                VampireLibClient.COLORED_LEAVES.add(new VampireLibClient.ColoredLeaves(woodRegistry.smallLog, true, color));
-            }
-            return this;
-        }
-
-        public Builder smallLog(ColoredBlock... coloredBlocks) {
-            String variant = woodRegistry.mushroomLike ? "_small_stem" : "_small_log";
-            for (ColoredBlock coloredBlock : coloredBlocks) {
-                woodRegistry.smallLog = registryHelper.blocks().registerBlock(new SmallLogBlock(woodRegistry.leaves, null, BlockBehaviour.Properties.copy(Blocks.OAK_LOG)),
-                    coloredBlock.name + variant, CreativeModeTab.TAB_BUILDING_BLOCKS);
-                woodRegistry.availableSmallLogs.add(coloredBlock.name + variant);
-                VampireLibClient.COLORED_LEAVES.add(new VampireLibClient.ColoredLeaves(woodRegistry.smallLog, true, coloredBlock.color));
-            }
-            return this;
-        }*/
-
-        /*public Builder strippedBareSmallLog() {
-            String variant = woodRegistry.mushroomLike ? "_bare_small_stem" : "_bare_small_log";
-            woodRegistry.strippedBareSmallLog = registryHelper.blocks().registerBlock(new BareSmallLogBlock(null, BlockBehaviour.Properties.copy(Blocks.OAK_LOG)),
-                "stripped_" + name.getPath() + variant, CreativeModeTab.TAB_BUILDING_BLOCKS);
-            return this;
-        }
-
-        public Builder bareSmallLog() {
-            String variant = woodRegistry.mushroomLike ? "_bare_small_stem" : "_bare_small_log";
-            woodRegistry.bareSmallLog = registryHelper.blocks().registerBlock(new BareSmallLogBlock(() -> woodRegistry.strippedBareSmallLog, BlockBehaviour.Properties.copy(Blocks.OAK_LOG)),
-                name.getPath() + variant, CreativeModeTab.TAB_BUILDING_BLOCKS);
-            return this;
-        }*/
-
-        public Builder strippedQuarterLog() {
-            String variant = woodRegistry.mushroomLike ? "_quarter_stem" : "_quarter_log";
-            woodRegistry.strippedQuarterLog = registryHelper.blocks().registerBlock(new QuarterLogBlock(null, MaterialColor.COLOR_BLACK, BlockBehaviour.Properties.copy(Blocks.OAK_LOG)),
-                "stripped_" + name.getPath() + variant, CreativeModeTab.TAB_BUILDING_BLOCKS);
-            return this;
-        }
-
-        public Builder quarterLog() {
-            String variant = woodRegistry.mushroomLike ? "_quarter_stem" : "_quarter_log";
-            woodRegistry.quarterLog = registryHelper.blocks().registerBlock(new QuarterLogBlock(() -> woodRegistry.strippedQuarterLog, MaterialColor.COLOR_BLACK, BlockBehaviour.Properties.copy(Blocks.OAK_LOG)),
-                name.getPath() + variant, CreativeModeTab.TAB_BUILDING_BLOCKS);
-            return this;
-        }
-
         public Builder sign() {
             Block baseBlock = woodRegistry.mushroomLike ? Blocks.WARPED_SIGN : Blocks.DARK_OAK_SIGN;
 
@@ -1963,7 +1793,7 @@ public class WoodRegistry {
 
         public Builder defaultExtraBlocks() {
             return this.fence().fenceGate().stairs().slab().door().trapdoor().button()
-                .pressurePlate(PressurePlateBlock.Sensitivity.EVERYTHING).sign().boat();
+                .pressurePlate(PressurePlateBlock.Sensitivity.EVERYTHING).sign()/*.boat()*/;
         }
 
         public Builder defaultBlocksColoredLeaves() {

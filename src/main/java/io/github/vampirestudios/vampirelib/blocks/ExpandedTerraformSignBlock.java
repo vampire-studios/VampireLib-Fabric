@@ -16,6 +16,7 @@ public class ExpandedTerraformSignBlock extends TerraformSignBlock {
     public ExpandedTerraformSignBlock(Block vanillaBlock, ResourceLocation texture, Properties settings) {
         super(texture, settings);
         FILLER = new VanillaTargetedItemGroupFiller(vanillaBlock.asItem());
+
     }
 
     @Override
