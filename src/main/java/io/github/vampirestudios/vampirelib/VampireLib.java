@@ -733,7 +733,7 @@ public class VampireLib extends BasicModClass {
     public static WoodRegistry TEST_NETHER_WOOD13;
 
     public VampireLib() {
-        super("vampirelib", "VampireLib", "4.7.1+build.1");
+        super("vampirelib", "VampireLib", "4.8.2+build.3");
     }
 
     @Override
@@ -742,12 +742,11 @@ public class VampireLib extends BasicModClass {
         getLogger().info(String.format("%s running %s v%s for %s", Rands.chance(15) ? "Your are" : (Rands.chance(15) ? "You're" : "You are"),
             modName(), modVersion(), SharedConstants.getCurrentVersion().getName()));
         BlockChiseler.setup();
-//        VShaderTypes.init();
 
         if (TEST_CONTENT_ENABLED) {
 			//Overworld
 			TEST_WOOD = WoodRegistry.of(identifier("test"))
-				.defaultBlocks().strippedQuarterLog().quarterLog().build();
+				.defaultBlocks().build();
 			TEST_WOOD1 = WoodRegistry.of(identifier("test1"))
 				.defaultBlocksColoredLeaves().build();
 
@@ -774,18 +773,16 @@ public class VampireLib extends BasicModClass {
                 .build();
 
             TEST_WOOD10 = WoodRegistry.of(identifier("test10"))
-                .defaultBlocks().defaultExtraBlocks().ladder().bookshelf().strippedQuarterLog()
-                .quarterLog().build();
+                .defaultBlocks().defaultExtraBlocks().ladder().bookshelf().build();
             TEST_WOOD11 = WoodRegistry.of(identifier("test11"))
                 .defaultBlocksColoredLeaves().defaultExtraBlocks().ladder().bookshelf()
-                .strippedQuarterLog().quarterLog().build();
+                .build();
 
             TEST_WOOD12 = WoodRegistry.of(identifier("test12"))
-                .defaultBlocks().defaultExtraBlocks().ladder().bookshelf().strippedQuarterLog()
-                .quarterLog().leafPile().build();
+                .defaultBlocks().defaultExtraBlocks().ladder().bookshelf().build();
             TEST_WOOD13 = WoodRegistry.of(identifier("test13"))
                 .defaultBlocksColoredLeaves().defaultExtraBlocks().ladder().bookshelf()
-                .strippedQuarterLog().quarterLog().leafPile().build();
+                .build();
 
 			//Nether
 			TEST_NETHER_WOOD = WoodRegistry.of(identifier("test_nether"))
@@ -819,17 +816,17 @@ public class VampireLib extends BasicModClass {
 
             TEST_NETHER_WOOD10 = WoodRegistry.of(identifier("test10_nether"))
                 .mushroomLike().defaultBlocks().defaultExtraBlocks().ladder().bookshelf()
-                .strippedQuarterLog().quarterLog().nonFlammable().build();
+                .nonFlammable().build();
             TEST_NETHER_WOOD11 = WoodRegistry.of(identifier("test11_nether"))
                 .mushroomLike().defaultBlocksColoredLeaves().defaultExtraBlocks().ladder()
-                .bookshelf().strippedQuarterLog().quarterLog().nonFlammable().build();
+                .bookshelf().nonFlammable().build();
 
             TEST_NETHER_WOOD12 = WoodRegistry.of(identifier("test12_nether"))
                 .mushroomLike().defaultBlocks().defaultExtraBlocks().ladder().bookshelf()
-                .strippedQuarterLog().quarterLog().leafPile().nonFlammable().build();
+                .nonFlammable().build();
             TEST_NETHER_WOOD13 = WoodRegistry.of(identifier("test13_nether"))
                 .mushroomLike().defaultBlocksColoredLeaves().defaultExtraBlocks().ladder().bookshelf()
-                .strippedQuarterLog().quarterLog().leafPile().nonFlammable().build();
+                .nonFlammable().build();
 		}
 
         UseBlockCallback.EVENT.register((player, world, hand, hitResult) -> {

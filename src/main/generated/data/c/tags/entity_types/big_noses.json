@@ -1,9 +1,0 @@
-{
-  "replace": false,
-  "values": [
-    "#c:illagers",
-    "minecraft:witch",
-    "minecraft:villager",
-    "minecraft:zombie_villager"
-  ]
-}

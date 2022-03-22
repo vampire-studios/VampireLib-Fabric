@@ -686,11 +686,11 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedDeque;
-import net.fabricmc.fabric.api.event.player.UseBlockCallback;
+
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.tags.Tag;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -698,13 +698,15 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Property;
 
+import net.fabricmc.fabric.api.event.player.UseBlockCallback;
+
 public class BlockChiseler {
 
     public static Map<ResourceLocation, ChiselEntry> chiselRegistry = new HashMap<>();
-    public static Map<Tag<Item>, Set<ChiselEntry>> toolTagsToEntries = new HashMap<>();
+    public static Map<TagKey<Item>, Set<ChiselEntry>> toolTagsToEntries = new HashMap<>();
     public static Map<Item, Set<ChiselEntry>> itemsToEntries = new HashMap<>();
 
-    public static void create(ResourceLocation identifier, Tag<Item> toolTag, Collection<Block> chiselBlocks) {
+    public static void create(ResourceLocation identifier, TagKey<Item> toolTag, Collection<Block> chiselBlocks) {
         ChiselEntry chiselEntry = new ChiselEntry(chiselBlocks);
         chiselRegistry.put(identifier, chiselEntry);
         if (toolTagsToEntries.containsKey(toolTag)) {
@@ -736,8 +738,8 @@ public class BlockChiseler {
             if (!world.isClientSide()) {
                 BlockState hitBlockState = world.getBlockState(hitResult.getBlockPos());
                 ItemStack heldStack = player.getItemInHand(hand);
-                for (Map.Entry<Tag<Item>, Set<ChiselEntry>> toolToEntries : toolTagsToEntries.entrySet()) {
-                    if (!toolToEntries.getKey().contains(heldStack.getItem()))
+                for (Map.Entry<TagKey<Item>, Set<ChiselEntry>> toolToEntries : toolTagsToEntries.entrySet()) {
+                    if (!new ItemStack(heldStack.getItem()).is(toolToEntries.getKey()))
                         continue;
                     for (ChiselEntry chiselEntry : toolToEntries.getValue()) {
                         Block newBlock;

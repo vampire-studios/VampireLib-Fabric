@@ -1,7 +1,7 @@
 package io.github.vampirestudios.vampirelib.api;
 
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.tags.Tag;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
@@ -140,14 +140,14 @@ public class ConvertibleBlockPair {
 		return droppedItem;
 	}
 
-	public record ConversionItem(Tag<Item> tag, Item item) {
+	public record ConversionItem(TagKey<Item> tag, Item item) {
 		public ConversionItem {
 			if ((tag == null) == (item == null)) {
 				throw new IllegalArgumentException("Only one of the fields must be non-null");
 			}
 		}
 
-		public static ConversionItem of(Tag<Item> tag) {
+		public static ConversionItem of(TagKey<Item> tag) {
 			return new ConversionItem(tag, null);
 		}
 

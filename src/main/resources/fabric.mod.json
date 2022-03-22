@@ -17,21 +17,25 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "io.github.vampirestudios.vampirelib.VampireLib"
+      "io.github.vampirestudios.vampirelib.VampireLib",
+      "com.terraformersmc.terraform.boat.impl.TerraformBoatInitializer"
     ],
     "client": [
-      "io.github.vampirestudios.vampirelib.client.VampireLibClient"
+      "io.github.vampirestudios.vampirelib.client.VampireLibClient",
+      "com.terraformersmc.terraform.boat.impl.client.TerraformBoatClientInitializer"
     ],
     "fabric-datagen": [
       "io.github.vampirestudios.vampirelib.VampireLibDataGen"
     ]
   },
   "mixins": [
-    "vampirelib.mixins.json"
+    "vampirelib.mixins.json",
+    "mixins.terraform-boats.json",
+    "mixins.terraform-signs.json"
   ],
   "accessWidener": "vampirelib.accesswidener",
   "depends": {
-    "fabricloader": ">=0.12.8",
+    "fabricloader": ">=0.13.3",
     "java": ">=17"
   },
   "custom": {

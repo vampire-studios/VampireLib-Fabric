@@ -54,7 +54,7 @@ repositories {
 dependencies {
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
 	mappings loom.layered {
-		it.addLayer(quiltMappings.mappings("org.quiltmc:quilt-mappings:1.18.1-rc3+build.4:v2")) // https://maven.quiltmc.org/#browse/browse:release
+		it.addLayer(quiltMappings.mappings("org.quiltmc:quilt-mappings:22w06a+build.1:v2")) // https://maven.quiltmc.org/#browse/browse:release
 		it.parchment("org.parchmentmc.data:parchment-1.18.1:BLEEDING-20211212.174449-1@zip") // https://ldtteam.jfrog.io/ui/native/parchmentmc-public/org/parchmentmc/data/parchment-1.18.1/BLEEDING-SNAPSHOT
 		it.officialMojangMappings {
 			setNameSyntheticMembers(false)
@@ -64,10 +64,10 @@ dependencies {
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 	modApi "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-	modApi("me.shedaniel.cloth:cloth-config-fabric:6.1.48") {
+	modApi("me.shedaniel.cloth:cloth-config-fabric:6.2.57") {
 		exclude(group: "net.fabricmc.fabric-api")
 	}
-	include("me.shedaniel.cloth:cloth-config-fabric:6.1.48") {
+	include("me.shedaniel.cloth:cloth-config-fabric:6.2.57") {
 		exclude(group: "net.fabricmc.fabric-api")
 	}
 
@@ -78,8 +78,12 @@ dependencies {
 		exclude group: "net.fabricmc.fabric-api"
 	}
 
-	modImplementation "com.terraformersmc.terraform-api:terraform-wood-api-v1:2.0.2"
-	include "com.terraformersmc.terraform-api:terraform-wood-api-v1:2.0.2"
+//	modImplementation ("com.terraformersmc.terraform-api:terraform-wood-api-v1:2.0.2") {
+//		exclude(group: "net.fabricmc.fabric-api")
+//	}
+//	include ("com.terraformersmc.terraform-api:terraform-wood-api-v1:2.0.2") {
+//		exclude(group: "net.fabricmc.fabric-api")
+//	}
 }
 
 processResources {
