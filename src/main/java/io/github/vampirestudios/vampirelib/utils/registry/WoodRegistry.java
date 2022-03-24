@@ -1358,7 +1358,7 @@ public class WoodRegistry {
     }
 
     public void generateRecipes(Consumer<FinishedRecipe> exporter) {
-//        if (planks != null && logsItemTag != null) RecipeProvider.planksFromLogs(exporter, planks, logsItemTag);
+        if (planks != null && logsItemTag != null) RecipeProvider.planksFromLogs(exporter, planks, logsItemTag);
         if (wood != null && log != null) RecipeProvider.woodFromLogs(exporter, wood, log);
         if (strippedWood != null && strippedLog != null) RecipeProvider.woodFromLogs(exporter, strippedWood, strippedLog);
         if (trapdoor != null && planks != null) RecipeProvider.trapdoorBuilder(trapdoor, Ingredient.of(planks));
