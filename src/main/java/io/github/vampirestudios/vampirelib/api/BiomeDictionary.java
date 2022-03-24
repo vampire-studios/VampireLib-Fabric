@@ -33,7 +33,6 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 import com.google.common.collect.ImmutableList;
-import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -176,15 +175,6 @@ public class BiomeDictionary {
 		 */
 		public static Collection<Type> getAll() {
 			return allTypes;
-		}
-
-		@Nullable
-		public static Type fromVanilla(Biome.BiomeCategory category) {
-			if (category == Biome.BiomeCategory.NONE)
-				return null;
-			if (category == Biome.BiomeCategory.THEEND)
-				return VOID;
-			return getType(category.name());
 		}
 	}
 

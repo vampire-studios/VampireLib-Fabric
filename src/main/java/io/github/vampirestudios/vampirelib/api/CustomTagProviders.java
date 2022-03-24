@@ -25,8 +25,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.core.Registry;
-import net.minecraft.data.BuiltinRegistries;
-import net.minecraft.data.DataProvider;
 import net.minecraft.data.tags.TagsProvider;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -35,9 +33,7 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.levelgen.NoiseGeneratorSettings;
 import net.minecraft.world.level.levelgen.synth.NormalNoise;
 
@@ -56,15 +52,10 @@ public abstract class CustomTagProviders<T> extends FabricTagProvider<T> {
 	 * @param dataGenerator The data generator instance
 	 * @param registry The backing registry for the Tag type.
 	 * @param path The directory name to write the tag file names. Example: "blocks" or "items"
-	 * @param name The name used for {@link DataProvider#getName()}
 	 */
 
-	protected CustomTagProviders(FabricDataGenerator dataGenerator, Registry<T> registry, String path, String name) {
-		super(dataGenerator, registry, path, name);
-
-		if (!(this instanceof CustomTagProviders.DynamicRegistryTagProvider) && BuiltinRegistries.REGISTRY.containsKey((ResourceKey) registry.key())) {
-			throw new IllegalArgumentException("Using FabricTagProvider to generate dynamic registry tags is not supported, Use DynamicRegistryTagProvider instead.");
-		}
+	protected CustomTagProviders(FabricDataGenerator dataGenerator, Registry<T> registry, String path) {
+		super(dataGenerator, registry, path);
 	}
 
 	protected CustomTagProviders<T>.CustomFabricTagBuilder<T> getOrCreateTagBuilderCustom(TagKey<T> tag) {
@@ -73,7 +64,7 @@ public abstract class CustomTagProviders<T> extends FabricTagProvider<T> {
 
 	public abstract static class CustomBlockTagProvider extends CustomTagProviders<Block> {
 		protected CustomBlockTagProvider(FabricDataGenerator dataGenerator) {
-			super(dataGenerator, Registry.BLOCK, "blocks", "Block Tags");
+			super(dataGenerator, Registry.BLOCK, "blocks");
 		}
 
 		public CustomFabricTagBuilder<Block> tagCustom(TagKey<Block> tag) {
@@ -86,7 +77,7 @@ public abstract class CustomTagProviders<T> extends FabricTagProvider<T> {
 		private final Function<TagKey<Block>, Tag.Builder> blockTagBuilderProvider;
 
 		protected CustomItemTagProvider(FabricDataGenerator dataGenerator, @Nullable CustomBlockTagProvider blockTagProvider) {
-			super(dataGenerator, Registry.ITEM, "items", "Item Tags");
+			super(dataGenerator, Registry.ITEM, "items");
 
 			this.blockTagBuilderProvider = blockTagProvider == null ? null : blockTagProvider::getOrCreateRawBuilder;
 		}
@@ -123,7 +114,7 @@ public abstract class CustomTagProviders<T> extends FabricTagProvider<T> {
 
 	public abstract static class VEntityTagProvider extends CustomTagProviders<EntityType<?>> {
 		public VEntityTagProvider(FabricDataGenerator dataGenerator) {
-			super(dataGenerator, Registry.ENTITY_TYPE, "entity_types", "Entity Type Tags");
+			super(dataGenerator, Registry.ENTITY_TYPE, "entity_types");
 		}
 
 		public CustomFabricTagBuilder<EntityType<?>> tagCustom(TagKey<EntityType<?>> tag) {
@@ -141,11 +132,10 @@ public abstract class CustomTagProviders<T> extends FabricTagProvider<T> {
 		 * @param dataGenerator The data generator instance
 		 * @param registryKey The registry key of the dynamic registry
 		 * @param path The directory name to write the tag file names
-		 * @param name The name used for {@link DataProvider#getName()}
 		 * @throws IllegalArgumentException if the registry is static registry
 		 */
-		protected DynamicRegistryTagProvider(FabricDataGenerator dataGenerator, ResourceKey<? extends Registry<T>> registryKey, String path, String name) {
-			super(dataGenerator, FabricDataGenHelper.getFakeDynamicRegistry(), path, name);
+		protected DynamicRegistryTagProvider(FabricDataGenerator dataGenerator, ResourceKey<? extends Registry<T>> registryKey, String path) {
+			super(dataGenerator, FabricDataGenHelper.getFakeDynamicRegistry(), path);
 			Preconditions.checkArgument(DynamicRegistryManagerAccessor.getInfos().containsKey(registryKey), "Only dynamic registries are supported in this tag provider.");
 		}
 	}
@@ -156,7 +146,7 @@ public abstract class CustomTagProviders<T> extends FabricTagProvider<T> {
 
 	public abstract static class MobEffectTagProvider extends CustomTagProviders<MobEffect> {
 		protected MobEffectTagProvider(FabricDataGenerator dataGenerator) {
-			super(dataGenerator, Registry.MOB_EFFECT, "mob_effects", "Mob Effect Tags");
+			super(dataGenerator, Registry.MOB_EFFECT, "mob_effects");
 		}
 
 		public CustomFabricTagBuilder<MobEffect> tagCustom(TagKey<MobEffect> tag) {
@@ -164,23 +154,9 @@ public abstract class CustomTagProviders<T> extends FabricTagProvider<T> {
 		}
 	}
 
-	/**
-	 * Extend this class to create {@link DimensionType} tags in the "biomes" tag directory.
-	 */
-
-	public abstract static class ExpandedBiomeTagProvider extends DynamicRegistryTagProvider<Biome> {
-		protected ExpandedBiomeTagProvider(FabricDataGenerator dataGenerator) {
-			super(dataGenerator, Registry.BIOME_REGISTRY, "biomes", "Biome Tags");
-		}
-
-		public CustomFabricTagBuilder<Biome> tagCustom(TagKey<Biome> tag) {
-			return new CustomFabricTagBuilder<Biome>(super.tag(tag));
-		}
-	}
-
 	public abstract static class NoiseSettingsTagProvider extends DynamicRegistryTagProvider<NoiseGeneratorSettings> {
 		protected NoiseSettingsTagProvider(FabricDataGenerator dataGenerator) {
-			super(dataGenerator, Registry.NOISE_GENERATOR_SETTINGS_REGISTRY, "worldgen/noise_settings", "Noise Settings Tags");
+			super(dataGenerator, Registry.NOISE_GENERATOR_SETTINGS_REGISTRY, "worldgen/noise_settings");
 		}
 
 		public CustomFabricTagBuilder<NoiseGeneratorSettings> tagCustom(TagKey<NoiseGeneratorSettings> tag) {
@@ -215,7 +191,7 @@ public abstract class CustomTagProviders<T> extends FabricTagProvider<T> {
 
 	public abstract static class NoiseTagProvider extends DynamicRegistryTagProvider<NormalNoise.NoiseParameters> {
 		protected NoiseTagProvider(FabricDataGenerator dataGenerator) {
-			super(dataGenerator, Registry.NOISE_REGISTRY, "worldgen/noises", "Noise Tags");
+			super(dataGenerator, Registry.NOISE_REGISTRY, "worldgen/noises");
 		}
 
 		public CustomFabricTagBuilder<NormalNoise.NoiseParameters> tagCustom(TagKey<NormalNoise.NoiseParameters> tag) {

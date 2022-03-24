@@ -686,7 +686,6 @@ import net.minecraft.world.entity.decoration.Motive;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.dimension.DimensionType;
@@ -1238,16 +1237,6 @@ public class VTags {
 
         private static TagKey<DimensionType> tag(String name) {
             return TagKey.create(Registry.DIMENSION_TYPE_REGISTRY, new ResourceLocation("c", name));
-        }
-    }
-
-    public static class Dimensions {
-		public static final TagKey<Level> END = tag("end");
-		public static final TagKey<Level> NETHER = tag("nether");
-		public static final TagKey<Level> OVERWORLD = tag("overworld");
-
-        private static TagKey<Level> tag(String name) {
-            return TagKey.create(Registry.DIMENSION_REGISTRY, new ResourceLocation("c", name));
         }
     }
 

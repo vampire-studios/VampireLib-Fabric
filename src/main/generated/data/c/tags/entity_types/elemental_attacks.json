@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "#c:elemental_attacks/electric",
+    "#c:elemental_attacks/fire",
+    "#c:elemental_attacks/ice"
+  ]
+}

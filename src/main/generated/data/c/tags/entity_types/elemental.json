@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "#c:elemental/fire",
+    "#c:elemental/ice",
+    "#c:elemental/metal"
+  ]
+}

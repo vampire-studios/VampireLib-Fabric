@@ -789,17 +789,6 @@ public class WoodRegistry {
     private Block wallSign;
     private Block ladder;
     private Block beehive;
-    private Block chest;
-    private Block trappedChest;
-
-    //Mod Support
-    private Block leafPile;
-    private Block bareSmallLog;
-    private Block strippedBareSmallLog;
-    private Block quarterLog;
-    private Block strippedQuarterLog;
-    private Block smallLog;
-    private Block strippedSmallLog;
 
     private Item signItem;
     private Item boatItem;
@@ -814,8 +803,6 @@ public class WoodRegistry {
 	private final List<String> availableLeaves = new ArrayList<>();
 	private final List<String> availableSaplings = new ArrayList<>();
 	private final List<String> availablePottedSaplings = new ArrayList<>();
-    private final List<String> availableLeafPiles = new ArrayList<>();
-    private final List<String> availableSmallLogs = new ArrayList<>();
 
     private WoodRegistry(ResourceLocation name) {
         this(name, null, null);
@@ -833,8 +820,8 @@ public class WoodRegistry {
         this.name = name;
         this.saplingGenerator = saplingGenerator;
         this.fungusGenerator = fungusGenerator;
-//        this.logsTag = TagFactory.BLOCK.create(Utils.appendToPath(name, "_logs"));
-//        this.logsItemTag = TagFactory.ITEM.create(Utils.appendToPath(name, "_logs"));
+        this.logsTag = TagKey.create(Registry.BLOCK_REGISTRY, Utils.appendToPath(name, "_logs"));
+        this.logsItemTag = TagKey.create(Registry.ITEM_REGISTRY, Utils.appendToPath(name, "_logs"));
     }
 
     public static WoodRegistry.Builder of(ResourceLocation name) {
@@ -939,42 +926,6 @@ public class WoodRegistry {
 
     public Block beehive() {
         return beehive;
-    }
-
-    public Block chest() {
-        return chest;
-    }
-
-    public Block trappedChest() {
-        return trappedChest;
-    }
-
-    public Block leafPile() {
-        return leafPile;
-    }
-
-    public Block bareSmallLog() {
-        return bareSmallLog;
-    }
-
-    public Block strippedBareSmallLog() {
-        return strippedBareSmallLog;
-    }
-
-    public Block quarterLog() {
-        return quarterLog;
-    }
-
-    public Block strippedQuarterLog() {
-        return strippedQuarterLog;
-    }
-
-    public Block smallLog() {
-        return smallLog;
-    }
-
-    public Block strippedSmallLog() {
-        return strippedSmallLog;
     }
 
     public Block sign() {
@@ -1162,11 +1113,16 @@ public class WoodRegistry {
             }
         }
         if (door != null) {
-            ResourceLocation resourceLocation = ModelTemplates.DOOR_BOTTOM.create(door, doorMapping, blockStateModelGenerator.modelOutput);
-            ResourceLocation resourceLocation2 = ModelTemplates.DOOR_BOTTOM_HINGE.create(door, doorMapping, blockStateModelGenerator.modelOutput);
-            ResourceLocation resourceLocation3 = ModelTemplates.DOOR_TOP.create(door, doorMapping, blockStateModelGenerator.modelOutput);
-            ResourceLocation resourceLocation4 = ModelTemplates.DOOR_TOP_HINGE.create(door, doorMapping, blockStateModelGenerator.modelOutput);
-            blockStateModelGenerator.blockStateOutput.accept(createDoor(door, resourceLocation, resourceLocation2, resourceLocation3, resourceLocation4));
+            ResourceLocation resourceLocation = ModelTemplates.DOOR_BOTTOM_LEFT.create(door, doorMapping, blockStateModelGenerator.modelOutput);
+            ResourceLocation resourceLocation2 = ModelTemplates.DOOR_BOTTOM_LEFT_OPEN.create(door, doorMapping, blockStateModelGenerator.modelOutput);
+            ResourceLocation resourceLocation3 = ModelTemplates.DOOR_TOP_LEFT.create(door, doorMapping, blockStateModelGenerator.modelOutput);
+            ResourceLocation resourceLocation4 = ModelTemplates.DOOR_TOP_LEFT_OPEN.create(door, doorMapping, blockStateModelGenerator.modelOutput);
+            ResourceLocation resourceLocation5 = ModelTemplates.DOOR_BOTTOM_RIGHT.create(door, doorMapping, blockStateModelGenerator.modelOutput);
+            ResourceLocation resourceLocation6 = ModelTemplates.DOOR_BOTTOM_RIGHT_OPEN.create(door, doorMapping, blockStateModelGenerator.modelOutput);
+            ResourceLocation resourceLocation7 = ModelTemplates.DOOR_TOP_RIGHT.create(door, doorMapping, blockStateModelGenerator.modelOutput);
+            ResourceLocation resourceLocation8 = ModelTemplates.DOOR_TOP_RIGHT_OPEN.create(door, doorMapping, blockStateModelGenerator.modelOutput);
+            blockStateModelGenerator.blockStateOutput.accept(createDoor(door, resourceLocation, resourceLocation2, resourceLocation5, resourceLocation6,
+                resourceLocation3, resourceLocation4, resourceLocation7, resourceLocation8));
             ModelTemplates.FLAT_ITEM.create(ModelLocationUtils.getModelLocation(door.asItem()),
                 TextureMapping.layer0(new ResourceLocation(
                     name.getNamespace(),

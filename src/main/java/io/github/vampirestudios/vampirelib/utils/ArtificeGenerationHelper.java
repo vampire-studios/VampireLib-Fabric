@@ -679,8 +679,8 @@ package io.github.vampirestudios.vampirelib.utils;
 
 import java.util.Map;
 
-import com.swordglowsblue.artifice.api.ArtificeResourcePack;
-import com.swordglowsblue.artifice.api.resource.StringResource;
+import io.github.vampirestudios.artifice.api.ArtificeResourcePack;
+import io.github.vampirestudios.artifice.api.resource.StringResource;
 
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;

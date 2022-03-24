@@ -27,13 +27,15 @@ import java.util.Set;
 import java.util.function.Consumer;
 
 import net.minecraft.core.Registry;
+import net.minecraft.data.BuiltinRegistries;
 import net.minecraft.data.models.BlockModelGenerators;
 import net.minecraft.data.models.ItemModelGenerators;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.data.recipes.ShapelessRecipeBuilder;
+import net.minecraft.data.tags.TagsProvider;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.EntityTypeTags;
+import net.minecraft.tags.BiomeTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.DyeColor;
@@ -45,16 +47,16 @@ import net.minecraft.world.item.crafting.Ingredient.ItemValue;
 import net.minecraft.world.item.crafting.Ingredient.TagValue;
 import net.minecraft.world.item.crafting.Ingredient.Value;
 import net.minecraft.world.level.ItemLike;
-import net.minecraft.world.level.Level;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.dimension.BuiltinDimensionTypes;
 import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.levelgen.NoiseGeneratorSettings;
 
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockStateDefinitionProvider;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricModelProvider;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipesProvider;
@@ -153,9 +155,8 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
         dataGenerator.addProvider(VRecipeReplacementProvider::new);
         dataGenerator.addProvider(VEntityTypeTagsProvider::new);
         dataGenerator.addProvider(VBiomeTagsProvider::new);
-//        dataGenerator.addProvider(VDimensionTagsProvider::new);
         dataGenerator.addProvider(VNoiseSettingsTagsProvider::new);
-//        dataGenerator.addProvider(VDimensionTypeTagsProvider::new);
+        dataGenerator.addProvider(VDimensionTypeTagsProvider::new);
     }
 
     //Wood Type Test Generation
@@ -320,7 +321,7 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
             tagCustom(FENCES).addTags(FENCES_NETHER_BRICK, FENCES_WOODEN);
             tag(FENCES_NETHER_BRICK).add(Blocks.NETHER_BRICK_FENCE);
             tag(FENCES_WOODEN).add(Blocks.OAK_FENCE, Blocks.SPRUCE_FENCE, Blocks.BIRCH_FENCE, Blocks.JUNGLE_FENCE, Blocks.ACACIA_FENCE, Blocks.DARK_OAK_FENCE, Blocks.CRIMSON_FENCE, Blocks.WARPED_FENCE);
-            tagCustom(GLASS).addTags(GLASS_COLORLESS, STAINED_GLASS, GLASS_TINTED);
+            tag(GLASS).addTag(GLASS_COLORLESS).addTag(STAINED_GLASS).addTag(GLASS_TINTED);
             tag(GLASS_COLORLESS).add(Blocks.GLASS);
             tag(GLASS_SILICA).add(Blocks.GLASS, Blocks.BLACK_STAINED_GLASS, Blocks.BLUE_STAINED_GLASS, Blocks.BROWN_STAINED_GLASS, Blocks.CYAN_STAINED_GLASS, Blocks.GRAY_STAINED_GLASS, Blocks.GREEN_STAINED_GLASS, Blocks.LIGHT_BLUE_STAINED_GLASS, Blocks.LIGHT_GRAY_STAINED_GLASS, Blocks.LIME_STAINED_GLASS, Blocks.MAGENTA_STAINED_GLASS, Blocks.ORANGE_STAINED_GLASS, Blocks.PINK_STAINED_GLASS, Blocks.PURPLE_STAINED_GLASS, Blocks.RED_STAINED_GLASS, Blocks.WHITE_STAINED_GLASS, Blocks.YELLOW_STAINED_GLASS);
             tag(GLASS_TINTED).add(Blocks.TINTED_GLASS);
@@ -398,89 +399,97 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
 
     }
 
-    private static class VBiomeTagsProvider extends CustomTagProviders.ExpandedBiomeTagProvider {
+    private static class VBiomeTagsProvider extends TagsProvider<Biome> {
         private VBiomeTagsProvider(FabricDataGenerator dataGenerator) {
-            super(dataGenerator);
+            super(dataGenerator, BuiltinRegistries.BIOME);
         }
 
         @Override
-        protected Path getPath(ResourceLocation id) {
-            return this.generator.getOutputFolder().resolve("data/%s/tags/%s/%s.json".formatted("c", "biomes", id.getPath()));
-        }
-
-        @Override
-        protected void generateTags() {
-            this.tagCustom(VTags.Biomes.HILLS)
+        protected void addTags() {
+            this.tag(VTags.Biomes.HILLS)
                 .add(Biomes.FLOWER_FOREST, Biomes.ICE_SPIKES, Biomes.WINDSWEPT_HILLS, Biomes.WINDSWEPT_GRAVELLY_HILLS, Biomes.OLD_GROWTH_BIRCH_FOREST);
-            this.tagCustom(VTags.Biomes.PLATEAUS)
+            this.tag(BiomeTags.IS_HILL).addTag(VTags.Biomes.HILLS);
+            this.tag(VTags.Biomes.PLATEAUS)
                 .add(Biomes.SAVANNA_PLATEAU, Biomes.WOODED_BADLANDS, Biomes.MEADOW);
-            this.tagCustom(VTags.Biomes.RARE)
+            this.tag(VTags.Biomes.RARE)
                 .add(Biomes.SPARSE_JUNGLE, Biomes.SAVANNA_PLATEAU, Biomes.SUNFLOWER_PLAINS, Biomes.WINDSWEPT_GRAVELLY_HILLS,
                     Biomes.FLOWER_FOREST, Biomes.ICE_SPIKES, Biomes.OLD_GROWTH_BIRCH_FOREST, Biomes.OLD_GROWTH_SPRUCE_TAIGA,
                     Biomes.WINDSWEPT_SAVANNA, Biomes.ERODED_BADLANDS, Biomes.BAMBOO_JUNGLE, Biomes.MUSHROOM_FIELDS);
 
-            this.tagCustom(VTags.Biomes.OCEANS)
-                .addTags(VTags.Biomes.DEEP_OCEANS, VTags.Biomes.SHALLOW_OCEANS);
-            this.tagCustom(VTags.Biomes.DEEP_OCEANS)
+            this.tag(VTags.Biomes.OCEANS)
+                .addTag(VTags.Biomes.DEEP_OCEANS).addTag(VTags.Biomes.SHALLOW_OCEANS);
+            this.tag(VTags.Biomes.DEEP_OCEANS)
                 .add(Biomes.DEEP_COLD_OCEAN, Biomes.DEEP_FROZEN_OCEAN, Biomes.DEEP_LUKEWARM_OCEAN, Biomes.DEEP_OCEAN);
-            this.tagCustom(VTags.Biomes.SHALLOW_OCEANS)
+            this.tag(VTags.Biomes.SHALLOW_OCEANS)
                 .add(Biomes.COLD_OCEAN, Biomes.FROZEN_OCEAN, Biomes.LUKEWARM_OCEAN, Biomes.OCEAN, Biomes.WARM_OCEAN);
-            this.tagCustom(VTags.Biomes.RIVERS)
+            this.tag(VTags.Biomes.RIVERS)
                 .add(Biomes.RIVER, Biomes.FROZEN_RIVER);
-            this.tagCustom(VTags.Biomes.WATER)
-                .addTags(VTags.Biomes.OCEANS, VTags.Biomes.RIVERS);
+            this.tag(VTags.Biomes.WATER)
+                .addTag(VTags.Biomes.OCEANS).addTag(VTags.Biomes.RIVERS);
+            this.tag(BiomeTags.IS_OCEAN).addTag(VTags.Biomes.SHALLOW_OCEANS);
+            this.tag(BiomeTags.IS_DEEP_OCEAN).addTag(VTags.Biomes.DEEP_OCEANS);
+            this.tag(BiomeTags.IS_RIVER).addTag(VTags.Biomes.RIVERS);
 
 
-            this.tagCustom(VTags.Biomes.BADLANDS)
-                .add(Biomes.BADLANDS, Biomes.ERODED_BADLANDS, Biomes.WOODED_BADLANDS);
-            this.tagCustom(VTags.Biomes.BEACHES)
+            this.tag(VTags.Biomes.BADLANDS).add(Biomes.BADLANDS, Biomes.ERODED_BADLANDS, Biomes.WOODED_BADLANDS);
+            this.tag(BiomeTags.IS_BADLANDS).addTag(VTags.Biomes.BADLANDS);
+            this.tag(VTags.Biomes.BEACHES)
                 .add(Biomes.BEACH, Biomes.SNOWY_BEACH, Biomes.STONY_SHORE);
-            this.tagCustom(VTags.Biomes.DESERTS)
-                .add(Biomes.DESERT);
-            this.tagCustom(VTags.Biomes.FORESTS)
-                .addTags(VTags.Biomes.BIRCH_FORESTS, VTags.Biomes.DARK_FORESTS, VTags.Biomes.JUNGLE_FORESTS,
-                    VTags.Biomes.NETHER_FORESTS, VTags.Biomes.OAK_FORESTS, VTags.Biomes.TAIGA_FORESTS);
-            this.tagCustom(VTags.Biomes.BIRCH_FORESTS)
+            this.tag(BiomeTags.IS_BEACH).addTag(VTags.Biomes.BEACHES);
+            this.tag(VTags.Biomes.DESERTS).add(Biomes.DESERT);
+            this.tag(VTags.Biomes.FORESTS).addTag(VTags.Biomes.BIRCH_FORESTS).addTag(VTags.Biomes.DARK_FORESTS)
+                .addTag(VTags.Biomes.JUNGLE_FORESTS).addTag(VTags.Biomes.NETHER_FORESTS)
+                .addTag(VTags.Biomes.OAK_FORESTS).addTag(VTags.Biomes.TAIGA_FORESTS);
+            this.tag(VTags.Biomes.BIRCH_FORESTS)
                 .add(Biomes.BIRCH_FOREST, Biomes.OLD_GROWTH_BIRCH_FOREST);
-            this.tagCustom(VTags.Biomes.DARK_FORESTS)
+            this.tag(VTags.Biomes.DARK_FORESTS)
                 .add(Biomes.DARK_FOREST);
-            this.tagCustom(VTags.Biomes.JUNGLE_FORESTS)
-                .addTags(VTags.Biomes.BAMBOO_JUNGLE_FORESTS)
+            this.tag(VTags.Biomes.JUNGLE_FORESTS)
+                .addTag(VTags.Biomes.BAMBOO_JUNGLE_FORESTS)
                 .add(Biomes.JUNGLE, Biomes.SPARSE_JUNGLE);
-            this.tagCustom(VTags.Biomes.BAMBOO_JUNGLE_FORESTS)
+            this.tag(VTags.Biomes.BAMBOO_JUNGLE_FORESTS)
                 .add(Biomes.BAMBOO_JUNGLE);
-            this.tagCustom(VTags.Biomes.NETHER_FORESTS)
+            this.tag(BiomeTags.IS_JUNGLE).addTag(VTags.Biomes.JUNGLE_FORESTS);
+            this.tag(VTags.Biomes.NETHER_FORESTS)
                 .add(Biomes.CRIMSON_FOREST, Biomes.WARPED_FOREST);
-            this.tagCustom(VTags.Biomes.OAK_FORESTS)
+            this.tag(BiomeTags.IS_NETHER).addTag(VTags.Biomes.NETHER_FORESTS);
+            this.tag(VTags.Biomes.OAK_FORESTS)
                 .add(Biomes.FOREST, Biomes.FLOWER_FOREST);
-            this.tagCustom(VTags.Biomes.TAIGA_FORESTS)
+            this.tag(VTags.Biomes.TAIGA_FORESTS)
                 .add(Biomes.TAIGA, Biomes.SNOWY_TAIGA, Biomes.OLD_GROWTH_SPRUCE_TAIGA, Biomes.OLD_GROWTH_PINE_TAIGA, Biomes.GROVE);
-            this.tagCustom(VTags.Biomes.MUSHROOM)
+            this.tag(BiomeTags.IS_FOREST).addTag(VTags.Biomes.FORESTS);
+            this.tag(VTags.Biomes.MUSHROOM)
                 .add(Biomes.MUSHROOM_FIELDS);
-            this.tagCustom(VTags.Biomes.MOUNTAINS)
+            this.tag(VTags.Biomes.MOUNTAINS)
                 .add(Biomes.WINDSWEPT_HILLS, Biomes.WINDSWEPT_GRAVELLY_HILLS, Biomes.WINDSWEPT_FOREST, Biomes.WINDSWEPT_SAVANNA);
-            this.tagCustom(VTags.Biomes.PLAINS)
+            this.tag(BiomeTags.IS_MOUNTAIN).addTag(VTags.Biomes.MOUNTAINS);
+            this.tag(VTags.Biomes.PLAINS)
                 .add(Biomes.PLAINS, Biomes.SAVANNA, Biomes.SAVANNA_PLATEAU, Biomes.SUNFLOWER_PLAINS, Biomes.MEADOW);
-            this.tagCustom(VTags.Biomes.GRASSLANDS)
-                .addTags(VTags.Biomes.PLAINS, VTags.Biomes.SAVANNAS);
-            this.tagCustom(VTags.Biomes.SAVANNAS)
+            this.tag(VTags.Biomes.GRASSLANDS)
+                .addTag(VTags.Biomes.PLAINS).addTag(VTags.Biomes.SAVANNAS);
+            this.tag(VTags.Biomes.SAVANNAS)
                 .add(Biomes.SAVANNA, Biomes.SAVANNA_PLATEAU, Biomes.WINDSWEPT_SAVANNA);
-            this.tagCustom(VTags.Biomes.SNOWY)
+            this.tag(BiomeTags.IS_SAVANNA).addTag(VTags.Biomes.SAVANNAS);
+            this.tag(VTags.Biomes.SNOWY)
                 .add(Biomes.FROZEN_OCEAN, Biomes.DEEP_FROZEN_OCEAN, Biomes.FROZEN_RIVER,
                     Biomes.SNOWY_BEACH, Biomes.SNOWY_TAIGA, Biomes.SNOWY_PLAINS,
                     Biomes.GROVE, Biomes.SNOWY_SLOPES, Biomes.JAGGED_PEAKS, Biomes.FROZEN_PEAKS);
-            this.tagCustom(VTags.Biomes.SWAMPS)
+            this.tag(BiomeTags.ONLY_ALLOWS_SNOW_AND_GOLD_RABBITS).addTag(VTags.Biomes.SNOWY);
+            this.tag(BiomeTags.SPAWNS_COLD_VARIANT_FROGS).addTag(VTags.Biomes.SNOWY);
+            this.tag(VTags.Biomes.SWAMPS)
                 .add(Biomes.SWAMP);
-            this.tagCustom(VTags.Biomes.SLOPES)
+            this.tag(BiomeTags.ALLOWS_SURFACE_SLIME_SPAWNS).addTag(VTags.Biomes.SWAMPS);
+            this.tag(VTags.Biomes.SLOPES)
                 .add(Biomes.MEADOW, Biomes.GROVE, Biomes.SNOWY_SLOPES);
-            this.tagCustom(VTags.Biomes.PEAKS)
+            this.tag(VTags.Biomes.PEAKS)
                 .add(Biomes.JAGGED_PEAKS, Biomes.FROZEN_PEAKS, Biomes.STONY_PEAKS);
-            this.tagCustom(VTags.Biomes.VOIDS)
+            this.tag(VTags.Biomes.VOIDS)
                 .add(Biomes.THE_VOID);
 
-            this.tagCustom(VTags.Biomes.OVERWORLD)
-                .addTags(VTags.Biomes.OVERWORLD_SURFACE, VTags.Biomes.OVERWORLD_UNDERGROUND);
-            this.tagCustom(VTags.Biomes.OVERWORLD_SURFACE)
+            this.tag(VTags.Biomes.OVERWORLD)
+                .addTag(VTags.Biomes.OVERWORLD_SURFACE).addTag(VTags.Biomes.OVERWORLD_UNDERGROUND);
+            this.tag(BiomeTags.IS_OVERWORLD).addTag(VTags.Biomes.OVERWORLD);
+            this.tag(VTags.Biomes.OVERWORLD_SURFACE)
                 .add(Biomes.BADLANDS,
                     Biomes.BAMBOO_JUNGLE,
                     Biomes.BEACH,
@@ -529,13 +538,15 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
                     Biomes.WINDSWEPT_GRAVELLY_HILLS,
                     Biomes.WINDSWEPT_HILLS,
                     Biomes.WINDSWEPT_SAVANNA);
-            this.tagCustom(VTags.Biomes.OVERWORLD_UNDERGROUND)
+            this.tag(VTags.Biomes.OVERWORLD_UNDERGROUND)
                 .add(Biomes.LUSH_CAVES, Biomes.DRIPSTONE_CAVES);
-            this.tagCustom(VTags.Biomes.NETHER)
-                .addTags(VTags.Biomes.NETHER_FORESTS)
+            this.tag(VTags.Biomes.NETHER)
+                .addTag(VTags.Biomes.NETHER_FORESTS)
                 .add(Biomes.NETHER_WASTES, Biomes.SOUL_SAND_VALLEY, Biomes.BASALT_DELTAS);
-            this.tagCustom(VTags.Biomes.END)
+            this.tag(BiomeTags.IS_NETHER).addTag(VTags.Biomes.NETHER);
+            this.tag(VTags.Biomes.END)
                 .add(Biomes.THE_END, Biomes.SMALL_END_ISLANDS, Biomes.END_BARRENS, Biomes.END_MIDLANDS, Biomes.END_HIGHLANDS);
+            this.tag(BiomeTags.IS_END).addTag(VTags.Biomes.END);
         }
     }
 
@@ -589,9 +600,12 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
             copy(VTags.Blocks.GLASS, VTags.Items.GLASS);
             copy(VTags.Blocks.GLASS_SILICA, VTags.Items.GLASS_SILICA);
             copy(VTags.Blocks.GLASS_TINTED, VTags.Items.GLASS_TINTED);
-            func_240521_a_Colored(VTags.Blocks.GLASS, VTags.Items.GLASS);
+            copy(VTags.Blocks.GLASS_COLORLESS, VTags.Items.GLASS_COLORLESS);
+            copyColored(VTags.Blocks.GLASS, VTags.Items.GLASS);
+            copy(VTags.Blocks.GLASS_PANES_COLORLESS, VTags.Items.GLASS_PANES_COLORLESS);
             copy(VTags.Blocks.GLASS_PANES, VTags.Items.GLASS_PANES);
-            func_240521_a_Colored(VTags.Blocks.GLASS_PANES, VTags.Items.GLASS_PANES);
+            copy(VTags.Blocks.STAINED_GLASS_PANES, VTags.Items.STAINED_GLASS_PANES);
+            copyColored(VTags.Blocks.GLASS_PANES, VTags.Items.GLASS_PANES);
             copy(VTags.Blocks.GRAVEL, VTags.Items.GRAVEL);
             tagCustom(VTags.Items.GUNPOWDER).add(Items.GUNPOWDER);
             tagCustom(VTags.Items.HEADS).add(Items.CREEPER_HEAD, Items.DRAGON_HEAD, Items.PLAYER_HEAD, Items.SKELETON_SKULL, Items.WITHER_SKELETON_SKULL, Items.ZOMBIE_HEAD);
@@ -682,7 +696,7 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
             }
         }
 
-        private void func_240521_a_Colored(TagKey<Block> blockGroup, TagKey<Item> itemGroup) {
+        private void copyColored(TagKey<Block> blockGroup, TagKey<Item> itemGroup) {
             String blockPre = blockGroup.location().getPath().toUpperCase(Locale.ENGLISH) + '_';
             String itemPre = itemGroup.location().getPath().toUpperCase(Locale.ENGLISH) + '_';
             for (DyeColor color : DyeColor.values()) {
@@ -754,7 +768,7 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
 
             tag(VTags.EntityTypes.AQUATIC).add(EntityType.AXOLOTL, EntityType.COD, EntityType.DOLPHIN, EntityType.ELDER_GUARDIAN,
                 EntityType.GLOW_SQUID, EntityType.GUARDIAN, EntityType.PUFFERFISH, EntityType.SALMON, EntityType.SQUID,
-                EntityType.TROPICAL_FISH, EntityType.TURTLE); // TODO Add frog and tadpole tags when they come to Minecraft Java
+                EntityType.TROPICAL_FISH, EntityType.TURTLE, EntityType.FROG, EntityType.TADPOLE);
             tag(VTags.EntityTypes.FISH).add(EntityType.COD, EntityType.PUFFERFISH, EntityType.SALMON, EntityType.TROPICAL_FISH);
             tag(VTags.EntityTypes.CEPHALOPODS).add(EntityType.GLOW_SQUID, EntityType.SQUID);
             tag(VTags.EntityTypes.GUARDIANS).add(EntityType.ELDER_GUARDIAN, EntityType.GUARDIAN);
@@ -801,7 +815,7 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
                     EntityType.BLAZE, EntityType.WITHER_SKELETON, EntityType.ZOMBIFIED_PIGLIN, EntityType.HOGLIN
                 );
 
-            tagCustom(VTags.EntityTypes.ENEMIES).addTags(VTags.EntityTypes.BOSSES, VTags.EntityTypes.CREEPERS, EntityTypeTags.RAIDERS)
+            tagCustom(VTags.EntityTypes.ENEMIES).addTags(VTags.EntityTypes.BOSSES, VTags.EntityTypes.CREEPERS/*, EntityTypeTags.RAIDERS*/)
                 .add(EntityType.BLAZE, EntityType.CAVE_SPIDER, EntityType.DROWNED, EntityType.ELDER_GUARDIAN, EntityType.ENDERMAN, EntityType.ENDERMITE,
                     EntityType.GHAST, EntityType.GUARDIAN, EntityType.HOGLIN, EntityType.HUSK, EntityType.MAGMA_CUBE, EntityType.PHANTOM, EntityType.PIGLIN,
                     EntityType.PIGLIN_BRUTE, EntityType.SHULKER, EntityType.SILVERFISH, EntityType.SKELETON, EntityType.SLIME, EntityType.SPIDER, EntityType.STRAY,
@@ -811,7 +825,7 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
 
             tagCustom(VTags.EntityTypes.UNDEAD).addTags(VTags.EntityTypes.SKELETONS, VTags.EntityTypes.ZOMBIES)
                 .add(EntityType.PHANTOM, EntityType.WITHER);
-            tag(VTags.EntityTypes.SKELETONS).addTag(EntityTypeTags.SKELETONS).add(EntityType.SKELETON_HORSE);
+            tag(VTags.EntityTypes.SKELETONS).add(EntityType.SKELETON, EntityType.WITHER_SKELETON, EntityType.SKELETON_HORSE);
             tag(VTags.EntityTypes.ZOMBIES).add(EntityType.DROWNED, EntityType.HUSK, EntityType.ZOGLIN, EntityType.ZOMBIE,
                 EntityType.ZOMBIE_HORSE, EntityType.ZOMBIE_VILLAGER, EntityType.ZOMBIFIED_PIGLIN);
 
@@ -925,65 +939,36 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
         }
     }
 
-    private static class VNoiseSettingsTagsProvider extends CustomTagProviders.NoiseSettingsTagProvider {
+    private static class VNoiseSettingsTagsProvider extends TagsProvider<NoiseGeneratorSettings> {
         private VNoiseSettingsTagsProvider(FabricDataGenerator dataGenerator) {
-            super(dataGenerator);
+            super(dataGenerator, BuiltinRegistries.NOISE_GENERATOR_SETTINGS);
         }
 
         @Override
-        protected Path getPath(ResourceLocation id) {
-            return this.generator.getOutputFolder().resolve("data/%s/tags/%s/%s.json".formatted("c", "worldgen/biomes", id.getPath()));
-        }
-
-        @Override
-        protected void generateTags() {
-            this.getOrCreateTagBuilder(VTags.NoiseSettings.AMPLIFIED).add(NoiseGeneratorSettings.AMPLIFIED);
-            this.tagCustom(VTags.NoiseSettings.CAVES).add(NoiseGeneratorSettings.CAVES);
-            this.tagCustom(VTags.NoiseSettings.END).add(NoiseGeneratorSettings.END);
-            this.tagCustom(VTags.NoiseSettings.FLOATING_ISLANDS).add(NoiseGeneratorSettings.FLOATING_ISLANDS);
-            this.tagCustom(VTags.NoiseSettings.NETHER).add(NoiseGeneratorSettings.NETHER);
-            this.tagCustom(VTags.NoiseSettings.OVERWORLD).add(NoiseGeneratorSettings.OVERWORLD);
+        protected void addTags() {
+            this.tag(VTags.NoiseSettings.AMPLIFIED).add(NoiseGeneratorSettings.AMPLIFIED);
+            this.tag(VTags.NoiseSettings.CAVES).add(NoiseGeneratorSettings.CAVES);
+            this.tag(VTags.NoiseSettings.END).add(NoiseGeneratorSettings.END);
+            this.tag(VTags.NoiseSettings.FLOATING_ISLANDS).add(NoiseGeneratorSettings.FLOATING_ISLANDS);
+            this.tag(VTags.NoiseSettings.NETHER).add(NoiseGeneratorSettings.NETHER);
+            this.tag(VTags.NoiseSettings.OVERWORLD).add(NoiseGeneratorSettings.OVERWORLD);
         }
 
     }
 
-    /*private static class VDimensionTagsProvider extends CustomTagProviders.DimensionTagProvider {
-        private VDimensionTagsProvider(FabricDataGenerator dataGenerator) {
-            super(dataGenerator);
-        }
-
-        @Override
-        protected Path getPath(ResourceLocation id) {
-            return this.generator.getOutputFolder().resolve("data/%s/tags/%s/%s.json".formatted("c", "worldgen/dimensions", id.getPath()));
-        }
-
-        @Override
-        protected void generateTags() {
-            this.tagCustom(VTags.Dimensions.END).add(Level.END);
-            this.tagCustom(VTags.Dimensions.NETHER).add(Level.NETHER);
-            this.tagCustom(VTags.Dimensions.OVERWORLD).add(Level.OVERWORLD);
-        }
-
-    }
-
-    private static class VDimensionTypeTagsProvider extends CustomTagProviders.DimensionTypeTagProvider {
+    private static class VDimensionTypeTagsProvider extends TagsProvider<DimensionType> {
         private VDimensionTypeTagsProvider(FabricDataGenerator dataGenerator) {
-            super(dataGenerator);
+            super(dataGenerator, BuiltinRegistries.DIMENSION_TYPE);
         }
 
         @Override
-        protected Path getPath(ResourceLocation id) {
-            return this.generator.getOutputFolder().resolve("data/%s/tags/%s/%s.json".formatted("c", "worldgen/dimension_types", id.getPath()));
+        protected void addTags() {
+            this.tag(VTags.DimensionTypes.END).add(BuiltinDimensionTypes.END);
+            this.tag(VTags.DimensionTypes.NETHER).add(BuiltinDimensionTypes.NETHER);
+            this.tag(VTags.DimensionTypes.OVERWORLD)
+                .addTag(VTags.DimensionTypes.OVERWORLD_CAVES)
+                .add(BuiltinDimensionTypes.OVERWORLD);
+            this.tag(VTags.DimensionTypes.OVERWORLD_CAVES).add(BuiltinDimensionTypes.OVERWORLD_CAVES);
         }
-
-        @Override
-        protected void generateTags() {
-            this.tagCustom(VTags.DimensionTypes.END).add(DimensionType.END_LOCATION);
-            this.tagCustom(VTags.DimensionTypes.NETHER).add(DimensionType.NETHER_LOCATION);
-            this.tagCustom(VTags.DimensionTypes.OVERWORLD)
-                .addTags(VTags.DimensionTypes.OVERWORLD_CAVES)
-                .add(DimensionType.OVERWORLD_LOCATION);
-            this.tagCustom(VTags.DimensionTypes.OVERWORLD_CAVES).add(DimensionType.OVERWORLD_CAVES_LOCATION);
-        }
-    }*/
+    }
 }
