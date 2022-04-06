@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "tag": "c:chests/wooden"
+    },
+    {
+      "item": "minecraft:birch_boat"
+    }
+  ],
+  "result": {
+    "item": "minecraft:birch_chest_boat"
+  }
+}

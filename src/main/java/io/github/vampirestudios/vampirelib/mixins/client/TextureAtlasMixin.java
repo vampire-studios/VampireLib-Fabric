@@ -1,24 +1,30 @@
 package io.github.vampirestudios.vampirelib.mixins.client;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.Set;
+import java.util.stream.Stream;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 import com.mojang.blaze3d.platform.NativeImage;
 
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.util.profiling.ProfilerFiller;
 
 import net.fabricmc.fabric.impl.client.texture.FabricSprite;
 import net.fabricmc.loader.api.FabricLoader;
 
 import io.github.vampirestudios.vampirelib.VampireLib;
+import io.github.vampirestudios.vampirelib.callbacks.client.TextureStitchCallback;
 
 @Mixin(TextureAtlas.class)
 public class TextureAtlasMixin {
@@ -29,18 +35,16 @@ public class TextureAtlasMixin {
 		if (!FabricLoader.getInstance().isModLoaded("optifabric") && !FabricLoader.getInstance().isModLoaded("bclib")) {
 			ResourceLocation location = info.name();
 			ResourceLocation emissiveLocation = new ResourceLocation(location.getNamespace(), "textures/" + location.getPath() + "_e.png");
-			if (container.hasResource(emissiveLocation)) {
+			if (container.getResource(emissiveLocation).isPresent()) {
 				NativeImage sprite = null;
 				NativeImage emission = null;
 				try {
 					ResourceLocation spriteLocation = new ResourceLocation(location.getNamespace(), "textures/" + location.getPath() + ".png");
-					Resource resource = container.getResource(spriteLocation);
-					sprite = NativeImage.read(resource.getInputStream());
-					resource.close();
+					InputStream resource = container.open(spriteLocation);
+					sprite = NativeImage.read(resource);
 
-					resource = container.getResource(emissiveLocation);
-					emission = NativeImage.read(resource.getInputStream());
-					resource.close();
+					resource = container.open(emissiveLocation);
+					emission = NativeImage.read(resource);
 				} catch (IOException e) {
 					VampireLib.INSTANCE.getLogger().info(e.getMessage());
 				}
@@ -68,5 +72,17 @@ public class TextureAtlasMixin {
 				}
 			}
 		}
+	}
+
+	@Inject(method = "prepareToStitch",
+		at = @At(value = "INVOKE", target = "Lnet/minecraft/util/profiling/ProfilerFiller;popPush(Ljava/lang/String;)V", ordinal = 0,
+			shift = At.Shift.AFTER), locals = LocalCapture.CAPTURE_FAILHARD)
+	private void vl$preStitch(ResourceManager resourceManager, Stream<ResourceLocation> stream, ProfilerFiller profilerFiller, int i, CallbackInfoReturnable<TextureAtlas.Preparations> cir, Set<ResourceLocation> set) {
+		TextureStitchCallback.PRE.invoker().stitch((TextureAtlas) (Object) this, set::add);
+	}
+
+	@Inject(method = "reload", at = @At("RETURN"))
+	private void vl$postStitch(TextureAtlas.Preparations preparations, CallbackInfo ci) {
+		TextureStitchCallback.POST.invoker().stitch((TextureAtlas) (Object) this);
 	}
 }

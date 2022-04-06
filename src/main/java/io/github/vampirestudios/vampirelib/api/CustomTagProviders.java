@@ -58,8 +58,13 @@ public abstract class CustomTagProviders<T> extends FabricTagProvider<T> {
 		super(dataGenerator, registry, path);
 	}
 
-	protected CustomTagProviders<T>.CustomFabricTagBuilder<T> getOrCreateTagBuilderCustom(TagKey<T> tag) {
+	public CustomTagProviders<T>.CustomFabricTagBuilder<T> getOrCreateTagBuilderCustom(TagKey<T> tag) {
 		return new CustomTagProviders.CustomFabricTagBuilder(super.tag(tag));
+	}
+
+	@Override
+	public CustomFabricTagBuilder<T> tag(TagKey<T> tag) {
+		return new CustomFabricTagBuilder<>(super.tag(tag));
 	}
 
 	public abstract static class CustomBlockTagProvider extends CustomTagProviders<Block> {

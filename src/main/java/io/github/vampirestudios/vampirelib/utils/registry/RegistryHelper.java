@@ -677,7 +677,6 @@
 
 package io.github.vampirestudios.vampirelib.utils.registry;
 
-import net.minecraft.core.Direction;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
@@ -691,17 +690,13 @@ import net.minecraft.world.item.SpawnEggItem;
 import net.minecraft.world.item.StandingAndWallBlockItem;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.RotatedPillarBlock;
-import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.level.material.Material;
-import net.minecraft.world.level.material.MaterialColor;
 
+import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
+import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.fabricmc.loader.api.FabricLoader;
 
-import io.github.vampirestudios.vampirelib.blocks.CompatBlock;
 import io.github.vampirestudios.vampirelib.mixins.SpawnEggItemAccessor;
 
 public record RegistryHelper(String modId) {
@@ -742,41 +737,9 @@ public record RegistryHelper(String modId) {
             return block;
         }
 
-        public Block registerNetherStem(String name, MaterialColor materialColor) {
-            return registerBlock(new RotatedPillarBlock(BlockBehaviour.Properties.of(Material.WOOD, (blockState) -> materialColor)
-                .strength(1.0F).sound(SoundType.STEM)), name, CreativeModeTab.TAB_BUILDING_BLOCKS);
-        }
-
-        public Block registerLog(String name, MaterialColor topMaterialColor, MaterialColor sideMaterialColor) {
-            return registerBlock(new RotatedPillarBlock(BlockBehaviour.Properties.of(Material.WOOD, (blockState) ->
-                    blockState.getValue(RotatedPillarBlock.AXIS) == Direction.Axis.Y ? topMaterialColor : sideMaterialColor)
-                .strength(2.0F).sound(SoundType.WOOD)), name);
-        }
-
-        public Block registerLog(String name, MaterialColor materialColor) {
-            return registerBlock(new RotatedPillarBlock(BlockBehaviour.Properties.of(Material.WOOD, (blockState) -> materialColor)
-                .strength(2.0F).sound(SoundType.WOOD)), name);
-        }
-
         public Block registerBlockWithoutItem(String name, Block block) {
             Registry.register(Registry.BLOCK, new ResourceLocation(modId, name), block);
             return block;
-        }
-
-        public Block registerCompatBlock(String modName, String blockName, Block block, CreativeModeTab itemGroup) {
-            if (!FabricLoader.getInstance().isModLoaded(modName)) {
-                return registerBlock(block, blockName, itemGroup);
-            } else {
-                return null;
-            }
-        }
-
-        public Block registerCompatBlock(String modName, String blockName, ResourceLocation modBlock, BlockBehaviour.Properties settings, CreativeModeTab itemGroup) {
-            if (!FabricLoader.getInstance().isModLoaded(modName)) {
-                return registerBlock(new CompatBlock(modName, Registry.BLOCK.get(modBlock), settings), blockName, itemGroup);
-            } else {
-                return null;
-            }
         }
     }
 
@@ -811,23 +774,21 @@ public record RegistryHelper(String modId) {
         }
     }
 
-    private static class Features {
-
+    public <T extends BlockEntity> BlockEntityType<T> registerBlockEntity(FabricBlockEntityTypeBuilder.Factory<T> blockEntityType, Class<? extends Block> block, String name) {
+        FabricBlockEntityTypeBuilder<T> builder = FabricBlockEntityTypeBuilder.create(blockEntityType, collectBlocks(block));
+        return Registry.register(Registry.BLOCK_ENTITY_TYPE, new ResourceLocation(modId, name), builder.build());
     }
 
-    private static class Carvers {
-
+    public <T extends BlockEntity> BlockEntityType<T> registerBlockEntity(FabricBlockEntityTypeBuilder<T> builder, String name) {
+        return Registry.register(Registry.BLOCK_ENTITY_TYPE, new ResourceLocation(modId, name), builder.build());
     }
 
-
-    public <T extends BlockEntity> BlockEntityType<T> registerBlockEntity(BlockEntityType.Builder<T> builder, String name) {
-        BlockEntityType<T> blockEntityType = builder.build(null);
-        return Registry.register(Registry.BLOCK_ENTITY_TYPE, new ResourceLocation(modId, name), blockEntityType);
+    public static Block[] collectBlocks(Class<?> blockClass) {
+        return Registry.BLOCK.stream().filter(blockClass::isInstance).toArray(Block[]::new);
     }
 
-    public <T extends Entity> EntityType<T> registerEntity(EntityType.Builder<T> builder, String name) {
-        EntityType<T> blockEntityType = builder.build(null);
-        return Registry.register(Registry.ENTITY_TYPE, new ResourceLocation(modId, name), blockEntityType);
+    public <T extends Entity> EntityType<T> registerEntity(FabricEntityTypeBuilder<T> builder, String name) {
+        return Registry.register(Registry.ENTITY_TYPE, new ResourceLocation(modId, name), builder.build());
     }
 
     public SoundEvent createSoundEvent(String name) {

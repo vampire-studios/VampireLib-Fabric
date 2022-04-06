@@ -6,6 +6,7 @@
     "HandledScreenMixin",
     "IngredientAccessor",
     "ItemInvokerMixin",
+    "Matrix3fMixin",
     "MixinItemEntity",
     "MixinLivingEntity",
     "MixinMobSpawnerLogic",
@@ -25,8 +26,16 @@
     "item.MixinBookOnLectern"
   ],
   "client": [
+    "client.BlockModelAccessor",
+    "client.BlockModelDeserializerMixin",
+    "client.BlockModelMixin",
+    "client.ModelStateMixin",
     "client.ShaderInstanceMixin",
-    "client.TextureAtlasMixin"
+    "client.SimpleBakedModelBuilderAccessor",
+    "client.TextureAtlasMixin",
+    "client.TextureAtlasSpriteAnimatedTextureAccessor",
+    "client.CameraInvokerMixin",
+    "client.ItemRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

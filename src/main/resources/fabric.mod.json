@@ -17,21 +17,17 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "io.github.vampirestudios.vampirelib.VampireLib",
-      "com.terraformersmc.terraform.boat.impl.TerraformBoatInitializer"
+      "io.github.vampirestudios.vampirelib.VampireLib"
     ],
     "client": [
-      "io.github.vampirestudios.vampirelib.client.VampireLibClient",
-      "com.terraformersmc.terraform.boat.impl.client.TerraformBoatClientInitializer"
+      "io.github.vampirestudios.vampirelib.client.VampireLibClient"
     ],
     "fabric-datagen": [
       "io.github.vampirestudios.vampirelib.VampireLibDataGen"
     ]
   },
   "mixins": [
-    "vampirelib.mixins.json",
-    "mixins.terraform-boats.json",
-    "mixins.terraform-signs.json"
+    "vampirelib.mixins.json"
   ],
   "accessWidener": "vampirelib.accesswidener",
   "depends": {

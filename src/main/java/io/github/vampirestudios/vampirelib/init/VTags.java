@@ -694,6 +694,10 @@ import net.minecraft.world.level.levelgen.NoiseGeneratorSettings;
 public class VTags {
 
     public static class Blocks {
+        public static final TagKey<Block> LEAF_PILES = tag("leaf_piles");
+        public static final TagKey<Block> LEAF_CARPETS = tag("leaf_carpets");
+        public static final TagKey<Block> WART_PILES = tag("wart_piles");
+        public static final TagKey<Block> WART_CARPETS = tag("wart_carpets");
 
         public static final TagKey<Block> BARRELS_WOODEN = tag("barrels/wooden");
 		public static final TagKey<Block> BARRELS = tag("barrels");

@@ -683,21 +683,28 @@ import java.util.List;
 import net.minecraft.SharedConstants;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BiomeColors;
+import net.minecraft.client.renderer.Sheets;
 import net.minecraft.world.level.FoliageColor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
+import net.fabricmc.fabric.impl.client.rendering.BlockEntityRendererRegistryImpl;
 import net.fabricmc.fabric.impl.client.rendering.ColorProviderRegistryImpl;
 
+import io.github.vampirestudios.vampirelib.ChestManager;
 import io.github.vampirestudios.vampirelib.api.BasicModClass;
+import io.github.vampirestudios.vampirelib.callbacks.client.TextureStitchCallback;
+import io.github.vampirestudios.vampirelib.init.VBlockEntityTypes;
 import io.github.vampirestudios.vampirelib.utils.Rands;
+
+import static io.github.vampirestudios.vampirelib.ChestManager.CHEST_INFO_MAP;
 
 public class VampireLibClient extends BasicModClass {
 
     public static final List<ColoredLeaves> COLORED_LEAVES = new ArrayList<>();
 
     public VampireLibClient() {
-        super("vampirelib", "VampireLib", "4.9.0+build.2", true);
+        super("vampirelib", "VampireLib", "5.0.0+build.1", true);
     }
 
     @Override
@@ -718,6 +725,17 @@ public class VampireLibClient extends BasicModClass {
                 ColorProviderRegistryImpl.ITEM.register((item, layer) -> coloredLeaves.color, coloredLeaves.leavesBlock);
             }
         });
+
+        TextureStitchCallback.PRE.register((atlas, spriteAdder) -> {
+            if (atlas.location().equals(Sheets.CHEST_SHEET)) {
+                for (ChestManager.ChestInfo chestInfo : CHEST_INFO_MAP.values()) {
+                    chestInfo.setup(spriteAdder);
+                }
+            }
+        });
+
+        BlockEntityRendererRegistryImpl.register(VBlockEntityTypes.CHEST, BlueprintChestBlockEntityRenderer::new);
+        BlockEntityRendererRegistryImpl.register(VBlockEntityTypes.TRAPPED_CHEST, BlueprintChestBlockEntityRenderer::new);
     }
 
     public static final class ColoredLeaves {

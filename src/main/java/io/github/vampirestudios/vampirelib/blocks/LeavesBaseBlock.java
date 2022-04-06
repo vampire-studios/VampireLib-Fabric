@@ -681,7 +681,6 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LeavesBlock;
 
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
@@ -689,15 +688,15 @@ import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import io.github.vampirestudios.vampirelib.api.VanillaTargetedItemGroupFiller;
 
 public class LeavesBaseBlock extends LeavesBlock {
-    private final VanillaTargetedItemGroupFiller FILLER;
+    private VanillaTargetedItemGroupFiller FILLER;
 
     public LeavesBaseBlock(Block parent) {
-        super(FabricBlockSettings.copyOf(parent));
-        FILLER = new VanillaTargetedItemGroupFiller(parent.asItem());
+        this(parent, true);
     }
 
-    public LeavesBaseBlock() {
-        this(Blocks.FLOWERING_AZALEA_LEAVES);
+    public LeavesBaseBlock(Block parent, boolean realign) {
+        super(FabricBlockSettings.copyOf(parent));
+        if (realign) FILLER = new VanillaTargetedItemGroupFiller(parent.asItem());
     }
 
     @Override

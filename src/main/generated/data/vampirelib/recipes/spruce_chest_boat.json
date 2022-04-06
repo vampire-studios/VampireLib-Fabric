@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "tag": "c:chests/wooden"
+    },
+    {
+      "item": "minecraft:spruce_boat"
+    }
+  ],
+  "result": {
+    "item": "minecraft:spruce_chest_boat"
+  }
+}

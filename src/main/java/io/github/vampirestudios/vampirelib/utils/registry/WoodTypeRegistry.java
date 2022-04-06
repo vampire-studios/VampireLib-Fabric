@@ -690,15 +690,12 @@ public abstract class WoodTypeRegistry implements StringRepresentable {
 
     static WoodType registerVanilla(WoodType woodType) {
         woodTypes.add(woodType);
-        System.out.println(woodType.getIdentifier().toString());
         return woodType;
     }
 
-    public static WoodType registerModded(WoodType woodType, float hardness, float resistance) {
+    public static WoodType registerModded(WoodType woodType) {
         registerVanilla(woodType);
-
-        listeners.forEach(listener -> listener.onModdedWoodTypeRegistered(woodType, hardness, resistance));
-        System.out.println(woodType.getIdentifier().toString());
+        listeners.forEach(listener -> listener.onModdedWoodTypeRegistered(woodType));
         return woodType;
     }
 
@@ -707,7 +704,7 @@ public abstract class WoodTypeRegistry implements StringRepresentable {
     }
 
     public interface ModdedTypeListener {
-        void onModdedWoodTypeRegistered(WoodType woodType, float hardness, float resistance);
+        void onModdedWoodTypeRegistered(WoodType woodType);
     }
 
 }

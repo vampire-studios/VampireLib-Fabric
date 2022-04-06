@@ -71,11 +71,18 @@ dependencies {
 		exclude(group: "net.fabricmc.fabric-api")
 	}
 
-	modApi ("io.github.vampirestudios:artifice:0.19.0+22w11a") {
+	modApi ("io.github.vampirestudios:artifice:0.19.0+build.1-22w13a") {
 		exclude group: "net.fabricmc.fabric-api"
 	}
-	include ("io.github.vampirestudios:artifice:0.19.0+22w11a") {
+	include ("io.github.vampirestudios:artifice:0.19.0+build.1-22w13a") {
 		exclude group: "net.fabricmc.fabric-api"
+	}
+
+	modImplementation ("com.terraformersmc.terraform-api:terraform-wood-api-v1:4.0.0-alpha.1") {
+		exclude(group: "net.fabricmc.fabric-api")
+	}
+	include ("com.terraformersmc.terraform-api:terraform-wood-api-v1:4.0.0-alpha.1") {
+		exclude(group: "net.fabricmc.fabric-api")
 	}
 }
 

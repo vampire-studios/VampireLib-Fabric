@@ -692,14 +692,18 @@ import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 
 import io.github.vampirestudios.vampirelib.api.BasicModClass;
 import io.github.vampirestudios.vampirelib.api.ConvertibleBlockPair;
+import io.github.vampirestudios.vampirelib.client.AnimationLoader;
+import io.github.vampirestudios.vampirelib.init.VBlockEntityTypes;
 import io.github.vampirestudios.vampirelib.utils.Rands;
 import io.github.vampirestudios.vampirelib.utils.registry.BlockChiseler;
+import io.github.vampirestudios.vampirelib.utils.registry.RegistryHelper;
 import io.github.vampirestudios.vampirelib.utils.registry.WoodRegistry;
 
 public class VampireLib extends BasicModClass {
     public static final VampireLib INSTANCE = new VampireLib();
 
     public static final List<ConvertibleBlockPair> CONVERTIBLE_BLOCKS = new ArrayList<>();
+    public static final RegistryHelper REGISTRY_HELPER = RegistryHelper.createRegistryHelper(INSTANCE.modId());
 	public static final boolean TEST_CONTENT_ENABLED = false;
 
     public static WoodRegistry TEST_WOOD;
@@ -733,7 +737,7 @@ public class VampireLib extends BasicModClass {
     public static WoodRegistry TEST_NETHER_WOOD13;
 
     public VampireLib() {
-        super("vampirelib", "VampireLib", "4.9.0+build.2");
+        super("vampirelib", "VampireLib", "5.0.0+build.1");
     }
 
     @Override
@@ -742,6 +746,7 @@ public class VampireLib extends BasicModClass {
         getLogger().info(String.format("%s running %s v%s for %s", Rands.chance(15) ? "Your are" : (Rands.chance(15) ? "You're" : "You are"),
             modName(), modVersion(), SharedConstants.getCurrentVersion().getName()));
         BlockChiseler.setup();
+        VBlockEntityTypes.init();
 
         if (TEST_CONTENT_ENABLED) {
 			//Overworld
@@ -751,37 +756,37 @@ public class VampireLib extends BasicModClass {
 				.defaultBlocksColoredLeaves().build();
 
 			TEST_WOOD2 = WoodRegistry.of(identifier("test2"))
-				.defaultBlocks().defaultExtraBlocks().build();
+				.defaultBlocks().defaultExtras().build();
 			TEST_WOOD3 = WoodRegistry.of(identifier("test3"))
-				.defaultBlocksColoredLeaves().defaultExtraBlocks().build();
+				.defaultBlocksColoredLeaves().defaultExtras().build();
 
 			TEST_WOOD4 = WoodRegistry.of(identifier("test4"))
-				.defaultBlocks().defaultExtraBlocks().ladder().build();
+				.defaultBlocks().defaultExtras().ladder().build();
 			TEST_WOOD5 = WoodRegistry.of(identifier("test5"))
-				.defaultBlocksColoredLeaves().defaultExtraBlocks().ladder().build();
+				.defaultBlocksColoredLeaves().defaultExtras().ladder().build();
 
 			TEST_WOOD6 = WoodRegistry.of(identifier("test6"))
-				.defaultBlocks().defaultExtraBlocks().ladder().bookshelf().build();
+				.defaultBlocks().defaultExtras().ladder().bookshelf().build();
 			TEST_WOOD7 = WoodRegistry.of(identifier("test7"))
-				.defaultBlocksColoredLeaves().defaultExtraBlocks().ladder().bookshelf().build();
+				.defaultBlocksColoredLeaves().defaultExtras().ladder().bookshelf().build();
 
             TEST_WOOD8 = WoodRegistry.of(identifier("test8"))
-                .defaultBlocks().defaultExtraBlocks().ladder().bookshelf()
+                .defaultBlocks().defaultExtras().ladder().bookshelf()
                 .build();
             TEST_WOOD9 = WoodRegistry.of(identifier("test9"))
-                .defaultBlocksColoredLeaves().defaultExtraBlocks().ladder().bookshelf()
+                .defaultBlocksColoredLeaves().defaultExtras().ladder().bookshelf()
                 .build();
 
             TEST_WOOD10 = WoodRegistry.of(identifier("test10"))
-                .defaultBlocks().defaultExtraBlocks().ladder().bookshelf().build();
+                .defaultBlocks().defaultExtras().ladder().bookshelf().build();
             TEST_WOOD11 = WoodRegistry.of(identifier("test11"))
-                .defaultBlocksColoredLeaves().defaultExtraBlocks().ladder().bookshelf()
+                .defaultBlocksColoredLeaves().defaultExtras().ladder().bookshelf()
                 .build();
 
             TEST_WOOD12 = WoodRegistry.of(identifier("test12"))
-                .defaultBlocks().defaultExtraBlocks().ladder().bookshelf().build();
+                .defaultBlocks().defaultExtras().ladder().bookshelf().build();
             TEST_WOOD13 = WoodRegistry.of(identifier("test13"))
-                .defaultBlocksColoredLeaves().defaultExtraBlocks().ladder().bookshelf()
+                .defaultBlocksColoredLeaves().defaultExtras().ladder().bookshelf()
                 .build();
 
 			//Nether
@@ -791,43 +796,46 @@ public class VampireLib extends BasicModClass {
                 .mushroomLike().defaultBlocksColoredLeaves().build();
 
 			TEST_NETHER_WOOD2 = WoodRegistry.of(identifier("test2_nether"))
-                .mushroomLike().defaultBlocks().defaultExtraBlocks().build();
+                .mushroomLike().defaultBlocks().defaultExtras().build();
 			TEST_NETHER_WOOD3 = WoodRegistry.of(identifier("test3_nether"))
-                .mushroomLike().defaultBlocksColoredLeaves().defaultExtraBlocks().build();
+                .mushroomLike().defaultBlocksColoredLeaves().defaultExtras().build();
 
 			TEST_NETHER_WOOD4 = WoodRegistry.of(identifier("test4_nether"))
-                .mushroomLike().defaultBlocks().defaultExtraBlocks().ladder().build();
+                .mushroomLike().defaultBlocks().defaultExtras().ladder().build();
 			TEST_NETHER_WOOD5 = WoodRegistry.of(identifier("test5_nether"))
-                .mushroomLike().defaultBlocksColoredLeaves().defaultExtraBlocks().ladder().build();
+                .mushroomLike().defaultBlocksColoredLeaves().defaultExtras().ladder().build();
 
 			TEST_NETHER_WOOD6 = WoodRegistry.of(identifier("test6_nether"))
-                .mushroomLike().defaultBlocks().defaultExtraBlocks().ladder().bookshelf()
+                .mushroomLike().defaultBlocks().defaultExtras().ladder().bookshelf()
                 .nonFlammable().build();
 			TEST_NETHER_WOOD7 = WoodRegistry.of(identifier("test7_nether"))
-                .mushroomLike().defaultBlocksColoredLeaves().defaultExtraBlocks().ladder()
+                .mushroomLike().defaultBlocksColoredLeaves().defaultExtras().ladder()
                 .bookshelf().build();
 
             TEST_NETHER_WOOD8 = WoodRegistry.of(identifier("test8_nether"))
-                .mushroomLike().defaultBlocks().defaultExtraBlocks().ladder().bookshelf()
+                .mushroomLike().defaultBlocks().defaultExtras().ladder().bookshelf()
                 .nonFlammable().build();
             TEST_NETHER_WOOD9 = WoodRegistry.of(identifier("test9_nether"))
-                .defaultBlocksColoredLeaves().defaultExtraBlocks().ladder().bookshelf()
+                .defaultBlocksColoredLeaves().defaultExtras().ladder().bookshelf()
                 .nonFlammable().build();
 
             TEST_NETHER_WOOD10 = WoodRegistry.of(identifier("test10_nether"))
-                .mushroomLike().defaultBlocks().defaultExtraBlocks().ladder().bookshelf()
+                .mushroomLike().defaultBlocks().defaultExtras().ladder().bookshelf()
                 .nonFlammable().build();
             TEST_NETHER_WOOD11 = WoodRegistry.of(identifier("test11_nether"))
-                .mushroomLike().defaultBlocksColoredLeaves().defaultExtraBlocks().ladder()
+                .mushroomLike().defaultBlocksColoredLeaves().defaultExtras().ladder()
                 .bookshelf().nonFlammable().build();
 
             TEST_NETHER_WOOD12 = WoodRegistry.of(identifier("test12_nether"))
-                .mushroomLike().defaultBlocks().defaultExtraBlocks().ladder().bookshelf()
+                .mushroomLike().defaultBlocks().defaultExtras().ladder().bookshelf()
                 .nonFlammable().build();
             TEST_NETHER_WOOD13 = WoodRegistry.of(identifier("test13_nether"))
-                .mushroomLike().defaultBlocksColoredLeaves().defaultExtraBlocks().ladder().bookshelf()
+                .mushroomLike().defaultBlocksColoredLeaves().defaultExtras().ladder().bookshelf()
                 .nonFlammable().build();
 		}
+
+        AnimationLoader loader = new AnimationLoader();
+        loader.getAnimationDefinition(identifier("idk"));
 
         UseBlockCallback.EVENT.register((player, world, hand, hitResult) -> {
             if (!world.isClientSide) {

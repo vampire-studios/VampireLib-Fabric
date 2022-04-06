@@ -2,8 +2,9 @@ package io.github.vampirestudios.vampirelib.api.blockspreading;
 
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+
+import com.mojang.logging.LogUtils;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
@@ -14,7 +15,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 
 public class SpreadBehaviors {
 
-	private static final Logger LOGGER = LogManager.getLogger();
+	private static final Logger LOGGER = LogUtils.getLogger();
 	private static final Table<Block, BlockSpreadingType, SpreadingBehavior> SPREADERS = HashBasedTable.create();
 
 	static {

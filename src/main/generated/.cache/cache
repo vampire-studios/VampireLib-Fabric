@@ -1,4 +1,4 @@
-50c0124c23ee5f12ad3aee3faba7935265bc3732 data\c\tags\worldgen\biomes\nether.json
+50c0124c23ee5f12ad3aee3faba7935265bc3732 data\c\tags\worldgen\noise_settings\nether.json
 74700d556ca80c7a1db5fd4efb09c3ddb26cad66 data\c\tags\blocks\enderman_place_on_blacklist.json
 7d7a8519039adb52a6bcc8c13836b3793b869fd7 data\vampirelib\advancements\recipes\decorations\crimson_fence.json
 271046e89a5707346ff3c4d37c6072822637f277 data\c\tags\items\stained_glass_panes.json
@@ -11,6 +11,7 @@ cbc6eadd7091d66306c90987366ac8e75921a74a data\c\tags\items\dyes\white.json
 cafc6f2a85f1fac58f8f041a06e1b97e69b993cd data\vampirelib\advancements\recipes\combat\crossbow.json
 0ddcba1bb3df2a037930a63852721d10b85ff7ae data\c\tags\blocks\glass_panes\light_blue.json
 f1a758a82b9d96830becf51d12c04cd23e7b50e6 data\c\tags\items\dusts\glowstone.json
+80a8cc74d33dda7818199a8edb1de818a9e989cb data\vampirelib\advancements\recipes\transportation\jungle_chest_boat.json
 a2ceacf6479b93c93d7c4c4a1da4aacea2d9a595 data\vampirelib\recipes\rail.json
 99f8b0585da7d585b9cff11de1dd5986e2ca3cc6 data\c\tags\entity_types\elemental.json
 b09264197426b8dd66f146603fdca8d794cce3ff data\minecraft\tags\worldgen\biome\only_allows_snow_and_gold_rabbits.json
@@ -35,6 +36,7 @@ f8ef7474e497c0dee44535fd857f142c1b09c54c data\c\tags\items\ores\netherite_scrap.
 da3c454eb2fd5f03c2b5fe8abc666ea50582a2e6 data\c\tags\blocks\glass_panes\yellow.json
 d53aebb7435613e4af43127d051c8d802f62b31d data\vampirelib\advancements\recipes\decorations\lodestone.json
 5f160170a743f711fd31b60e2bbaa8219a69e4a5 data\vampirelib\recipes\black_banner.json
+2586523b363000fd0dd2b625f848a0cbcab439b7 data\vampirelib\recipes\spruce_chest_boat.json
 82bf3bb0d99df6321581339c8f0fc79ceef53e09 data\vampirelib\advancements\recipes\decorations\jungle_fence.json
 5a36a873ee480cb0e3b19f6f01afca0a6dfbbada data\vampirelib\recipes\golden_boots.json
 709a9fd80347e0c2251ad67d503bbf75df45209b data\c\tags\items\ingots.json
@@ -82,6 +84,7 @@ b4f4ca84afe421c33e2f697bbaf8db31ac35065f data\vampirelib\recipes\lever.json
 fa23e3c486f9220c5014d0d51e36002337f16cb6 data\vampirelib\recipes\activator_rail.json
 83cef3ace4e4ca204d9c6108c24a0e823a140e06 data\c\tags\entity_types\aquatic\guardians.json
 338c62e15c2044712dc02dbbda42a63557be4085 data\c\tags\items\glass_panes\colorless.json
+7f685408f2200f569c009749165de909118ed020 data\vampirelib\advancements\recipes\transportation\mangrove_chest_boat.json
 4ba564cfd233fd149f868c9353ee50a748b84133 data\vampirelib\advancements\recipes\decorations\cyan_banner.json
 6d551741e0643b31f72e74527e1ffe51bc8cb61f data\c\tags\entity_types\flying.json
 f8392b6650515eb74f0a01c95f844a97dbf00a34 data\c\tags\worldgen\biome\plains.json
@@ -89,6 +92,7 @@ f8392b6650515eb74f0a01c95f844a97dbf00a34 data\c\tags\worldgen\biome\plains.json
 15f26361bcbcd9c6dae2f9fe26f20163ff43b94d data\c\tags\entity_types\mushroom_cows.json
 b1b08c48e4feb390abaa14ab6badf5f7d40278e7 data\c\tags\entity_types\reptiles.json
 52bf2d9f9cc7533117079c7f1f8c5f4ae22b0e0e data\c\tags\items\gunpowder.json
+671a67ec5a27548735a23107dc07b8b0985f06d6 data\c\tags\worldgen\noise_settings\end.json
 e4d6b051573282824d0f7e80dd576c8980207b84 data\vampirelib\recipes\acacia_fence.json
 75d75005c4f772cac7a99403f20d2f62e1ce35de data\minecraft\tags\worldgen\biome\is_nether.json
 0850ef0450f1eb2b52e2ff3b70e3e0d3d00b537c data\c\tags\items\seeds\pumpkin.json
@@ -98,6 +102,7 @@ aa413ab149e35d4dd286dd2afa14f0b534ac7c78 data\vampirelib\recipes\golden_helmet.j
 54d37a3eb008bfc5368605ee5041bbb3df5fa5b7 data\vampirelib\advancements\recipes\tools\stone_shovel.json
 9ac38c4e0ea9dd2cb24458474d634f15638d51cb data\c\tags\items\ore_rates\sparse.json
 3af5b71a6afb4b445df55b46423cf03010e57fde data\c\tags\items\ingots\copper.json
+50a318a60266ea641abbfe56a5b29924b5b3f4db data\vampirelib\recipes\mangrove_chest_boat.json
 a4e47680b9742347f1ea372cbcefdaf18664e505 data\vampirelib\advancements\recipes\tools\golden_pickaxe.json
 83944efe802afddb6f6e76587766c61e7fa50aae data\vampirelib\advancements\recipes\decorations\acacia_fence.json
 eb5be571a0fb7a365c07d6d4fa1c6ceb43db9a88 data\vampirelib\advancements\recipes\transportation\powered_rail.json
@@ -138,7 +143,6 @@ c589fc0ea5d8368b1dc31eb18f7e5bcc9147ecb5 data\vampirelib\recipes\clock.json
 781e15f104b2b2fb284f5f917d97f92a0a41df1f data\c\tags\blocks\ores.json
 2cd2e2b2df3874454a2e3e990ecc3599ee456677 data\vampirelib\recipes\stonecutter.json
 1ea1e5e3952f93871f5a8ec26ed596bf9d0c9b04 data\vampirelib\advancements\recipes\decorations\blast_furnace.json
-ac292bef02f40336740c895cb89a45e763688ecd data\c\tags\worldgen\biomes\amplified.json
 0659f03a175ca525c303f0a41b4a64c9c583de04 data\c\tags\items\nuggets\iron.json
 74d5be5b421bf01e35331eb4ab3d3457fac7cc8e data\c\tags\worldgen\biome\nether.json
 22eda1cbd71972afc15dfaecc4824bed7f425429 data\vampirelib\recipes\minecart.json
@@ -149,10 +153,10 @@ c97605a7493aaedd4748fc7850a17cc5aa56e812 data\vampirelib\advancements\recipes\co
 50a0c44c1d67601c37f28f7acf71b4532a0b8e81 data\vampirelib\recipes\anvil.json
 e4943ec16eb5f8f2258f7e8f62f610d1b904dc83 data\c\tags\blocks\stone.json
 b09264197426b8dd66f146603fdca8d794cce3ff data\minecraft\tags\worldgen\biome\spawns_cold_variant_frogs.json
-671a67ec5a27548735a23107dc07b8b0985f06d6 data\c\tags\worldgen\biomes\end.json
 3407c5fe94261d902e2134240b316e485dff2fed data\vampirelib\advancements\recipes\decorations\dark_oak_sign.json
 1b68ef5266053db2123f5283056ec5a1173a46ef data\c\tags\items\dyes\magenta.json
 3c3c07cef161cef10cf120b2c667683b62dbaeb8 data\vampirelib\advancements\recipes\redstone\iron_trapdoor.json
+464274389d06590c26c5c7efb47765944b646952 data\vampirelib\recipes\oak_chest_boat.json
 cd7f41e47af058423520efb0af3149ae2d5f8f25 data\c\tags\items\seeds\wheat.json
 3e3c24cb175bd1e6503e1c332b682dd921458c38 data\c\tags\items\ores\lapis.json
 6a27c78201e1b36c2fd77e5f5b707efc51723f61 data\c\tags\blocks\glass_panes.json
@@ -206,7 +210,6 @@ e85b79154a2329c89af6eeb721f16fe585e8b55d data\c\tags\items\dyes\blue.json
 144855dd205ab552042e5735d5253cef3d0aa029 data\vampirelib\recipes\iron_boots.json
 86255b3181c89703556dfbcfafe7a59ac5bae45a data\vampirelib\recipes\enchanting_table.json
 62577fa71342ec47f40b6f37588622bea9f64b93 data\c\tags\blocks\glass_panes\light_gray.json
-f7ea474b7b4a5f89c509fbfd0db9493e2ee33922 data\c\tags\worldgen\biomes\floating_islands.json
 8168970e4ad0c4e32ba30d326524b186b01783c1 data\c\tags\items\crops.json
 4f31e214e741070b27c1a20dfdcee9f60b22de8b data\c\tags\blocks\sand.json
 d13f2ba3db000d70d0454c7b48faf0f80bd97171 data\vampirelib\advancements\recipes\decorations\chain.json
@@ -223,6 +226,7 @@ abbe68c5507951a8b501cafa4f37d829ff2d5dc7 data\c\tags\blocks\glass\red.json
 4029575a6859608541b5f1f8cee33cb352232b84 data\vampirelib\advancements\recipes\decorations\soul_campfire.json
 02652eb8c177fa7e5c77c1c8ad3dd1936ef3ce6c data\c\tags\blocks\glass\yellow.json
 e2e8b11c564d4e13ddeb7cd903e1aecb34b6cfe2 data\c\tags\blocks\glass_panes\blue.json
+9216e41c7f5041639a79eae484191eae40f5db81 data\vampirelib\advancements\recipes\transportation\spruce_chest_boat.json
 8ddd459556449e01066238c47f1a6871497e8a35 data\vampirelib\advancements\recipes\decorations\black_banner.json
 ec14d413dbf86390ec7a88a1b193bdd4de2beb58 data\c\tags\items\glass.json
 f3415d086f1411edf37f9991d6cbe0199952e589 data\c\tags\items\dyes\red.json
@@ -230,6 +234,7 @@ f3415d086f1411edf37f9991d6cbe0199952e589 data\c\tags\items\dyes\red.json
 dd6bc6d6114c7abf05b227e3c51240b23d3471f9 data\vampirelib\advancements\recipes\combat\diamond_sword.json
 0d695a90dfb7065a89d1668681cb6eb8e5a2c7d8 data\c\tags\items\bookshelves.json
 b6ee1d63fe5ea647869fb4093aaad421403ca2f0 data\vampirelib\advancements\recipes\tools\stone_hoe.json
+0e48383aedf19133942a440cbf3e4bcafb9c7700 data\vampirelib\advancements\recipes\redstone\mangrove_fence_gate.json
 be5fed949a34bab6714267c3ac4defe331dae585 data\vampirelib\recipes\diamond_sword.json
 f049f0f4dfcc4e610d4edf810eb6eb698262730f data\c\tags\entity_types\aquatic\cephalopods.json
 5387fbedd3f206214bb92b44fd4ba9281932ede5 data\c\tags\entity_types\illagers.json
@@ -240,13 +245,16 @@ f57402f59ae5c7e142232b73dac650c32aa6765a data\vampirelib\advancements\recipes\de
 931d34190c8b828b0374c841befb02c6d8851828 data\c\tags\entity_types\mammals\caprines.json
 6c9289e8ade252556a8e85183614383dc407286a data\c\tags\items\stained_glass.json
 1f180747e3120628f58f3cdee1f90b890ec98cd4 data\c\tags\blocks\ores\coal.json
+7ee302f9a53772c888a2ac8adecbe2d09317a871 data\c\tags\dimension_type\overworld.json
 e2829fb72b5b437cd5f46cb7a0cc63af0d4fff2c data\c\tags\entity_types\npc.json
 c9b1eac1955d133ae1174ec7e1158816f0c45f94 data\vampirelib\advancements\recipes\tools\diamond_shovel.json
+0085b6d0e1d60577fbde77ce088d17969626149b data\vampirelib\advancements\recipes\transportation\birch_chest_boat.json
 81dff3510776460b8cdf05d832f1ad7988949b70 data\vampirelib\recipes\trapped_chest.json
 24900f8a1a59fb4fdddb41bfd546c1f24acfc8a3 data\c\tags\items\end_stones.json
 27d9c3f5e4054c79f7168d5ae65e452ae87ae1bb data\vampirelib\advancements\recipes\food\golden_apple.json
 cf72d34b442b1f8905c65aa362cefb1a3e6bfa7c data\vampirelib\advancements\recipes\decorations\light_blue_banner.json
 36cd4cc0fd110b5c9ca5b0ff7b68b1a1b3cc10d6 data\vampirelib\recipes\chest_minecart.json
+bedf81332b637cfe0e923d00f4ed2c142c81b025 data\vampirelib\recipes\jungle_chest_boat.json
 a02de1a9598dd4706ea456c04243047a70a86568 data\vampirelib\advancements\recipes\decorations\spruce_fence.json
 fc68d7c5c53bdb935a04fc24567add260bff7bfe data\c\tags\blocks\storage_blocks\lapis.json
 5a68548a9945ecd2fb42b7e6de02bcc917536c1c data\c\tags\items\shears.json
@@ -254,6 +262,7 @@ b4c872632735fea2a0b4622af7624b2d61a42a7d data\vampirelib\recipes\wooden_axe.json
 59b3b4179d9c85a65cf59be92de3c2a0b30f46fa data\c\tags\blocks\ores\redstone.json
 b86880a812aa6bc4b5c7a5e5901a5822ecb7c0b5 data\vampirelib\advancements\recipes\decorations\green_banner.json
 a4245f119ece142fe7d949d39fea50ae779459f7 data\c\tags\items\gems\amethyst.json
+ac292bef02f40336740c895cb89a45e763688ecd data\c\tags\worldgen\noise_settings\amplified.json
 d88897b7b8ddacae2426a7be2dfe81ddd49551ca data\c\tags\items\dyes.json
 66f98abd36c80ecae450025bca892b9cba72cd08 data\vampirelib\advancements\recipes\brewing\cauldron.json
 2e5f78b1ea474195b49cad11f00158b59b803de8 data\vampirelib\recipes\golden_shovel.json
@@ -276,6 +285,7 @@ b5d1174bbc55ffc0a0bcc751d5ad99dcb002505b data\minecraft\tags\worldgen\biome\is_d
 7fe7a16838e2b52d47bfa9fafafc6463904cff96 data\c\tags\entity_types\big_noses.json
 10db2b8af0a0ca12726b1db86b390f996e734776 data\minecraft\tags\worldgen\biome\is_end.json
 bc203f09dd7f48965d146d0bd035fb904cb75e7d data\c\tags\items\barrels\wooden.json
+3b8cd73a6c1fbf4129335d1a4f8d9636f01f2fda data\vampirelib\advancements\recipes\transportation\oak_chest_boat.json
 289f4ffd0eb267f8fb67a391d105b3497dcb1ce5 data\vampirelib\recipes\wooden_sword.json
 d8697ac014312791ded30e56bc255afd03331369 data\vampirelib\advancements\recipes\decorations\armor_stand.json
 9d33e29870da1212ea7ec78b521042f219da3126 data\c\tags\entity_types\undead\zombies.json
@@ -298,6 +308,7 @@ ed2b9fe00c565d9cd9e28b8eba37ba48ff5b91e6 data\c\tags\entity_types\milkable.json
 1321f847ea5e0e89b1328102c8af9425ccf7002c data\vampirelib\advancements\recipes\decorations\oak_fence.json
 96e0ba3b452129a4021b69731b3124f0d5fd1d9f data\c\tags\worldgen\biome\water\oceans\shallow.json
 2eeec61d76768475c65971a92a15a46b523dd84d data\c\tags\blocks\fence_gates\wooden.json
+9d5a2bec45bc14bd21b61136f61d78a759312df4 data\vampirelib\advancements\recipes\transportation\dark_oak_chest_boat.json
 dba3ada44805c1f2f6bd6757053e0079668e3f48 data\c\tags\blocks\glass\cyan.json
 79d057724be38b035d711e7f7c95b6c45064bc6c data\vampirelib\advancements\recipes\building_blocks\andesite.json
 32b6bb541e6afda6262036b6c6631a2df8f77be4 data\vampirelib\advancements\recipes\redstone\crimson_fence_gate.json
@@ -340,9 +351,11 @@ e5cf96dcde4ef7af3bd952fa097e8040f2a3254f data\vampirelib\advancements\recipes\re
 07b90e3344b3e6ba002f87b1c30aed4a4614b95e data\vampirelib\recipes\soul_torch.json
 79237c9f77752f3a3e1dd76ff24ca9a5200b166a data\c\tags\items\ore_rates\dense.json
 7a1ebecb0ab724b1dcadcf96c1a24ca1aaedec0c data\c\tags\worldgen\biome\overworld\underground.json
+b49911fc46d68f25677887b4ef4dbeea9f00021f data\c\tags\worldgen\noise_settings\caves.json
 db36333cce25adb17b2472d220f179e9308b67fb data\vampirelib\recipes\jungle_sign.json
 9de679550338310923cc8d2b1f7d5434b3e58396 data\vampirelib\advancements\recipes\redstone\piston.json
 d65c425e740dc833f29d16606a1171825876be0d data\c\tags\blocks\cobblestone\normal.json
+c70bf572482a2360c669ebb856f234f836e76e32 data\vampirelib\recipes\dark_oak_chest_boat.json
 b861b526ba95b7b73d628fc4acb11107014a185a data\c\tags\entity_types\elemental\ice.json
 4a9cd8cb1cc87d3c6f7e98f50ae68243e0ee216a data\c\tags\worldgen\biome\forests\jungles.json
 c38d13f69420a93e5fec19c6d7795e45359e13da data\vampirelib\advancements\recipes\decorations\red_banner.json
@@ -377,6 +390,7 @@ d65c425e740dc833f29d16606a1171825876be0d data\c\tags\items\cobblestone\normal.js
 9842091a93ff4627bf2f21750f73e4897a1a8b03 data\c\tags\entity_types\avians\fowls.json
 79237c9f77752f3a3e1dd76ff24ca9a5200b166a data\c\tags\blocks\ore_rates\dense.json
 74700d556ca80c7a1db5fd4efb09c3ddb26cad66 data\c\tags\entity_types\blind_mobs.json
+eb547845df24e7bcd298fc6de7be631ea2cef06d data\vampirelib\advancements\recipes\decorations\mangrove_fence.json
 50fdb7ea38282b34ad2886abeefe9e543e95ae0b data\vampirelib\advancements\recipes\transportation\activator_rail.json
 e0e7f020a64bc03661c76be063a1f073f3a67436 data\vampirelib\recipes\polished_deepslate.json
 0e20434bfd0f4b1d24b56e2c2d8209a2a76069eb data\vampirelib\recipes\gray_banner.json
@@ -395,7 +409,6 @@ e5202d599a201ad20695c433bfb8fde1ffbd03c1 data\vampirelib\recipes\crossbow.json
 ec14d413dbf86390ec7a88a1b193bdd4de2beb58 data\c\tags\blocks\glass.json
 1881e2aed61927c6b1ec8eec42f420d72c9bda47 data\vampirelib\recipes\pink_banner.json
 3ea41f521b6f08889a890e25123831b03428709b data\c\tags\entity_types\aquatic\fish.json
-eb547845df24e7bcd298fc6de7be631ea2cef06d data\vampirelib\advancements\recipes\building_blocks\mangrove_fence.json
 0a252e864bba54e7cb92ea42c1ecb6c596c9e839 data\vampirelib\advancements\recipes\decorations\painting.json
 dddaeaf841b8d64fcf03159e7a158849c5c276df data\c\tags\entity_types\mammals\felines.json
 20f26af05cf31f46e7dc7240252ffe4a7524535b data\c\tags\worldgen\biome\plateaus.json
@@ -421,6 +434,7 @@ b30ce8a2d83d85941c24300744507e80fd99557a data\c\tags\entity_types\mammals\equine
 25b205eb4d45ec959a3edbc129ad62a61a1e9458 data\vampirelib\recipes\green_banner.json
 74a324a16865ec43d8ee27d69f9301ddb17c768c data\c\tags\blocks\glass_panes\gray.json
 58d1ba4ecc6a5c33d406020ffc4c1c5f20e93b33 data\c\tags\items\string.json
+ade8606b52402643630f5ff7a0c3f52918abfc1d data\c\tags\worldgen\noise_settings\overworld.json
 b013134f20842b2e8529fe77be0330f49a349734 data\vampirelib\recipes\soul_campfire.json
 50e97df35e7309fbd5feb8f4161ce7888cf962ad data\c\tags\blocks\gravel.json
 e6f46419ad5d5e0f1cfd351d5fc3ee8427c6b1f1 data\c\tags\items\barrels.json
@@ -480,7 +494,6 @@ f9a12f5637d5d7ff445bf85f7117b4b5ad111378 data\vampirelib\advancements\recipes\de
 3e0fc6e9b294f3760fa8ec97419ecfb226891c34 data\c\tags\items\storage_blocks\emerald.json
 ad449ae38e6d8fa737d9a50572bfb4ace44e52ac data\vampirelib\recipes\wooden_shovel.json
 02a9859d0164260be5a9f0993baec5ec98ea4986 data\vampirelib\recipes\acacia_sign.json
-0e48383aedf19133942a440cbf3e4bcafb9c7700 data\vampirelib\advancements\recipes\building_blocks\mangrove_fence_gate.json
 bcb9dd70f58bb407f90360ffa06ea80c10359fb9 data\c\tags\blocks\ores_in_ground\deepslate.json
 15a5a38f5f8663a1adcfc73332e29d1d0cfae660 data\c\tags\items\chests\wooden.json
 8f07cb8af2a6176b44fd0b84310fe042f6c4835d data\c\tags\items\dyes\light_gray.json
@@ -488,6 +501,7 @@ bcb9dd70f58bb407f90360ffa06ea80c10359fb9 data\c\tags\blocks\ores_in_ground\deeps
 b39f2808662b49e1b8f810535fc5d55b4b3a1bff data\c\tags\entity_types\elemental\metal.json
 142ea4adc794fd7740bb942b6a0ea9d39867984b data\c\tags\items\crops\nether_wart.json
 b3303dc019ecd7260ee5c1487f2449d8445f319b data\vampirelib\advancements\recipes\decorations\pink_banner.json
+ee24dc1faafcbb1bcbd81ccb6852d8340df9cdcb data\vampirelib\advancements\recipes\transportation\acacia_chest_boat.json
 70fd9db26fe00e8a42fc44bc54ad3f3ad217c4f4 data\c\tags\items\ender_pearls.json
 44d66290b72bff895bec2d42a8b62fe1ac7f99e8 data\c\tags\items\fences\nether_brick.json
 678a3f3e1fceba96a1ca80cddf3c2d39600a6f17 data\vampirelib\recipes\birch_sign.json
@@ -519,6 +533,7 @@ ca51fa3bd2fe5587c1208569eb41d4652320435f data\c\tags\items\sandstone.json
 3f5770de0f2e9bc3dad668d29db9fd7b3f6c8fe5 data\vampirelib\advancements\recipes\decorations\brown_banner.json
 6f83f548101cf2023ade8dcafe38e2362b7a238c data\c\tags\items\ores\gold.json
 27a0846d88db6ab85f829b5c1863ba289b30bfe2 data\vampirelib\recipes\painting.json
+ee11c2c1d99dd17a2150b9713e2128d4ab7ba066 data\c\tags\dimension_type\overworld\caves.json
 dcff178d6a3fa12270851abf52b5859b06f8f855 data\c\tags\entity_types\undead.json
 b5c76c4da920c695882aa3a546631005492f9469 data\vampirelib\advancements\recipes\tools\iron_hoe.json
 2acd007287c9adf463a3c54853d24a310e3ebe50 data\vampirelib\recipes\magenta_banner.json
@@ -529,11 +544,11 @@ b5c76c4da920c695882aa3a546631005492f9469 data\vampirelib\advancements\recipes\to
 a32086e4b15335c2a9952694fa75a567fb6f01b5 data\vampirelib\recipes\jungle_fence_gate.json
 0f2f9805af755155616ff0feb3bf536178410678 data\c\tags\blocks\storage_blocks\quartz.json
 dc1b52c5bd7fd0277ed68c18833e526c1d6eb362 data\vampirelib\recipes\armor_stand.json
+18ace92447686da3c81c9fe418215134e2ded85b data\c\tags\dimension_type\end.json
 d61c8f577ab7c88df600f5393491378450b5b860 data\c\tags\items\seeds\melon.json
 5b75f9854570771d6f1f34eef0b59ab36d45f549 data\c\tags\blocks\ores\copper.json
 1f180747e3120628f58f3cdee1f90b890ec98cd4 data\c\tags\items\ores\coal.json
 7ed2aa78437e06fa6b1fc1343d495fcd04dc0486 data\minecraft\tags\worldgen\biome\is_jungle.json
-b49911fc46d68f25677887b4ef4dbeea9f00021f data\c\tags\worldgen\biomes\caves.json
 4af2fc27547afe06ea3c18f1f24fd7c82f34563b data\c\tags\blocks\glass\pink.json
 42065df7e74f6d89a1937c7876e342a03cdb97f2 data\c\tags\items\crops\carrot.json
 5b75f9854570771d6f1f34eef0b59ab36d45f549 data\c\tags\items\ores\copper.json
@@ -571,18 +586,20 @@ e3413dd2a51e4e30683a6eed7d8bbdd2151547f8 data\vampirelib\advancements\recipes\tr
 6055bb13f5b6d813bb3941d6e12965de7f760787 data\c\tags\items\fences\wooden.json
 1fcba05015cc67ddd94f34bb0792e7f94dac5ade data\vampirelib\advancements\recipes\redstone\dispenser.json
 f981e0a87a77d32f65e1f43806f50abfc24e8f63 data\c\tags\entity_types\ghosts.json
+3439129d86ec6cb6f1f2acc34dcd585b2cb1c56a data\c\tags\dimension_type\nether.json
 30765a5d8c3aaa0012e2864a62732453793647ee data\vampirelib\recipes\iron_hoe.json
 42510b884f3549495f31de46b87a029d700c5ee4 data\c\tags\entity_types\mammals.json
 609322708c04c70ba0c6c552c2c7477a9d2d7604 data\vampirelib\advancements\recipes\decorations\ladder.json
 ede59b1d22abbaea6a8eb2956062ab64c890c8cc data\c\tags\blocks\glass\light_gray.json
 dd61bc03bc89098e100e5f9b8da2ce1f595fdea9 data\c\tags\items\ore_bearing_ground\deepslate.json
 ff376c5596dc93b8bfc72f11bf8716c0aa8433e9 data\c\tags\items\cobblestone\infested.json
+785d65a95959d1d997e148b4fcd0318665fa9502 data\vampirelib\recipes\acacia_chest_boat.json
 2d7bb792b86a5ab3c8d226bd3cbb7e515e7f515d data\c\tags\worldgen\biome\deserts.json
 67595e0b8689be000ac53d380b7d39941c8303af data\c\tags\blocks\sand\colorless.json
 f81618bb0e9a389ec1d6cc7b2e25f34d1a666f36 data\vampirelib\recipes\mangrove_fence_gate.json
 355282ff734396b490ec1280789916028cb5e5de data\vampirelib\recipes\dropper.json
+f959a44dae7786d6b268884b985931d75684e111 data\vampirelib\recipes\birch_chest_boat.json
 503d91d94bc05c19308d1115a64d737aa5df5916 data\c\tags\blocks\glass\magenta.json
-ade8606b52402643630f5ff7a0c3f52918abfc1d data\c\tags\worldgen\biomes\overworld.json
 f9a7b288b3b769cdc6469c21325951937857da74 data\c\tags\items\storage_blocks\redstone.json
 ceff42de0b465a6c520e3705f96eb4e90ed29c67 data\c\tags\entity_types\avians.json
 967bdbc5b40798b914f7f72c826f840b6afe9e01 data\vampirelib\advancements\recipes\decorations\warped_sign.json
@@ -595,6 +612,7 @@ cadb2115bcb59822f702be6a6e8175789b5d2a78 data\vampirelib\recipes\wooden_pickaxe.
 7d683166b4ca52286ccf079014b62142d2ef02c7 data\vampirelib\advancements\recipes\combat\golden_boots.json
 091a92300611157633df130ab7192041d0652528 data\c\tags\items\dusts\prismarine.json
 2fb99f54d8554039900b027ff92c7570daca7cc8 data\c\tags\items\ores\iron.json
+f7ea474b7b4a5f89c509fbfd0db9493e2ee33922 data\c\tags\worldgen\noise_settings\floating_islands.json
 fc00c5156513007324f5800eb3edd919aff35507 data\vampirelib\recipes\stone_axe.json
 369e5410b271bf2c93d89682023396571b0950b4 data\minecraft\tags\worldgen\biome\is_forest.json
 cc8eeefbcf6a2b6c9d418b273437e112371e1d1f data\c\tags\worldgen\biome\beaches.json
