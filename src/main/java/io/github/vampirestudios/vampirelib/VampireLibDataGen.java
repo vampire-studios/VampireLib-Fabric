@@ -60,6 +60,7 @@ import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricModelProvider;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipesProvider;
+import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBiomeTags;
 
 import io.github.vampirestudios.vampirelib.api.CustomTagProviders;
 import io.github.vampirestudios.vampirelib.api.FabricLanguageProvider;
@@ -408,7 +409,8 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
         protected void addTags() {
             this.tag(VTags.Biomes.HILLS)
                 .add(Biomes.FLOWER_FOREST, Biomes.ICE_SPIKES, Biomes.WINDSWEPT_HILLS, Biomes.WINDSWEPT_GRAVELLY_HILLS, Biomes.OLD_GROWTH_BIRCH_FOREST);
-            this.tag(BiomeTags.IS_HILL).addTag(VTags.Biomes.HILLS);
+            this.tag(BiomeTags.IS_HILL).addTag(VTags.Biomes.HILLS)
+                .addOptionalTag(ConventionalBiomeTags.EXTREME_HILLS.location());
             this.tag(VTags.Biomes.PLATEAUS)
                 .add(Biomes.SAVANNA_PLATEAU, Biomes.WOODED_BADLANDS, Biomes.MEADOW);
             this.tag(VTags.Biomes.RARE)
@@ -428,16 +430,31 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
                 .addTag(VTags.Biomes.OCEANS).addTag(VTags.Biomes.RIVERS);
             this.tag(BiomeTags.IS_OCEAN).addTag(VTags.Biomes.SHALLOW_OCEANS);
             this.tag(BiomeTags.IS_DEEP_OCEAN).addTag(VTags.Biomes.DEEP_OCEANS);
-            this.tag(BiomeTags.IS_RIVER).addTag(VTags.Biomes.RIVERS);
+            this.tag(BiomeTags.IS_RIVER)
+                .addOptionalTag(ConventionalBiomeTags.RIVER.location())
+                .addTag(VTags.Biomes.RIVERS);
 
 
-            this.tag(VTags.Biomes.BADLANDS).add(Biomes.BADLANDS, Biomes.ERODED_BADLANDS, Biomes.WOODED_BADLANDS);
+            this.tag(VTags.Biomes.BADLANDS)
+                .addOptionalTag(ConventionalBiomeTags.MESA.location())
+                .addOptionalTag(ConventionalBiomeTags.BADLANDS.location())
+                .add(Biomes.BADLANDS, Biomes.ERODED_BADLANDS, Biomes.WOODED_BADLANDS);
             this.tag(BiomeTags.IS_BADLANDS).addTag(VTags.Biomes.BADLANDS);
             this.tag(VTags.Biomes.BEACHES)
+                .addOptionalTag(ConventionalBiomeTags.STONY_SHORES.location())
+                .addOptionalTag(ConventionalBiomeTags.BEACH.location())
                 .add(Biomes.BEACH, Biomes.SNOWY_BEACH, Biomes.STONY_SHORE);
             this.tag(BiomeTags.IS_BEACH).addTag(VTags.Biomes.BEACHES);
-            this.tag(VTags.Biomes.DESERTS).add(Biomes.DESERT);
-            this.tag(VTags.Biomes.FORESTS).addTag(VTags.Biomes.BIRCH_FORESTS).addTag(VTags.Biomes.DARK_FORESTS)
+            this.tag(VTags.Biomes.DESERTS)
+                .addOptionalTag(ConventionalBiomeTags.DESERT.location())
+                .add(Biomes.DESERT);
+            this.tag(VTags.Biomes.FORESTS)
+                .addOptionalTag(ConventionalBiomeTags.FOREST.location())
+                .addOptionalTag(ConventionalBiomeTags.FLOWER_FORESTS.location())
+                .addOptionalTag(ConventionalBiomeTags.TREE_SAVANNA.location())
+                .addOptionalTag(ConventionalBiomeTags.TREE_CONIFEROUS.location())
+                .addOptionalTag(ConventionalBiomeTags.TREE_DECIDUOUS.location())
+                .addTag(VTags.Biomes.BIRCH_FORESTS).addTag(VTags.Biomes.DARK_FORESTS)
                 .addTag(VTags.Biomes.JUNGLE_FORESTS).addTag(VTags.Biomes.NETHER_FORESTS)
                 .addTag(VTags.Biomes.OAK_FORESTS).addTag(VTags.Biomes.TAIGA_FORESTS);
             this.tag(VTags.Biomes.BIRCH_FORESTS)
@@ -445,22 +462,26 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
             this.tag(VTags.Biomes.DARK_FORESTS)
                 .add(Biomes.DARK_FOREST);
             this.tag(VTags.Biomes.JUNGLE_FORESTS)
+                .addOptionalTag(ConventionalBiomeTags.TREE_JUNGLE.location())
                 .addTag(VTags.Biomes.BAMBOO_JUNGLE_FORESTS)
                 .add(Biomes.JUNGLE, Biomes.SPARSE_JUNGLE);
             this.tag(VTags.Biomes.BAMBOO_JUNGLE_FORESTS)
                 .add(Biomes.BAMBOO_JUNGLE);
             this.tag(BiomeTags.IS_JUNGLE).addTag(VTags.Biomes.JUNGLE_FORESTS);
             this.tag(VTags.Biomes.NETHER_FORESTS)
-                .add(Biomes.CRIMSON_FOREST, Biomes.WARPED_FOREST);
-            this.tag(BiomeTags.IS_NETHER).addTag(VTags.Biomes.NETHER_FORESTS);
+                .add(Biomes.CRIMSON_FOREST, Biomes.WARPED_FOREST)
+                .addOptionalTag(ConventionalBiomeTags.NETHER_FORESTS.location());
+            this.tag(BiomeTags.IS_NETHER).addOptionalTag(ConventionalBiomeTags.IN_NETHER.location()).addTag(VTags.Biomes.NETHER_FORESTS);
             this.tag(VTags.Biomes.OAK_FORESTS)
                 .add(Biomes.FOREST, Biomes.FLOWER_FOREST);
             this.tag(VTags.Biomes.TAIGA_FORESTS)
+                .addOptionalTag(ConventionalBiomeTags.TAIGA.location())
                 .add(Biomes.TAIGA, Biomes.SNOWY_TAIGA, Biomes.OLD_GROWTH_SPRUCE_TAIGA, Biomes.OLD_GROWTH_PINE_TAIGA, Biomes.GROVE);
             this.tag(BiomeTags.IS_FOREST).addTag(VTags.Biomes.FORESTS);
             this.tag(VTags.Biomes.MUSHROOM)
                 .add(Biomes.MUSHROOM_FIELDS);
             this.tag(VTags.Biomes.MOUNTAINS)
+                .addOptionalTag(ConventionalBiomeTags.MOUNTAIN.location())
                 .add(Biomes.WINDSWEPT_HILLS, Biomes.WINDSWEPT_GRAVELLY_HILLS, Biomes.WINDSWEPT_FOREST, Biomes.WINDSWEPT_SAVANNA);
             this.tag(BiomeTags.IS_MOUNTAIN).addTag(VTags.Biomes.MOUNTAINS);
             this.tag(VTags.Biomes.PLAINS)
@@ -468,20 +489,27 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
             this.tag(VTags.Biomes.GRASSLANDS)
                 .addTag(VTags.Biomes.PLAINS).addTag(VTags.Biomes.SAVANNAS);
             this.tag(VTags.Biomes.SAVANNAS)
+                .addOptionalTag(ConventionalBiomeTags.SAVANNA.location())
+                .addOptionalTag(ConventionalBiomeTags.TREE_SAVANNA.location())
                 .add(Biomes.SAVANNA, Biomes.SAVANNA_PLATEAU, Biomes.WINDSWEPT_SAVANNA);
             this.tag(BiomeTags.IS_SAVANNA).addTag(VTags.Biomes.SAVANNAS);
             this.tag(VTags.Biomes.SNOWY)
+                .addOptionalTag(ConventionalBiomeTags.SNOWY.location())
+                .addOptionalTag(ConventionalBiomeTags.SNOWY_PLAINS.location())
                 .add(Biomes.FROZEN_OCEAN, Biomes.DEEP_FROZEN_OCEAN, Biomes.FROZEN_RIVER,
                     Biomes.SNOWY_BEACH, Biomes.SNOWY_TAIGA, Biomes.SNOWY_PLAINS,
                     Biomes.GROVE, Biomes.SNOWY_SLOPES, Biomes.JAGGED_PEAKS, Biomes.FROZEN_PEAKS);
             this.tag(BiomeTags.ONLY_ALLOWS_SNOW_AND_GOLD_RABBITS).addTag(VTags.Biomes.SNOWY);
             this.tag(BiomeTags.SPAWNS_COLD_VARIANT_FROGS).addTag(VTags.Biomes.SNOWY);
             this.tag(VTags.Biomes.SWAMPS)
+                .addOptionalTag(ConventionalBiomeTags.SWAMP.location())
                 .add(Biomes.SWAMP);
             this.tag(BiomeTags.ALLOWS_SURFACE_SLIME_SPAWNS).addTag(VTags.Biomes.SWAMPS);
             this.tag(VTags.Biomes.SLOPES)
+                .addOptionalTag(ConventionalBiomeTags.MOUNTAIN_SLOPE.location())
                 .add(Biomes.MEADOW, Biomes.GROVE, Biomes.SNOWY_SLOPES);
             this.tag(VTags.Biomes.PEAKS)
+                .addOptionalTag(ConventionalBiomeTags.MOUNTAIN_PEAK.location())
                 .add(Biomes.JAGGED_PEAKS, Biomes.FROZEN_PEAKS, Biomes.STONY_PEAKS);
             this.tag(VTags.Biomes.VOIDS)
                 .add(Biomes.THE_VOID);
@@ -539,12 +567,15 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
                     Biomes.WINDSWEPT_HILLS,
                     Biomes.WINDSWEPT_SAVANNA);
             this.tag(VTags.Biomes.OVERWORLD_UNDERGROUND)
+                .addOptionalTag(ConventionalBiomeTags.UNDERGROUND.location())
                 .add(Biomes.LUSH_CAVES, Biomes.DRIPSTONE_CAVES);
             this.tag(VTags.Biomes.NETHER)
                 .addTag(VTags.Biomes.NETHER_FORESTS)
                 .add(Biomes.NETHER_WASTES, Biomes.SOUL_SAND_VALLEY, Biomes.BASALT_DELTAS);
             this.tag(BiomeTags.IS_NETHER).addTag(VTags.Biomes.NETHER);
             this.tag(VTags.Biomes.END)
+                .addOptionalTag(ConventionalBiomeTags.END_ISLANDS.location())
+                .addOptionalTag(ConventionalBiomeTags.IN_THE_END.location())
                 .add(Biomes.THE_END, Biomes.SMALL_END_ISLANDS, Biomes.END_BARRENS, Biomes.END_MIDLANDS, Biomes.END_HIGHLANDS);
             this.tag(BiomeTags.IS_END).addTag(VTags.Biomes.END);
         }

@@ -44,18 +44,18 @@ repositories {
 	mavenCentral()
 	mavenLocal()
 	maven { url = "https://maven.fabricmc.net" }
-	maven { url = "https://raw.githubusercontent.com/vampire-studios/VampireStudiosMaven/main/" }
 	maven { url = "https://maven.shedaniel.me/" }
 	maven { url = uri("https://storage.googleapis.com/devan-maven/") }
 	maven { url = "https://maven.parchmentmc.net/" }
 	maven { url = "https://maven.terraformersmc.com/" }
+	maven { url = "https://maven.siphalor.de" }
 }
 
 dependencies {
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
 	mappings loom.layered {
 		it.addLayer(quiltMappings.mappings("org.quiltmc:quilt-mappings:${project.quilt_version}:v2")) // https://maven.quiltmc.org/#browse/browse:release
-		it.parchment("org.parchmentmc.data:parchment-1.18.1:BLEEDING-20211212.174449-1@zip") // https://ldtteam.jfrog.io/ui/native/parchmentmc-public/org/parchmentmc/data/parchment-1.18.1/BLEEDING-SNAPSHOT
+		it.parchment("org.parchmentmc.data:parchment-1.18.2:2022.03.13@zip") // https://ldtteam.jfrog.io/ui/native/parchmentmc-public/org/parchmentmc/data/parchment-1.18.1/BLEEDING-SNAPSHOT
 		it.officialMojangMappings {
 			setNameSyntheticMembers(false)
 		}
@@ -71,10 +71,10 @@ dependencies {
 		exclude(group: "net.fabricmc.fabric-api")
 	}
 
-	modApi ("io.github.vampirestudios:artifice:0.19.0+build.1-22w13a") {
+	modApi ("io.github.vampirestudios:artifice:0.19.0+build.1-22w15a") {
 		exclude group: "net.fabricmc.fabric-api"
 	}
-	include ("io.github.vampirestudios:artifice:0.19.0+build.1-22w13a") {
+	include ("io.github.vampirestudios:artifice:0.19.0+build.1-22w15a") {
 		exclude group: "net.fabricmc.fabric-api"
 	}
 
@@ -116,8 +116,15 @@ publishing {
 		}
 	}
 	repositories {
-		maven {
-			url file("E:\\Development\\Work\\VampireStudiosMaven\\")
+		if (project.hasProperty("siphalorMavenUser")) {
+			maven {
+				name = "Siphalor"
+				url = "https://maven.siphalor.de/upload.php"
+				credentials {
+					username = siphalorMavenUser
+					password = siphalorMavenPassword
+				}
+			}
 		}
 	}
 }

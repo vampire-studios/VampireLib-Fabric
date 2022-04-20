@@ -1,6 +1,14 @@
 {
   "replace": false,
   "values": [
+    {
+      "id": "#c:stony_shores",
+      "required": false
+    },
+    {
+      "id": "#c:beach",
+      "required": false
+    },
     "minecraft:beach",
     "minecraft:snowy_beach",
     "minecraft:stony_shore"

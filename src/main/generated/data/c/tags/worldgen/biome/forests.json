@@ -1,6 +1,26 @@
 {
   "replace": false,
   "values": [
+    {
+      "id": "#c:forest",
+      "required": false
+    },
+    {
+      "id": "#c:flower_forests",
+      "required": false
+    },
+    {
+      "id": "#c:tree_savanna",
+      "required": false
+    },
+    {
+      "id": "#c:tree_coniferous",
+      "required": false
+    },
+    {
+      "id": "#c:tree_deciduous",
+      "required": false
+    },
     "#c:forests/birch",
     "#c:forests/dark",
     "#c:forests/jungles",

@@ -1,6 +1,10 @@
 {
   "replace": false,
   "values": [
+    {
+      "id": "#c:tree_jungle",
+      "required": false
+    },
     "#c:forests/jungles/bamboo",
     "minecraft:jungle",
     "minecraft:sparse_jungle"

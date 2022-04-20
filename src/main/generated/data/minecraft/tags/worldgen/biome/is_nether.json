@@ -1,6 +1,10 @@
 {
   "replace": false,
   "values": [
+    {
+      "id": "#c:in_nether",
+      "required": false
+    },
     "#c:forests/nether",
     "#c:nether"
   ]
