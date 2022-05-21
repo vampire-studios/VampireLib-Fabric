@@ -1,20 +1,21 @@
 accessWidener v2 named
-transitive-accessible method net/minecraft/world/entity/decoration/Motive register (Ljava/lang/String;II)Lnet/minecraft/world/entity/decoration/Motive;
-
 transitive-accessible method net/minecraft/world/level/levelgen/feature/trunkplacers/TrunkPlacerType <init> (Lcom/mojang/serialization/Codec;)V
 transitive-accessible method net/minecraft/world/level/levelgen/feature/foliageplacers/FoliagePlacerType <init> (Lcom/mojang/serialization/Codec;)V
 transitive-accessible method net/minecraft/world/level/levelgen/feature/treedecorators/TreeDecoratorType <init> (Lcom/mojang/serialization/Codec;)V
 transitive-accessible method net/minecraft/world/level/levelgen/feature/stateproviders/SimpleStateProvider <init> (Lnet/minecraft/world/level/block/state/BlockState;)V
 
-transitive-accessible method net/minecraft/world/entity/ai/village/poi/PoiType <init> (Ljava/lang/String;Ljava/util/Set;II)V
-transitive-accessible method net/minecraft/world/entity/npc/VillagerProfession <init> (Ljava/lang/String;Lnet/minecraft/world/entity/ai/village/poi/PoiType;Lcom/google/common/collect/ImmutableSet;Lcom/google/common/collect/ImmutableSet;Lnet/minecraft/sounds/SoundEvent;)V
-transitive-accessible method net/minecraft/world/entity/ai/village/poi/PoiType getBlockStates (Lnet/minecraft/world/level/block/Block;)Ljava/util/Set;
-transitive-accessible field net/minecraft/world/entity/ai/village/poi/PoiType TYPE_BY_STATE Ljava/util/Map;
+transitive-accessible method net/minecraft/world/entity/ai/village/poi/PoiType <init> (Ljava/util/Set;II)V
+transitive-accessible method net/minecraft/world/entity/npc/VillagerProfession <init> (Ljava/lang/String;Ljava/util/function/Predicate;Ljava/util/function/Predicate;Lcom/google/common/collect/ImmutableSet;Lcom/google/common/collect/ImmutableSet;Lnet/minecraft/sounds/SoundEvent;)V
+transitive-extendable class net/minecraft/world/entity/npc/VillagerType
+transitive-accessible method net/minecraft/world/entity/npc/VillagerType <init> (Ljava/lang/String;)V
+transitive-accessible field net/minecraft/world/entity/npc/VillagerType BY_BIOME Ljava/util/Map;
 
-transitive-accessible method net/minecraft/data/tags/TagsProvider$TagAppender <init> (Lnet/minecraft/tags/Tag$Builder;Lnet/minecraft/core/Registry;Ljava/lang/String;)V
-transitive-accessible field net/minecraft/data/tags/TagsProvider$TagAppender builder Lnet/minecraft/tags/Tag$Builder;
+transitive-accessible field net/minecraft/data/tags/TagsProvider pathProvider Lnet/minecraft/data/DataGenerator$PathProvider;
+transitive-mutable field net/minecraft/data/tags/TagsProvider pathProvider Lnet/minecraft/data/DataGenerator$PathProvider;
+transitive-accessible method net/minecraft/data/tags/TagsProvider$TagAppender <init> (Lnet/minecraft/tags/TagBuilder;Lnet/minecraft/core/Registry;)V
+transitive-accessible field net/minecraft/data/tags/TagsProvider$TagAppender builder Lnet/minecraft/tags/TagBuilder;
 transitive-accessible field net/minecraft/data/tags/TagsProvider$TagAppender registry Lnet/minecraft/core/Registry;
-transitive-accessible field net/minecraft/data/tags/TagsProvider$TagAppender source Ljava/lang/String;
+transitive-extendable method net/minecraft/data/tags/TagsProvider$TagAppender add ([Ljava/lang/Object;)Lnet/minecraft/data/tags/TagsProvider$TagAppender;
 
 transitive-accessible field net/minecraft/data/loot/BlockLoot map Ljava/util/Map;
 
@@ -42,8 +43,6 @@ transitive-accessible method net/minecraft/world/item/crafting/Ingredient$TagVal
 
 transitive-accessible class net/minecraft/data/recipes/ShapedRecipeBuilder$Result
 
-transitive-extendable method net/minecraft/data/tags/TagsProvider$TagAppender add ([Ljava/lang/Object;)Lnet/minecraft/data/tags/TagsProvider$TagAppender;
-
 accessible field net/minecraft/client/renderer/BlockEntityWithoutLevelRenderer blockEntityRenderDispatcher Lnet/minecraft/client/renderer/blockentity/BlockEntityRenderDispatcher;
 accessible class net/minecraft/world/level/block/entity/BlockEntityType$BlockEntitySupplier
 accessible class net/minecraft/client/renderer/texture/TextureAtlasSprite$AnimatedTexture
@@ -62,3 +61,19 @@ accessible class net/minecraft/client/renderer/block/model/ItemTransforms$Deseri
 accessible method net/minecraft/client/renderer/block/model/ItemTransforms$Deserializer <init> ()V
 accessible class net/minecraft/client/renderer/block/model/ItemOverride$Deserializer
 accessible method net/minecraft/client/renderer/block/model/ItemOverride$Deserializer <init> ()V
+
+transitive-accessible class net/minecraft/world/level/levelgen/SurfaceRules$Context
+transitive-accessible class net/minecraft/world/level/levelgen/SurfaceRules$Condition
+transitive-accessible class net/minecraft/world/level/levelgen/SurfaceRules$SurfaceRule
+transitive-accessible class net/minecraft/world/level/levelgen/SurfaceRules$LazyXZCondition
+transitive-accessible class net/minecraft/world/level/levelgen/SurfaceRules$LazyCondition
+transitive-accessible class net/minecraft/world/level/levelgen/SurfaceRules$SequenceRuleSource
+transitive-accessible method net/minecraft/world/level/levelgen/SurfaceRules$SequenceRuleSource <init> (Ljava/util/List;)V
+transitive-accessible class net/minecraft/world/level/levelgen/SurfaceRules$StateRule
+
+transitive-accessible method net/minecraft/core/Registry registerSimple (Lnet/minecraft/resources/ResourceKey;Lcom/mojang/serialization/Lifecycle;Lnet/minecraft/core/Registry$RegistryBootstrap;)Lnet/minecraft/core/Registry;
+transitive-accessible method net/minecraft/core/Registry registerSimple (Lnet/minecraft/resources/ResourceKey;Lnet/minecraft/core/Registry$RegistryBootstrap;)Lnet/minecraft/core/Registry;
+transitive-accessible class net/minecraft/core/RegistryAccess$RegistryData
+transitive-accessible class net/minecraft/core/Registry$RegistryBootstrap
+transitive-accessible method net/minecraft/core/Registry internalRegister (Lnet/minecraft/resources/ResourceKey;Lnet/minecraft/core/WritableRegistry;Lnet/minecraft/core/Registry$RegistryBootstrap;Lcom/mojang/serialization/Lifecycle;)Lnet/minecraft/core/WritableRegistry;
+transitive-accessible method net/minecraft/data/BuiltinRegistries internalRegister (Lnet/minecraft/resources/ResourceKey;Lnet/minecraft/core/WritableRegistry;Lnet/minecraft/data/BuiltinRegistries$RegistryBootstrap;Lcom/mojang/serialization/Lifecycle;)Lnet/minecraft/core/WritableRegistry;

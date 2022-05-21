@@ -23,19 +23,24 @@
     "block.SpreadableBlockMixin",
     "block.StructureBlockBlockEntityMixin",
     "block.UpdateStructureBlockC2SPacketMixin",
+    "entity.FarmerVillagerTaskMixin",
+    "entity.FarmerWorkTaskAccessor",
+    "entity.GiveGiftsToHeroTaskAccessor",
+    "entity.VillagerEntityAccessor",
+    "entity.VillagerEntityMixin",
     "item.MixinBookOnLectern"
   ],
   "client": [
     "client.BlockModelAccessor",
     "client.BlockModelDeserializerMixin",
     "client.BlockModelMixin",
+    "client.CameraInvokerMixin",
+    "client.ItemRendererMixin",
     "client.ModelStateMixin",
     "client.ShaderInstanceMixin",
     "client.SimpleBakedModelBuilderAccessor",
     "client.TextureAtlasMixin",
-    "client.TextureAtlasSpriteAnimatedTextureAccessor",
-    "client.CameraInvokerMixin",
-    "client.ItemRendererMixin"
+    "client.TextureAtlasSpriteAnimatedTextureAccessor"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -682,7 +682,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.decoration.Motive;
+import net.minecraft.world.entity.decoration.PaintingVariant;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -1295,17 +1295,17 @@ public class VTags {
         }
     }
 
-    public static class Motives {
-        public static final TagKey<Motive> ONE_X_ONE = tag("1x1");
-        public static final TagKey<Motive> TWO_X_ONE = tag("2x1");
-        public static final TagKey<Motive> ONE_X_TWO = tag("1x2");
-        public static final TagKey<Motive> TWO_X_TWO = tag("2x2");
-        public static final TagKey<Motive> FOUR_X_TWO = tag("4x2");
-        public static final TagKey<Motive> FOUR_X_THREE = tag("4x3");
-        public static final TagKey<Motive> FOUR_X_FOUR = tag("4x4");
+    public static class PaintingVariants {
+        public static final TagKey<PaintingVariant> ONE_X_ONE = tag("1x1");
+        public static final TagKey<PaintingVariant> TWO_X_ONE = tag("2x1");
+        public static final TagKey<PaintingVariant> ONE_X_TWO = tag("1x2");
+        public static final TagKey<PaintingVariant> TWO_X_TWO = tag("2x2");
+        public static final TagKey<PaintingVariant> FOUR_X_TWO = tag("4x2");
+        public static final TagKey<PaintingVariant> FOUR_X_THREE = tag("4x3");
+        public static final TagKey<PaintingVariant> FOUR_X_FOUR = tag("4x4");
 
-        private static TagKey<Motive> tag(String name) {
-            return TagKey.create(Registry.MOTIVE_REGISTRY, new ResourceLocation("c", name));
+        private static TagKey<PaintingVariant> tag(String name) {
+            return TagKey.create(Registry.PAINTING_VARIANT_REGISTRY, new ResourceLocation("c", name));
         }
     }
 

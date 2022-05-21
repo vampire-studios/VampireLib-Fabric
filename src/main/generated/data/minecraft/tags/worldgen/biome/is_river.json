@@ -1,10 +1,6 @@
 {
   "replace": false,
   "values": [
-    {
-      "id": "#c:river",
-      "required": false
-    },
     "#c:water/rivers"
   ]
 }

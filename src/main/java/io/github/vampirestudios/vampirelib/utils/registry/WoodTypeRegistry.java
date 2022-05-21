@@ -677,23 +677,52 @@
 
 package io.github.vampirestudios.vampirelib.utils.registry;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
+
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.StringRepresentable;
+import net.minecraft.world.level.block.Block;
 
 public abstract class WoodTypeRegistry implements StringRepresentable {
-    public static List<WoodType> woodTypes = new ArrayList<>();
+    public static Map<ResourceLocation, WoodType> woodTypes = new HashMap<>();
 
     private static final Queue<ModdedTypeListener> listeners = new ConcurrentLinkedQueue<>();
 
+    public static WoodType get(ResourceLocation id) {
+        return woodTypes.get(id);
+    }
+
+    public static boolean contains(ResourceLocation id) {
+        return woodTypes.containsKey(id);
+    }
+
+    public static boolean contains(WoodType woodType) {
+        return woodTypes.containsValue(woodType);
+    }
+
     static WoodType registerVanilla(WoodType woodType) {
-        woodTypes.add(woodType);
+        woodTypes.put(woodType.identifier, woodType);
         return woodType;
     }
 
     public static WoodType registerModded(WoodType woodType) {
+        registerVanilla(woodType);
+        listeners.forEach(listener -> listener.onModdedWoodTypeRegistered(woodType));
+        return woodType;
+    }
+
+    public static WoodType registerModded(WoodRegistry woodRegistry) {
+        WoodType woodType = new WoodType(woodRegistry.name(), woodRegistry.leaves(), woodRegistry.log());
+        registerVanilla(woodType);
+        listeners.forEach(listener -> listener.onModdedWoodTypeRegistered(woodType));
+        return woodType;
+    }
+
+    public static WoodType registerModded(WoodRegistry woodRegistry, Block leaves) {
+        WoodType woodType = new WoodType(woodRegistry.name(), leaves, woodRegistry.log());
         registerVanilla(woodType);
         listeners.forEach(listener -> listener.onModdedWoodTypeRegistered(woodType));
         return woodType;

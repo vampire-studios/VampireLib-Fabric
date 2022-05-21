@@ -691,12 +691,16 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Property;
+import net.minecraft.world.phys.BlockHitResult;
 
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 
@@ -730,7 +734,7 @@ public class BlockChiseler {
         if (chiselRegistry.containsKey(identifier)) {
             chiselRegistry.get(identifier).chiselDeque.addAll(carvedBlocks);
         } else
-            throw new RuntimeException("Unknown chisel entry \"" + identifier + "\".");
+            throw new RuntimeException("Unknown chisel entry: \"" + identifier + "\".");
     }
 
     public static void setup() {
@@ -741,44 +745,39 @@ public class BlockChiseler {
                 for (Map.Entry<TagKey<Item>, Set<ChiselEntry>> toolToEntries : toolTagsToEntries.entrySet()) {
                     if (!new ItemStack(heldStack.getItem()).is(toolToEntries.getKey()))
                         continue;
-                    for (ChiselEntry chiselEntry : toolToEntries.getValue()) {
-                        Block newBlock;
-                        if (player.isShiftKeyDown())
-                            newBlock = chiselEntry.getPreviousBlock(hitBlockState.getBlock());
-                        else
-                            newBlock = chiselEntry.getNextBlock(hitBlockState.getBlock());
-                        if (newBlock == null) continue;
-
-                        world.playSound(null, hitResult.getBlockPos(), SoundEvents.PUMPKIN_CARVE, SoundSource.BLOCKS, 1.0F, 1.0F);
-                        world.setBlockAndUpdate(hitResult.getBlockPos(), copyTo(hitBlockState, newBlock.defaultBlockState()));
-                        if (heldStack.getItem().canBeDepleted())
-                            heldStack.hurtAndBreak(1, player, playerEntity -> player.broadcastBreakEvent(hand));
-                        return InteractionResult.SUCCESS;
-                    }
+                    return loopThroughChiselEntries(player, world, hand, hitResult, hitBlockState, heldStack, toolToEntries.getValue());
                 }
                 for (Map.Entry<Item, Set<ChiselEntry>> itemsToEntry : itemsToEntries.entrySet()) {
                     if (itemsToEntry.getKey() != heldStack.getItem())
                         continue;
-                    for (ChiselEntry chiselEntry : itemsToEntry.getValue()) {
-                        Block newBlock;
-                        if (player.isShiftKeyDown())
-                            newBlock = chiselEntry.getPreviousBlock(hitBlockState.getBlock());
-                        else
-                            newBlock = chiselEntry.getNextBlock(hitBlockState.getBlock());
-                        if (newBlock == null) continue;
-
-                        world.playSound(null, hitResult.getBlockPos(), SoundEvents.PUMPKIN_CARVE, SoundSource.BLOCKS, 1.0F, 1.0F);
-                        world.setBlockAndUpdate(hitResult.getBlockPos(), copyTo(hitBlockState, newBlock.defaultBlockState()));
-                        if (heldStack.getItem().canBeDepleted())
-                            heldStack.hurtAndBreak(1, player, playerEntity -> player.broadcastBreakEvent(hand));
-                        return InteractionResult.SUCCESS;
-                    }
+                    return loopThroughChiselEntries(player, world, hand, hitResult, hitBlockState, heldStack, itemsToEntry.getValue());
                 }
             }
             return InteractionResult.PASS;
         });
     }
 
+    private static InteractionResult loopThroughChiselEntries(
+        Player player, Level level, InteractionHand hand, BlockHitResult hitResult,
+        BlockState hitBlockState, ItemStack heldStack, Set<ChiselEntry> entries
+    ) {
+        for (ChiselEntry chiselEntry : entries) {
+            Block newBlock;
+            if (player.isShiftKeyDown())
+                newBlock = chiselEntry.getPreviousBlock(hitBlockState.getBlock());
+            else
+                newBlock = chiselEntry.getNextBlock(hitBlockState.getBlock());
+            if (newBlock == null) continue;
+
+            level.playSound(null, hitResult.getBlockPos(), SoundEvents.PUMPKIN_CARVE, SoundSource.BLOCKS, 1.0F, 1.0F);
+            level.setBlockAndUpdate(hitResult.getBlockPos(), copyTo(hitBlockState, newBlock.defaultBlockState()));
+            if (heldStack.getItem().canBeDepleted())
+                heldStack.hurtAndBreak(1, player, playerEntity -> player.broadcastBreakEvent(hand));
+        }
+        return InteractionResult.SUCCESS;
+    }
+
+    @SuppressWarnings("rawtypes")
     private static BlockState copyTo(BlockState from, BlockState to) {
         Collection<Property<?>> fromProperties = from.getValues().keySet();
         Collection<Property<?>> toProperties = to.getValues().keySet();

@@ -25,21 +25,22 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.core.Registry;
+import net.minecraft.data.BuiltinRegistries;
 import net.minecraft.data.tags.TagsProvider;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.Tag;
+import net.minecraft.tags.TagBuilder;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.levelgen.NoiseGeneratorSettings;
 import net.minecraft.world.level.levelgen.synth.NormalNoise;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
-import net.fabricmc.fabric.impl.datagen.FabricDataGenHelper;
 import net.fabricmc.fabric.mixin.datagen.DynamicRegistryManagerAccessor;
 
 public abstract class CustomTagProviders<T> extends FabricTagProvider<T> {
@@ -51,25 +52,24 @@ public abstract class CustomTagProviders<T> extends FabricTagProvider<T> {
 	 *
 	 * @param dataGenerator The data generator instance
 	 * @param registry The backing registry for the Tag type.
-	 * @param path The directory name to write the tag file names. Example: "blocks" or "items"
 	 */
 
-	protected CustomTagProviders(FabricDataGenerator dataGenerator, Registry<T> registry, String path) {
-		super(dataGenerator, registry, path);
+	protected CustomTagProviders(FabricDataGenerator dataGenerator, Registry<T> registry) {
+		super(dataGenerator, registry);
 	}
 
-	public CustomTagProviders<T>.CustomFabricTagBuilder<T> getOrCreateTagBuilderCustom(TagKey<T> tag) {
-		return new CustomTagProviders.CustomFabricTagBuilder(super.tag(tag));
+	public CustomFabricTagBuilder<T> getOrCreateTagBuilderCustom(TagKey<T> tag) {
+		return new CustomFabricTagBuilder<>(super.tag(tag));
 	}
 
 	@Override
-	public CustomFabricTagBuilder<T> tag(TagKey<T> tag) {
+	public CustomFabricTagBuilder<T> tag(@NotNull TagKey<T> tag) {
 		return new CustomFabricTagBuilder<>(super.tag(tag));
 	}
 
 	public abstract static class CustomBlockTagProvider extends CustomTagProviders<Block> {
 		protected CustomBlockTagProvider(FabricDataGenerator dataGenerator) {
-			super(dataGenerator, Registry.BLOCK, "blocks");
+			super(dataGenerator, Registry.BLOCK);
 		}
 
 		public CustomFabricTagBuilder<Block> tagCustom(TagKey<Block> tag) {
@@ -77,12 +77,22 @@ public abstract class CustomTagProviders<T> extends FabricTagProvider<T> {
 		}
 	}
 
+	public abstract static class CustomBiomeTagProvider extends CustomTagProviders<Biome> {
+		protected CustomBiomeTagProvider(FabricDataGenerator dataGenerator) {
+			super(dataGenerator, BuiltinRegistries.BIOME);
+		}
+
+		public CustomFabricTagBuilder<Biome> tagCustom(TagKey<Biome> tag) {
+			return getOrCreateTagBuilderCustom(tag);
+		}
+	}
+
 	public abstract static class CustomItemTagProvider extends CustomTagProviders<Item> {
 		@Nullable
-		private final Function<TagKey<Block>, Tag.Builder> blockTagBuilderProvider;
+		private final Function<TagKey<Block>, TagBuilder> blockTagBuilderProvider;
 
 		protected CustomItemTagProvider(FabricDataGenerator dataGenerator, @Nullable CustomBlockTagProvider blockTagProvider) {
-			super(dataGenerator, Registry.ITEM, "items");
+			super(dataGenerator, Registry.ITEM);
 
 			this.blockTagBuilderProvider = blockTagProvider == null ? null : blockTagProvider::getOrCreateRawBuilder;
 		}
@@ -107,9 +117,9 @@ public abstract class CustomTagProviders<T> extends FabricTagProvider<T> {
 		 * @param itemTag The item tag to copy to.
 		 */
 		public void copy(TagKey<Block> blockTag, TagKey<Item> itemTag) {
-			Tag.Builder blockTagBuilder = Objects.requireNonNull(this.blockTagBuilderProvider, "Pass Block tag provider via constructor to use copy").apply(blockTag);
-			Tag.Builder itemTagBuilder = this.getOrCreateRawBuilder(itemTag);
-			blockTagBuilder.getEntries().filter((entry) -> entry.entry().verifyIfPresent(this.registry::containsKey, (id) -> true)).forEach(itemTagBuilder::add);
+			TagBuilder blockTagBuilder = Objects.requireNonNull(this.blockTagBuilderProvider, "Pass Block tag provider via constructor to use copy").apply(blockTag);
+			TagBuilder itemTagBuilder = this.getOrCreateRawBuilder(itemTag);
+			blockTagBuilder.build().stream().filter((entry) -> entry.verifyIfPresent(this.registry::containsKey, (id) -> true)).forEach(itemTagBuilder::add);
 		}
 
 		public CustomFabricTagBuilder<Item> tagCustom(TagKey<Item> tag) {
@@ -119,7 +129,7 @@ public abstract class CustomTagProviders<T> extends FabricTagProvider<T> {
 
 	public abstract static class VEntityTagProvider extends CustomTagProviders<EntityType<?>> {
 		public VEntityTagProvider(FabricDataGenerator dataGenerator) {
-			super(dataGenerator, Registry.ENTITY_TYPE, "entity_types");
+			super(dataGenerator, Registry.ENTITY_TYPE);
 		}
 
 		public CustomFabricTagBuilder<EntityType<?>> tagCustom(TagKey<EntityType<?>> tag) {
@@ -135,13 +145,12 @@ public abstract class CustomTagProviders<T> extends FabricTagProvider<T> {
 		 * Construct a new {@link CustomTagProviders.DynamicRegistryTagProvider}.
 		 *
 		 * @param dataGenerator The data generator instance
-		 * @param registryKey The registry key of the dynamic registry
-		 * @param path The directory name to write the tag file names
+		 * @param registry The registry key of the dynamic registry
 		 * @throws IllegalArgumentException if the registry is static registry
 		 */
-		protected DynamicRegistryTagProvider(FabricDataGenerator dataGenerator, ResourceKey<? extends Registry<T>> registryKey, String path) {
-			super(dataGenerator, FabricDataGenHelper.getFakeDynamicRegistry(), path);
-			Preconditions.checkArgument(DynamicRegistryManagerAccessor.getInfos().containsKey(registryKey), "Only dynamic registries are supported in this tag provider.");
+		protected DynamicRegistryTagProvider(FabricDataGenerator dataGenerator, Registry<T> registry) {
+			super(dataGenerator, registry);
+			Preconditions.checkArgument(DynamicRegistryManagerAccessor.getInfos().containsKey(registry.key()), "Only dynamic registries are supported in this tag provider.");
 		}
 	}
 
@@ -151,7 +160,7 @@ public abstract class CustomTagProviders<T> extends FabricTagProvider<T> {
 
 	public abstract static class MobEffectTagProvider extends CustomTagProviders<MobEffect> {
 		protected MobEffectTagProvider(FabricDataGenerator dataGenerator) {
-			super(dataGenerator, Registry.MOB_EFFECT, "mob_effects");
+			super(dataGenerator, Registry.MOB_EFFECT);
 		}
 
 		public CustomFabricTagBuilder<MobEffect> tagCustom(TagKey<MobEffect> tag) {
@@ -161,7 +170,7 @@ public abstract class CustomTagProviders<T> extends FabricTagProvider<T> {
 
 	public abstract static class NoiseSettingsTagProvider extends DynamicRegistryTagProvider<NoiseGeneratorSettings> {
 		protected NoiseSettingsTagProvider(FabricDataGenerator dataGenerator) {
-			super(dataGenerator, Registry.NOISE_GENERATOR_SETTINGS_REGISTRY, "worldgen/noise_settings");
+			super(dataGenerator, BuiltinRegistries.NOISE_GENERATOR_SETTINGS);
 		}
 
 		public CustomFabricTagBuilder<NoiseGeneratorSettings> tagCustom(TagKey<NoiseGeneratorSettings> tag) {
@@ -196,7 +205,7 @@ public abstract class CustomTagProviders<T> extends FabricTagProvider<T> {
 
 	public abstract static class NoiseTagProvider extends DynamicRegistryTagProvider<NormalNoise.NoiseParameters> {
 		protected NoiseTagProvider(FabricDataGenerator dataGenerator) {
-			super(dataGenerator, Registry.NOISE_REGISTRY, "worldgen/noises");
+			super(dataGenerator, BuiltinRegistries.NOISE);
 		}
 
 		public CustomFabricTagBuilder<NormalNoise.NoiseParameters> tagCustom(TagKey<NormalNoise.NoiseParameters> tag) {
@@ -204,11 +213,11 @@ public abstract class CustomTagProviders<T> extends FabricTagProvider<T> {
 		}
 	}
 
-	public final class CustomFabricTagBuilder<T> extends TagsProvider.TagAppender<T> {
-		private final TagsProvider.TagAppender<T> parent;
+	public final class CustomFabricTagBuilder<T2> extends TagsProvider.TagAppender<T2> {
+		private final TagsProvider.TagAppender<T2> parent;
 
-		public CustomFabricTagBuilder(TagsProvider.TagAppender<T> parent) {
-			super(parent.builder, parent.registry, parent.source);
+		public CustomFabricTagBuilder(TagsProvider.TagAppender<T2> parent) {
+			super(parent.builder, parent.registry);
 			this.parent = parent;
 		}
 
@@ -219,7 +228,7 @@ public abstract class CustomTagProviders<T> extends FabricTagProvider<T> {
 		 *
 		 * @return the {@link CustomFabricTagBuilder} instance
 		 */
-		public CustomFabricTagBuilder<T> setReplace(boolean replace) {
+		public CustomFabricTagBuilder<T2> setReplace(boolean replace) {
 			((net.fabricmc.fabric.impl.datagen.FabricTagBuilder) builder).fabric_setReplace(replace);
 			return this;
 		}
@@ -230,8 +239,7 @@ public abstract class CustomTagProviders<T> extends FabricTagProvider<T> {
 		 * @return the {@link CustomFabricTagBuilder} instance
 		 */
 		@Override
-		public CustomFabricTagBuilder<T> add(T element) {
-			assertStaticRegistry();
+		public CustomFabricTagBuilder<T2> add(T2 element) {
 			parent.add(element);
 			return this;
 		}
@@ -241,8 +249,8 @@ public abstract class CustomTagProviders<T> extends FabricTagProvider<T> {
 		 *
 		 * @return the {@link CustomFabricTagBuilder} instance
 		 */
-		public CustomFabricTagBuilder<T> add(ResourceLocation id) {
-			builder.addElement(id, source);
+		public CustomFabricTagBuilder<T2> add(ResourceLocation id) {
+			builder.addElement(id);
 			return this;
 		}
 
@@ -251,7 +259,7 @@ public abstract class CustomTagProviders<T> extends FabricTagProvider<T> {
 		 *
 		 * @return the {@link CustomFabricTagBuilder} instance
 		 */
-		public CustomFabricTagBuilder<T> add(ResourceKey<? extends T> registryKey) {
+		public CustomFabricTagBuilder<T2> add(ResourceKey<? extends T2> registryKey) {
 			return add(registryKey.location());
 		}
 
@@ -261,7 +269,7 @@ public abstract class CustomTagProviders<T> extends FabricTagProvider<T> {
 		 * @return the {@link CustomFabricTagBuilder} instance
 		 */
 		@Override
-		public CustomFabricTagBuilder<T> addOptional(@NotNull ResourceLocation id) {
+		public CustomFabricTagBuilder<T2> addOptional(@NotNull ResourceLocation id) {
 			parent.addOptional(id);
 			return this;
 		}
@@ -272,7 +280,7 @@ public abstract class CustomTagProviders<T> extends FabricTagProvider<T> {
 		 * @return the {@link CustomFabricTagBuilder} instance
 		 */
 		@Override
-		public CustomFabricTagBuilder<T> addTag(@NotNull TagKey<T> tag) {
+		public CustomFabricTagBuilder<T2> addTag(@NotNull TagKey<T2> tag) {
 			parent.addTag(tag);
 			return this;
 		}
@@ -283,7 +291,7 @@ public abstract class CustomTagProviders<T> extends FabricTagProvider<T> {
 		 * @return the {@link CustomFabricTagBuilder} instance
 		 */
 		@Override
-		public CustomFabricTagBuilder<T> addOptionalTag(ResourceLocation id) {
+		public CustomFabricTagBuilder<T2> addOptionalTag(ResourceLocation id) {
 			parent.addOptionalTag(id);
 			return this;
 		}
@@ -296,8 +304,8 @@ public abstract class CustomTagProviders<T> extends FabricTagProvider<T> {
 		 *
 		 * @return the {@link CustomFabricTagBuilder} instance
 		 */
-		public CustomFabricTagBuilder<T> forceAddTag(TagKey<T> tag) {
-			builder.addElement(tag.location(), source);
+		public CustomFabricTagBuilder<T2> forceAddTag(TagKey<T2> tag) {
+			builder.addElement(tag.location());
 			return this;
 		}
 
@@ -308,10 +316,8 @@ public abstract class CustomTagProviders<T> extends FabricTagProvider<T> {
 		 */
 		@SafeVarargs
 		@Override
-		public final CustomFabricTagBuilder<T> add(T... elements) {
-			assertStaticRegistry();
-
-			for (T element : elements) {
+		public final CustomFabricTagBuilder<T2> add(T2... elements) {
+			for (T2 element : elements) {
 				add(element);
 			}
 			return this;
@@ -322,7 +328,7 @@ public abstract class CustomTagProviders<T> extends FabricTagProvider<T> {
 		 *
 		 * @return the {@link CustomFabricTagBuilder} instance
 		 */
-		public CustomFabricTagBuilder<T> add(ResourceLocation... ids) {
+		public CustomFabricTagBuilder<T2> add(ResourceLocation... ids) {
 			for (ResourceLocation id : ids) {
 				add(id);
 			}
@@ -335,17 +341,11 @@ public abstract class CustomTagProviders<T> extends FabricTagProvider<T> {
 		 * @return the {@link FabricTagProvider.FabricTagBuilder} instance
 		 */
 		@SafeVarargs
-		public final CustomFabricTagBuilder<T> addTags(TagKey<T>... values) {
-			for (TagKey<T> value : values) {
+		public final CustomFabricTagBuilder<T2> addTags(TagKey<T2>... values) {
+			for (TagKey<T2> value : values) {
 				this.addTag(value);
 			}
 			return this;
-		}
-
-		private void assertStaticRegistry() {
-			if (CustomTagProviders.this instanceof DynamicRegistryTagProvider) {
-				throw new UnsupportedOperationException("Adding object instances is not supported for DynamicRegistryTagProvider.");
-			}
 		}
 
 	}

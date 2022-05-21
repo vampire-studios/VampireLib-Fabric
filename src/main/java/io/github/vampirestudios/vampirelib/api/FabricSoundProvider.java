@@ -72,7 +72,7 @@ public abstract class FabricSoundProvider implements DataProvider {
         sounds.stream().sorted(Comparator.comparing(SoundDefinition::getSoundId)).forEachOrdered(definition -> json.add(definition.getSoundId(), definition.toJson()));
 
         try {
-            DataProvider.save(GSON, cache, json, path);
+            DataProvider.saveStable(cache, json, path);
         } catch (IOException e) {
             LOGGER.error("Couldn't save {}", path, e);
         }

@@ -1,7 +1,7 @@
-// 22w15a	2022-04-19T21:17:11.3429797	Tags for minecraft:worldgen/noise_settings
-ac292bef02f40336740c895cb89a45e763688ecd data\c\tags\worldgen\noise_settings\amplified.json
-50c0124c23ee5f12ad3aee3faba7935265bc3732 data\c\tags\worldgen\noise_settings\nether.json
-ade8606b52402643630f5ff7a0c3f52918abfc1d data\c\tags\worldgen\noise_settings\overworld.json
-b49911fc46d68f25677887b4ef4dbeea9f00021f data\c\tags\worldgen\noise_settings\caves.json
-671a67ec5a27548735a23107dc07b8b0985f06d6 data\c\tags\worldgen\noise_settings\end.json
-f7ea474b7b4a5f89c509fbfd0db9493e2ee33922 data\c\tags\worldgen\noise_settings\floating_islands.json
+// 22w19a	2022-05-13T16:25:19.3465942	Tags for minecraft:worldgen/noise_settings
+fdf8da12288a95c2b1cf282c26b596495313b332 data\c\tags\worldgen\noise_settings\amplified.json
+45b8551c91e21d216f642ce29b6432219617a850 data\c\tags\worldgen\noise_settings\nether.json
+b17b144612be59deafac03f8be9c0b90adcfc4d2 data\c\tags\worldgen\noise_settings\overworld.json
+f888ff05eee7943471d8dba0debb96cb90eca568 data\c\tags\worldgen\noise_settings\caves.json
+e651ef2618479c142ccf39e4ca99f05071cd9e01 data\c\tags\worldgen\noise_settings\end.json
+9ff8a4c1814dc22076f72383929cf1452068c25e data\c\tags\worldgen\noise_settings\floating_islands.json

@@ -692,9 +692,9 @@ public class WoodType {
     public static final WoodType WARPED = WoodTypeRegistry.registerVanilla(new WoodType("warped", Blocks.WARPED_WART_BLOCK, Blocks.WARPED_STEM));
     public static final WoodType MANGROVE = WoodTypeRegistry.registerVanilla(new WoodType("mangrove", Blocks.MANGROVE_LEAVES, Blocks.MANGROVE_LOG));
     public static final WoodType[] VANILLA = new WoodType[] {OAK, SPRUCE, BIRCH, JUNGLE, ACACIA, DARK_OAK, CRIMSON, WARPED, MANGROVE};
-    private final Block leaves;
-    private final Block log;
-    protected ResourceLocation identifier;
+    public final Block leaves;
+    public final Block log;
+    public final ResourceLocation identifier;
 
     public WoodType(String name, Block leaves, Block log) {
         this(new ResourceLocation(name), leaves, log);
@@ -704,18 +704,6 @@ public class WoodType {
         this.identifier = identifier;
         this.leaves = leaves;
         this.log = log;
-    }
-
-    public ResourceLocation getIdentifier() {
-        return identifier;
-    }
-
-    public Block getLeaves() {
-        return leaves;
-    }
-
-    public Block getLog() {
-        return log;
     }
 
 }

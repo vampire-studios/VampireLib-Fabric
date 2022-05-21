@@ -1,10 +1,6 @@
 {
   "replace": false,
   "values": [
-    "#c:hills",
-    {
-      "id": "#c:extreme_hills",
-      "required": false
-    }
+    "#c:hills"
   ]
 }

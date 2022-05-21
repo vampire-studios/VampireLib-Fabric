@@ -694,7 +694,7 @@ public class SaplingBaseBlock extends SaplingBlock {
 
     public SaplingBaseBlock(AbstractTreeGrower treeGrower) {
         super(treeGrower, BlockBehaviour.Properties.of(Material.PLANT).noCollission().randomTicks().instabreak().sound(SoundType.GRASS));
-        FILLER = new VanillaTargetedItemGroupFiller(Blocks.DARK_OAK_SAPLING.asItem());
+        FILLER = new VanillaTargetedItemGroupFiller(Blocks.MANGROVE_PROPAGULE.asItem());
     }
 
     @Override

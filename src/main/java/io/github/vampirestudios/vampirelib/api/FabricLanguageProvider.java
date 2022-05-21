@@ -132,7 +132,7 @@ public abstract class FabricLanguageProvider implements DataProvider {
 		Path path = this.dataGenerator.getOutputFolder().resolve("assets/" + this.modId + "/lang/" + this.locale + ".json");
 		try {
 			JsonElement json = GSON.toJsonTree(this.data);
-			DataProvider.save(GSON, cache, json, path);
+			DataProvider.saveStable(cache, json, path);
 		} catch (IOException e) {
 			LOGGER.error("Couldn't save {}", path, e);
 		}

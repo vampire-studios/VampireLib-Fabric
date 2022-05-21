@@ -1,10 +1,6 @@
 {
   "replace": false,
   "values": [
-    {
-      "id": "#c:mountain_peak",
-      "required": false
-    },
     "minecraft:jagged_peaks",
     "minecraft:frozen_peaks",
     "minecraft:stony_peaks"

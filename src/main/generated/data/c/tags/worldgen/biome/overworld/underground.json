@@ -1,10 +1,6 @@
 {
   "replace": false,
   "values": [
-    {
-      "id": "#c:underground",
-      "required": false
-    },
     "minecraft:lush_caves",
     "minecraft:dripstone_caves"
   ]

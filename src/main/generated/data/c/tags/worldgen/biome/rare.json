@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
+    "#c:mushroom",
     "minecraft:sparse_jungle",
     "minecraft:savanna_plateau",
     "minecraft:sunflower_plains",
@@ -11,7 +12,6 @@
     "minecraft:old_growth_spruce_taiga",
     "minecraft:windswept_savanna",
     "minecraft:eroded_badlands",
-    "minecraft:bamboo_jungle",
-    "minecraft:mushroom_fields"
+    "minecraft:bamboo_jungle"
   ]
 }

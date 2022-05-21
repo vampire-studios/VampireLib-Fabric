@@ -718,19 +718,7 @@ public class ArtificeGenerationHelper {
     }
 
     public static void generatePillarBlockState(ArtificeResourcePack.ClientResourcePackBuilder clientResourcePackBuilder, ResourceLocation name) {
-        clientResourcePackBuilder.addBlockState(name, blockStateBuilder -> {
-            blockStateBuilder.variant("axis=y", variant ->
-                variant.model(Utils.prependToPath(name, "block/")));
-            blockStateBuilder.variant("axis=x", variant -> {
-                variant.model(Utils.prependToPath(name, "block/"));
-                variant.rotationX(90);
-                variant.rotationY(90);
-            });
-            blockStateBuilder.variant("axis=z", variant -> {
-                variant.model(Utils.prependToPath(name, "block/"));
-                variant.rotationX(90);
-            });
-        });
+        generatePillarBlockState(clientResourcePackBuilder, name, name);
     }
 
     public static void generatePillarBlockState(ArtificeResourcePack.ClientResourcePackBuilder clientResourcePackBuilder, ResourceLocation name, ResourceLocation modelId) {
@@ -965,16 +953,12 @@ public class ArtificeGenerationHelper {
 
     public static void generateFenceBlockState(ArtificeResourcePack.ClientResourcePackBuilder pack, ResourceLocation name) {
         pack.addBlockState(name, state -> {
-            state.multipartCase(caze -> {
-                caze.apply(var -> {
-                    var.model(Utils.appendAndPrependToPath(name, "block/", "_post"));
-                });
-            });
+            state.multipartCase(aCase -> aCase.apply(variant -> variant.model(Utils.appendAndPrependToPath(name, "block/", "_post"))));
             for (Direction d : Direction.values()) {
                 if (d != Direction.UP && d != Direction.DOWN) {
-                    state.multipartCase(caze -> {
-                        caze.when(d.getSerializedName(), "true");
-                        caze.apply(var -> {
+                    state.multipartCase(aCase -> {
+                        aCase.when(d.getSerializedName(), "true");
+                        aCase.apply(var -> {
                             var.model(Utils.appendAndPrependToPath(name, "block/", "_side"));
                             var.uvlock(true);
                             switch (d) {
@@ -1102,8 +1086,7 @@ public class ArtificeGenerationHelper {
         clientResourcePackBuilder.add(Utils.appendAndPrependToPath(name, "blockstates/", ".json"), new StringResource(JSON));
     }
 
-    public static void generateTrapdoorBlockModels(ArtificeResourcePack.ClientResourcePackBuilder pack, ResourceLocation name,
-                                                   ResourceLocation texture) {
+    public static void generateTrapdoorBlockModels(ArtificeResourcePack.ClientResourcePackBuilder pack, ResourceLocation name, ResourceLocation texture) {
         pack.addBlockModel(Utils.appendToPath(name, "_bottom"), model -> {
             model.parent(new ResourceLocation("block/template_orientable_trapdoor_bottom"));
             model.texture("texture", texture);

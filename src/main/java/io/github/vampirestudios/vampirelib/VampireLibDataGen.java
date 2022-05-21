@@ -16,7 +16,6 @@
 
 package io.github.vampirestudios.vampirelib;
 
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -33,9 +32,11 @@ import net.minecraft.data.models.ItemModelGenerators;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.data.recipes.ShapelessRecipeBuilder;
+import net.minecraft.data.tags.BiomeTagsProvider;
 import net.minecraft.data.tags.TagsProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BiomeTags;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.DyeColor;
@@ -47,7 +48,6 @@ import net.minecraft.world.item.crafting.Ingredient.ItemValue;
 import net.minecraft.world.item.crafting.Ingredient.TagValue;
 import net.minecraft.world.item.crafting.Ingredient.Value;
 import net.minecraft.world.level.ItemLike;
-import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -59,8 +59,6 @@ import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricModelProvider;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipesProvider;
-import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBiomeTags;
 
 import io.github.vampirestudios.vampirelib.api.CustomTagProviders;
 import io.github.vampirestudios.vampirelib.api.FabricLanguageProvider;
@@ -150,6 +148,8 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
             dataGenerator.addProvider(WoodTypeEnglishLanguageProvider::new);
             dataGenerator.addProvider(WoodTypeFrenchLanguageProvider::new);
             dataGenerator.addProvider(WoodTypeRecipeProvider::new);
+            WoodTypeBlockTagProvider blockTagsProvider = dataGenerator.addProvider(WoodTypeBlockTagProvider::new);
+            dataGenerator.addProvider(new WoodTypeItemTagProvider(dataGenerator, blockTagsProvider));
         }
         VBlockTagsProvider blockTagsProvider = dataGenerator.addProvider(VBlockTagsProvider::new);
         dataGenerator.addProvider(new VItemTagsProvider(dataGenerator, blockTagsProvider));
@@ -176,6 +176,15 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
             generateWoodTypeAssets(blockStateModelGenerator, VampireLib.TEST_WOOD5);
             generateWoodTypeAssets(blockStateModelGenerator, VampireLib.TEST_WOOD6);
             generateWoodTypeAssets(blockStateModelGenerator, VampireLib.TEST_WOOD7);
+            generateWoodTypeAssets(blockStateModelGenerator, VampireLib.TEST_WOOD8);
+            generateWoodTypeAssets(blockStateModelGenerator, VampireLib.TEST_WOOD9);
+            generateWoodTypeAssets(blockStateModelGenerator, VampireLib.TEST_WOOD10);
+            generateWoodTypeAssets(blockStateModelGenerator, VampireLib.TEST_WOOD11);
+            generateWoodTypeAssets(blockStateModelGenerator, VampireLib.TEST_WOOD12);
+            generateWoodTypeAssets(blockStateModelGenerator, VampireLib.TEST_WOOD13);
+            generateWoodTypeAssets(blockStateModelGenerator, VampireLib.TEST_WOOD14);
+            generateWoodTypeAssets(blockStateModelGenerator, VampireLib.TEST_WOOD15);
+            generateWoodTypeAssets(blockStateModelGenerator, VampireLib.TEST_WOOD16);
 
             generateWoodTypeAssets(blockStateModelGenerator, VampireLib.TEST_NETHER_WOOD);
             generateWoodTypeAssets(blockStateModelGenerator, VampireLib.TEST_NETHER_WOOD1);
@@ -185,6 +194,12 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
             generateWoodTypeAssets(blockStateModelGenerator, VampireLib.TEST_NETHER_WOOD5);
             generateWoodTypeAssets(blockStateModelGenerator, VampireLib.TEST_NETHER_WOOD6);
             generateWoodTypeAssets(blockStateModelGenerator, VampireLib.TEST_NETHER_WOOD7);
+            generateWoodTypeAssets(blockStateModelGenerator, VampireLib.TEST_NETHER_WOOD8);
+            generateWoodTypeAssets(blockStateModelGenerator, VampireLib.TEST_NETHER_WOOD9);
+            generateWoodTypeAssets(blockStateModelGenerator, VampireLib.TEST_NETHER_WOOD10);
+            generateWoodTypeAssets(blockStateModelGenerator, VampireLib.TEST_NETHER_WOOD11);
+            generateWoodTypeAssets(blockStateModelGenerator, VampireLib.TEST_NETHER_WOOD12);
+            generateWoodTypeAssets(blockStateModelGenerator, VampireLib.TEST_NETHER_WOOD13);
         }
 
         @Override
@@ -212,6 +227,15 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
             addWoodTypeLang(VampireLib.TEST_WOOD5);
             addWoodTypeLang(VampireLib.TEST_WOOD6);
             addWoodTypeLang(VampireLib.TEST_WOOD7);
+            addWoodTypeLang(VampireLib.TEST_WOOD8);
+            addWoodTypeLang(VampireLib.TEST_WOOD9);
+            addWoodTypeLang(VampireLib.TEST_WOOD10);
+            addWoodTypeLang(VampireLib.TEST_WOOD11);
+            addWoodTypeLang(VampireLib.TEST_WOOD12);
+            addWoodTypeLang(VampireLib.TEST_WOOD13);
+            addWoodTypeLang(VampireLib.TEST_WOOD14);
+            addWoodTypeLang(VampireLib.TEST_WOOD15);
+            addWoodTypeLang(VampireLib.TEST_WOOD16);
 
             addWoodTypeLang(VampireLib.TEST_NETHER_WOOD);
             addWoodTypeLang(VampireLib.TEST_NETHER_WOOD1);
@@ -221,6 +245,12 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
             addWoodTypeLang(VampireLib.TEST_NETHER_WOOD5);
             addWoodTypeLang(VampireLib.TEST_NETHER_WOOD6);
             addWoodTypeLang(VampireLib.TEST_NETHER_WOOD7);
+            addWoodTypeLang(VampireLib.TEST_NETHER_WOOD8);
+            addWoodTypeLang(VampireLib.TEST_NETHER_WOOD9);
+            addWoodTypeLang(VampireLib.TEST_NETHER_WOOD10);
+            addWoodTypeLang(VampireLib.TEST_NETHER_WOOD11);
+            addWoodTypeLang(VampireLib.TEST_NETHER_WOOD12);
+            addWoodTypeLang(VampireLib.TEST_NETHER_WOOD13);
         }
 
         private void addWoodTypeLang(WoodRegistry woodRegistry) {
@@ -243,6 +273,15 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
             addWoodTypeLang(VampireLib.TEST_WOOD5);
             addWoodTypeLang(VampireLib.TEST_WOOD6);
             addWoodTypeLang(VampireLib.TEST_WOOD7);
+            addWoodTypeLang(VampireLib.TEST_WOOD8);
+            addWoodTypeLang(VampireLib.TEST_WOOD9);
+            addWoodTypeLang(VampireLib.TEST_WOOD10);
+            addWoodTypeLang(VampireLib.TEST_WOOD11);
+            addWoodTypeLang(VampireLib.TEST_WOOD12);
+            addWoodTypeLang(VampireLib.TEST_WOOD13);
+            addWoodTypeLang(VampireLib.TEST_WOOD14);
+            addWoodTypeLang(VampireLib.TEST_WOOD15);
+            addWoodTypeLang(VampireLib.TEST_WOOD16);
 
             addWoodTypeLang(VampireLib.TEST_NETHER_WOOD);
             addWoodTypeLang(VampireLib.TEST_NETHER_WOOD1);
@@ -252,6 +291,12 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
             addWoodTypeLang(VampireLib.TEST_NETHER_WOOD5);
             addWoodTypeLang(VampireLib.TEST_NETHER_WOOD6);
             addWoodTypeLang(VampireLib.TEST_NETHER_WOOD7);
+            addWoodTypeLang(VampireLib.TEST_NETHER_WOOD8);
+            addWoodTypeLang(VampireLib.TEST_NETHER_WOOD9);
+            addWoodTypeLang(VampireLib.TEST_NETHER_WOOD10);
+            addWoodTypeLang(VampireLib.TEST_NETHER_WOOD11);
+            addWoodTypeLang(VampireLib.TEST_NETHER_WOOD12);
+            addWoodTypeLang(VampireLib.TEST_NETHER_WOOD13);
         }
 
         private void addWoodTypeLang(WoodRegistry woodRegistry) {
@@ -274,6 +319,15 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
             generateWoodTypeRecipes(exporter, VampireLib.TEST_WOOD5);
             generateWoodTypeRecipes(exporter, VampireLib.TEST_WOOD6);
             generateWoodTypeRecipes(exporter, VampireLib.TEST_WOOD7);
+            generateWoodTypeRecipes(exporter, VampireLib.TEST_WOOD8);
+            generateWoodTypeRecipes(exporter, VampireLib.TEST_WOOD9);
+            generateWoodTypeRecipes(exporter, VampireLib.TEST_WOOD10);
+            generateWoodTypeRecipes(exporter, VampireLib.TEST_WOOD11);
+            generateWoodTypeRecipes(exporter, VampireLib.TEST_WOOD12);
+            generateWoodTypeRecipes(exporter, VampireLib.TEST_WOOD13);
+            generateWoodTypeRecipes(exporter, VampireLib.TEST_WOOD14);
+            generateWoodTypeRecipes(exporter, VampireLib.TEST_WOOD15);
+            generateWoodTypeRecipes(exporter, VampireLib.TEST_WOOD16);
 
             generateWoodTypeRecipes(exporter, VampireLib.TEST_NETHER_WOOD);
             generateWoodTypeRecipes(exporter, VampireLib.TEST_NETHER_WOOD1);
@@ -283,10 +337,108 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
             generateWoodTypeRecipes(exporter, VampireLib.TEST_NETHER_WOOD5);
             generateWoodTypeRecipes(exporter, VampireLib.TEST_NETHER_WOOD6);
             generateWoodTypeRecipes(exporter, VampireLib.TEST_NETHER_WOOD7);
+            generateWoodTypeRecipes(exporter, VampireLib.TEST_NETHER_WOOD8);
+            generateWoodTypeRecipes(exporter, VampireLib.TEST_NETHER_WOOD9);
+            generateWoodTypeRecipes(exporter, VampireLib.TEST_NETHER_WOOD10);
+            generateWoodTypeRecipes(exporter, VampireLib.TEST_NETHER_WOOD11);
+            generateWoodTypeRecipes(exporter, VampireLib.TEST_NETHER_WOOD12);
+            generateWoodTypeRecipes(exporter, VampireLib.TEST_NETHER_WOOD13);
         }
 
         private void generateWoodTypeRecipes(Consumer<FinishedRecipe> exporter, WoodRegistry woodRegistry) {
             woodRegistry.generateRecipes(exporter);
+        }
+    }
+
+    private static class WoodTypeBlockTagProvider extends CustomTagProviders.CustomBlockTagProvider {
+        private WoodTypeBlockTagProvider(FabricDataGenerator dataGenerator) {
+            super(dataGenerator);
+        }
+
+        @Override
+        protected void generateTags() {
+            this.generateWoodTypeRecipes(VampireLib.TEST_WOOD);
+            this.generateWoodTypeRecipes(VampireLib.TEST_WOOD1);
+            this.generateWoodTypeRecipes(VampireLib.TEST_WOOD2);
+            this.generateWoodTypeRecipes(VampireLib.TEST_WOOD3);
+            this.generateWoodTypeRecipes(VampireLib.TEST_WOOD4);
+            this.generateWoodTypeRecipes(VampireLib.TEST_WOOD5);
+            this.generateWoodTypeRecipes(VampireLib.TEST_WOOD6);
+            this.generateWoodTypeRecipes(VampireLib.TEST_WOOD7);
+            this.generateWoodTypeRecipes(VampireLib.TEST_WOOD8);
+            this.generateWoodTypeRecipes(VampireLib.TEST_WOOD9);
+            this.generateWoodTypeRecipes(VampireLib.TEST_WOOD10);
+            this.generateWoodTypeRecipes(VampireLib.TEST_WOOD11);
+            this.generateWoodTypeRecipes(VampireLib.TEST_WOOD12);
+            this.generateWoodTypeRecipes(VampireLib.TEST_WOOD13);
+            this.generateWoodTypeRecipes(VampireLib.TEST_WOOD14);
+            this.generateWoodTypeRecipes(VampireLib.TEST_WOOD15);
+            this.generateWoodTypeRecipes(VampireLib.TEST_WOOD16);
+
+            this.generateWoodTypeRecipes(VampireLib.TEST_NETHER_WOOD);
+            this.generateWoodTypeRecipes(VampireLib.TEST_NETHER_WOOD1);
+            this.generateWoodTypeRecipes(VampireLib.TEST_NETHER_WOOD2);
+            this.generateWoodTypeRecipes(VampireLib.TEST_NETHER_WOOD3);
+            this.generateWoodTypeRecipes(VampireLib.TEST_NETHER_WOOD4);
+            this.generateWoodTypeRecipes(VampireLib.TEST_NETHER_WOOD5);
+            this.generateWoodTypeRecipes(VampireLib.TEST_NETHER_WOOD6);
+            this.generateWoodTypeRecipes(VampireLib.TEST_NETHER_WOOD7);
+            this.generateWoodTypeRecipes(VampireLib.TEST_NETHER_WOOD8);
+            this.generateWoodTypeRecipes(VampireLib.TEST_NETHER_WOOD9);
+            this.generateWoodTypeRecipes(VampireLib.TEST_NETHER_WOOD10);
+            this.generateWoodTypeRecipes(VampireLib.TEST_NETHER_WOOD11);
+            this.generateWoodTypeRecipes(VampireLib.TEST_NETHER_WOOD12);
+            this.generateWoodTypeRecipes(VampireLib.TEST_NETHER_WOOD13);
+        }
+
+        private void generateWoodTypeRecipes(WoodRegistry woodRegistry) {
+            woodRegistry.generateBlockTags(this);
+        }
+    }
+
+    private static class WoodTypeItemTagProvider extends CustomTagProviders.CustomItemTagProvider {
+        private WoodTypeItemTagProvider(FabricDataGenerator dataGenerator, CustomBlockTagProvider blockTagProvider) {
+            super(dataGenerator, blockTagProvider);
+        }
+
+        @Override
+        protected void generateTags() {
+            this.generateWoodTypeRecipes(VampireLib.TEST_WOOD);
+            this.generateWoodTypeRecipes(VampireLib.TEST_WOOD1);
+            this.generateWoodTypeRecipes(VampireLib.TEST_WOOD2);
+            this.generateWoodTypeRecipes(VampireLib.TEST_WOOD3);
+            this.generateWoodTypeRecipes(VampireLib.TEST_WOOD4);
+            this.generateWoodTypeRecipes(VampireLib.TEST_WOOD5);
+            this.generateWoodTypeRecipes(VampireLib.TEST_WOOD6);
+            this.generateWoodTypeRecipes(VampireLib.TEST_WOOD7);
+            this.generateWoodTypeRecipes(VampireLib.TEST_WOOD8);
+            this.generateWoodTypeRecipes(VampireLib.TEST_WOOD9);
+            this.generateWoodTypeRecipes(VampireLib.TEST_WOOD10);
+            this.generateWoodTypeRecipes(VampireLib.TEST_WOOD11);
+            this.generateWoodTypeRecipes(VampireLib.TEST_WOOD12);
+            this.generateWoodTypeRecipes(VampireLib.TEST_WOOD13);
+            this.generateWoodTypeRecipes(VampireLib.TEST_WOOD14);
+            this.generateWoodTypeRecipes(VampireLib.TEST_WOOD15);
+            this.generateWoodTypeRecipes(VampireLib.TEST_WOOD16);
+
+            this.generateWoodTypeRecipes(VampireLib.TEST_NETHER_WOOD);
+            this.generateWoodTypeRecipes(VampireLib.TEST_NETHER_WOOD1);
+            this.generateWoodTypeRecipes(VampireLib.TEST_NETHER_WOOD2);
+            this.generateWoodTypeRecipes(VampireLib.TEST_NETHER_WOOD3);
+            this.generateWoodTypeRecipes(VampireLib.TEST_NETHER_WOOD4);
+            this.generateWoodTypeRecipes(VampireLib.TEST_NETHER_WOOD5);
+            this.generateWoodTypeRecipes(VampireLib.TEST_NETHER_WOOD6);
+            this.generateWoodTypeRecipes(VampireLib.TEST_NETHER_WOOD7);
+            this.generateWoodTypeRecipes(VampireLib.TEST_NETHER_WOOD8);
+            this.generateWoodTypeRecipes(VampireLib.TEST_NETHER_WOOD9);
+            this.generateWoodTypeRecipes(VampireLib.TEST_NETHER_WOOD10);
+            this.generateWoodTypeRecipes(VampireLib.TEST_NETHER_WOOD11);
+            this.generateWoodTypeRecipes(VampireLib.TEST_NETHER_WOOD12);
+            this.generateWoodTypeRecipes(VampireLib.TEST_NETHER_WOOD13);
+        }
+
+        private void generateWoodTypeRecipes(WoodRegistry woodRegistry) {
+            woodRegistry.generateItemTags(this);
         }
     }
 
@@ -296,10 +448,10 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
             super(dataGenerator);
         }
 
-        @Override
+        /*@Override
         protected Path getPath(ResourceLocation id) {
             return this.generator.getOutputFolder().resolve("data/%s/tags/blocks/%s.json".formatted("c", id.getPath()));
-        }
+        }*/
 
         @Override
         protected void generateTags() {
@@ -400,60 +552,59 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
 
     }
 
-    private static class VBiomeTagsProvider extends TagsProvider<Biome> {
+    private static class VBiomeTagsProvider extends BiomeTagsProvider {
         private VBiomeTagsProvider(FabricDataGenerator dataGenerator) {
-            super(dataGenerator, BuiltinRegistries.BIOME);
+            super(dataGenerator);
         }
 
         @Override
         protected void addTags() {
             this.tag(VTags.Biomes.HILLS)
+//                .addOptionalTag(ConventionalBiomeTags.EXTREME_HILLS.location())
                 .add(Biomes.FLOWER_FOREST, Biomes.ICE_SPIKES, Biomes.WINDSWEPT_HILLS, Biomes.WINDSWEPT_GRAVELLY_HILLS, Biomes.OLD_GROWTH_BIRCH_FOREST);
-            this.tag(BiomeTags.IS_HILL).addTag(VTags.Biomes.HILLS)
-                .addOptionalTag(ConventionalBiomeTags.EXTREME_HILLS.location());
+            this.tag(BiomeTags.IS_HILL).addTag(VTags.Biomes.HILLS);
             this.tag(VTags.Biomes.PLATEAUS)
                 .add(Biomes.SAVANNA_PLATEAU, Biomes.WOODED_BADLANDS, Biomes.MEADOW);
             this.tag(VTags.Biomes.RARE)
+                .addTag(VTags.Biomes.MUSHROOM)
                 .add(Biomes.SPARSE_JUNGLE, Biomes.SAVANNA_PLATEAU, Biomes.SUNFLOWER_PLAINS, Biomes.WINDSWEPT_GRAVELLY_HILLS,
                     Biomes.FLOWER_FOREST, Biomes.ICE_SPIKES, Biomes.OLD_GROWTH_BIRCH_FOREST, Biomes.OLD_GROWTH_SPRUCE_TAIGA,
-                    Biomes.WINDSWEPT_SAVANNA, Biomes.ERODED_BADLANDS, Biomes.BAMBOO_JUNGLE, Biomes.MUSHROOM_FIELDS);
+                    Biomes.WINDSWEPT_SAVANNA, Biomes.ERODED_BADLANDS, Biomes.BAMBOO_JUNGLE);
 
             this.tag(VTags.Biomes.OCEANS)
+//                .addOptionalTag(ConventionalBiomeTags.OCEAN.location())
                 .addTag(VTags.Biomes.DEEP_OCEANS).addTag(VTags.Biomes.SHALLOW_OCEANS);
             this.tag(VTags.Biomes.DEEP_OCEANS)
                 .add(Biomes.DEEP_COLD_OCEAN, Biomes.DEEP_FROZEN_OCEAN, Biomes.DEEP_LUKEWARM_OCEAN, Biomes.DEEP_OCEAN);
             this.tag(VTags.Biomes.SHALLOW_OCEANS)
                 .add(Biomes.COLD_OCEAN, Biomes.FROZEN_OCEAN, Biomes.LUKEWARM_OCEAN, Biomes.OCEAN, Biomes.WARM_OCEAN);
             this.tag(VTags.Biomes.RIVERS)
+//                .addOptionalTag(ConventionalBiomeTags.RIVER.location())
                 .add(Biomes.RIVER, Biomes.FROZEN_RIVER);
             this.tag(VTags.Biomes.WATER)
                 .addTag(VTags.Biomes.OCEANS).addTag(VTags.Biomes.RIVERS);
             this.tag(BiomeTags.IS_OCEAN).addTag(VTags.Biomes.SHALLOW_OCEANS);
             this.tag(BiomeTags.IS_DEEP_OCEAN).addTag(VTags.Biomes.DEEP_OCEANS);
-            this.tag(BiomeTags.IS_RIVER)
-                .addOptionalTag(ConventionalBiomeTags.RIVER.location())
-                .addTag(VTags.Biomes.RIVERS);
+            this.tag(BiomeTags.IS_RIVER).addTag(VTags.Biomes.RIVERS);
 
 
             this.tag(VTags.Biomes.BADLANDS)
-                .addOptionalTag(ConventionalBiomeTags.MESA.location())
-                .addOptionalTag(ConventionalBiomeTags.BADLANDS.location())
+//                .addOptionalTag(ConventionalBiomeTags.MESA.location())
+//                .addOptionalTag(ConventionalBiomeTags.BADLANDS.location())
                 .add(Biomes.BADLANDS, Biomes.ERODED_BADLANDS, Biomes.WOODED_BADLANDS);
             this.tag(BiomeTags.IS_BADLANDS).addTag(VTags.Biomes.BADLANDS);
             this.tag(VTags.Biomes.BEACHES)
-                .addOptionalTag(ConventionalBiomeTags.STONY_SHORES.location())
-                .addOptionalTag(ConventionalBiomeTags.BEACH.location())
+//                .addOptionalTag(ConventionalBiomeTags.STONY_SHORES.location())
+//                .addOptionalTag(ConventionalBiomeTags.BEACH.location())
                 .add(Biomes.BEACH, Biomes.SNOWY_BEACH, Biomes.STONY_SHORE);
             this.tag(BiomeTags.IS_BEACH).addTag(VTags.Biomes.BEACHES);
             this.tag(VTags.Biomes.DESERTS)
-                .addOptionalTag(ConventionalBiomeTags.DESERT.location())
+//                .addOptionalTag(ConventionalBiomeTags.DESERT.location())
                 .add(Biomes.DESERT);
             this.tag(VTags.Biomes.FORESTS)
-                .addOptionalTag(ConventionalBiomeTags.FOREST.location())
-                .addOptionalTag(ConventionalBiomeTags.FLOWER_FORESTS.location())
-                .addOptionalTag(ConventionalBiomeTags.TREE_SAVANNA.location())
-                .addOptionalTag(ConventionalBiomeTags.TREE_CONIFEROUS.location())
-                .addOptionalTag(ConventionalBiomeTags.TREE_DECIDUOUS.location())
+//                .addOptionalTag(ConventionalBiomeTags.FOREST.location())
+//                .addOptionalTag(ConventionalBiomeTags.FLOWER_FORESTS.location())
+//                .addOptionalTag(ConventionalBiomeTags.TREE_DECIDUOUS.location())
                 .addTag(VTags.Biomes.BIRCH_FORESTS).addTag(VTags.Biomes.DARK_FORESTS)
                 .addTag(VTags.Biomes.JUNGLE_FORESTS).addTag(VTags.Biomes.NETHER_FORESTS)
                 .addTag(VTags.Biomes.OAK_FORESTS).addTag(VTags.Biomes.TAIGA_FORESTS);
@@ -462,54 +613,53 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
             this.tag(VTags.Biomes.DARK_FORESTS)
                 .add(Biomes.DARK_FOREST);
             this.tag(VTags.Biomes.JUNGLE_FORESTS)
-                .addOptionalTag(ConventionalBiomeTags.TREE_JUNGLE.location())
                 .addTag(VTags.Biomes.BAMBOO_JUNGLE_FORESTS)
                 .add(Biomes.JUNGLE, Biomes.SPARSE_JUNGLE);
             this.tag(VTags.Biomes.BAMBOO_JUNGLE_FORESTS)
                 .add(Biomes.BAMBOO_JUNGLE);
             this.tag(BiomeTags.IS_JUNGLE).addTag(VTags.Biomes.JUNGLE_FORESTS);
             this.tag(VTags.Biomes.NETHER_FORESTS)
-                .add(Biomes.CRIMSON_FOREST, Biomes.WARPED_FOREST)
-                .addOptionalTag(ConventionalBiomeTags.NETHER_FORESTS.location());
-            this.tag(BiomeTags.IS_NETHER).addOptionalTag(ConventionalBiomeTags.IN_NETHER.location()).addTag(VTags.Biomes.NETHER_FORESTS);
+                .add(Biomes.CRIMSON_FOREST, Biomes.WARPED_FOREST);
+            this.tag(BiomeTags.IS_NETHER).addTag(VTags.Biomes.NETHER_FORESTS);
             this.tag(VTags.Biomes.OAK_FORESTS)
                 .add(Biomes.FOREST, Biomes.FLOWER_FOREST);
             this.tag(VTags.Biomes.TAIGA_FORESTS)
-                .addOptionalTag(ConventionalBiomeTags.TAIGA.location())
+//                .addOptionalTag(ConventionalBiomeTags.TREE_CONIFEROUS.location())
                 .add(Biomes.TAIGA, Biomes.SNOWY_TAIGA, Biomes.OLD_GROWTH_SPRUCE_TAIGA, Biomes.OLD_GROWTH_PINE_TAIGA, Biomes.GROVE);
             this.tag(BiomeTags.IS_FOREST).addTag(VTags.Biomes.FORESTS);
             this.tag(VTags.Biomes.MUSHROOM)
+//                .addOptionalTag(ConventionalBiomeTags.MUSHROOM.location())
                 .add(Biomes.MUSHROOM_FIELDS);
             this.tag(VTags.Biomes.MOUNTAINS)
-                .addOptionalTag(ConventionalBiomeTags.MOUNTAIN.location())
                 .add(Biomes.WINDSWEPT_HILLS, Biomes.WINDSWEPT_GRAVELLY_HILLS, Biomes.WINDSWEPT_FOREST, Biomes.WINDSWEPT_SAVANNA);
             this.tag(BiomeTags.IS_MOUNTAIN).addTag(VTags.Biomes.MOUNTAINS);
             this.tag(VTags.Biomes.PLAINS)
+//                .addOptionalTag(ConventionalBiomeTags.PLAINS.location())
                 .add(Biomes.PLAINS, Biomes.SAVANNA, Biomes.SAVANNA_PLATEAU, Biomes.SUNFLOWER_PLAINS, Biomes.MEADOW);
             this.tag(VTags.Biomes.GRASSLANDS)
                 .addTag(VTags.Biomes.PLAINS).addTag(VTags.Biomes.SAVANNAS);
             this.tag(VTags.Biomes.SAVANNAS)
-                .addOptionalTag(ConventionalBiomeTags.SAVANNA.location())
-                .addOptionalTag(ConventionalBiomeTags.TREE_SAVANNA.location())
+//                .addOptionalTag(ConventionalBiomeTags.TREE_SAVANNA.location())
                 .add(Biomes.SAVANNA, Biomes.SAVANNA_PLATEAU, Biomes.WINDSWEPT_SAVANNA);
             this.tag(BiomeTags.IS_SAVANNA).addTag(VTags.Biomes.SAVANNAS);
             this.tag(VTags.Biomes.SNOWY)
-                .addOptionalTag(ConventionalBiomeTags.SNOWY.location())
-                .addOptionalTag(ConventionalBiomeTags.SNOWY_PLAINS.location())
+//                .addOptionalTag(ConventionalBiomeTags.CLIMATE_COLD.location())
+//                .addOptionalTag(ConventionalBiomeTags.SNOWY.location())
+//                .addOptionalTag(ConventionalBiomeTags.SNOWY_PLAINS.location())
                 .add(Biomes.FROZEN_OCEAN, Biomes.DEEP_FROZEN_OCEAN, Biomes.FROZEN_RIVER,
                     Biomes.SNOWY_BEACH, Biomes.SNOWY_TAIGA, Biomes.SNOWY_PLAINS,
                     Biomes.GROVE, Biomes.SNOWY_SLOPES, Biomes.JAGGED_PEAKS, Biomes.FROZEN_PEAKS);
             this.tag(BiomeTags.ONLY_ALLOWS_SNOW_AND_GOLD_RABBITS).addTag(VTags.Biomes.SNOWY);
             this.tag(BiomeTags.SPAWNS_COLD_VARIANT_FROGS).addTag(VTags.Biomes.SNOWY);
             this.tag(VTags.Biomes.SWAMPS)
-                .addOptionalTag(ConventionalBiomeTags.SWAMP.location())
+//                .addOptionalTag(ConventionalBiomeTags.SWAMP.location())
                 .add(Biomes.SWAMP);
             this.tag(BiomeTags.ALLOWS_SURFACE_SLIME_SPAWNS).addTag(VTags.Biomes.SWAMPS);
             this.tag(VTags.Biomes.SLOPES)
-                .addOptionalTag(ConventionalBiomeTags.MOUNTAIN_SLOPE.location())
+//                .addOptionalTag(ConventionalBiomeTags.MOUNTAIN_SLOPE.location())
                 .add(Biomes.MEADOW, Biomes.GROVE, Biomes.SNOWY_SLOPES);
             this.tag(VTags.Biomes.PEAKS)
-                .addOptionalTag(ConventionalBiomeTags.MOUNTAIN_PEAK.location())
+//                .addOptionalTag(ConventionalBiomeTags.MOUNTAIN_PEAK.location())
                 .add(Biomes.JAGGED_PEAKS, Biomes.FROZEN_PEAKS, Biomes.STONY_PEAKS);
             this.tag(VTags.Biomes.VOIDS)
                 .add(Biomes.THE_VOID);
@@ -518,6 +668,17 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
                 .addTag(VTags.Biomes.OVERWORLD_SURFACE).addTag(VTags.Biomes.OVERWORLD_UNDERGROUND);
             this.tag(BiomeTags.IS_OVERWORLD).addTag(VTags.Biomes.OVERWORLD);
             this.tag(VTags.Biomes.OVERWORLD_SURFACE)
+                .addTag(VTags.Biomes.BADLANDS)
+                .addTag(VTags.Biomes.FORESTS)
+                .addTag(VTags.Biomes.DESERTS)
+                .addTag(VTags.Biomes.BEACHES)
+                .addTag(VTags.Biomes.GRASSLANDS)
+                .addTag(VTags.Biomes.MUSHROOM)
+                .addTag(VTags.Biomes.PEAKS)
+                .addTag(VTags.Biomes.SAVANNAS)
+                .addTag(VTags.Biomes.SNOWY)
+                .addTag(VTags.Biomes.SLOPES)
+                .addTag(VTags.Biomes.SWAMPS)
                 .add(Biomes.BADLANDS,
                     Biomes.BAMBOO_JUNGLE,
                     Biomes.BEACH,
@@ -567,15 +728,15 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
                     Biomes.WINDSWEPT_HILLS,
                     Biomes.WINDSWEPT_SAVANNA);
             this.tag(VTags.Biomes.OVERWORLD_UNDERGROUND)
-                .addOptionalTag(ConventionalBiomeTags.UNDERGROUND.location())
+//                .addOptionalTag(ConventionalBiomeTags.UNDERGROUND.location())
                 .add(Biomes.LUSH_CAVES, Biomes.DRIPSTONE_CAVES);
             this.tag(VTags.Biomes.NETHER)
                 .addTag(VTags.Biomes.NETHER_FORESTS)
                 .add(Biomes.NETHER_WASTES, Biomes.SOUL_SAND_VALLEY, Biomes.BASALT_DELTAS);
             this.tag(BiomeTags.IS_NETHER).addTag(VTags.Biomes.NETHER);
             this.tag(VTags.Biomes.END)
-                .addOptionalTag(ConventionalBiomeTags.END_ISLANDS.location())
-                .addOptionalTag(ConventionalBiomeTags.IN_THE_END.location())
+//                .addOptionalTag(ConventionalBiomeTags.END_ISLANDS.location())
+//                .addOptionalTag(ConventionalBiomeTags.IN_THE_END.location())
                 .add(Biomes.THE_END, Biomes.SMALL_END_ISLANDS, Biomes.END_BARRENS, Biomes.END_MIDLANDS, Biomes.END_HIGHLANDS);
             this.tag(BiomeTags.IS_END).addTag(VTags.Biomes.END);
         }
@@ -610,7 +771,7 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
             tagCustom(VTags.Items.DUSTS_GLOWSTONE).add(Items.GLOWSTONE_DUST);
             tagCustom(VTags.Items.DUSTS_PRISMARINE).add(Items.PRISMARINE_SHARD);
             tagCustom(VTags.Items.DUSTS_REDSTONE).add(Items.REDSTONE);
-            addColored(tagCustom(VTags.Items.DYES)::addTags, VTags.Items.DYES, "{color}_dye");
+            addColored(tagCustom(VTags.Items.DYES)::addTags);
             tagCustom(VTags.Items.EGGS).add(Items.EGG);
             tagCustom(VTags.Items.ENCHANTING_FUELS).addTag(VTags.Items.GEMS_LAPIS);
             copy(VTags.Blocks.END_STONES, VTags.Items.END_STONES);
@@ -712,16 +873,22 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
             copy(VTags.Blocks.STORAGE_BLOCKS_RAW_IRON, VTags.Items.STORAGE_BLOCKS_RAW_IRON);
             copy(VTags.Blocks.STORAGE_BLOCKS_NETHERITE, VTags.Items.STORAGE_BLOCKS_NETHERITE);
             tagCustom(VTags.Items.STRING).add(Items.STRING);
+
+            copy(VTags.Blocks.COBBLESTONE_DEEPSLATE, ItemTags.STONE_CRAFTING_MATERIALS);
+            copy(VTags.Blocks.COBBLESTONE_NORMAL, ItemTags.STONE_CRAFTING_MATERIALS);
+            tag(ItemTags.STONE_CRAFTING_MATERIALS).add(Items.ANDESITE, Items.DIORITE, Items.GRANITE);
+
+            tag(ItemTags.STONE_TOOL_MATERIALS).addTag(ItemTags.STONE_CRAFTING_MATERIALS);
         }
 
-        private void addColored(Consumer<TagKey<Item>> consumer, TagKey<Item> group, String pattern) {
-            String prefix = group.location().getPath().toUpperCase(Locale.ENGLISH) + '_';
+        private void addColored(Consumer<TagKey<Item>> consumer) {
+            String prefix = VTags.Items.DYES.location().getPath().toUpperCase(Locale.ENGLISH) + '_';
             for (DyeColor color : DyeColor.values()) {
-                ResourceLocation key = new ResourceLocation("minecraft", pattern.replace("{color}", color.getName()));
+                ResourceLocation key = new ResourceLocation("minecraft", "{color}_dye".replace("{color}", color.getName()));
                 TagKey<Item> tag = getForgeItemTag(prefix + color.getName());
                 Item item = Registry.ITEM.get(key);
-                if (item == null || item == Items.AIR)
-                    throw new IllegalStateException("Unknown vanilla item: " + key.toString());
+                if (item == Items.AIR)
+                    throw new IllegalStateException("Unknown vanilla item: " + key);
                 tag(tag).add(item);
                 consumer.accept(tag);
             }
@@ -733,9 +900,9 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
             for (DyeColor color : DyeColor.values()) {
                 TagKey<Block> from = getForgeBlockTag(blockPre + color.getName());
                 TagKey<Item> to = getForgeItemTag(itemPre + color.getName());
-//                copy(from, to);
+                copy(from, to);
             }
-//            copy(getForgeBlockTag(blockPre + "colorless"), getForgeItemTag(itemPre + "colorless"));
+            copy(getForgeBlockTag(blockPre + "colorless"), getForgeItemTag(itemPre + "colorless"));
         }
 
         @SuppressWarnings("unchecked")
@@ -864,7 +1031,7 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
         }
     }
 
-    private static class VRecipeReplacementProvider extends FabricRecipesProvider {
+    private static class VRecipeReplacementProvider extends FabricRecipeProvider {
         private final Map<Item, TagKey<Item>> replacements = new HashMap<>();
         private final Set<ResourceLocation> excludes = new HashSet<>();
 
@@ -889,7 +1056,7 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
             replace(Items.DIAMOND,  VTags.Items.GEMS_DIAMOND);
             replace(Items.EMERALD,  VTags.Items.GEMS_EMERALD);
             replace(Items.CHEST,  VTags.Items.CHESTS_WOODEN);
-            replace(Blocks.COBBLESTONE, VTags.Items.COBBLESTONE_NORMAL);
+            replace(Blocks.COBBLESTONE, ItemTags.STONE_CRAFTING_MATERIALS);
             replace(Blocks.COBBLED_DEEPSLATE, VTags.Items.COBBLESTONE_DEEPSLATE);
 
             exclude(Blocks.GOLD_BLOCK);

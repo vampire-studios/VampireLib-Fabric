@@ -675,7 +675,7 @@
  * <https://www.gnu.org/licenses/why-not-lgpl.html>.
  */
 
-package io.github.vampirestudios.vampirelib.utils;
+package io.github.vampirestudios.vampirelib.utils.noise;
 // MIT License
 //
 // Copyright(c) 2020 Jordan Peck (jordan.me2@gmail.com)
@@ -3260,6 +3260,24 @@ public class FastNoiseLite
 		coord.y += vy * warpAmp;
 		coord.z += vz * warpAmp;
 	}
+
+    public static FastNoiseLite createSpongePerlin(int seed) {
+        FastNoiseLite fnlNoise = new FastNoiseLite(seed);
+        fnlNoise.SetNoiseType(NoiseType.Perlin); // We will use 3D with a domain rotation to improve the look.
+        fnlNoise.SetRotationType3D(RotationType3D.ImproveXZPlanes); // Make the Perlin look better than Simplex, but only in 2D slices of 3D.
+        fnlNoise.SetFractalType(FractalType.FBm);
+        fnlNoise.SetFractalOctaves(6);
+        return fnlNoise;
+    }
+
+    private static final double SPONGE_COMPATIBILITY_RATIO = 2 * Math.sqrt(3.0) / 1.7252359327388492;
+
+    public static float getSpongePerlinValue(float noise3) {
+        noise3 = noise3 * 0.5f + 0.5f; // Rescale to 0 to 1 to match new Sponge
+        noise3 *= (1.0f + 0.5f + 0.25f + 0.125f + 0.0625 + 0.03125); // Counter FastNoiseLite fractal range rescale.
+        noise3 *= SPONGE_COMPATIBILITY_RATIO; // Now make it match old Sponge.
+        return noise3;
+    }
 
 	public static class Vector2
 	{

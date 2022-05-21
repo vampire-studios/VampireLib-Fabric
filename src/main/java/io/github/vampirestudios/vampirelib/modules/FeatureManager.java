@@ -677,6 +677,8 @@
 
 package io.github.vampirestudios.vampirelib.modules;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import net.minecraft.core.Registry;
@@ -724,30 +726,76 @@ public class FeatureManager {
         }
     }
 
+    private final List<CommonFeature> commonFeatures = new ArrayList<>();
+    private final List<ClientFeature> clientFeatures = new ArrayList<>();
+    private final List<ServerFeature> serverFeatures = new ArrayList<>();
+
+    public void initCommonFeature(CommonFeature feature) {
+        feature.initCommon();
+        commonFeatures.add(feature);
+    }
+
+    public void initCommonFeature(CommonFeature... features) {
+        for (CommonFeature feature : features) {
+            feature.initCommon();
+            commonFeatures.add(feature);
+        }
+    }
+
     public void initCommon(String modId) {
         COMMON_FEATURES.forEach(feature -> {
-            if (feature.getRegistryName().getNamespace().equals(modId))
-                feature.initCommon();
+            if (!commonFeatures.contains(feature)) {
+                if (feature.getRegistryName().getNamespace().equals(modId))
+                    feature.initCommon();
+            }
         });
 
         ConsoleUtils.logCommonFeatures();
     }
 
+    public void initClientFeature(ClientFeature clientFeature) {
+        clientFeature.initClient();
+        clientFeatures.add(clientFeature);
+    }
+
+    public void initClientFeature(ClientFeature... features) {
+        for (ClientFeature feature : features) {
+            feature.initClient();
+            clientFeatures.add(feature);
+        }
+    }
+
     @Environment(EnvType.CLIENT)
     public void initClient(String modId) {
         CLIENT_FEATURES.forEach(feature -> {
-            if (feature.getRegistryName().getNamespace().equals(modId))
-                feature.initClient();
+            if (!clientFeatures.contains(feature)) {
+                if (feature.getRegistryName().getNamespace().equals(modId))
+                    feature.initClient();
+            }
         });
 
         ConsoleUtils.logClientFeatures();
     }
 
+    public void initServerFeature(ServerFeature serverFeature) {
+        serverFeature.initServer();
+        serverFeatures.add(serverFeature);
+    }
+
+    public void initServerFeature(ServerFeature... features) {
+        for (ServerFeature feature : features) {
+            feature.initServer();
+            serverFeatures.add(feature);
+        }
+    }
+
     @Environment(EnvType.SERVER)
     public void initServer(String modId) {
         SERVER_FEATURES.forEach(feature -> {
-            if (feature.getRegistryName().getNamespace().equals(modId))
-                feature.initServer();
+            if (!serverFeatures.contains(feature)) {
+                if (feature.getRegistryName().getNamespace().equals(modId))
+                    feature.initServer();
+            }
         });
 
         ConsoleUtils.logServerFeatures();

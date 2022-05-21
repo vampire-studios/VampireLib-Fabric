@@ -1,6 +1,17 @@
 {
   "replace": false,
   "values": [
+    "#c:badlands",
+    "#c:forests",
+    "#c:deserts",
+    "#c:beaches",
+    "#c:grasslands",
+    "#c:mushroom",
+    "#c:peaks",
+    "#c:savannas",
+    "#c:snowy",
+    "#c:slopes",
+    "#c:swamps",
     "minecraft:badlands",
     "minecraft:bamboo_jungle",
     "minecraft:beach",

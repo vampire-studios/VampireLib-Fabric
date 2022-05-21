@@ -1,10 +1,6 @@
 {
   "replace": false,
   "values": [
-    {
-      "id": "#c:mountain_slope",
-      "required": false
-    },
     "minecraft:meadow",
     "minecraft:grove",
     "minecraft:snowy_slopes"

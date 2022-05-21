@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
+    "minecraft:glass_pane",
     "minecraft:glass_pane"
   ]
 }

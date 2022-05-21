@@ -692,9 +692,10 @@ import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 
 import io.github.vampirestudios.vampirelib.api.BasicModClass;
 import io.github.vampirestudios.vampirelib.api.ConvertibleBlockPair;
-import io.github.vampirestudios.vampirelib.client.AnimationLoader;
 import io.github.vampirestudios.vampirelib.init.VBlockEntityTypes;
+import io.github.vampirestudios.vampirelib.init.VRegistries;
 import io.github.vampirestudios.vampirelib.utils.Rands;
+import io.github.vampirestudios.vampirelib.utils.blendfunctions.BlendingFunction;
 import io.github.vampirestudios.vampirelib.utils.registry.BlockChiseler;
 import io.github.vampirestudios.vampirelib.utils.registry.RegistryHelper;
 import io.github.vampirestudios.vampirelib.utils.registry.WoodRegistry;
@@ -720,6 +721,9 @@ public class VampireLib extends BasicModClass {
     public static WoodRegistry TEST_WOOD11;
     public static WoodRegistry TEST_WOOD12;
     public static WoodRegistry TEST_WOOD13;
+    public static WoodRegistry TEST_WOOD14;
+    public static WoodRegistry TEST_WOOD15;
+    public static WoodRegistry TEST_WOOD16;
 
 	public static WoodRegistry TEST_NETHER_WOOD;
 	public static WoodRegistry TEST_NETHER_WOOD1;
@@ -737,7 +741,7 @@ public class VampireLib extends BasicModClass {
     public static WoodRegistry TEST_NETHER_WOOD13;
 
     public VampireLib() {
-        super("vampirelib", "VampireLib", "5.0.1+build.1");
+        super("vampirelib", "VampireLib", "5.2.0+build.2");
     }
 
     @Override
@@ -747,6 +751,8 @@ public class VampireLib extends BasicModClass {
             modName(), modVersion(), SharedConstants.getCurrentVersion().getName()));
         BlockChiseler.setup();
         VBlockEntityTypes.init();
+        VRegistries.init();
+        BlendingFunction.init();
 
         if (TEST_CONTENT_ENABLED) {
 			//Overworld
@@ -788,6 +794,15 @@ public class VampireLib extends BasicModClass {
             TEST_WOOD13 = WoodRegistry.of(identifier("test13"))
                 .defaultBlocksColoredLeaves().defaultExtras().ladder().bookshelf()
                 .build();
+
+            TEST_WOOD14 = WoodRegistry.of(identifier("test14"))
+                .leaves().sapling().build();
+
+            TEST_WOOD15 = WoodRegistry.of(identifier("test15"))
+                .leaves().build();
+
+            TEST_WOOD16 = WoodRegistry.of(identifier("test16"))
+                .sapling().build();
 
 			//Nether
 			TEST_NETHER_WOOD = WoodRegistry.of(identifier("test_nether"))
@@ -833,9 +848,6 @@ public class VampireLib extends BasicModClass {
                 .mushroomLike().defaultBlocksColoredLeaves().defaultExtras().ladder().bookshelf()
                 .nonFlammable().build();
 		}
-
-        AnimationLoader loader = new AnimationLoader();
-        loader.getAnimationDefinition(identifier("idk"));
 
         UseBlockCallback.EVENT.register((player, world, hand, hitResult) -> {
             if (!world.isClientSide) {
