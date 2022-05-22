@@ -78,4 +78,3 @@ transitive-accessible method net/minecraft/core/Registry registerSimple (Lnet/mi
 transitive-accessible class net/minecraft/core/RegistryAccess$RegistryData
 transitive-accessible class net/minecraft/core/Registry$RegistryBootstrap
 transitive-accessible method net/minecraft/core/Registry internalRegister (Lnet/minecraft/resources/ResourceKey;Lnet/minecraft/core/WritableRegistry;Lnet/minecraft/core/Registry$RegistryBootstrap;Lcom/mojang/serialization/Lifecycle;)Lnet/minecraft/core/WritableRegistry;
-transitive-accessible method net/minecraft/data/BuiltinRegistries internalRegister (Lnet/minecraft/resources/ResourceKey;Lnet/minecraft/core/WritableRegistry;Lnet/minecraft/data/BuiltinRegistries$RegistryBootstrap;Lcom/mojang/serialization/Lifecycle;)Lnet/minecraft/core/WritableRegistry;
