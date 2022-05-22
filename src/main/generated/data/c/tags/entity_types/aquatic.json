@@ -11,8 +11,6 @@
     "minecraft:salmon",
     "minecraft:squid",
     "minecraft:tropical_fish",
-    "minecraft:turtle",
-    "minecraft:frog",
-    "minecraft:tadpole"
+    "minecraft:turtle"
   ]
 }

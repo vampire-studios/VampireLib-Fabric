@@ -1,8 +1,9 @@
 package io.github.vampirestudios.vampirelib.village;
 
+import java.util.Random;
+
 import org.jetbrains.annotations.Nullable;
 
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.ItemStack;
@@ -49,7 +50,7 @@ public class BasicTrade implements VillagerTrades.ItemListing {
 
     @Override
     @Nullable
-    public MerchantOffer getOffer(Entity merchant, RandomSource rand)
+    public MerchantOffer getOffer(Entity merchant, Random rand)
     {
         return new MerchantOffer(price, price2, forSale, maxTrades, xp, priceMult);
     }

@@ -1,6 +1,11 @@
 {
   "type": "minecraft:crafting_shaped",
   "group": "wooden_sign",
+  "pattern": [
+    "###",
+    "###",
+    " X "
+  ],
   "key": {
     "#": {
       "item": "minecraft:jungle_planks"
@@ -9,13 +14,8 @@
       "tag": "c:rods/wooden"
     }
   },
-  "pattern": [
-    "###",
-    "###",
-    " X "
-  ],
   "result": {
-    "count": 3,
-    "item": "minecraft:jungle_sign"
+    "item": "minecraft:jungle_sign",
+    "count": 3
   }
 }

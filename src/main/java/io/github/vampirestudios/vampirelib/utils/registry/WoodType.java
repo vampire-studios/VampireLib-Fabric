@@ -690,8 +690,7 @@ public class WoodType {
     public static final WoodType DARK_OAK = WoodTypeRegistry.registerVanilla(new WoodType("dark_oak", Blocks.DARK_OAK_LEAVES, Blocks.DARK_OAK_LOG));
     public static final WoodType CRIMSON = WoodTypeRegistry.registerVanilla(new WoodType("crimson", Blocks.NETHER_WART_BLOCK, Blocks.CRIMSON_STEM));
     public static final WoodType WARPED = WoodTypeRegistry.registerVanilla(new WoodType("warped", Blocks.WARPED_WART_BLOCK, Blocks.WARPED_STEM));
-    public static final WoodType MANGROVE = WoodTypeRegistry.registerVanilla(new WoodType("mangrove", Blocks.MANGROVE_LEAVES, Blocks.MANGROVE_LOG));
-    public static final WoodType[] VANILLA = new WoodType[] {OAK, SPRUCE, BIRCH, JUNGLE, ACACIA, DARK_OAK, CRIMSON, WARPED, MANGROVE};
+    public static final WoodType[] VANILLA = new WoodType[] {OAK, SPRUCE, BIRCH, JUNGLE, ACACIA, DARK_OAK, CRIMSON, WARPED};
     public final Block leaves;
     public final Block log;
     public final ResourceLocation identifier;

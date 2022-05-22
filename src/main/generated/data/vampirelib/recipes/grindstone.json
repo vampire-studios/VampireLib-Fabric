@@ -1,20 +1,20 @@
 {
   "type": "minecraft:crafting_shaped",
-  "key": {
-    "#": {
-      "tag": "minecraft:planks"
-    },
-    "-": {
-      "item": "minecraft:stone_slab"
-    },
-    "I": {
-      "tag": "c:rods/wooden"
-    }
-  },
   "pattern": [
     "I-I",
     "# #"
   ],
+  "key": {
+    "I": {
+      "tag": "c:rods/wooden"
+    },
+    "-": {
+      "item": "minecraft:stone_slab"
+    },
+    "#": {
+      "tag": "minecraft:planks"
+    }
+  },
   "result": {
     "item": "minecraft:grindstone"
   }

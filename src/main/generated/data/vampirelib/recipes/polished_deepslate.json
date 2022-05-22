@@ -1,16 +1,16 @@
 {
   "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "SS",
+    "SS"
+  ],
   "key": {
     "S": {
       "tag": "c:cobblestone/deepslate"
     }
   },
-  "pattern": [
-    "SS",
-    "SS"
-  ],
   "result": {
-    "count": 4,
-    "item": "minecraft:polished_deepslate"
+    "item": "minecraft:polished_deepslate",
+    "count": 4
   }
 }

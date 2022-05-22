@@ -1,5 +1,10 @@
 {
   "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "I I",
+    "ICI",
+    " I "
+  ],
   "key": {
     "C": {
       "tag": "c:chests/wooden"
@@ -8,11 +13,6 @@
       "tag": "c:ingots/iron"
     }
   },
-  "pattern": [
-    "I I",
-    "ICI",
-    " I "
-  ],
   "result": {
     "item": "minecraft:hopper"
   }

@@ -28,8 +28,8 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
+import net.minecraft.data.HashCache;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
@@ -126,13 +126,13 @@ public abstract class FabricLanguageProvider implements DataProvider {
 	protected abstract void registerTranslations();
 
 	@Override
-	public void run(@NotNull CachedOutput cache) throws IOException {
+	public void run(@NotNull HashCache cache) throws IOException {
 		this.registerTranslations();
 
 		Path path = this.dataGenerator.getOutputFolder().resolve("assets/" + this.modId + "/lang/" + this.locale + ".json");
 		try {
 			JsonElement json = GSON.toJsonTree(this.data);
-			DataProvider.saveStable(cache, json, path);
+			DataProvider.save(GSON, cache, json, path);
 		} catch (IOException e) {
 			LOGGER.error("Couldn't save {}", path, e);
 		}

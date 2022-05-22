@@ -26,6 +26,7 @@ package io.github.vampirestudios.vampirelib.village;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 import com.google.common.collect.Lists;
@@ -33,10 +34,9 @@ import org.jetbrains.annotations.NotNull;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
-import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.TagKey;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.npc.AbstractVillager;
@@ -59,7 +59,7 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.levelgen.structure.Structure;
+import net.minecraft.world.level.levelgen.feature.ConfiguredStructureFeature;
 import net.minecraft.world.level.saveddata.maps.MapDecoration;
 import net.minecraft.world.level.saveddata.maps.MapItemSavedData;
 
@@ -91,20 +91,20 @@ public class TradeOfferFactories {
         }
 
 
-        public MerchantOffer getOffer(Entity entity_1, RandomSource random_1) {
+        public MerchantOffer getOffer(Entity entity_1, Random random_1) {
             return new MerchantOffer(new ItemStack(Items.EMERALD, this.price), new ItemStack(this.secondBuy.getItem(), this.secondCount), new ItemStack(this.sell.getItem(), this.sellCount), this.maxUses, this.experience, this.multiplier);
         }
     }
 
     public static class TreasureMapForEmeralds implements VillagerTrades.ItemListing {
         private final int price;
-        private final TagKey<Structure> structure;
+        private final TagKey<ConfiguredStructureFeature<?, ?>> structure;
         private final String displayName;
         private final MapDecoration.Type iconType;
         private final int maxUses;
         private final int experience;
 
-        public TreasureMapForEmeralds(int price, TagKey<Structure> structure, String displayName, MapDecoration.Type iconType, int maxUses,
+        public TreasureMapForEmeralds(int price, TagKey<ConfiguredStructureFeature<?, ?>> structure, String displayName, MapDecoration.Type iconType, int maxUses,
                                       int experience) {
             this.price = price;
             this.structure = structure;
@@ -115,16 +115,16 @@ public class TradeOfferFactories {
         }
 
 
-        public MerchantOffer getOffer(Entity entity_1, @NotNull RandomSource random_1) {
+        public MerchantOffer getOffer(Entity entity_1, @NotNull Random random_1) {
             if (!(entity_1.level instanceof ServerLevel serverWorld_1)) {
                 return null;
             } else {
-                BlockPos blockPos_1 = serverWorld_1.findNearestMapStructure(this.structure, new BlockPos(entity_1.blockPosition()), 100, true);
+                BlockPos blockPos_1 = serverWorld_1.findNearestMapFeature(this.structure, new BlockPos(entity_1.blockPosition()), 100, true);
                 if (blockPos_1 != null) {
                     ItemStack itemStack_1 = MapItem.create(serverWorld_1, blockPos_1.getX(), blockPos_1.getZ(), (byte) 2, true, true);
                     MapItem.lockMap(serverWorld_1, itemStack_1);
                     MapItemSavedData.addTargetDecoration(itemStack_1, blockPos_1, "+", this.iconType);
-                    itemStack_1.setHoverName(Component.translatable(this.displayName));
+                    itemStack_1.setHoverName(new TranslatableComponent(this.displayName));
                     return new MerchantOffer(new ItemStack(Items.EMERALD, this.price), new ItemStack(Items.COMPASS), itemStack_1, this.maxUses, this.experience, 0.2F);
                 } else {
                     return null;
@@ -140,7 +140,7 @@ public class TradeOfferFactories {
             this.experience = int_1;
         }
 
-        public TradeOffer create(Entity entity_1, RandomSource random_1) {
+        public TradeOffer create(Entity entity_1, Random random_1) {
             Enchantment enchantment_1 = Registry.ENCHANTMENT.getRandom(random_1);
             int int_1 = MathHelper.nextInt(random_1, enchantment_1.getMinimumLevel(), enchantment_1.getMaximumLevel());
             ItemStack itemStack_1 = EnchantedBookItem.forEnchantment(new InfoEnchantment(enchantment_1, int_1));
@@ -172,7 +172,7 @@ public class TradeOfferFactories {
             this.multiplier = 0.05F;
         }
 
-        public MerchantOffer getOffer(Entity entity_1, RandomSource random_1) {
+        public MerchantOffer getOffer(Entity entity_1, Random random_1) {
             return new MerchantOffer(buyItem, buyItem2, sellItem, maxUses, experience, multiplier);
         }
     }
@@ -194,11 +194,11 @@ public class TradeOfferFactories {
             this.experience = int_3;
         }
 
-        private static DyeItem getDye(RandomSource random_1) {
+        private static DyeItem getDye(Random random_1) {
             return DyeItem.byColor(DyeColor.byId(random_1.nextInt(16)));
         }
 
-        public MerchantOffer getOffer(Entity entity_1, RandomSource random_1) {
+        public MerchantOffer getOffer(Entity entity_1, Random random_1) {
             ItemStack itemStack_1 = new ItemStack(Items.EMERALD, this.price);
             ItemStack itemStack_2 = new ItemStack(this.sell);
             if (this.sell instanceof DyeableArmorItem) {
@@ -240,7 +240,7 @@ public class TradeOfferFactories {
             this.priceMultiplier = 0.05F;
         }
 
-        public MerchantOffer getOffer(Entity entity_1, RandomSource random_1) {
+        public MerchantOffer getOffer(Entity entity_1, Random random_1) {
             ItemStack itemStack_1 = new ItemStack(Items.EMERALD, this.price);
             List<Potion> list_1 = Registry.POTION.stream().filter((potion_1x) ->
                     !potion_1x.getEffects().isEmpty() && PotionBrewing.isBrewablePotion(potion_1x)).collect(Collectors.toList());
@@ -269,7 +269,7 @@ public class TradeOfferFactories {
             this.multiplier = float_1;
         }
 
-        public MerchantOffer getOffer(Entity entity_1, RandomSource random_1) {
+        public MerchantOffer getOffer(Entity entity_1, Random random_1) {
             int int_1 = 5 + random_1.nextInt(15);
             ItemStack itemStack_1 = EnchantmentHelper.enchantItem(random_1, new ItemStack(this.tool.getItem()), int_1, false);
             int int_2 = Math.min(this.basePrice + int_1, 64);
@@ -292,7 +292,7 @@ public class TradeOfferFactories {
         }
 
 
-        public MerchantOffer getOffer(Entity entity_1, RandomSource random_1) {
+        public MerchantOffer getOffer(Entity entity_1, Random random_1) {
             ItemStack itemStack_1 = new ItemStack(Items.SUSPICIOUS_STEW, 1);
             SuspiciousStewItem.saveMobEffect(itemStack_1, this.effect, this.duration);
             return new MerchantOffer(new ItemStack(Items.EMERALD, 1), itemStack_1, 6, this.experience, this.multiplier);
@@ -346,7 +346,7 @@ public class TradeOfferFactories {
             this.multiplier = multiplier;
         }
 
-        public MerchantOffer getOffer(Entity entity_1, RandomSource random_1) {
+        public MerchantOffer getOffer(Entity entity_1, Random random_1) {
             return new MerchantOffer(new ItemStack(Items.EMERALD, this.price), new ItemStack(this.sell.getItem(), this.count), this.maxUses, this.experience, this.multiplier);
         }
     }
@@ -366,7 +366,7 @@ public class TradeOfferFactories {
             this.multiplier = 0.05F;
         }
 
-        public MerchantOffer getOffer(Entity entity_1, RandomSource random_1) {
+        public MerchantOffer getOffer(Entity entity_1, Random random_1) {
             ItemStack itemStack_1 = new ItemStack(this.buy, this.price);
             return new MerchantOffer(itemStack_1, new ItemStack(Items.EMERALD), this.maxUses, this.experience, this.multiplier);
         }
@@ -389,7 +389,7 @@ public class TradeOfferFactories {
         }
 
 
-        public MerchantOffer getOffer(Entity entity_1, RandomSource random_1) {
+        public MerchantOffer getOffer(Entity entity_1, Random random_1) {
             if (entity_1 instanceof VillagerDataHolder) {
                 ItemStack itemStack_1 = new ItemStack(this.map.get(((VillagerDataHolder) entity_1).getVillagerData().getType()), this.count);
                 return new MerchantOffer(itemStack_1, new ItemStack(Items.EMERALD), this.maxUses, this.experience, 0.05F);
@@ -425,7 +425,7 @@ public class TradeOfferFactories {
         }
 
         @Override
-        public MerchantOffer getOffer(Entity var1, RandomSource var2) {
+        public MerchantOffer getOffer(Entity var1, Random var2) {
             ItemStack itemStack_1 = new ItemStack(this.item, this.price);
             return new MerchantOffer(itemStack_1, new ItemStack(Items.EMERALD), this.maxUses, this.experience, this.multiplier);
         }
@@ -445,7 +445,7 @@ public class TradeOfferFactories {
         }
 
         @Override
-        public MerchantOffer getOffer(Entity entity, RandomSource random) {
+        public MerchantOffer getOffer(Entity entity, Random random) {
             if (entity instanceof VillagerDataHolder) {
                 ItemStack itemStack = new ItemStack(this.itemMap.get(((VillagerDataHolder)entity).getVillagerData().getType()), this.price);
                 return new MerchantOffer(itemStack, new ItemStack(Items.EMERALD), this.maxUses, this.experience, 0.05F);
@@ -455,7 +455,7 @@ public class TradeOfferFactories {
         }
 
         @Override
-        public boolean hg$isApplicable(AbstractVillager entity, RandomSource random) {
+        public boolean hg$isApplicable(AbstractVillager entity, Random random) {
             if (entity.level.getBiome(entity.blockPosition()).unwrapKey().isPresent()) {
                 System.out.println(VillagerTypeRegistry.getVillagerTypeForBiome(entity.level.getBiome(entity.blockPosition())).toString());
                 return itemMap.containsKey(VillagerTypeRegistry.getVillagerTypeForBiome(entity.level.getBiome(entity.blockPosition())));

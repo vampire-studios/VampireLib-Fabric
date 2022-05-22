@@ -24,9 +24,10 @@
 
 package io.github.vampirestudios.vampirelib.village;
 
-import net.minecraft.util.RandomSource;
+import java.util.Random;
+
 import net.minecraft.world.entity.npc.AbstractVillager;
 
 public interface ConditionalTradeFactory {
-    boolean hg$isApplicable(AbstractVillager entity, RandomSource random);
+    boolean hg$isApplicable(AbstractVillager entity, Random random);
 }

@@ -1,5 +1,10 @@
 {
   "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "XX",
+    " #",
+    " #"
+  ],
   "key": {
     "#": {
       "tag": "c:rods/wooden"
@@ -8,11 +13,6 @@
       "tag": "minecraft:stone_tool_materials"
     }
   },
-  "pattern": [
-    "XX",
-    " #",
-    " #"
-  ],
   "result": {
     "item": "minecraft:stone_hoe"
   }

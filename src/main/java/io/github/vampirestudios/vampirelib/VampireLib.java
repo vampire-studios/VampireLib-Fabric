@@ -741,7 +741,7 @@ public class VampireLib extends BasicModClass {
     public static WoodRegistry TEST_NETHER_WOOD13;
 
     public VampireLib() {
-        super("vampirelib", "VampireLib", "5.2.0+build.2");
+        super("vampirelib", "VampireLib", "4.9.0+build.1");
     }
 
     @Override

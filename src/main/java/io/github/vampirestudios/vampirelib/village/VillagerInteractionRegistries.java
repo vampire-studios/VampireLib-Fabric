@@ -89,7 +89,7 @@ public class VillagerInteractionRegistries {
 		ResourceLocation oldValue = GiveGiftsToHeroTaskAccessor.getGifts().put(profession, lootTable);
 
 		if (oldValue != null) {
-			LOGGER.info("Overriding previous gift loot table of {} profession, was: {}, now: {}", profession.name(), oldValue, lootTable);
+			LOGGER.info("Overriding previous gift loot table of {} profession, was: {}, now: {}", profession.getName(), oldValue, lootTable);
 		}
 	}
 

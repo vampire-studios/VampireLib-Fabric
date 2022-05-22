@@ -1,17 +1,17 @@
 {
   "type": "minecraft:crafting_shaped",
-  "key": {
-    "#": {
-      "tag": "c:rods/wooden"
-    }
-  },
   "pattern": [
     "# #",
     "###",
     "# #"
   ],
+  "key": {
+    "#": {
+      "tag": "c:rods/wooden"
+    }
+  },
   "result": {
-    "count": 3,
-    "item": "minecraft:ladder"
+    "item": "minecraft:ladder",
+    "count": 3
   }
 }

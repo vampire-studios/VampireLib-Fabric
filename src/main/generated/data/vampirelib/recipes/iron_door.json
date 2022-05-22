@@ -1,17 +1,17 @@
 {
   "type": "minecraft:crafting_shaped",
-  "key": {
-    "#": {
-      "tag": "c:ingots/iron"
-    }
-  },
   "pattern": [
     "##",
     "##",
     "##"
   ],
+  "key": {
+    "#": {
+      "tag": "c:ingots/iron"
+    }
+  },
   "result": {
-    "count": 3,
-    "item": "minecraft:iron_door"
+    "item": "minecraft:iron_door",
+    "count": 3
   }
 }

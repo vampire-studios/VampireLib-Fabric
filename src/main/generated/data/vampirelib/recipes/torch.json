@@ -1,5 +1,9 @@
 {
   "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "X",
+    "#"
+  ],
   "key": {
     "#": {
       "tag": "c:rods/wooden"
@@ -13,12 +17,8 @@
       }
     ]
   },
-  "pattern": [
-    "X",
-    "#"
-  ],
   "result": {
-    "count": 4,
-    "item": "minecraft:torch"
+    "item": "minecraft:torch",
+    "count": 4
   }
 }

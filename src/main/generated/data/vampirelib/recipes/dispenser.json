@@ -1,21 +1,21 @@
 {
   "type": "minecraft:crafting_shaped",
-  "key": {
-    "#": {
-      "tag": "minecraft:stone_crafting_materials"
-    },
-    "R": {
-      "item": "minecraft:redstone"
-    },
-    "X": {
-      "item": "minecraft:bow"
-    }
-  },
   "pattern": [
     "###",
     "#X#",
     "#R#"
   ],
+  "key": {
+    "R": {
+      "item": "minecraft:redstone"
+    },
+    "#": {
+      "tag": "minecraft:stone_crafting_materials"
+    },
+    "X": {
+      "item": "minecraft:bow"
+    }
+  },
   "result": {
     "item": "minecraft:dispenser"
   }

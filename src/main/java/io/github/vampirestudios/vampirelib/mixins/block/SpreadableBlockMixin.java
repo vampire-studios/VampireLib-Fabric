@@ -1,5 +1,7 @@
 package io.github.vampirestudios.vampirelib.mixins.block;
 
+import java.util.Random;
+
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -10,7 +12,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.FluidTags;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SnowLayerBlock;
@@ -55,7 +56,7 @@ public abstract class SpreadableBlockMixin extends SnowyDirtBlock implements Spr
 	 * @author OliviaTheVampire
 	 */
 	@Inject(method = "randomTick", at=@At("HEAD"), cancellable = true)
-	public void randomTick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random, CallbackInfo ci) {
+	public void randomTick(BlockState state, ServerLevel world, BlockPos pos, Random random, CallbackInfo ci) {
 		if (!canBeGrass(state, world, pos)) {
 			if (!world.hasChunksAt(pos.offset(-1, -1, -1), pos.offset(1, 1, 1))) return; // Forge: prevent loading unloaded chunks when checking neighbor's light and spreading
 			if (SpreadBehaviors.canSpread(state, BlockSpreadingType.REVERT)) //Forge: switch to use SpreadBehaviors API, so this class can be used more easily

@@ -1,15 +1,15 @@
 {
   "type": "minecraft:crafting_shaped",
-  "key": {
-    "#": {
-      "tag": "c:ingots/iron"
-    }
-  },
   "pattern": [
     "# #",
     "# #",
     "###"
   ],
+  "key": {
+    "#": {
+      "tag": "c:ingots/iron"
+    }
+  },
   "result": {
     "item": "minecraft:cauldron"
   }

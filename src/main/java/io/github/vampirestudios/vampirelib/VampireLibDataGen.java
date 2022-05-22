@@ -51,8 +51,6 @@ import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.dimension.BuiltinDimensionTypes;
-import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.levelgen.NoiseGeneratorSettings;
 
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
@@ -157,7 +155,7 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
         dataGenerator.addProvider(VEntityTypeTagsProvider::new);
         dataGenerator.addProvider(VBiomeTagsProvider::new);
         dataGenerator.addProvider(VNoiseSettingsTagsProvider::new);
-        dataGenerator.addProvider(VDimensionTypeTagsProvider::new);
+//        dataGenerator.addProvider(VDimensionTypeTagsProvider::new);
     }
 
     //Wood Type Test Generation
@@ -641,7 +639,7 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
             this.tag(VTags.Biomes.SAVANNAS)
 //                .addOptionalTag(ConventionalBiomeTags.TREE_SAVANNA.location())
                 .add(Biomes.SAVANNA, Biomes.SAVANNA_PLATEAU, Biomes.WINDSWEPT_SAVANNA);
-            this.tag(BiomeTags.IS_SAVANNA).addTag(VTags.Biomes.SAVANNAS);
+//            this.tag(BiomeTags.IS_SAVANNA).addTag(VTags.Biomes.SAVANNAS);
             this.tag(VTags.Biomes.SNOWY)
 //                .addOptionalTag(ConventionalBiomeTags.CLIMATE_COLD.location())
 //                .addOptionalTag(ConventionalBiomeTags.SNOWY.location())
@@ -649,12 +647,12 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
                 .add(Biomes.FROZEN_OCEAN, Biomes.DEEP_FROZEN_OCEAN, Biomes.FROZEN_RIVER,
                     Biomes.SNOWY_BEACH, Biomes.SNOWY_TAIGA, Biomes.SNOWY_PLAINS,
                     Biomes.GROVE, Biomes.SNOWY_SLOPES, Biomes.JAGGED_PEAKS, Biomes.FROZEN_PEAKS);
-            this.tag(BiomeTags.ONLY_ALLOWS_SNOW_AND_GOLD_RABBITS).addTag(VTags.Biomes.SNOWY);
-            this.tag(BiomeTags.SPAWNS_COLD_VARIANT_FROGS).addTag(VTags.Biomes.SNOWY);
+//            this.tag(BiomeTags.ONLY_ALLOWS_SNOW_AND_GOLD_RABBITS).addTag(VTags.Biomes.SNOWY);
+//            this.tag(BiomeTags.SPAWNS_COLD_VARIANT_FROGS).addTag(VTags.Biomes.SNOWY);
             this.tag(VTags.Biomes.SWAMPS)
 //                .addOptionalTag(ConventionalBiomeTags.SWAMP.location())
                 .add(Biomes.SWAMP);
-            this.tag(BiomeTags.ALLOWS_SURFACE_SLIME_SPAWNS).addTag(VTags.Biomes.SWAMPS);
+//            this.tag(BiomeTags.ALLOWS_SURFACE_SLIME_SPAWNS).addTag(VTags.Biomes.SWAMPS);
             this.tag(VTags.Biomes.SLOPES)
 //                .addOptionalTag(ConventionalBiomeTags.MOUNTAIN_SLOPE.location())
                 .add(Biomes.MEADOW, Biomes.GROVE, Biomes.SNOWY_SLOPES);
@@ -666,7 +664,7 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
 
             this.tag(VTags.Biomes.OVERWORLD)
                 .addTag(VTags.Biomes.OVERWORLD_SURFACE).addTag(VTags.Biomes.OVERWORLD_UNDERGROUND);
-            this.tag(BiomeTags.IS_OVERWORLD).addTag(VTags.Biomes.OVERWORLD);
+//            this.tag(BiomeTags.IS_OVERWORLD).addTag(VTags.Biomes.OVERWORLD);
             this.tag(VTags.Biomes.OVERWORLD_SURFACE)
                 .addTag(VTags.Biomes.BADLANDS)
                 .addTag(VTags.Biomes.FORESTS)
@@ -738,7 +736,7 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
 //                .addOptionalTag(ConventionalBiomeTags.END_ISLANDS.location())
 //                .addOptionalTag(ConventionalBiomeTags.IN_THE_END.location())
                 .add(Biomes.THE_END, Biomes.SMALL_END_ISLANDS, Biomes.END_BARRENS, Biomes.END_MIDLANDS, Biomes.END_HIGHLANDS);
-            this.tag(BiomeTags.IS_END).addTag(VTags.Biomes.END);
+//            this.tag(BiomeTags.IS_END).addTag(VTags.Biomes.END);
         }
     }
 
@@ -966,7 +964,7 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
 
             tag(VTags.EntityTypes.AQUATIC).add(EntityType.AXOLOTL, EntityType.COD, EntityType.DOLPHIN, EntityType.ELDER_GUARDIAN,
                 EntityType.GLOW_SQUID, EntityType.GUARDIAN, EntityType.PUFFERFISH, EntityType.SALMON, EntityType.SQUID,
-                EntityType.TROPICAL_FISH, EntityType.TURTLE, EntityType.FROG, EntityType.TADPOLE);
+                EntityType.TROPICAL_FISH, EntityType.TURTLE/*, EntityType.FROG, EntityType.TADPOLE*/);
             tag(VTags.EntityTypes.FISH).add(EntityType.COD, EntityType.PUFFERFISH, EntityType.SALMON, EntityType.TROPICAL_FISH);
             tag(VTags.EntityTypes.CEPHALOPODS).add(EntityType.GLOW_SQUID, EntityType.SQUID);
             tag(VTags.EntityTypes.GUARDIANS).add(EntityType.ELDER_GUARDIAN, EntityType.GUARDIAN);
@@ -1152,21 +1150,25 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
             this.tag(VTags.NoiseSettings.OVERWORLD).add(NoiseGeneratorSettings.OVERWORLD);
         }
 
+        @Override
+        public String getName() {
+            return "Noise Settings Generator";
+        }
     }
 
-    private static class VDimensionTypeTagsProvider extends TagsProvider<DimensionType> {
+    /*private static class VDimensionTypeTagsProvider extends CustomTagProviders.DimensionTypeTagProvider {
         private VDimensionTypeTagsProvider(FabricDataGenerator dataGenerator) {
-            super(dataGenerator, BuiltinRegistries.DIMENSION_TYPE);
+            super(dataGenerator);
         }
 
         @Override
-        protected void addTags() {
-            this.tag(VTags.DimensionTypes.END).add(BuiltinDimensionTypes.END);
-            this.tag(VTags.DimensionTypes.NETHER).add(BuiltinDimensionTypes.NETHER);
+        protected void generateTags() {
+            this.tag(VTags.DimensionTypes.END).add(DimensionType.END_LOCATION);
+            this.tag(VTags.DimensionTypes.NETHER).add(DimensionType.NETHER_LOCATION);
             this.tag(VTags.DimensionTypes.OVERWORLD)
                 .addTag(VTags.DimensionTypes.OVERWORLD_CAVES)
-                .add(BuiltinDimensionTypes.OVERWORLD);
-            this.tag(VTags.DimensionTypes.OVERWORLD_CAVES).add(BuiltinDimensionTypes.OVERWORLD_CAVES);
+                .add(DimensionType.OVERWORLD_LOCATION);
+            this.tag(VTags.DimensionTypes.OVERWORLD_CAVES).add(DimensionType.OVERWORLD_CAVES_LOCATION);
         }
-    }
+    }*/
 }

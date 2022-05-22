@@ -2,6 +2,7 @@ package io.github.vampirestudios.vampirelib.client.model;
 
 import java.util.EnumMap;
 import java.util.List;
+import java.util.Random;
 
 import javax.annotation.Nullable;
 
@@ -18,7 +19,6 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.ModelState;
 import net.minecraft.core.Direction;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
@@ -126,7 +126,7 @@ public class PerspectiveMapWrapper implements BakedModel, TransformTypeDependent
 	}
 
 	@Override
-	public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, RandomSource rand) {
+	public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, Random rand) {
 		return parent.getQuads(state, side, rand);
 	}
 

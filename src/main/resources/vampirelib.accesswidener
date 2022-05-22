@@ -4,17 +4,19 @@ transitive-accessible method net/minecraft/world/level/levelgen/feature/foliagep
 transitive-accessible method net/minecraft/world/level/levelgen/feature/treedecorators/TreeDecoratorType <init> (Lcom/mojang/serialization/Codec;)V
 transitive-accessible method net/minecraft/world/level/levelgen/feature/stateproviders/SimpleStateProvider <init> (Lnet/minecraft/world/level/block/state/BlockState;)V
 
-transitive-accessible method net/minecraft/world/entity/ai/village/poi/PoiType <init> (Ljava/util/Set;II)V
-transitive-accessible method net/minecraft/world/entity/npc/VillagerProfession <init> (Ljava/lang/String;Ljava/util/function/Predicate;Ljava/util/function/Predicate;Lcom/google/common/collect/ImmutableSet;Lcom/google/common/collect/ImmutableSet;Lnet/minecraft/sounds/SoundEvent;)V
+transitive-accessible method net/minecraft/world/entity/ai/village/poi/PoiType <init> (Ljava/lang/String;Ljava/util/Set;II)V
+transitive-accessible method net/minecraft/world/entity/npc/VillagerProfession <init> (Ljava/lang/String;Lnet/minecraft/world/entity/ai/village/poi/PoiType;Lcom/google/common/collect/ImmutableSet;Lcom/google/common/collect/ImmutableSet;Lnet/minecraft/sounds/SoundEvent;)V
+transitive-accessible method net/minecraft/world/entity/ai/village/poi/PoiType getBlockStates (Lnet/minecraft/world/level/block/Block;)Ljava/util/Set;
+transitive-accessible field net/minecraft/world/entity/ai/village/poi/PoiType TYPE_BY_STATE Ljava/util/Map;
+
 transitive-extendable class net/minecraft/world/entity/npc/VillagerType
 transitive-accessible method net/minecraft/world/entity/npc/VillagerType <init> (Ljava/lang/String;)V
 transitive-accessible field net/minecraft/world/entity/npc/VillagerType BY_BIOME Ljava/util/Map;
 
-transitive-accessible field net/minecraft/data/tags/TagsProvider pathProvider Lnet/minecraft/data/DataGenerator$PathProvider;
-transitive-mutable field net/minecraft/data/tags/TagsProvider pathProvider Lnet/minecraft/data/DataGenerator$PathProvider;
-transitive-accessible method net/minecraft/data/tags/TagsProvider$TagAppender <init> (Lnet/minecraft/tags/TagBuilder;Lnet/minecraft/core/Registry;)V
-transitive-accessible field net/minecraft/data/tags/TagsProvider$TagAppender builder Lnet/minecraft/tags/TagBuilder;
+transitive-accessible method net/minecraft/data/tags/TagsProvider$TagAppender <init> (Lnet/minecraft/tags/Tag$Builder;Lnet/minecraft/core/Registry;Ljava/lang/String;)V
+transitive-accessible field net/minecraft/data/tags/TagsProvider$TagAppender builder Lnet/minecraft/tags/Tag$Builder;
 transitive-accessible field net/minecraft/data/tags/TagsProvider$TagAppender registry Lnet/minecraft/core/Registry;
+transitive-accessible field net/minecraft/data/tags/TagsProvider$TagAppender source Ljava/lang/String;
 transitive-extendable method net/minecraft/data/tags/TagsProvider$TagAppender add ([Ljava/lang/Object;)Lnet/minecraft/data/tags/TagsProvider$TagAppender;
 
 transitive-accessible field net/minecraft/data/loot/BlockLoot map Ljava/util/Map;

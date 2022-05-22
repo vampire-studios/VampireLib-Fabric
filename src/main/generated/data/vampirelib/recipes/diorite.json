@@ -1,19 +1,19 @@
 {
   "type": "minecraft:crafting_shaped",
-  "key": {
-    "C": {
-      "tag": "minecraft:stone_crafting_materials"
-    },
-    "Q": {
-      "item": "minecraft:quartz"
-    }
-  },
   "pattern": [
     "CQ",
     "QC"
   ],
+  "key": {
+    "Q": {
+      "item": "minecraft:quartz"
+    },
+    "C": {
+      "tag": "minecraft:stone_crafting_materials"
+    }
+  },
   "result": {
-    "count": 2,
-    "item": "minecraft:diorite"
+    "item": "minecraft:diorite",
+    "count": 2
   }
 }
