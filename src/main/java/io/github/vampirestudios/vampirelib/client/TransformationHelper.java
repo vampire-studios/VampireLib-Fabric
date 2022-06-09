@@ -22,8 +22,8 @@ import net.minecraft.util.Mth;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
-import io.github.vampirestudios.vampirelib.api.Matrix4fExtensions;
-import io.github.vampirestudios.vampirelib.api.TransformationExtensions;
+import io.github.vampirestudios.vampirelib.api.extensions.Matrix4fExtensions;
+import io.github.vampirestudios.vampirelib.api.extensions.TransformationExtensions;
 
 public final class TransformationHelper {
     private static final double THRESHOLD = 0.9995;

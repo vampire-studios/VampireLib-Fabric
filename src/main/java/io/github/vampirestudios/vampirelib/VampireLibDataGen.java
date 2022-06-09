@@ -25,6 +25,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
 
+import net.fabric.api.tag.convention.v1.ConventionalBlockTags;
+import net.fabric.api.tag.convention.v1.ConventionalItemTags;
+
 import net.minecraft.core.Registry;
 import net.minecraft.data.BuiltinRegistries;
 import net.minecraft.data.models.BlockModelGenerators;
@@ -36,6 +39,7 @@ import net.minecraft.data.tags.BiomeTagsProvider;
 import net.minecraft.data.tags.TagsProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BiomeTags;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
@@ -58,8 +62,8 @@ import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricModelProvider;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
 
-import io.github.vampirestudios.vampirelib.api.CustomTagProviders;
-import io.github.vampirestudios.vampirelib.api.FabricLanguageProvider;
+import io.github.vampirestudios.vampirelib.api.datagen.CustomTagProviders;
+import io.github.vampirestudios.vampirelib.api.datagen.FabricLanguageProvider;
 import io.github.vampirestudios.vampirelib.init.VTags;
 import io.github.vampirestudios.vampirelib.mixins.IngredientAccessor;
 import io.github.vampirestudios.vampirelib.mixins.ShapedRecipeResultAccessor;
@@ -216,7 +220,7 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
         }
 
         @Override
-        public void registerTranslations() {
+        public void addTranslations() {
             addWoodTypeLang(VampireLib.TEST_WOOD);
             addWoodTypeLang(VampireLib.TEST_WOOD1);
             addWoodTypeLang(VampireLib.TEST_WOOD2);
@@ -262,7 +266,7 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
         }
 
         @Override
-        public void registerTranslations() {
+        public void addTranslations() {
             addWoodTypeLang(VampireLib.TEST_WOOD);
             addWoodTypeLang(VampireLib.TEST_WOOD1);
             addWoodTypeLang(VampireLib.TEST_WOOD2);
@@ -453,17 +457,68 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
 
         @Override
         protected void generateTags() {
+            getOrCreateTagBuilder(ConventionalBlockTags.VILLAGER_JOB_SITES)
+                .add(Blocks.BARREL)
+                .add(Blocks.BLAST_FURNACE)
+                .add(Blocks.BREWING_STAND)
+                .add(Blocks.CARTOGRAPHY_TABLE)
+                .add(Blocks.CAULDRON)
+                .add(Blocks.COMPOSTER)
+                .add(Blocks.FLETCHING_TABLE)
+                .add(Blocks.GRINDSTONE)
+                .add(Blocks.LECTERN)
+                .add(Blocks.LOOM)
+                .add(Blocks.SMITHING_TABLE)
+                .add(Blocks.SMOKER)
+                .add(Blocks.STONECUTTER);
+
+            getOrCreateTagBuilder(ConventionalBlockTags.NORMAL_SANDSTONE_BLOCKS)
+                .add(Blocks.SANDSTONE)
+                .add(Blocks.CUT_SANDSTONE)
+                .add(Blocks.CHISELED_SANDSTONE)
+                .add(Blocks.SMOOTH_SANDSTONE);
+            getOrCreateTagBuilder(ConventionalBlockTags.RED_SANDSTONE_BLOCKS)
+                .add(Blocks.RED_SANDSTONE)
+                .add(Blocks.CUT_RED_SANDSTONE)
+                .add(Blocks.CHISELED_RED_SANDSTONE)
+                .add(Blocks.SMOOTH_RED_SANDSTONE);
+            getOrCreateTagBuilder(ConventionalBlockTags.SANDSTONE_BLOCKS)
+                .addOptionalTag(ConventionalBlockTags.NORMAL_SANDSTONE_BLOCKS)
+                .addOptionalTag(ConventionalBlockTags.RED_SANDSTONE_BLOCKS);
+
+            getOrCreateTagBuilder(ConventionalBlockTags.NORMAL_SANDSTONE_SLABS)
+                .add(Blocks.SANDSTONE_SLAB)
+                .add(Blocks.CUT_SANDSTONE_SLAB)
+                .add(Blocks.SMOOTH_SANDSTONE_SLAB);
+            getOrCreateTagBuilder(ConventionalBlockTags.RED_SANDSTONE_SLABS)
+                .add(Blocks.RED_SANDSTONE_SLAB)
+                .add(Blocks.CUT_RED_SANDSTONE_SLAB)
+                .add(Blocks.SMOOTH_RED_SANDSTONE_SLAB);
+            getOrCreateTagBuilder(ConventionalBlockTags.SANDSTONE_SLABS)
+                .addOptionalTag(ConventionalBlockTags.NORMAL_SANDSTONE_SLABS)
+                .addOptionalTag(ConventionalBlockTags.RED_SANDSTONE_SLABS);
+
+            getOrCreateTagBuilder(ConventionalBlockTags.NORMAL_SANDSTONE_STAIRS)
+                .add(Blocks.SANDSTONE_STAIRS)
+                .add(Blocks.SMOOTH_SANDSTONE_STAIRS);
+            getOrCreateTagBuilder(ConventionalBlockTags.RED_SANDSTONE_STAIRS)
+                .add(Blocks.RED_SANDSTONE_STAIRS)
+                .add(Blocks.SMOOTH_RED_SANDSTONE_STAIRS);
+            getOrCreateTagBuilder(ConventionalBlockTags.SANDSTONE_STAIRS)
+                .addOptionalTag(ConventionalBlockTags.NORMAL_SANDSTONE_SLABS)
+                .addOptionalTag(ConventionalBlockTags.RED_SANDSTONE_SLABS);
+
             tagCustom(BARRELS_WOODEN).add(Blocks.BARREL);
             tagCustom(BARRELS).addTag(BARRELS_WOODEN);
             tagCustom(CHESTS_ENDER).add(Blocks.ENDER_CHEST);
             tagCustom(CHESTS_TRAPPED).add(Blocks.TRAPPED_CHEST);
             tagCustom(CHESTS_WOODEN).add(Blocks.CHEST, Blocks.TRAPPED_CHEST);
             tagCustom(CHESTS).addTags(CHESTS_ENDER, CHESTS_TRAPPED, CHESTS_WOODEN);
+            tag(COBBLESTONE).addTag(COBBLESTONE_NORMAL).addTag(COBBLESTONE_INFESTED).addTag(COBBLESTONE_MOSSY).addTag(COBBLESTONE_DEEPSLATE);
             tag(COBBLESTONE_NORMAL).add(Blocks.COBBLESTONE);
             tag(COBBLESTONE_INFESTED).add(Blocks.INFESTED_COBBLESTONE);
             tag(COBBLESTONE_MOSSY).add(Blocks.MOSSY_COBBLESTONE);
             tag(COBBLESTONE_DEEPSLATE).add(Blocks.COBBLED_DEEPSLATE);
-            tagCustom(COBBLESTONE).addTags(COBBLESTONE_NORMAL, COBBLESTONE_INFESTED, COBBLESTONE_MOSSY, COBBLESTONE_DEEPSLATE);
             tag(DIRT).add(Blocks.DIRT, Blocks.GRASS_BLOCK, Blocks.COARSE_DIRT, Blocks.PODZOL, Blocks.MYCELIUM, Blocks.ROOTED_DIRT);
             tag(END_STONES).add(Blocks.END_STONE);
             tag(ENDERMAN_PLACE_ON_BLACKLIST);
@@ -471,13 +526,13 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
             tag(FENCE_GATES_WOODEN).add(Blocks.OAK_FENCE_GATE, Blocks.SPRUCE_FENCE_GATE, Blocks.BIRCH_FENCE_GATE, Blocks.JUNGLE_FENCE_GATE, Blocks.ACACIA_FENCE_GATE, Blocks.DARK_OAK_FENCE_GATE, Blocks.CRIMSON_FENCE_GATE, Blocks.WARPED_FENCE_GATE);
             tagCustom(FENCES).addTags(FENCES_NETHER_BRICK, FENCES_WOODEN);
             tag(FENCES_NETHER_BRICK).add(Blocks.NETHER_BRICK_FENCE);
-            tag(FENCES_WOODEN).add(Blocks.OAK_FENCE, Blocks.SPRUCE_FENCE, Blocks.BIRCH_FENCE, Blocks.JUNGLE_FENCE, Blocks.ACACIA_FENCE, Blocks.DARK_OAK_FENCE, Blocks.CRIMSON_FENCE, Blocks.WARPED_FENCE);
+            getOrCreateTagBuilder(FENCES_WOODEN).forceAddTag(BlockTags.WOODEN_FENCES);
             tag(GLASS).addTag(GLASS_COLORLESS).addTag(STAINED_GLASS).addTag(GLASS_TINTED);
             tag(GLASS_COLORLESS).add(Blocks.GLASS);
             tag(GLASS_SILICA).add(Blocks.GLASS, Blocks.BLACK_STAINED_GLASS, Blocks.BLUE_STAINED_GLASS, Blocks.BROWN_STAINED_GLASS, Blocks.CYAN_STAINED_GLASS, Blocks.GRAY_STAINED_GLASS, Blocks.GREEN_STAINED_GLASS, Blocks.LIGHT_BLUE_STAINED_GLASS, Blocks.LIGHT_GRAY_STAINED_GLASS, Blocks.LIME_STAINED_GLASS, Blocks.MAGENTA_STAINED_GLASS, Blocks.ORANGE_STAINED_GLASS, Blocks.PINK_STAINED_GLASS, Blocks.PURPLE_STAINED_GLASS, Blocks.RED_STAINED_GLASS, Blocks.WHITE_STAINED_GLASS, Blocks.YELLOW_STAINED_GLASS);
             tag(GLASS_TINTED).add(Blocks.TINTED_GLASS);
             addColored(tag(STAINED_GLASS)::add, GLASS, "{color}_stained_glass");
-            tagCustom(GLASS_PANES).addTags(GLASS_PANES_COLORLESS, STAINED_GLASS_PANES);
+            tag(GLASS_PANES).addTag(GLASS_PANES_COLORLESS).addTag(STAINED_GLASS_PANES);
             tag(GLASS_PANES_COLORLESS).add(Blocks.GLASS_PANE);
             addColored(tag(STAINED_GLASS_PANES)::add, GLASS_PANES, "{color}_stained_glass_pane");
             tag(GRAVEL).add(Blocks.GRAVEL);
@@ -490,15 +545,15 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
             tag(ORE_RATES_SINGULAR).add(Blocks.ANCIENT_DEBRIS, Blocks.COAL_ORE, Blocks.DEEPSLATE_COAL_ORE, Blocks.DEEPSLATE_DIAMOND_ORE, Blocks.DEEPSLATE_EMERALD_ORE, Blocks.DEEPSLATE_GOLD_ORE, Blocks.DEEPSLATE_IRON_ORE, Blocks.DIAMOND_ORE, Blocks.EMERALD_ORE, Blocks.GOLD_ORE, Blocks.IRON_ORE, Blocks.NETHER_QUARTZ_ORE);
             tag(ORE_RATES_SPARSE).add(Blocks.NETHER_GOLD_ORE);
             tagCustom(ORES).addTags(ORES_COAL, ORES_COPPER, ORES_DIAMOND, ORES_EMERALD, ORES_GOLD, ORES_IRON, ORES_LAPIS, ORES_REDSTONE, ORES_QUARTZ, ORES_NETHERITE_SCRAP);
-            tag(ORES_COAL).add(Blocks.COAL_ORE, Blocks.DEEPSLATE_COAL_ORE);
-            tag(ORES_COPPER).add(Blocks.COPPER_ORE, Blocks.DEEPSLATE_COPPER_ORE);
-            tag(ORES_DIAMOND).add(Blocks.DIAMOND_ORE, Blocks.DEEPSLATE_DIAMOND_ORE);
-            tag(ORES_EMERALD).add(Blocks.EMERALD_ORE, Blocks.DEEPSLATE_EMERALD_ORE);
-            tag(ORES_GOLD).add(Blocks.GOLD_ORE, Blocks.DEEPSLATE_GOLD_ORE);
-            tag(ORES_IRON).add(Blocks.IRON_ORE, Blocks.DEEPSLATE_IRON_ORE);
-            tag(ORES_LAPIS).add(Blocks.LAPIS_ORE, Blocks.DEEPSLATE_LAPIS_ORE);
+            getOrCreateTagBuilder(ORES_COAL).forceAddTag(BlockTags.COAL_ORES);
+            getOrCreateTagBuilder(ORES_COPPER).forceAddTag(BlockTags.COPPER_ORES);
+            getOrCreateTagBuilder(ORES_DIAMOND).forceAddTag(BlockTags.DIAMOND_ORES);
+            getOrCreateTagBuilder(ORES_EMERALD).forceAddTag(BlockTags.EMERALD_ORES);
+            getOrCreateTagBuilder(ORES_GOLD).forceAddTag(BlockTags.GOLD_ORES);
+            getOrCreateTagBuilder(ORES_IRON).forceAddTag(BlockTags.IRON_ORES);
+            getOrCreateTagBuilder(ORES_LAPIS).forceAddTag(BlockTags.LAPIS_ORES);
             tag(ORES_QUARTZ).add(Blocks.NETHER_QUARTZ_ORE);
-            tag(ORES_REDSTONE).add(Blocks.REDSTONE_ORE, Blocks.DEEPSLATE_REDSTONE_ORE);
+            getOrCreateTagBuilder(ORES_REDSTONE).forceAddTag(BlockTags.REDSTONE_ORES);
             tag(ORES_NETHERITE_SCRAP).add(Blocks.ANCIENT_DEBRIS);
             tag(ORES_IN_GROUND_DEEPSLATE).add(Blocks.DEEPSLATE_COAL_ORE, Blocks.DEEPSLATE_COPPER_ORE, Blocks.DEEPSLATE_DIAMOND_ORE, Blocks.DEEPSLATE_EMERALD_ORE, Blocks.DEEPSLATE_GOLD_ORE, Blocks.DEEPSLATE_IRON_ORE, Blocks.DEEPSLATE_LAPIS_ORE, Blocks.DEEPSLATE_REDSTONE_ORE);
             tag(ORES_IN_GROUND_NETHERRACK).add(Blocks.NETHER_GOLD_ORE, Blocks.NETHER_QUARTZ_ORE);
@@ -639,7 +694,6 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
             this.tag(VTags.Biomes.SAVANNAS)
 //                .addOptionalTag(ConventionalBiomeTags.TREE_SAVANNA.location())
                 .add(Biomes.SAVANNA, Biomes.SAVANNA_PLATEAU, Biomes.WINDSWEPT_SAVANNA);
-//            this.tag(BiomeTags.IS_SAVANNA).addTag(VTags.Biomes.SAVANNAS);
             this.tag(VTags.Biomes.SNOWY)
 //                .addOptionalTag(ConventionalBiomeTags.CLIMATE_COLD.location())
 //                .addOptionalTag(ConventionalBiomeTags.SNOWY.location())
@@ -647,12 +701,9 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
                 .add(Biomes.FROZEN_OCEAN, Biomes.DEEP_FROZEN_OCEAN, Biomes.FROZEN_RIVER,
                     Biomes.SNOWY_BEACH, Biomes.SNOWY_TAIGA, Biomes.SNOWY_PLAINS,
                     Biomes.GROVE, Biomes.SNOWY_SLOPES, Biomes.JAGGED_PEAKS, Biomes.FROZEN_PEAKS);
-//            this.tag(BiomeTags.ONLY_ALLOWS_SNOW_AND_GOLD_RABBITS).addTag(VTags.Biomes.SNOWY);
-//            this.tag(BiomeTags.SPAWNS_COLD_VARIANT_FROGS).addTag(VTags.Biomes.SNOWY);
             this.tag(VTags.Biomes.SWAMPS)
 //                .addOptionalTag(ConventionalBiomeTags.SWAMP.location())
                 .add(Biomes.SWAMP);
-//            this.tag(BiomeTags.ALLOWS_SURFACE_SLIME_SPAWNS).addTag(VTags.Biomes.SWAMPS);
             this.tag(VTags.Biomes.SLOPES)
 //                .addOptionalTag(ConventionalBiomeTags.MOUNTAIN_SLOPE.location())
                 .add(Biomes.MEADOW, Biomes.GROVE, Biomes.SNOWY_SLOPES);
@@ -664,7 +715,6 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
 
             this.tag(VTags.Biomes.OVERWORLD)
                 .addTag(VTags.Biomes.OVERWORLD_SURFACE).addTag(VTags.Biomes.OVERWORLD_UNDERGROUND);
-//            this.tag(BiomeTags.IS_OVERWORLD).addTag(VTags.Biomes.OVERWORLD);
             this.tag(VTags.Biomes.OVERWORLD_SURFACE)
                 .addTag(VTags.Biomes.BADLANDS)
                 .addTag(VTags.Biomes.FORESTS)
@@ -747,6 +797,57 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
 
         @Override
         protected void generateTags() {
+            getOrCreateTagBuilder(ConventionalItemTags.VILLAGER_JOB_SITES)
+                .add(Items.BARREL)
+                .add(Items.BLAST_FURNACE)
+                .add(Items.BREWING_STAND)
+                .add(Items.CARTOGRAPHY_TABLE)
+                .add(Items.CAULDRON)
+                .add(Items.COMPOSTER)
+                .add(Items.FLETCHING_TABLE)
+                .add(Items.GRINDSTONE)
+                .add(Items.LECTERN)
+                .add(Items.LOOM)
+                .add(Items.SMITHING_TABLE)
+                .add(Items.SMOKER)
+                .add(Items.STONECUTTER);
+
+            getOrCreateTagBuilder(ConventionalItemTags.NORMAL_SANDSTONE_BLOCKS)
+                .add(Items.SANDSTONE)
+                .add(Items.CUT_SANDSTONE)
+                .add(Items.CHISELED_SANDSTONE)
+                .add(Items.SMOOTH_SANDSTONE);
+            getOrCreateTagBuilder(ConventionalItemTags.RED_SANDSTONE_BLOCKS)
+                .add(Items.RED_SANDSTONE)
+                .add(Items.CUT_RED_SANDSTONE)
+                .add(Items.CHISELED_RED_SANDSTONE)
+                .add(Items.SMOOTH_RED_SANDSTONE);
+            getOrCreateTagBuilder(ConventionalItemTags.SANDSTONE_BLOCKS)
+                .addOptionalTag(ConventionalItemTags.NORMAL_SANDSTONE_BLOCKS)
+                .addOptionalTag(ConventionalItemTags.RED_SANDSTONE_BLOCKS);
+
+            getOrCreateTagBuilder(ConventionalItemTags.NORMAL_SANDSTONE_SLABS)
+                .add(Items.SANDSTONE_SLAB)
+                .add(Items.CUT_STANDSTONE_SLAB)
+                .add(Items.SMOOTH_SANDSTONE_SLAB);
+            getOrCreateTagBuilder(ConventionalItemTags.RED_SANDSTONE_SLABS)
+                .add(Items.RED_SANDSTONE_SLAB)
+                .add(Items.CUT_RED_SANDSTONE_SLAB)
+                .add(Items.SMOOTH_RED_SANDSTONE_SLAB);
+            getOrCreateTagBuilder(ConventionalItemTags.SANDSTONE_SLABS)
+                .addOptionalTag(ConventionalItemTags.NORMAL_SANDSTONE_SLABS)
+                .addOptionalTag(ConventionalItemTags.RED_SANDSTONE_SLABS);
+
+            getOrCreateTagBuilder(ConventionalItemTags.NORMAL_SANDSTONE_STAIRS)
+                .add(Items.SANDSTONE_STAIRS)
+                .add(Items.SMOOTH_SANDSTONE_STAIRS);
+            getOrCreateTagBuilder(ConventionalItemTags.RED_SANDSTONE_STAIRS)
+                .add(Items.RED_SANDSTONE_STAIRS)
+                .add(Items.SMOOTH_RED_SANDSTONE_STAIRS);
+            getOrCreateTagBuilder(ConventionalItemTags.SANDSTONE_STAIRS)
+                .addOptionalTag(ConventionalItemTags.NORMAL_SANDSTONE_SLABS)
+                .addOptionalTag(ConventionalItemTags.RED_SANDSTONE_SLABS);
+
             copy(VTags.Blocks.BARRELS_WOODEN, VTags.Items.BARRELS_WOODEN);
             copy(VTags.Blocks.BARRELS, VTags.Items.BARRELS);
             tagCustom(VTags.Items.BONES).add(Items.BONE);

@@ -6,7 +6,7 @@ import com.mojang.math.Transformation;
 
 import net.minecraft.client.resources.model.ModelState;
 
-import io.github.vampirestudios.vampirelib.api.ModelStateExtensions;
+import io.github.vampirestudios.vampirelib.api.extensions.ModelStateExtensions;
 
 /**
  * An {@link ModelState} that combines the transforms from two child {@link ModelState}.

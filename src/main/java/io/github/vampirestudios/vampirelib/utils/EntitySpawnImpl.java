@@ -683,7 +683,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.level.ServerLevelAccessor;
-import io.github.vampirestudios.vampirelib.callbacks.EntitySpawnCallback;
+import io.github.vampirestudios.vampirelib.api.callbacks.EntitySpawnCallback;
 
 public final class EntitySpawnImpl {
     private EntitySpawnImpl() {

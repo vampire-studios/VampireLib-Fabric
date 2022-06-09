@@ -35,7 +35,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.WeatheringCopper;
 import net.minecraft.world.level.block.state.BlockState;
 
-import io.github.vampirestudios.vampirelib.api.ModdedTargetedItemGroupFiller;
+import io.github.vampirestudios.vampirelib.api.itemGroupSorting.ModdedTargetedItemGroupFiller;
 
 public class CompatOxidizableBlock extends Block implements WeatheringCopper {
     private final ModdedTargetedItemGroupFiller FILLER;

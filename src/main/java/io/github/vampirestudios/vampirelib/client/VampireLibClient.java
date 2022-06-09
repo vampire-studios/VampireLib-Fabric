@@ -692,8 +692,9 @@ import net.fabricmc.fabric.impl.client.rendering.BlockEntityRendererRegistryImpl
 import net.fabricmc.fabric.impl.client.rendering.ColorProviderRegistryImpl;
 
 import io.github.vampirestudios.vampirelib.ChestManager;
+import io.github.vampirestudios.vampirelib.VampireLib;
 import io.github.vampirestudios.vampirelib.api.BasicModClass;
-import io.github.vampirestudios.vampirelib.callbacks.client.TextureStitchCallback;
+import io.github.vampirestudios.vampirelib.api.callbacks.client.TextureStitchCallback;
 import io.github.vampirestudios.vampirelib.init.VBlockEntityTypes;
 import io.github.vampirestudios.vampirelib.utils.Rands;
 
@@ -704,7 +705,7 @@ public class VampireLibClient extends BasicModClass {
     public static final List<ColoredLeaves> COLORED_LEAVES = new ArrayList<>();
 
     public VampireLibClient() {
-        super("vampirelib", "VampireLib", "4.9.0+build.1", true);
+        super(VampireLib.INSTANCE, true);
     }
 
     @Override

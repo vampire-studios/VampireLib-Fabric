@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.Shadow;
 
 import com.mojang.math.Matrix3f;
 
-import io.github.vampirestudios.vampirelib.api.Matrix3fExtensions;
+import io.github.vampirestudios.vampirelib.api.extensions.Matrix3fExtensions;
 import io.github.vampirestudios.vampirelib.utils.MixinHelper;
 
 @Mixin(Matrix3f.class)

@@ -695,7 +695,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-import io.github.vampirestudios.vampirelib.api.VanillaTargetedItemGroupFiller;
+import io.github.vampirestudios.vampirelib.api.itemGroupSorting.VanillaTargetedItemGroupFiller;
 
 public class RodBaseBlock extends io.github.vampirestudios.vampirelib.blocks.DirectionalBlock {
     private final VanillaTargetedItemGroupFiller FILLER;

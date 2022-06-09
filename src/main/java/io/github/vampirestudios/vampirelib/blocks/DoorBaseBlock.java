@@ -686,7 +686,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.DoorBlock;
 import net.minecraft.world.level.block.state.BlockState;
 
-import io.github.vampirestudios.vampirelib.api.VanillaTargetedItemGroupFiller;
+import io.github.vampirestudios.vampirelib.api.itemGroupSorting.VanillaTargetedItemGroupFiller;
 
 public class DoorBaseBlock extends DoorBlock {
     private final VanillaTargetedItemGroupFiller FILLER;

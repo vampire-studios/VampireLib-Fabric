@@ -22,8 +22,6 @@ import net.minecraft.client.resources.model.ModelState;
 import net.minecraft.client.resources.model.UnbakedModel;
 import net.minecraft.resources.ResourceLocation;
 
-import io.github.vampirestudios.vampirelib.api.BlockModelExtensions;
-
 public class BlockModelConfiguration implements IModelConfiguration {
 	public final BlockModel owner;
 	public final VisibilityData visibilityData = new VisibilityData();
@@ -53,7 +51,7 @@ public class BlockModelConfiguration implements IModelConfiguration {
 
 	@Nullable
 	public IModelGeometry<?> getCustomGeometry() {
-		return owner.parent != null && customGeometry == null ? ((BlockModelExtensions) owner.parent).getGeometry().getCustomGeometry() : customGeometry;
+		return owner.parent != null && customGeometry == null ? owner.parent.getGeometry().getCustomGeometry() : customGeometry;
 	}
 
 	public void setCustomGeometry(IModelGeometry<?> geometry) {
@@ -62,7 +60,7 @@ public class BlockModelConfiguration implements IModelConfiguration {
 
 	@Nullable
 	public ModelState getCustomModelState() {
-		return owner.parent != null && customModelState == null ? ((BlockModelExtensions) owner.parent).getGeometry().getCustomModelState() : customModelState;
+		return owner.parent != null && customModelState == null ? owner.parent.getGeometry().getCustomModelState() : customModelState;
 	}
 
 	public void setCustomModelState(ModelState modelState) {
@@ -72,7 +70,7 @@ public class BlockModelConfiguration implements IModelConfiguration {
 	@Override
 	public boolean getPartVisibility(IModelGeometryPart part, boolean fallback) {
 		return owner.parent != null && !visibilityData.hasCustomVisibility(part) ?
-				((BlockModelExtensions) owner.parent).getGeometry().getPartVisibility(part, fallback) :
+				owner.parent.getGeometry().getPartVisibility(part, fallback) :
 				visibilityData.isVisible(part, fallback);
 	}
 

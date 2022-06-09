@@ -686,7 +686,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 
-import io.github.vampirestudios.vampirelib.callbacks.PlayerPickupItemCallback;
+import io.github.vampirestudios.vampirelib.api.callbacks.PlayerPickupItemCallback;
 
 @Mixin(ItemEntity.class)
 public abstract class MixinItemEntity {

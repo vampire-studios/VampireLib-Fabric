@@ -36,7 +36,7 @@ import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.block.WeatheringCopper;
 import net.minecraft.world.level.block.state.BlockState;
 
-import io.github.vampirestudios.vampirelib.api.ModdedTargetedItemGroupFiller;
+import io.github.vampirestudios.vampirelib.api.itemGroupSorting.ModdedTargetedItemGroupFiller;
 
 public class CompatOxidizablePillarBlock extends RotatedPillarBlock implements WeatheringCopper {
     private final ModdedTargetedItemGroupFiller FILLER;

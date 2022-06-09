@@ -17,9 +17,9 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.world.InteractionResult;
 
-import io.github.vampirestudios.vampirelib.callbacks.client.RenderTooltipCallback;
-import io.github.vampirestudios.vampirelib.callbacks.client.TooltipEventColorContextImpl;
-import io.github.vampirestudios.vampirelib.callbacks.client.TooltipEventPositionContextImpl;
+import io.github.vampirestudios.vampirelib.api.callbacks.client.RenderTooltipCallback;
+import io.github.vampirestudios.vampirelib.api.callbacks.client.TooltipEventColorContextImpl;
+import io.github.vampirestudios.vampirelib.api.callbacks.client.TooltipEventPositionContextImpl;
 
 @Mixin(value = Screen.class, priority = 1100)
 public abstract class MixinScreen {

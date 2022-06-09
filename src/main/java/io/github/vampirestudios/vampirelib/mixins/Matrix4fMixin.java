@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.Unique;
 
 import com.mojang.math.Matrix4f;
 
-import io.github.vampirestudios.vampirelib.api.Matrix4fExtensions;
+import io.github.vampirestudios.vampirelib.api.extensions.Matrix4fExtensions;
 
 @Mixin(Matrix4f.class)
 public abstract class Matrix4fMixin implements Matrix4fExtensions {

@@ -684,7 +684,7 @@ import net.minecraft.world.level.block.Block;
 
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 
-import io.github.vampirestudios.vampirelib.api.VanillaTargetedItemGroupFiller;
+import io.github.vampirestudios.vampirelib.api.itemGroupSorting.VanillaTargetedItemGroupFiller;
 
 public class WartBlockBaseBlock extends Block {
     private VanillaTargetedItemGroupFiller FILLER;

@@ -23,8 +23,8 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 
-import io.github.vampirestudios.vampirelib.api.ModelStateExtensions;
-import io.github.vampirestudios.vampirelib.api.TransformationExtensions;
+import io.github.vampirestudios.vampirelib.api.extensions.ModelStateExtensions;
+import io.github.vampirestudios.vampirelib.api.extensions.TransformationExtensions;
 import io.github.vampirestudios.vampirelib.client.TransformationHelper;
 import io.github.vampirestudios.vampirelib.client.render.TransformTypeDependentItemBakedModel;
 

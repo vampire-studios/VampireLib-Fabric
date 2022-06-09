@@ -13,7 +13,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
-import io.github.vampirestudios.vampirelib.callbacks.client.TextureStitchCallback;
+import io.github.vampirestudios.vampirelib.api.callbacks.client.TextureStitchCallback;
 
 /**
  * Manager class for texture information for Blueprint Chests.

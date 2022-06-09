@@ -734,8 +734,8 @@ import net.fabricmc.fabric.api.registry.StrippableBlockRegistry;
 import net.fabricmc.fabric.impl.blockrenderlayer.BlockRenderLayerMapImpl;
 import net.fabricmc.loader.api.FabricLoader;
 
-import io.github.vampirestudios.vampirelib.api.CustomTagProviders;
-import io.github.vampirestudios.vampirelib.api.FabricLanguageProvider;
+import io.github.vampirestudios.vampirelib.api.datagen.CustomTagProviders;
+import io.github.vampirestudios.vampirelib.api.datagen.FabricLanguageProvider;
 import io.github.vampirestudios.vampirelib.blocks.BaseBeehiveBlock;
 import io.github.vampirestudios.vampirelib.blocks.BaseBlock;
 import io.github.vampirestudios.vampirelib.blocks.BaseLogAndWoodBlock;

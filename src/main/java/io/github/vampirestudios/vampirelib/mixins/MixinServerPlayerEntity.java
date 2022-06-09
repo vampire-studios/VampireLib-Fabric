@@ -687,7 +687,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 
-import io.github.vampirestudios.vampirelib.callbacks.PlayerDropItemCallback;
+import io.github.vampirestudios.vampirelib.api.callbacks.PlayerDropItemCallback;
 
 @Mixin(ServerPlayer.class)
 public class MixinServerPlayerEntity {

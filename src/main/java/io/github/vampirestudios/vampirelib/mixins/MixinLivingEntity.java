@@ -685,7 +685,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 
-import io.github.vampirestudios.vampirelib.callbacks.EntityHealthChangeCallback;
+import io.github.vampirestudios.vampirelib.api.callbacks.EntityHealthChangeCallback;
 
 @Mixin(LivingEntity.class)
 public abstract class MixinLivingEntity {

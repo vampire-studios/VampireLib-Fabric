@@ -31,6 +31,10 @@ public abstract class BasicModClass implements ModInitializer, ClientModInitiali
 	private ConfigHolder<? extends CustomConfig> config;
 	private final Logger LOGGER;
 
+	protected BasicModClass(BasicModClass basicModClass, boolean client) {
+		this(basicModClass.modId, basicModClass.modName, basicModClass.modVersion, client);
+	}
+
 	protected BasicModClass(String modName, String modVersion) {
 		this(modName, modVersion, false);
 	}
@@ -120,14 +124,14 @@ public abstract class BasicModClass implements ModInitializer, ClientModInitiali
 	public void shouldNotPrintVersionMessage() {
 		this.printVersionMessage = false;
 	}
-
 	@Override
 	public void onInitialize() {
 		if (printVersionMessage) getLogger().info(String.format("You're now running %s v%s for %s", modName(), modVersion(), SharedConstants.getCurrentVersion().getName()));
 	}
 
-	@Override
+	@Environment(EnvType.CLIENT) @Override
 	public void onInitializeClient() {
 		if (printVersionMessage) getLogger().info(String.format("You're now running %s v%s on Client-Side for %s", modName(), modVersion(), SharedConstants.getCurrentVersion().getName()));
 	}
+
 }

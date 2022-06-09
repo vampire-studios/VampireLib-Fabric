@@ -682,7 +682,7 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 
-import io.github.vampirestudios.vampirelib.api.ModdedTargetedItemGroupFiller;
+import io.github.vampirestudios.vampirelib.api.itemGroupSorting.ModdedTargetedItemGroupFiller;
 
 public class CompatBlock extends Block {
     private final ModdedTargetedItemGroupFiller FILLER;

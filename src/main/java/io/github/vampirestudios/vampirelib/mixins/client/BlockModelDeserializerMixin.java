@@ -17,7 +17,7 @@ import net.minecraft.client.renderer.block.model.BlockModel;
 import net.minecraft.client.resources.model.ModelState;
 import net.minecraft.util.GsonHelper;
 
-import io.github.vampirestudios.vampirelib.api.BlockModelExtensions;
+import io.github.vampirestudios.vampirelib.api.extensions.BlockModelExtensions;
 import io.github.vampirestudios.vampirelib.client.model.IModelGeometry;
 import io.github.vampirestudios.vampirelib.client.model.ModelLoaderRegistry;
 

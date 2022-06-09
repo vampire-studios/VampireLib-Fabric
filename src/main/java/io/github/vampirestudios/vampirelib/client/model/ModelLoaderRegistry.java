@@ -46,7 +46,7 @@ import net.minecraft.server.packs.resources.ReloadableResourceManager;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.GsonHelper;
 
-import io.github.vampirestudios.vampirelib.api.TransformationExtensions;
+import io.github.vampirestudios.vampirelib.api.extensions.TransformationExtensions;
 import io.github.vampirestudios.vampirelib.client.TransformationHelper;
 import io.github.vampirestudios.vampirelib.mixins.client.BlockModelAccessor;
 

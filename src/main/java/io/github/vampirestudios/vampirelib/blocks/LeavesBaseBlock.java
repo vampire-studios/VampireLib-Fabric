@@ -685,7 +685,7 @@ import net.minecraft.world.level.block.LeavesBlock;
 
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 
-import io.github.vampirestudios.vampirelib.api.VanillaTargetedItemGroupFiller;
+import io.github.vampirestudios.vampirelib.api.itemGroupSorting.VanillaTargetedItemGroupFiller;
 
 public class LeavesBaseBlock extends LeavesBlock {
     private VanillaTargetedItemGroupFiller FILLER;

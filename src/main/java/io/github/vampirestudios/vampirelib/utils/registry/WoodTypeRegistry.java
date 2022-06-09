@@ -677,35 +677,37 @@
 
 package io.github.vampirestudios.vampirelib.utils.registry;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.level.block.Block;
 
+import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
+
+import io.github.vampirestudios.vampirelib.VampireLib;
+
 public abstract class WoodTypeRegistry implements StringRepresentable {
-    public static Map<ResourceLocation, WoodType> woodTypes = new HashMap<>();
+    public static final Registry<WoodType> WOOD_TYPES = FabricRegistryBuilder.createSimple(WoodType.class, VampireLib.INSTANCE.identifier("wood_type_registry")).buildAndRegister();
 
     private static final Queue<ModdedTypeListener> listeners = new ConcurrentLinkedQueue<>();
 
     public static WoodType get(ResourceLocation id) {
-        return woodTypes.get(id);
+        return WOOD_TYPES.get(id);
     }
 
     public static boolean contains(ResourceLocation id) {
-        return woodTypes.containsKey(id);
+        return WOOD_TYPES.containsKey(id);
     }
 
     public static boolean contains(WoodType woodType) {
-        return woodTypes.containsValue(woodType);
+        return WOOD_TYPES.getKey(woodType) != null;
     }
 
     static WoodType registerVanilla(WoodType woodType) {
-        woodTypes.put(woodType.identifier, woodType);
-        return woodType;
+        return Registry.register(WOOD_TYPES, woodType.identifier, woodType);
     }
 
     public static WoodType registerModded(WoodType woodType) {

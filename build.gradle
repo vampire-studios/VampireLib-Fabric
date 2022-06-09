@@ -6,10 +6,8 @@ plugins {
 	alias(libs.plugins.mappings.loom)
 }
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(17)
-
 archivesBaseName = project.archives_base_name
-version = project.mod_version + "+" + "build." + project.build_number + "-" + libs.versions.minecraft.get()
+version = "$mod_version+build.$build_number-${libs.versions.minecraft.get()}"
 group = project.maven_group
 
 loom {
@@ -50,9 +48,20 @@ repositories {
 	maven { url = "https://maven.parchmentmc.net/" }
 	maven { url = "https://maven.terraformersmc.com/" }
 	maven { url = "https://maven.siphalor.de" }
+	maven { url = "https://mvn.devos.one/releases/" }
+	maven { url = "https://mvn.devos.one/snapshots/" }
+	maven {
+		url = "https://jitpack.io"
+		content {
+			includeGroup("com.github.LlamaLad7")
+		}
+	}
 }
 
 dependencies {
+	def noFapi = { exclude group: 'net.fabricmc.fabric-api' }
+	def noFLoader = { exclude group: 'net.fabricmc' }
+
 	minecraft libs.minecraft
 	mappings loom.layered {
 		it.addLayer(quiltMappings.mappings("org.quiltmc:quilt-mappings:${libs.versions.quilt.mappings.get()}:v2"))
@@ -61,40 +70,42 @@ dependencies {
 			setNameSyntheticMembers(false)
 		}
 	}
-
-	modImplementation libs.quilt.loader
+	modImplementation(libs.quilt.loader) {
+		noFLoader
+	}
 
 	modImplementation (libs.fabric.api) {
 		force = true
-		exclude(group: "net.fabricmc", module: "fabric-loader")
+		noFLoader
 	}
 
-	modApi (libs.clothconfig) {
-		exclude(group: "net.fabricmc.fabric-api")
-		exclude(group: "net.fabricmc", module: "fabric-loader")
+	modImplementation(libs.clothconfig) {
+		noFapi
+		noFLoader
 	}
-	include (libs.clothconfig) {
-		exclude(group: "net.fabricmc.fabric-api")
-		exclude(group: "net.fabricmc", module: "fabric-loader")
-	}
-
-	modApi (libs.artifice) {
-		exclude(group: "net.fabricmc.fabric-api")
-		exclude(group: "net.fabricmc", module: "fabric-loader")
-	}
-	include (libs.artifice) {
-		exclude(group: "net.fabricmc.fabric-api")
-		exclude(group: "net.fabricmc", module: "fabric-loader")
+	include(libs.clothconfig) {
+		noFapi
+		noFLoader
 	}
 
-	modApi (libs.terraformwoodapi) {
-		exclude(group: "net.fabricmc.fabric-api")
-		exclude(group: "net.fabricmc", module: "fabric-loader")
+	modImplementation(libs.artifice) {
+		noFapi
+		noFLoader
 	}
-	include (libs.terraformwoodapi) {
-		exclude(group: "net.fabricmc.fabric-api")
-		exclude(group: "net.fabricmc", module: "fabric-loader")
+	include(libs.artifice) {
+		noFapi
+		noFLoader
 	}
+
+	modImplementation(libs.terraformwoodapi) {
+		noFapi
+		noFLoader
+	}
+	include(libs.terraformwoodapi) {
+		noFapi
+		noFLoader
+	}
+	modImplementation(include("io.github.tropheusj:serialization-hooks:0.2.0+1.18.cb29164"))
 }
 
 processResources {
@@ -105,19 +116,26 @@ processResources {
 	}
 }
 
-tasks.withType(JavaCompile).configureEach {
-	it.options.encoding = "UTF-8"
-	it.options.release = 17
-}
-
 java {
 	withSourcesJar()
 	withJavadocJar()
+	toolchain.languageVersion = JavaLanguageVersion.of(17)
+}
+
+tasks.withType(JavaCompile).configureEach {
+	it.options.release = 17
+	it.options.encoding = 'UTF-8'
+}
+
+compileJava {
+	options.compilerArgs += '--enable-preview'
 }
 
 jar {
-	from("LICENSE") {
-		rename { "${it}_${project.archivesBaseName}"}
+	from('LICENSE') {
+		rename {
+			"${it}_$archivesBaseName"
+		}
 	}
 }
 
@@ -138,5 +156,17 @@ publishing {
 				}
 			}
 		}
+	}
+}
+
+modrinth {
+	token = System.getenv("MODRINTH_TOKEN")
+	projectId = "C7pWNmLQ"
+	versionNumber = project.version
+	versionType = "beta"
+	uploadFile = remapJar
+	gameVersions = ["1.18.2"]
+	dependencies {
+		required.project "P7dR8mSH"
 	}
 }

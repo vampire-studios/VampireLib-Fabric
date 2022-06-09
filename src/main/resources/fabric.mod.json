@@ -31,10 +31,18 @@
   ],
   "accessWidener": "vampirelib.accesswidener",
   "depends": {
-    "fabricloader": ">=0.13.3",
     "java": ">=17"
   },
   "custom": {
+    "loom:injected_interfaces": {
+      "net/minecraft/class_793": ["io/github/vampirestudios/vampirelib/api/extensions/BlockModelExtensions"],
+      "net/minecraft/class_1159": ["io/github/vampirestudios/vampirelib/api/extensions/Matrix4fExtensions"],
+      "net/minecraft/class_4581": ["io/github/vampirestudios/vampirelib/api/extensions/Matrix3fExtensions"],
+      "net/minecraft/class_1832": ["io/github/vampirestudios/vampirelib/api/extensions/TierExtensions"],
+      "net/minecraft/class_1767": ["io/github/vampirestudios/vampirelib/api/extensions/DyeExtension"],
+      "net/minecraft/class_3665": ["io/github/vampirestudios/vampirelib/api/extensions/ModelStateExtensions"],
+      "net/minecraft/class_4590": ["io/github/vampirestudios/vampirelib/api/extensions/TransformationExtensions"]
+    },
     "modmenu": {
       "links": {
         "modmenu.discord": "https://discord.gg/63hmSTxyDA"

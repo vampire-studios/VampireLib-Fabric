@@ -6,7 +6,7 @@ import com.mojang.math.Transformation;
 import net.minecraft.client.renderer.block.model.ItemTransforms.TransformType;
 import net.minecraft.client.resources.model.BakedModel;
 
-import io.github.vampirestudios.vampirelib.api.TransformationExtensions;
+import io.github.vampirestudios.vampirelib.api.extensions.TransformationExtensions;
 import io.github.vampirestudios.vampirelib.client.TransformationHelper;
 
 public interface TransformTypeDependentItemBakedModel {

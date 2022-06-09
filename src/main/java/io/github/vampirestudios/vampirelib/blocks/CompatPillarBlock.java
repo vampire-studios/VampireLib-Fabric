@@ -30,7 +30,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RotatedPillarBlock;
 
-import io.github.vampirestudios.vampirelib.api.ModdedTargetedItemGroupFiller;
+import io.github.vampirestudios.vampirelib.api.itemGroupSorting.ModdedTargetedItemGroupFiller;
 
 public class CompatPillarBlock extends RotatedPillarBlock {
     private final ModdedTargetedItemGroupFiller FILLER;

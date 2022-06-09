@@ -687,7 +687,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 
-import io.github.vampirestudios.vampirelib.callbacks.RenderGuiCallback;
+import io.github.vampirestudios.vampirelib.api.callbacks.RenderGuiCallback;
 
 @Mixin(AbstractContainerScreen.class)
 public class HandledScreenMixin {

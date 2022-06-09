@@ -24,7 +24,7 @@ import net.fabricmc.fabric.impl.client.texture.FabricSprite;
 import net.fabricmc.loader.api.FabricLoader;
 
 import io.github.vampirestudios.vampirelib.VampireLib;
-import io.github.vampirestudios.vampirelib.callbacks.client.TextureStitchCallback;
+import io.github.vampirestudios.vampirelib.api.callbacks.client.TextureStitchCallback;
 
 @Mixin(TextureAtlas.class)
 public class TextureAtlasMixin {
@@ -85,4 +85,5 @@ public class TextureAtlasMixin {
 	private void vl$postStitch(TextureAtlas.Preparations preparations, CallbackInfo ci) {
 		TextureStitchCallback.POST.invoker().stitch((TextureAtlas) (Object) this);
 	}
+
 }

@@ -679,19 +679,26 @@ package io.github.vampirestudios.vampirelib;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import net.minecraft.SharedConstants;
+import net.minecraft.client.Camera;
+import net.minecraft.core.Holder;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameRules;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.block.state.BlockState;
 
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 
 import io.github.vampirestudios.vampirelib.api.BasicModClass;
 import io.github.vampirestudios.vampirelib.api.ConvertibleBlockPair;
+import io.github.vampirestudios.vampirelib.api.callbacks.FogEvents;
 import io.github.vampirestudios.vampirelib.init.VBlockEntityTypes;
 import io.github.vampirestudios.vampirelib.init.VRegistries;
 import io.github.vampirestudios.vampirelib.utils.Rands;
@@ -753,6 +760,26 @@ public class VampireLib extends BasicModClass {
         VBlockEntityTypes.init();
         VRegistries.init();
         BlendingFunction.init();
+
+
+        FogEvents.SET_COLOR.register((colorData, partialTicks) -> {
+            Camera camera = colorData.getCamera();
+            Holder<Biome> biomeHolder = camera.getEntity().getLevel().getBiome(camera.getBlockPosition());
+            Optional<ResourceKey<Biome>> biomeResourceKey = biomeHolder.unwrapKey();
+            if (biomeResourceKey.isPresent() && biomeResourceKey.get().equals(Biomes.DESERT)) {
+                colorData.setRed(147 / 255.0f);
+                colorData.setGreen(180 / 255.0f);
+                colorData.setBlue(152 / 255.0f);
+            }
+        });
+        FogEvents.SET_DENSITY.register((camera, density) -> {
+            Holder<Biome> biomeHolder = camera.getEntity().getLevel().getBiome(camera.getBlockPosition());
+            Optional<ResourceKey<Biome>> biomeResourceKey = biomeHolder.unwrapKey();
+            if (biomeResourceKey.isPresent() && biomeResourceKey.get().equals(Biomes.SWAMP)) {
+                return 0.05F;
+            }
+            return density;
+        });
 
         if (TEST_CONTENT_ENABLED) {
 			//Overworld

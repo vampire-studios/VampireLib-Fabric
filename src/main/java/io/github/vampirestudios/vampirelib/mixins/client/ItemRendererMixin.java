@@ -26,8 +26,8 @@ import net.minecraft.world.item.ItemStack;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
-import io.github.vampirestudios.vampirelib.api.Matrix3fExtensions;
-import io.github.vampirestudios.vampirelib.api.Matrix4fExtensions;
+import io.github.vampirestudios.vampirelib.api.extensions.Matrix3fExtensions;
+import io.github.vampirestudios.vampirelib.api.extensions.Matrix4fExtensions;
 import io.github.vampirestudios.vampirelib.client.render.LayeredBakedModel;
 import io.github.vampirestudios.vampirelib.client.render.TransformTypeDependentItemBakedModel;
 

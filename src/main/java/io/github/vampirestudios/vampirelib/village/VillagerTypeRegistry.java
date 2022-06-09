@@ -45,14 +45,10 @@ public interface VillagerTypeRegistry {
     static VillagerType register(ResourceLocation id, ResourceKey<Biome>... biomes) {
         VillagerType villagerType = Registry.register(Registry.VILLAGER_TYPE, id, new VillagerType(id.getPath()));
         for (ResourceKey<Biome> biome : biomes) {
-            if (customVillagerTypes.containsKey(biome))
-                customVillagerTypes.get(biome).add(villagerType);
-            else {
-                customVillagerTypes.put(biome, new ArrayList<>(Collections.singleton(villagerType)));
-            }
-            if(VillagerType.BY_BIOME.containsKey(biome)) {
-                VillagerType.BY_BIOME.replace(biome, villagerType);
-            }
+            if (customVillagerTypes.containsKey(biome)) customVillagerTypes.get(biome).add(villagerType);
+            else customVillagerTypes.put(biome, new ArrayList<>(Collections.singleton(villagerType)));
+
+            if (VillagerType.BY_BIOME.containsKey(biome)) VillagerType.BY_BIOME.replace(biome, villagerType);
         }
         return villagerType;
     }
