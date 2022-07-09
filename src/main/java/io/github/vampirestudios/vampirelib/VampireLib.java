@@ -680,6 +680,12 @@ package io.github.vampirestudios.vampirelib;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.quiltmc.config.api.Config;
+import org.quiltmc.config.api.values.TrackedValue;
+import org.quiltmc.config.impl.ConfigImpl;
+import org.quiltmc.loader.impl.config.QuiltConfigImpl;
+import org.quiltmc.qsl.command.api.CommandRegistrationCallback;
+
 import net.minecraft.SharedConstants;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionResult;
@@ -687,6 +693,9 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.loot.BuiltInLootTables;
+import net.minecraft.world.level.storage.loot.predicates.ExplosionCondition;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 
@@ -694,6 +703,7 @@ import io.github.vampirestudios.vampirelib.api.BasicModClass;
 import io.github.vampirestudios.vampirelib.api.ConvertibleBlockPair;
 import io.github.vampirestudios.vampirelib.init.VBlockEntityTypes;
 import io.github.vampirestudios.vampirelib.init.VRegistries;
+import io.github.vampirestudios.vampirelib.loot.LootModifierManager;
 import io.github.vampirestudios.vampirelib.utils.Rands;
 import io.github.vampirestudios.vampirelib.utils.blendfunctions.BlendingFunction;
 import io.github.vampirestudios.vampirelib.utils.registry.BlockChiseler;
@@ -753,6 +763,22 @@ public class VampireLib extends BasicModClass {
         VBlockEntityTypes.init();
         VRegistries.init();
         BlendingFunction.init();
+
+        Config.Creator configCreator = builder -> {
+            builder.field(TrackedValue.create("testing", "idk", "idk1", "idk2", "idk3"));
+            builder.field(TrackedValue.create(false, "testing", "idk1", "idk2", "idk3"));
+            builder.field(TrackedValue.create(1, "testing2", "idk1", "idk2", "idk3"));
+        };
+
+        Config config = ConfigImpl.create(QuiltConfigImpl.getConfigEnvironment(), INSTANCE.modId(), "testing", configCreator);
+        config.save();
+
+        CommandRegistrationCallback.EVENT.register((dispatcher, buildContext, environment) -> new ForgeCommand(dispatcher));
+
+        LootModifierManager.getSerializerForName(BuiltInLootTables.ABANDONED_MINESHAFT)
+            .makeConditions(new LootItemCondition[] {
+                ExplosionCondition.survivesExplosion().build()
+            });
 
         if (TEST_CONTENT_ENABLED) {
 			//Overworld

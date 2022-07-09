@@ -30,8 +30,8 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
-import net.minecraft.data.HashCache;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 
@@ -58,7 +58,7 @@ public abstract class FabricSoundProvider implements DataProvider {
     protected abstract void registerSounds(Consumer<SoundDefinition> registry);
 
     @Override
-    public void run(@NotNull HashCache cache) throws IOException {
+    public void run(@NotNull CachedOutput cache) throws IOException {
         Path path = this.dataGenerator.getOutputFolder().resolve("assets/" + this.modId + "/sounds.json");
         Set<SoundDefinition> sounds = new HashSet<>();
         Consumer<SoundDefinition> registry = sound -> {
@@ -72,7 +72,7 @@ public abstract class FabricSoundProvider implements DataProvider {
         sounds.stream().sorted(Comparator.comparing(SoundDefinition::getSoundId)).forEachOrdered(definition -> json.add(definition.getSoundId(), definition.toJson()));
 
         try {
-            DataProvider.save(GSON, cache, json, path);
+            DataProvider.saveStable(cache, json, path);
         } catch (IOException e) {
             LOGGER.error("Couldn't save {}", path, e);
         }

@@ -30,17 +30,11 @@ import net.minecraft.world.entity.ai.village.poi.PoiType;
 
 public interface PointOfInterestRegistry {
 
-    static PoiType register(PointOfInterestTypeCustom pointOfInterestTypeCustom) {
-        if (!Registry.POINT_OF_INTEREST_TYPE.containsKey(new ResourceLocation(pointOfInterestTypeCustom.getName())) &&
-            !pointOfInterestTypeCustom.getWorkStationStates().isEmpty())
-            return Registry.register(Registry.POINT_OF_INTEREST_TYPE, new ResourceLocation(pointOfInterestTypeCustom.getName()), pointOfInterestTypeCustom);
-        else return Registry.POINT_OF_INTEREST_TYPE.get(ResourceLocation.tryParse(pointOfInterestTypeCustom.getName()));
-    }
-
-    static PoiType register(ResourceLocation name, PointOfInterestTypeCustom pointOfInterestType) {
-        if (!Registry.POINT_OF_INTEREST_TYPE.containsKey(name) && !pointOfInterestType.getWorkStationStates().isEmpty())
-            return Registry.register(Registry.POINT_OF_INTEREST_TYPE, name, pointOfInterestType);
-        else return Registry.POINT_OF_INTEREST_TYPE.get(name);
+    static PoiType register(ResourceLocation id, PoiType pointOfInterestTypeCustom) {
+        if (!Registry.POINT_OF_INTEREST_TYPE.containsKey(id) &&
+            !pointOfInterestTypeCustom.matchingStates().isEmpty())
+            return Registry.register(Registry.POINT_OF_INTEREST_TYPE, id, pointOfInterestTypeCustom);
+        else return Registry.POINT_OF_INTEREST_TYPE.get(id);
     }
 
 }

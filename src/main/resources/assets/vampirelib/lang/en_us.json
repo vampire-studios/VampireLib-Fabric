@@ -1,0 +1,20 @@
+{
+  "commands.vampirelib.dimensions.list": "Currently registered dimensions by type:",
+  "commands.vampirelib.entity.list.invalid": "Invalid filter, does not match any entities. Use /vampirelib entity list for a proper list",
+  "commands.vampirelib.entity.list.invalidworld": "Could not load world for dimension {0}. Please select a valid dimension.",
+  "commands.vampirelib.entity.list.none": "No entities found.",
+  "commands.vampirelib.entity.list.single.header": "Entity: {0} Total: {1}",
+  "commands.vampirelib.entity.list.multiple.header": "Total: {0}",
+  "commands.vampirelib.tags.error.unknown_registry": "Unknown registry '%s'",
+  "commands.vampirelib.tags.error.unknown_tag": "Unknown tag '%s' in registry '%s'",
+  "commands.vampirelib.tags.error.unknown_element": "Unknown element '%s' in registry '%s'",
+  "commands.vampirelib.tags.registry_key": "%s",
+  "commands.vampirelib.tags.tag_count": "Tags: %s",
+  "commands.vampirelib.tags.copy_tag_names": "Click to copy all tag names to clipboard",
+  "commands.vampirelib.tags.element_count": "Elements: %s",
+  "commands.vampirelib.tags.copy_element_names": "Click to copy all element names to clipboard",
+  "commands.vampirelib.tags.tag_key": "%s / %s",
+  "commands.vampirelib.tags.containing_tag_count": "Containing tags: %s",
+  "commands.vampirelib.tags.element": "%s : %s",
+  "commands.vampirelib.tags.page_info": "%s <page %s / %s>"
+}

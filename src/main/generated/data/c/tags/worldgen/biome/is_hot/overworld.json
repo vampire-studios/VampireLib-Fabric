@@ -1,0 +1,12 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:desert",
+    "minecraft:jungle",
+    "minecraft:sparse_jungle",
+    "minecraft:savanna",
+    "minecraft:savanna_plateau",
+    "minecraft:stony_peaks",
+    "minecraft:warm_ocean"
+  ]
+}

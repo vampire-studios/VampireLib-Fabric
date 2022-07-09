@@ -16,21 +16,16 @@
 
 package io.github.vampirestudios.vampirelib.api.datagen;
 
-import java.io.BufferedWriter;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Map;
-import java.util.Objects;
 import java.util.TreeMap;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import org.apache.commons.lang3.text.translate.JavaUnicodeEscaper;
+import com.google.gson.JsonObject;
 import org.jetbrains.annotations.NotNull;
 
+import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
-import net.minecraft.data.HashCache;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
@@ -47,7 +42,6 @@ import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
  * <p>Register an instance of the class with {@link FabricDataGenerator#addProvider} in a {@link net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint}
  */
 public abstract class FabricLanguageProvider implements DataProvider {
-	private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
     private final Map<String, String> data = new TreeMap<>();
     protected final FabricDataGenerator dataGenerator;
     private final String modId;
@@ -65,7 +59,7 @@ public abstract class FabricLanguageProvider implements DataProvider {
 	protected abstract void addTranslations();
 
 	@Override
-	public void run(@NotNull HashCache cache) throws IOException {
+	public void run(@NotNull CachedOutput cache) throws IOException {
 		addTranslations();
 		if (!data.isEmpty())
 			save(cache, data, this.dataGenerator.getOutputFolder().resolve("assets/" + modId + "/lang/" + locale + ".json"));
@@ -76,19 +70,13 @@ public abstract class FabricLanguageProvider implements DataProvider {
 		return "Languages: " + locale;
 	}
 
-	private void save(HashCache cache, Object object, Path target) throws IOException {
-		String data = GSON.toJson(object);
-		data = JavaUnicodeEscaper.outsideOf(0, 0x7f).translate(data); // Escape unicode after the fact so that it's not double escaped by GSON
-		String hash = DataProvider.SHA1.hashUnencodedChars(data).toString();
-		if (!Objects.equals(cache.getHash(target), hash) || !Files.exists(target)) {
-			Files.createDirectories(target.getParent());
-
-			try (BufferedWriter bufferedwriter = Files.newBufferedWriter(target)) {
-				bufferedwriter.write(data);
-			}
-		}
-
-		cache.putNew(target, hash);
+	private void save(CachedOutput cache, Object object, Path target) throws IOException {
+        // TODO: DataProvider.saveStable handles the caching and hashing already, but creating the JSON Object this way seems unreliable. -C
+        JsonObject json = new JsonObject();
+        for (Map.Entry<String, String> pair : data.entrySet()) {
+            json.addProperty(pair.getKey(), pair.getValue());
+        }
+        DataProvider.saveStable(cache, json, target);
 	}
 
     public void addBlock(Block key, String name) {

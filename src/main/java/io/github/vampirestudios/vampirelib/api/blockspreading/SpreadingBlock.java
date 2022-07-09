@@ -1,15 +1,14 @@
 package io.github.vampirestudios.vampirelib.api.blockspreading;
 
-import java.util.Random;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.state.BlockState;
 
 public interface SpreadingBlock {
 	BlockSpreadingType getBlockSpreadingType(BlockState state);
 
-	default void spread(BlockState state, ServerLevel level, BlockPos pos, Random random, int tries, int range) {
+	default void spread(BlockState state, ServerLevel level, BlockPos pos, RandomSource random, int tries, int range) {
 		if (!level.hasChunksAt(pos.offset(-(range + 1), -(range + 1), -(range + 1)), pos.offset(range + 1, range + 1, range + 1)))
 			return;
 		range = (range * 2) + 1;

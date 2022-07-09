@@ -1,21 +1,21 @@
 [versions]
-    minecraft = '1.18.2'
-    quilt_mappings = '1.18.2+build.24'
-    quilt_loader = '0.16.1-SNAPSHOT'
+    minecraft = '1.19'
+    quilt_mappings = '1.19+build.1'
+    quilt_loader = '0.17.1-beta.6'
     parchment = '2022.03.13'
 
-    fabric-api = '0.55.1+1.18.2'
+    qsl = "2.0.0-beta.4+0.57.0-1.19"
 
-    artifice = '0.19.0-rewrite+build.2-1.18.2'
-    clothconfig = '6.2.62'
-    terraformwoodapi = '3.0.0'
+    artifice = '0.30.1+build.2-1.19'
+    clothconfig = '7.0.72'
+    terraformwoodapi = '4.1.0'
 
 [libraries]
     minecraft = { module = 'com.mojang:minecraft', version.ref = 'minecraft' }
     quilt_mappings = { module = 'org.quiltmc:quilt-mappings', version.ref = 'quilt_mappings' }
     quilt_loader = { module = 'org.quiltmc:quilt-loader', version.ref = 'quilt_loader' }
 
-    fabric-api = { module = 'net.fabricmc.fabric-api:fabric-api', version.ref = 'fabric-api' }
+    qfapi = { module = "org.quiltmc.quilted-fabric-api:quilted-fabric-api", version.ref = "qsl" }
 
     clothconfig = { module = 'me.shedaniel.cloth:cloth-config-fabric', version.ref = 'clothconfig' }
     artifice = { module = 'io.github.vampirestudios:artifice', version.ref = 'artifice' }

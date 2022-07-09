@@ -1,10 +1,5 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "X",
-    "X",
-    "#"
-  ],
   "key": {
     "#": {
       "tag": "c:rods/wooden"
@@ -13,6 +8,11 @@
       "tag": "c:ingots/gold"
     }
   },
+  "pattern": [
+    "X",
+    "X",
+    "#"
+  ],
   "result": {
     "item": "minecraft:golden_sword"
   }

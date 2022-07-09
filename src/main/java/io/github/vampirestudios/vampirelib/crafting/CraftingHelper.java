@@ -7,11 +7,13 @@ import java.util.function.Predicate;
 
 import javax.annotation.Nullable;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
+import io.github.tropheusj.serialization_hooks.ingredient.CombinedIngredient;
 import io.github.tropheusj.serialization_hooks.ingredient.IngredientDeserializer;
-import io.github.tropheusj.serialization_hooks.value.ValueDeserializer;
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
@@ -27,15 +29,16 @@ import net.minecraft.world.item.crafting.Ingredient;
 
 import net.fabricmc.fabric.api.resource.conditions.v1.ResourceConditions;
 
-import io.github.vampirestudios.vampirelib.crafting.NbtItemValue.NbtItemValueDeserializer;
-
-import static net.fabricmc.fabric.api.datagen.v1.provider.FabricLootTableProvider.GSON;
-
 public class CraftingHelper {
+	static Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
+
 	public static void init() {
-		register(new ResourceLocation("forge", "compound"), CompoundIngredient.Serializer.INSTANCE);
-		register(new ResourceLocation("forge", "nbt"), NBTIngredient.Serializer.INSTANCE);
-		Registry.register(ValueDeserializer.REGISTRY, NbtItemValueDeserializer.ID, NbtItemValueDeserializer.INSTANCE);
+		// forge's Compound defers to Serialization Hooks' Combined
+		// can't register more than once so construct a new one
+		register(new ResourceLocation("forge", "compound"), new CombinedIngredient.Deserializer());
+		register(NBTIngredient.Serializer.ID, NBTIngredient.Serializer.INSTANCE);
+		register(DifferenceIngredient.Serializer.ID, DifferenceIngredient.Serializer.INSTANCE);
+		register(IntersectionIngredient.Serializer.ID, IntersectionIngredient.Serializer.INSTANCE);
 	}
 
 	public static IngredientDeserializer register(ResourceLocation key, IngredientDeserializer serializer) {
@@ -104,7 +107,7 @@ public class CraftingHelper {
 			CompoundTag nbt = getNBT(json.get("nbt"));
 			CompoundTag tmp = new CompoundTag();
 			if (nbt.contains("ForgeCaps")) { // TODO: should we keep this?
-				tmp.put("ForgeCaps", nbt.get("ForgeCaps"));
+				tmp.put("ForgeCaps", Objects.requireNonNull(nbt.get("ForgeCaps")));
 				nbt.remove("ForgeCaps");
 			}
 

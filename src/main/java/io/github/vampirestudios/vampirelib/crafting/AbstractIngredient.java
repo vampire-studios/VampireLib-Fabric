@@ -5,7 +5,7 @@ import java.util.stream.Stream;
 import javax.annotation.Nullable;
 
 import com.google.gson.JsonElement;
-import io.github.tropheusj.serialization_hooks.ingredient.CustomIngredient;
+import io.github.tropheusj.serialization_hooks.ingredient.BaseCustomIngredient;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.tags.TagKey;
@@ -18,7 +18,7 @@ import net.minecraft.world.level.ItemLike;
  * Extension of {@link Ingredient} which makes most methods custom ingredients need to implement abstract, and removes the static constructors
  * Mods are encouraged to extend this class for their custom ingredients
  */
-public abstract class AbstractIngredient extends Ingredient implements CustomIngredient {
+public abstract class AbstractIngredient extends BaseCustomIngredient {
 	/**
 	 * Empty constructor, for the sake of dynamic ingredients
 	 */

@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.google.common.collect.ImmutableSet;
 
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.ai.village.poi.PoiType;
 import net.minecraft.world.entity.npc.VillagerProfession;
@@ -15,7 +16,7 @@ public class VillagerProfessionCreator {
     private List<VillagerHouse> villagerHouses;
     private boolean hasHouse;
     private ResourceLocation name;
-    private PoiType pointOfInterest;
+    private ResourceKey<PoiType> pointOfInterest;
     private ImmutableSet<Item> gatherableItems;
     private ImmutableSet<Block> secondaryJobSites;
 
@@ -38,7 +39,7 @@ public class VillagerProfessionCreator {
         return this;
     }
 
-    public VillagerProfessionCreator pointOfInterest(PoiType pointOfInterest) {
+    public VillagerProfessionCreator pointOfInterest(ResourceKey<PoiType> pointOfInterest) {
         this.pointOfInterest = pointOfInterest;
         return this;
     }

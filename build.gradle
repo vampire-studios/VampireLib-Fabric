@@ -74,7 +74,7 @@ dependencies {
 		noFLoader
 	}
 
-	modImplementation (libs.fabric.api) {
+	modImplementation (libs.qfapi) {
 		force = true
 		noFLoader
 	}
@@ -105,7 +105,7 @@ dependencies {
 		noFapi
 		noFLoader
 	}
-	modImplementation(include("io.github.tropheusj:serialization-hooks:0.2.0+1.18.cb29164"))
+	modImplementation(include("io.github.tropheusj:serialization-hooks:0.3.21"))
 }
 
 processResources {
@@ -165,7 +165,7 @@ modrinth {
 	versionNumber = project.version
 	versionType = "beta"
 	uploadFile = remapJar
-	gameVersions = ["1.18.2"]
+	gameVersions = ["1.19"]
 	dependencies {
 		required.project "P7dR8mSH"
 	}

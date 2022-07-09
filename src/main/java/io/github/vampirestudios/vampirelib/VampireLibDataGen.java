@@ -37,6 +37,7 @@ import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.data.recipes.ShapelessRecipeBuilder;
 import net.minecraft.data.tags.BiomeTagsProvider;
 import net.minecraft.data.tags.TagsProvider;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BiomeTags;
 import net.minecraft.tags.BlockTags;
@@ -52,6 +53,7 @@ import net.minecraft.world.item.crafting.Ingredient.ItemValue;
 import net.minecraft.world.item.crafting.Ingredient.TagValue;
 import net.minecraft.world.item.crafting.Ingredient.Value;
 import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -612,110 +614,110 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
 
         @Override
         protected void addTags() {
-            this.tag(VTags.Biomes.HILLS)
+            tag(VTags.Biomes.HILLS)
 //                .addOptionalTag(ConventionalBiomeTags.EXTREME_HILLS.location())
                 .add(Biomes.FLOWER_FOREST, Biomes.ICE_SPIKES, Biomes.WINDSWEPT_HILLS, Biomes.WINDSWEPT_GRAVELLY_HILLS, Biomes.OLD_GROWTH_BIRCH_FOREST);
-            this.tag(BiomeTags.IS_HILL).addTag(VTags.Biomes.HILLS);
-            this.tag(VTags.Biomes.PLATEAUS)
+            tag(BiomeTags.IS_HILL).addTag(VTags.Biomes.HILLS);
+            tag(VTags.Biomes.PLATEAUS)
                 .add(Biomes.SAVANNA_PLATEAU, Biomes.WOODED_BADLANDS, Biomes.MEADOW);
-            this.tag(VTags.Biomes.RARE)
+            tag(VTags.Biomes.RARE)
                 .addTag(VTags.Biomes.MUSHROOM)
                 .add(Biomes.SPARSE_JUNGLE, Biomes.SAVANNA_PLATEAU, Biomes.SUNFLOWER_PLAINS, Biomes.WINDSWEPT_GRAVELLY_HILLS,
                     Biomes.FLOWER_FOREST, Biomes.ICE_SPIKES, Biomes.OLD_GROWTH_BIRCH_FOREST, Biomes.OLD_GROWTH_SPRUCE_TAIGA,
                     Biomes.WINDSWEPT_SAVANNA, Biomes.ERODED_BADLANDS, Biomes.BAMBOO_JUNGLE);
 
-            this.tag(VTags.Biomes.OCEANS)
+            tag(VTags.Biomes.OCEANS)
 //                .addOptionalTag(ConventionalBiomeTags.OCEAN.location())
                 .addTag(VTags.Biomes.DEEP_OCEANS).addTag(VTags.Biomes.SHALLOW_OCEANS);
-            this.tag(VTags.Biomes.DEEP_OCEANS)
+            tag(VTags.Biomes.DEEP_OCEANS)
                 .add(Biomes.DEEP_COLD_OCEAN, Biomes.DEEP_FROZEN_OCEAN, Biomes.DEEP_LUKEWARM_OCEAN, Biomes.DEEP_OCEAN);
-            this.tag(VTags.Biomes.SHALLOW_OCEANS)
+            tag(VTags.Biomes.SHALLOW_OCEANS)
                 .add(Biomes.COLD_OCEAN, Biomes.FROZEN_OCEAN, Biomes.LUKEWARM_OCEAN, Biomes.OCEAN, Biomes.WARM_OCEAN);
-            this.tag(VTags.Biomes.RIVERS)
+            tag(VTags.Biomes.RIVERS)
 //                .addOptionalTag(ConventionalBiomeTags.RIVER.location())
                 .add(Biomes.RIVER, Biomes.FROZEN_RIVER);
-            this.tag(VTags.Biomes.WATER)
+            tag(VTags.Biomes.WATER)
                 .addTag(VTags.Biomes.OCEANS).addTag(VTags.Biomes.RIVERS);
-            this.tag(BiomeTags.IS_OCEAN).addTag(VTags.Biomes.SHALLOW_OCEANS);
-            this.tag(BiomeTags.IS_DEEP_OCEAN).addTag(VTags.Biomes.DEEP_OCEANS);
-            this.tag(BiomeTags.IS_RIVER).addTag(VTags.Biomes.RIVERS);
+            tag(BiomeTags.IS_OCEAN).addTag(VTags.Biomes.SHALLOW_OCEANS);
+            tag(BiomeTags.IS_DEEP_OCEAN).addTag(VTags.Biomes.DEEP_OCEANS);
+            tag(BiomeTags.IS_RIVER).addTag(VTags.Biomes.RIVERS);
 
 
-            this.tag(VTags.Biomes.BADLANDS)
+            tag(VTags.Biomes.BADLANDS)
 //                .addOptionalTag(ConventionalBiomeTags.MESA.location())
 //                .addOptionalTag(ConventionalBiomeTags.BADLANDS.location())
                 .add(Biomes.BADLANDS, Biomes.ERODED_BADLANDS, Biomes.WOODED_BADLANDS);
-            this.tag(BiomeTags.IS_BADLANDS).addTag(VTags.Biomes.BADLANDS);
-            this.tag(VTags.Biomes.BEACHES)
+            tag(BiomeTags.IS_BADLANDS).addTag(VTags.Biomes.BADLANDS);
+            tag(VTags.Biomes.BEACHES)
 //                .addOptionalTag(ConventionalBiomeTags.STONY_SHORES.location())
 //                .addOptionalTag(ConventionalBiomeTags.BEACH.location())
                 .add(Biomes.BEACH, Biomes.SNOWY_BEACH, Biomes.STONY_SHORE);
-            this.tag(BiomeTags.IS_BEACH).addTag(VTags.Biomes.BEACHES);
-            this.tag(VTags.Biomes.DESERTS)
+            tag(BiomeTags.IS_BEACH).addTag(VTags.Biomes.BEACHES);
+            tag(VTags.Biomes.DESERTS)
 //                .addOptionalTag(ConventionalBiomeTags.DESERT.location())
                 .add(Biomes.DESERT);
-            this.tag(VTags.Biomes.FORESTS)
+            tag(VTags.Biomes.FORESTS)
 //                .addOptionalTag(ConventionalBiomeTags.FOREST.location())
 //                .addOptionalTag(ConventionalBiomeTags.FLOWER_FORESTS.location())
 //                .addOptionalTag(ConventionalBiomeTags.TREE_DECIDUOUS.location())
                 .addTag(VTags.Biomes.BIRCH_FORESTS).addTag(VTags.Biomes.DARK_FORESTS)
                 .addTag(VTags.Biomes.JUNGLE_FORESTS).addTag(VTags.Biomes.NETHER_FORESTS)
                 .addTag(VTags.Biomes.OAK_FORESTS).addTag(VTags.Biomes.TAIGA_FORESTS);
-            this.tag(VTags.Biomes.BIRCH_FORESTS)
+            tag(VTags.Biomes.BIRCH_FORESTS)
                 .add(Biomes.BIRCH_FOREST, Biomes.OLD_GROWTH_BIRCH_FOREST);
-            this.tag(VTags.Biomes.DARK_FORESTS)
+            tag(VTags.Biomes.DARK_FORESTS)
                 .add(Biomes.DARK_FOREST);
-            this.tag(VTags.Biomes.JUNGLE_FORESTS)
+            tag(VTags.Biomes.JUNGLE_FORESTS)
                 .addTag(VTags.Biomes.BAMBOO_JUNGLE_FORESTS)
                 .add(Biomes.JUNGLE, Biomes.SPARSE_JUNGLE);
-            this.tag(VTags.Biomes.BAMBOO_JUNGLE_FORESTS)
+            tag(VTags.Biomes.BAMBOO_JUNGLE_FORESTS)
                 .add(Biomes.BAMBOO_JUNGLE);
-            this.tag(BiomeTags.IS_JUNGLE).addTag(VTags.Biomes.JUNGLE_FORESTS);
-            this.tag(VTags.Biomes.NETHER_FORESTS)
+            tag(BiomeTags.IS_JUNGLE).addTag(VTags.Biomes.JUNGLE_FORESTS);
+            tag(VTags.Biomes.NETHER_FORESTS)
                 .add(Biomes.CRIMSON_FOREST, Biomes.WARPED_FOREST);
-            this.tag(BiomeTags.IS_NETHER).addTag(VTags.Biomes.NETHER_FORESTS);
-            this.tag(VTags.Biomes.OAK_FORESTS)
+            tag(BiomeTags.IS_NETHER).addTag(VTags.Biomes.NETHER_FORESTS);
+            tag(VTags.Biomes.OAK_FORESTS)
                 .add(Biomes.FOREST, Biomes.FLOWER_FOREST);
-            this.tag(VTags.Biomes.TAIGA_FORESTS)
+            tag(VTags.Biomes.TAIGA_FORESTS)
 //                .addOptionalTag(ConventionalBiomeTags.TREE_CONIFEROUS.location())
                 .add(Biomes.TAIGA, Biomes.SNOWY_TAIGA, Biomes.OLD_GROWTH_SPRUCE_TAIGA, Biomes.OLD_GROWTH_PINE_TAIGA, Biomes.GROVE);
-            this.tag(BiomeTags.IS_FOREST).addTag(VTags.Biomes.FORESTS);
-            this.tag(VTags.Biomes.MUSHROOM)
+            tag(BiomeTags.IS_FOREST).addTag(VTags.Biomes.FORESTS);
+            tag(VTags.Biomes.MUSHROOM)
 //                .addOptionalTag(ConventionalBiomeTags.MUSHROOM.location())
                 .add(Biomes.MUSHROOM_FIELDS);
-            this.tag(VTags.Biomes.MOUNTAINS)
+            tag(VTags.Biomes.MOUNTAINS)
                 .add(Biomes.WINDSWEPT_HILLS, Biomes.WINDSWEPT_GRAVELLY_HILLS, Biomes.WINDSWEPT_FOREST, Biomes.WINDSWEPT_SAVANNA);
-            this.tag(BiomeTags.IS_MOUNTAIN).addTag(VTags.Biomes.MOUNTAINS);
-            this.tag(VTags.Biomes.PLAINS)
+            tag(BiomeTags.IS_MOUNTAIN).addTag(VTags.Biomes.MOUNTAINS);
+            tag(VTags.Biomes.PLAINS)
 //                .addOptionalTag(ConventionalBiomeTags.PLAINS.location())
                 .add(Biomes.PLAINS, Biomes.SAVANNA, Biomes.SAVANNA_PLATEAU, Biomes.SUNFLOWER_PLAINS, Biomes.MEADOW);
-            this.tag(VTags.Biomes.GRASSLANDS)
+            tag(VTags.Biomes.GRASSLANDS)
                 .addTag(VTags.Biomes.PLAINS).addTag(VTags.Biomes.SAVANNAS);
-            this.tag(VTags.Biomes.SAVANNAS)
+            tag(VTags.Biomes.SAVANNAS)
 //                .addOptionalTag(ConventionalBiomeTags.TREE_SAVANNA.location())
                 .add(Biomes.SAVANNA, Biomes.SAVANNA_PLATEAU, Biomes.WINDSWEPT_SAVANNA);
-            this.tag(VTags.Biomes.SNOWY)
+            tag(VTags.Biomes.SNOWY)
 //                .addOptionalTag(ConventionalBiomeTags.CLIMATE_COLD.location())
 //                .addOptionalTag(ConventionalBiomeTags.SNOWY.location())
 //                .addOptionalTag(ConventionalBiomeTags.SNOWY_PLAINS.location())
                 .add(Biomes.FROZEN_OCEAN, Biomes.DEEP_FROZEN_OCEAN, Biomes.FROZEN_RIVER,
                     Biomes.SNOWY_BEACH, Biomes.SNOWY_TAIGA, Biomes.SNOWY_PLAINS,
                     Biomes.GROVE, Biomes.SNOWY_SLOPES, Biomes.JAGGED_PEAKS, Biomes.FROZEN_PEAKS);
-            this.tag(VTags.Biomes.SWAMPS)
+            tag(VTags.Biomes.SWAMPS)
 //                .addOptionalTag(ConventionalBiomeTags.SWAMP.location())
                 .add(Biomes.SWAMP);
-            this.tag(VTags.Biomes.SLOPES)
+            tag(VTags.Biomes.SLOPES)
 //                .addOptionalTag(ConventionalBiomeTags.MOUNTAIN_SLOPE.location())
                 .add(Biomes.MEADOW, Biomes.GROVE, Biomes.SNOWY_SLOPES);
-            this.tag(VTags.Biomes.PEAKS)
+            tag(VTags.Biomes.PEAKS)
 //                .addOptionalTag(ConventionalBiomeTags.MOUNTAIN_PEAK.location())
                 .add(Biomes.JAGGED_PEAKS, Biomes.FROZEN_PEAKS, Biomes.STONY_PEAKS);
-            this.tag(VTags.Biomes.VOIDS)
+            tag(VTags.Biomes.VOIDS)
                 .add(Biomes.THE_VOID);
 
-            this.tag(VTags.Biomes.OVERWORLD)
+            tag(VTags.Biomes.OVERWORLD)
                 .addTag(VTags.Biomes.OVERWORLD_SURFACE).addTag(VTags.Biomes.OVERWORLD_UNDERGROUND);
-            this.tag(VTags.Biomes.OVERWORLD_SURFACE)
+            tag(VTags.Biomes.OVERWORLD_SURFACE)
                 .addTag(VTags.Biomes.BADLANDS)
                 .addTag(VTags.Biomes.FORESTS)
                 .addTag(VTags.Biomes.DESERTS)
@@ -775,18 +777,63 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
                     Biomes.WINDSWEPT_GRAVELLY_HILLS,
                     Biomes.WINDSWEPT_HILLS,
                     Biomes.WINDSWEPT_SAVANNA);
-            this.tag(VTags.Biomes.OVERWORLD_UNDERGROUND)
+            tag(VTags.Biomes.OVERWORLD_UNDERGROUND)
 //                .addOptionalTag(ConventionalBiomeTags.UNDERGROUND.location())
                 .add(Biomes.LUSH_CAVES, Biomes.DRIPSTONE_CAVES);
-            this.tag(VTags.Biomes.NETHER)
+            tag(VTags.Biomes.NETHER)
                 .addTag(VTags.Biomes.NETHER_FORESTS)
                 .add(Biomes.NETHER_WASTES, Biomes.SOUL_SAND_VALLEY, Biomes.BASALT_DELTAS);
-            this.tag(BiomeTags.IS_NETHER).addTag(VTags.Biomes.NETHER);
-            this.tag(VTags.Biomes.END)
+            tag(BiomeTags.IS_NETHER).addTag(VTags.Biomes.NETHER);
+            tag(VTags.Biomes.END)
 //                .addOptionalTag(ConventionalBiomeTags.END_ISLANDS.location())
 //                .addOptionalTag(ConventionalBiomeTags.IN_THE_END.location())
                 .add(Biomes.THE_END, Biomes.SMALL_END_ISLANDS, Biomes.END_BARRENS, Biomes.END_MIDLANDS, Biomes.END_HIGHLANDS);
-//            this.tag(BiomeTags.IS_END).addTag(VTags.Biomes.END);
+//            tag(BiomeTags.IS_END).addTag(VTags.Biomes.END);
+
+
+            tag(Biomes.PLAINS, VTags.Biomes.IS_PLAINS);
+            tag(Biomes.DESERT, VTags.Biomes.IS_HOT_OVERWORLD, VTags.Biomes.IS_DRY_OVERWORLD, VTags.Biomes.IS_SANDY);
+            tag(Biomes.TAIGA, VTags.Biomes.IS_COLD_OVERWORLD, VTags.Biomes.IS_CONIFEROUS);
+            tag(Biomes.SWAMP, VTags.Biomes.IS_WET_OVERWORLD, VTags.Biomes.IS_SWAMP);
+            tag(Biomes.NETHER_WASTES, VTags.Biomes.IS_HOT_NETHER, VTags.Biomes.IS_DRY_NETHER);
+            tag(Biomes.THE_END, VTags.Biomes.IS_COLD_END, VTags.Biomes.IS_DRY_END);
+            tag(Biomes.FROZEN_OCEAN, VTags.Biomes.IS_COLD_OVERWORLD, VTags.Biomes.IS_SNOWY);
+            tag(Biomes.FROZEN_RIVER, VTags.Biomes.IS_COLD_OVERWORLD, VTags.Biomes.IS_SNOWY);
+            tag(Biomes.SNOWY_PLAINS, VTags.Biomes.IS_COLD_OVERWORLD, VTags.Biomes.IS_SNOWY, VTags.Biomes.IS_WASTELAND, VTags.Biomes.IS_PLAINS);
+            tag(Biomes.MUSHROOM_FIELDS, VTags.Biomes.IS_MUSHROOM, VTags.Biomes.IS_RARE);
+            tag(Biomes.JUNGLE, VTags.Biomes.IS_HOT_OVERWORLD, VTags.Biomes.IS_WET_OVERWORLD, VTags.Biomes.IS_DENSE_OVERWORLD);
+            tag(Biomes.SPARSE_JUNGLE, VTags.Biomes.IS_HOT_OVERWORLD, VTags.Biomes.IS_WET_OVERWORLD, VTags.Biomes.IS_RARE);
+            tag(Biomes.SNOWY_BEACH, VTags.Biomes.IS_COLD_OVERWORLD, VTags.Biomes.IS_SNOWY);
+            tag(Biomes.DARK_FOREST, VTags.Biomes.IS_SPOOKY, VTags.Biomes.IS_DENSE_OVERWORLD);
+            tag(Biomes.SNOWY_TAIGA, VTags.Biomes.IS_COLD_OVERWORLD, VTags.Biomes.IS_CONIFEROUS, VTags.Biomes.IS_SNOWY);
+            tag(Biomes.OLD_GROWTH_PINE_TAIGA, VTags.Biomes.IS_COLD_OVERWORLD, VTags.Biomes.IS_CONIFEROUS);
+            tag(Biomes.WINDSWEPT_FOREST, VTags.Biomes.IS_SPARSE_OVERWORLD);
+            tag(Biomes.SAVANNA, VTags.Biomes.IS_HOT_OVERWORLD, VTags.Biomes.IS_SPARSE_OVERWORLD);
+            tag(Biomes.SAVANNA_PLATEAU, VTags.Biomes.IS_HOT_OVERWORLD, VTags.Biomes.IS_SPARSE_OVERWORLD, VTags.Biomes.IS_RARE, VTags.Biomes.IS_SLOPE, VTags.Biomes.IS_PLATEAU);
+            tag(Biomes.BADLANDS, VTags.Biomes.IS_SANDY, VTags.Biomes.IS_DRY_OVERWORLD);
+            tag(Biomes.WOODED_BADLANDS, VTags.Biomes.IS_SANDY, VTags.Biomes.IS_DRY_OVERWORLD, VTags.Biomes.IS_SPARSE_OVERWORLD, VTags.Biomes.IS_SLOPE, VTags.Biomes.IS_PLATEAU);
+            tag(Biomes.MEADOW, VTags.Biomes.IS_PLAINS, VTags.Biomes.IS_PLATEAU, VTags.Biomes.IS_SLOPE);
+            tag(Biomes.GROVE, VTags.Biomes.IS_COLD_OVERWORLD, VTags.Biomes.IS_CONIFEROUS, VTags.Biomes.IS_SNOWY, VTags.Biomes.IS_SLOPE);
+            tag(Biomes.SNOWY_SLOPES, VTags.Biomes.IS_SPARSE_OVERWORLD, VTags.Biomes.IS_SNOWY, VTags.Biomes.IS_SLOPE);
+            tag(Biomes.JAGGED_PEAKS, VTags.Biomes.IS_SPARSE_OVERWORLD, VTags.Biomes.IS_SNOWY, VTags.Biomes.IS_PEAK);
+            tag(Biomes.STONY_PEAKS, VTags.Biomes.IS_HOT_OVERWORLD, VTags.Biomes.IS_PEAK);
+            tag(VTags.Biomes.IS_COLD_END, Biomes.SMALL_END_ISLANDS, Biomes.END_MIDLANDS, Biomes.END_HIGHLANDS, Biomes.END_BARRENS);
+            tag(VTags.Biomes.IS_DRY_END, Biomes.SMALL_END_ISLANDS, Biomes.END_MIDLANDS, Biomes.END_HIGHLANDS, Biomes.END_BARRENS);
+            tag(Biomes.WARM_OCEAN, VTags.Biomes.IS_HOT_OVERWORLD);
+            tag(VTags.Biomes.IS_COLD_OVERWORLD, Biomes.COLD_OCEAN, Biomes.DEEP_COLD_OCEAN, Biomes.DEEP_FROZEN_OCEAN, Biomes.SNOWY_SLOPES, Biomes.JAGGED_PEAKS);
+            tag(Biomes.THE_VOID, VTags.Biomes.IS_VOID);
+        }
+
+        @SafeVarargs
+        private void tag(ResourceKey<Biome> biome, TagKey<Biome>... tags) {
+            for(TagKey<Biome> key : tags) {
+                tag(key).add(biome);
+            }
+        }
+
+        @SafeVarargs
+        private void tag(TagKey<Biome> tag, ResourceKey<Biome>... biomes) {
+            tag(tag).add(biomes);
         }
     }
 
@@ -1220,7 +1267,7 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
 
             boolean modified = false;
             List<Value> items = new ArrayList<>();
-            for (Value entry : ((IngredientAccessor)(Object)vanilla).getValues()) {
+            for (Value entry : ((IngredientAccessor) vanilla).getValues()) {
                 if (entry instanceof ItemValue) {
                     ItemStack stack = entry.getItems().stream().findFirst().orElse(ItemStack.EMPTY);
                     TagKey<Item> replacement = replacements.get(stack.getItem());
@@ -1249,11 +1296,6 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
             this.tag(VTags.NoiseSettings.FLOATING_ISLANDS).add(NoiseGeneratorSettings.FLOATING_ISLANDS);
             this.tag(VTags.NoiseSettings.NETHER).add(NoiseGeneratorSettings.NETHER);
             this.tag(VTags.NoiseSettings.OVERWORLD).add(NoiseGeneratorSettings.OVERWORLD);
-        }
-
-        @Override
-        public String getName() {
-            return "Noise Settings Generator";
         }
     }
 

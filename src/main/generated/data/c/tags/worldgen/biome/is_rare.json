@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:mushroom_fields",
+    "minecraft:sparse_jungle",
+    "minecraft:savanna_plateau"
+  ]
+}

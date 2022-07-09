@@ -35,15 +35,15 @@ public class TextureAtlasMixin {
 		if (!FabricLoader.getInstance().isModLoaded("optifabric") && !FabricLoader.getInstance().isModLoaded("bclib")) {
 			ResourceLocation location = info.name();
 			ResourceLocation emissiveLocation = new ResourceLocation(location.getNamespace(), "textures/" + location.getPath() + "_e.png");
-			if (container.hasResource(emissiveLocation)) {
+			if (container.getResource(emissiveLocation).isPresent()) {
 				NativeImage sprite = null;
 				NativeImage emission = null;
 				try {
 					ResourceLocation spriteLocation = new ResourceLocation(location.getNamespace(), "textures/" + location.getPath() + ".png");
-					InputStream resource = container.getResource(spriteLocation).getInputStream();
+					InputStream resource = container.open(spriteLocation);
 					sprite = NativeImage.read(resource);
 
-					resource = container.getResource(emissiveLocation).getInputStream();
+					resource = container.open(emissiveLocation);
 					emission = NativeImage.read(resource);
 				} catch (IOException e) {
 					VampireLib.INSTANCE.getLogger().info(e.getMessage());

@@ -2,11 +2,11 @@ package io.github.vampirestudios.vampirelib.client.model;
 
 import java.util.EnumMap;
 import java.util.List;
-import java.util.Random;
 
 import javax.annotation.Nullable;
 
 import com.google.common.collect.ImmutableMap;
+import org.jetbrains.annotations.NotNull;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Transformation;
@@ -19,12 +19,11 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.ModelState;
 import net.minecraft.core.Direction;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 
-import io.github.vampirestudios.vampirelib.api.extensions.ModelStateExtensions;
-import io.github.vampirestudios.vampirelib.api.extensions.TransformationExtensions;
 import io.github.vampirestudios.vampirelib.client.TransformationHelper;
 import io.github.vampirestudios.vampirelib.client.render.TransformTypeDependentItemBakedModel;
 
@@ -45,8 +44,8 @@ public class PerspectiveMapWrapper implements BakedModel, TransformTypeDependent
 	public static ImmutableMap<ItemTransforms.TransformType, Transformation> getTransforms(ModelState state) {
 		EnumMap<ItemTransforms.TransformType, Transformation> map = new EnumMap<>(ItemTransforms.TransformType.class);
 		for (ItemTransforms.TransformType type : ItemTransforms.TransformType.values()) {
-			Transformation tr = ((ModelStateExtensions) state).getPartTransformation(type);
-			if (!((TransformationExtensions) (Object) tr).isIdentity()) {
+			Transformation tr = state.getPartTransformation(type);
+			if (!tr.isIdentity()) {
 				map.put(type, tr);
 			}
 		}
@@ -57,8 +56,8 @@ public class PerspectiveMapWrapper implements BakedModel, TransformTypeDependent
 	public static ImmutableMap<ItemTransforms.TransformType, Transformation> getTransformsWithFallback(ModelState state, ItemTransforms transforms) {
 		EnumMap<ItemTransforms.TransformType, Transformation> map = new EnumMap<>(ItemTransforms.TransformType.class);
 		for (ItemTransforms.TransformType type : ItemTransforms.TransformType.values()) {
-			Transformation tr = ((ModelStateExtensions) state).getPartTransformation(type);
-			if (!((TransformationExtensions) (Object) tr).isIdentity()) {
+			Transformation tr = state.getPartTransformation(type);
+			if (!tr.isIdentity()) {
 				map.put(type, tr);
 			} else if (transforms.hasTransform(type)) {
 				map.put(type, TransformationHelper.toTransformation(transforms.getTransform(type)));
@@ -80,16 +79,17 @@ public class PerspectiveMapWrapper implements BakedModel, TransformTypeDependent
 
 	public static BakedModel handlePerspective(BakedModel model, ImmutableMap<ItemTransforms.TransformType, Transformation> transforms, ItemTransforms.TransformType cameraTransformType, PoseStack mat) {
 		Transformation tr = transforms.getOrDefault(cameraTransformType, Transformation.identity());
-		if (!((TransformationExtensions) (Object) tr).isIdentity()) {
-			((TransformationExtensions) (Object) tr).push(mat);
+		assert tr != null;
+		if (!tr.isIdentity()) {
+			tr.push(mat);
 		}
 		return model;
 	}
 
 	public static BakedModel handlePerspective(BakedModel model, ModelState state, ItemTransforms.TransformType cameraTransformType, PoseStack mat) {
-		Transformation tr = ((ModelStateExtensions) state).getPartTransformation(cameraTransformType);
-		if (!((TransformationExtensions) (Object) tr).isIdentity()) {
-			((TransformationExtensions) (Object) tr).push(mat);
+		Transformation tr = state.getPartTransformation(cameraTransformType);
+		if (!tr.isIdentity()) {
+			tr.push(mat);
 		}
 		return model;
 	}
@@ -126,7 +126,7 @@ public class PerspectiveMapWrapper implements BakedModel, TransformTypeDependent
 	}
 
 	@Override
-	public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, Random rand) {
+	public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @NotNull RandomSource rand) {
 		return parent.getQuads(state, side, rand);
 	}
 

@@ -13,7 +13,6 @@
 	"MixinMobSpawnerLogic",
 	"MixinServerPlayerEntity",
 	"MixinSpawnHelper",
-	"SculkSensorBlockMixin",
 	"ServerPlayerEntityDamageMixin",
 	"ShapedRecipeMixin",
 	"ShapedRecipeResultAccessor",
@@ -28,10 +27,6 @@
 	"block.SpreadableBlockMixin",
 	"block.StructureBlockBlockEntityMixin",
 	"block.UpdateStructureBlockC2SPacketMixin",
-	"entity.FarmerVillagerTaskMixin",
-	"entity.FarmerWorkTaskAccessor",
-	"entity.GiveGiftsToHeroTaskAccessor",
-	"entity.VillagerEntityAccessor",
 	"entity.VillagerEntityMixin",
 	"item.MixinBookOnLectern"
   ],

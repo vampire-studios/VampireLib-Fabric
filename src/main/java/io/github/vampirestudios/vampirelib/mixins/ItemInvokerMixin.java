@@ -685,6 +685,6 @@ import net.minecraft.world.item.Item;
 
 @Mixin(Item.class)
 public interface ItemInvokerMixin {
-	@Invoker("allowdedIn")
+	@Invoker("allowedIn")
 	boolean callAllowedIn(CreativeModeTab group);
 }
