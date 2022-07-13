@@ -79,3 +79,58 @@ transitive-accessible method net/minecraft/core/Registry internalRegister (Lnet/
 transitive-accessible method net/minecraft/data/BuiltinRegistries internalRegister (Lnet/minecraft/resources/ResourceKey;Lnet/minecraft/core/WritableRegistry;Lnet/minecraft/data/BuiltinRegistries$RegistryBootstrap;Lcom/mojang/serialization/Lifecycle;)Lnet/minecraft/core/WritableRegistry;
 
 accessible method net/minecraft/server/level/ServerLevel getEntities ()Lnet/minecraft/world/level/entity/LevelEntityGetter;
+
+accessible field net/minecraft/data/models/ItemModelGenerators output Ljava/util/function/BiConsumer;
+accessible field net/minecraft/client/Minecraft RESOURCE_RELOAD_INITIAL_TASK Ljava/util/concurrent/CompletableFuture;
+
+extendable class net/minecraft/client/model/geom/ModelPart
+
+transitive-accessible method net/minecraft/client/model/geom/builders/LayerDefinition <init> (Lnet/minecraft/client/model/geom/builders/MeshDefinition;Lnet/minecraft/client/model/geom/builders/MaterialDefinition;)V
+transitive-accessible field net/minecraft/client/model/geom/builders/LayerDefinition mesh Lnet/minecraft/client/model/geom/builders/MeshDefinition;
+transitive-accessible field net/minecraft/client/model/geom/builders/LayerDefinition material Lnet/minecraft/client/model/geom/builders/MaterialDefinition;
+
+transitive-accessible method net/minecraft/client/model/geom/builders/PartDefinition <init> (Ljava/util/List;Lnet/minecraft/client/model/geom/PartPose;)V
+transitive-accessible field net/minecraft/client/model/geom/builders/PartDefinition children Ljava/util/Map;
+transitive-accessible field net/minecraft/client/model/geom/builders/PartDefinition cubes Ljava/util/List;
+transitive-mutable field net/minecraft/client/model/geom/builders/PartDefinition cubes Ljava/util/List;
+transitive-accessible field net/minecraft/client/model/geom/builders/PartDefinition partPose Lnet/minecraft/client/model/geom/PartPose;
+transitive-mutable field net/minecraft/client/model/geom/builders/PartDefinition partPose Lnet/minecraft/client/model/geom/PartPose;
+
+transitive-accessible field net/minecraft/client/model/geom/ModelPart children Ljava/util/Map;
+transitive-accessible field net/minecraft/client/model/geom/EntityModelSet roots Ljava/util/Map;
+transitive-accessible field net/minecraft/client/model/geom/builders/MeshDefinition root Lnet/minecraft/client/model/geom/builders/PartDefinition;
+
+transitive-accessible method net/minecraft/client/model/geom/builders/CubeDefinition <init> (Ljava/lang/String;FFFFFFFFLnet/minecraft/client/model/geom/builders/CubeDeformation;ZFF)V
+transitive-accessible field net/minecraft/client/model/geom/builders/CubeDefinition origin Lcom/mojang/math/Vector3f;
+transitive-accessible field net/minecraft/client/model/geom/builders/CubeDefinition dimensions Lcom/mojang/math/Vector3f;
+transitive-accessible field net/minecraft/client/model/geom/builders/CubeDefinition grow Lnet/minecraft/client/model/geom/builders/CubeDeformation;
+transitive-accessible field net/minecraft/client/model/geom/builders/CubeDefinition mirror Z
+transitive-accessible field net/minecraft/client/model/geom/builders/CubeDefinition texCoord Lnet/minecraft/client/model/geom/builders/UVPair;
+transitive-accessible field net/minecraft/client/model/geom/builders/CubeDefinition texScale Lnet/minecraft/client/model/geom/builders/UVPair;
+transitive-accessible field net/minecraft/client/model/geom/builders/CubeDefinition comment Ljava/lang/String;
+
+transitive-accessible field net/minecraft/client/model/geom/builders/CubeDeformation growX F
+transitive-accessible field net/minecraft/client/model/geom/builders/CubeDeformation growY F
+transitive-accessible field net/minecraft/client/model/geom/builders/CubeDeformation growZ F
+
+transitive-accessible field net/minecraft/client/model/geom/builders/MaterialDefinition xTexSize I
+transitive-accessible field net/minecraft/client/model/geom/builders/MaterialDefinition yTexSize I
+
+accessible class net/minecraft/client/renderer/FogRenderer$FogData
+
+accessible method net/minecraft/world/item/Item allowedIn (Lnet/minecraft/world/item/CreativeModeTab;)Z
+
+accessible class net/minecraft/data/recipes/ShapedRecipeBuilder$Result
+accessible field net/minecraft/data/recipes/ShapedRecipeBuilder$Result key Ljava/util/Map;
+accessible field net/minecraft/data/recipes/ShapelessRecipeBuilder$Result ingredients Ljava/util/List;
+
+accessible field net/minecraft/world/item/SpawnEggItem BY_ID Ljava/util/Map;
+
+accessible method net/minecraft/client/resources/model/SimpleBakedModel$Builder <init> (ZZZLnet/minecraft/client/renderer/block/model/ItemTransforms;Lnet/minecraft/client/renderer/block/model/ItemOverrides;)V
+
+accessible field net/minecraft/client/renderer/block/model/ItemTransform$Deserializer DEFAULT_ROTATION Lcom/mojang/math/Vector3f;
+accessible field net/minecraft/client/renderer/block/model/ItemTransform$Deserializer DEFAULT_TRANSLATION Lcom/mojang/math/Vector3f;
+accessible field net/minecraft/client/renderer/block/model/ItemTransform$Deserializer DEFAULT_SCALE Lcom/mojang/math/Vector3f;
+
+accessible method net/minecraft/client/renderer/block/model/BlockElement uvsByFace (Lnet/minecraft/core/Direction;)[F
+accessible method net/minecraft/client/renderer/block/model/BlockModel bakeFace (Lnet/minecraft/client/renderer/block/model/BlockElement;Lnet/minecraft/client/renderer/block/model/BlockElementFace;Lnet/minecraft/client/renderer/texture/TextureAtlasSprite;Lnet/minecraft/core/Direction;Lnet/minecraft/client/resources/model/ModelState;Lnet/minecraft/resources/ResourceLocation;)Lnet/minecraft/client/renderer/block/model/BakedQuad;

@@ -1,3 +1,4 @@
+/*
 package io.github.vampirestudios.vampirelib.client.model;
 
 import java.util.Collection;
@@ -31,4 +32,4 @@ public interface ISimpleModelGeometry<T extends ISimpleModelGeometry<T>> extends
 
 	@Override
 	Collection<Material> getTextures(IModelConfiguration owner, Function<ResourceLocation, UnbakedModel> modelGetter, Set<Pair<String, String>> missingTextureErrors);
-}
+}*/

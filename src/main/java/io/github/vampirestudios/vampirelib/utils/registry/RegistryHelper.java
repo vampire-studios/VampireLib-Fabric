@@ -697,8 +697,6 @@ import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityT
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.fabricmc.loader.api.FabricLoader;
 
-import io.github.vampirestudios.vampirelib.mixins.SpawnEggItemAccessor;
-
 public record RegistryHelper(String modId) {
     public static RegistryHelper createRegistryHelper(String modId) {
         return new RegistryHelper(modId);
@@ -765,7 +763,7 @@ public record RegistryHelper(String modId) {
         public Item registerSpawnEgg(String name, EntityType<? extends Mob> entity, int primaryColor, int secondaryColor) {
             Item item = registerItem(name + "_spawn_egg", new SpawnEggItem(entity, primaryColor, secondaryColor, new Item.Properties()
                 .tab(CreativeModeTab.TAB_MISC)));
-            SpawnEggItemAccessor.getBY_ID().put(entity, (SpawnEggItem) item);
+            SpawnEggItem.BY_ID.put(entity, (SpawnEggItem) item);
             return item;
         }
 

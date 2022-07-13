@@ -5,8 +5,6 @@ import java.util.Collection;
 import java.util.Objects;
 import java.util.function.Predicate;
 
-import javax.annotation.Nullable;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
@@ -14,6 +12,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import io.github.tropheusj.serialization_hooks.ingredient.CombinedIngredient;
 import io.github.tropheusj.serialization_hooks.ingredient.IngredientDeserializer;
+import org.jetbrains.annotations.Nullable;
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 

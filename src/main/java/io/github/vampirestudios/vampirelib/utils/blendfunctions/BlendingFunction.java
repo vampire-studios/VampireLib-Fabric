@@ -8,7 +8,7 @@ import net.minecraft.core.Registry;
 
 import io.github.vampirestudios.vampirelib.VampireLib;
 import io.github.vampirestudios.vampirelib.init.VRegistries;
-import io.github.vampirestudios.vampirelib.utils.ResourceLocationUtils;
+import io.github.vampirestudios.vampirelib.utils.registry.ResourceLocationUtils;
 
 public interface BlendingFunction {
     Codec<BlendingFunction> CODEC = VRegistries.BLENDING_FUNCTION.byNameCodec().dispatchStable(BlendingFunction::codec, Function.identity());

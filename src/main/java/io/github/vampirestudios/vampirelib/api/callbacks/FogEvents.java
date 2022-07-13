@@ -4,6 +4,7 @@ import com.mojang.blaze3d.shaders.FogShape;
 
 import net.minecraft.client.Camera;
 import net.minecraft.client.renderer.FogRenderer;
+import net.minecraft.world.level.material.FogType;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -11,55 +12,47 @@ import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
 
 @Environment(EnvType.CLIENT)
-public interface FogEvents {
-	Event<SetDensity> SET_DENSITY = EventFactory.createArrayBacked(SetDensity.class, callbacks -> (info, density) -> {
+public class FogEvents {
+	public static final Event<SetDensity> SET_DENSITY = EventFactory.createArrayBacked(SetDensity.class, callbacks -> (info, density) -> {
 		for (SetDensity callback : callbacks) {
 			return callback.setDensity(info, density);
 		}
 		return density;
 	});
 
-	Event<SetColor> SET_COLOR = EventFactory.createArrayBacked(SetColor.class, callbacks -> (data, partialTicks) -> {
+	public static final Event<SetColor> SET_COLOR = EventFactory.createArrayBacked(SetColor.class, callbacks -> (data, partialTicks) -> {
 		for (SetColor callback : callbacks) {
 			callback.setColor(data, partialTicks);
 		}
 	});
 
-	Event<RenderFog> RENDER_FOG = EventFactory.createArrayBacked(RenderFog.class, callbacks -> (type, info, partialTicks, distance) -> {
+	public static final Event<RenderFog> RENDER_FOG = EventFactory.createArrayBacked(RenderFog.class, callbacks -> (mode, type, camera, partialTick, renderDistance, nearDistance, farDistance, shape, fogData) -> {
 		for (RenderFog callback : callbacks) {
-			callback.onFogRender(type, info, partialTicks, distance);
-		}
-	});
-
-	Event<ActualRenderFog> ACTUAL_RENDER_FOG = EventFactory.createArrayBacked(ActualRenderFog.class, callbacks -> (type, info, fogData) -> {
-		for (ActualRenderFog callback : callbacks) {
-			if (callback.onFogRender(type, info, fogData))
+			if (callback.onFogRender(mode, type, camera, partialTick, renderDistance, nearDistance, farDistance, shape, fogData))
 				return true;
 		}
 		return false;
 	});
 
+	private FogEvents() {
+	}
+
 	@FunctionalInterface
-	interface SetDensity {
+	public interface SetDensity {
 		float setDensity(Camera activeRenderInfo, float density);
 	}
 
 	@FunctionalInterface
-	interface SetColor {
+	public interface SetColor {
 		void setColor(ColorData d, float partialTicks);
 	}
 
 	@FunctionalInterface
-	interface RenderFog {
-		void onFogRender(FogRenderer.FogMode type, Camera info, float partial, float distance);
+	public interface RenderFog {
+		boolean onFogRender(FogRenderer.FogMode mode, FogType type, Camera camera, float partialTick, float renderDistance, float nearDistance, float farDistance, FogShape shape, FogData fogData);
 	}
 
-	@FunctionalInterface
-	interface ActualRenderFog {
-		boolean onFogRender(FogRenderer.FogMode type, Camera info, FogData fogData);
-	}
-
-	class FogData {
+	public static class FogData {
 		private float farPlaneDistance;
 		private float nearPlaneDistance;
 		private FogShape fogShape;
@@ -103,7 +96,7 @@ public interface FogEvents {
 		}
 	}
 
-	class ColorData {
+	public static class ColorData {
 		private final Camera camera;
 		private float red;
 		private float green;

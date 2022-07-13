@@ -1,6 +1,6 @@
 package io.github.vampirestudios.vampirelib.client.model;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.resources.model.Material;

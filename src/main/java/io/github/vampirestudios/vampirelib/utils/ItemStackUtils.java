@@ -683,8 +683,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
 
-import io.github.vampirestudios.vampirelib.mixins.ItemInvokerMixin;
-
 public class ItemStackUtils {
 
     /**
@@ -730,7 +728,7 @@ public class ItemStackUtils {
      * @return Whether the item is in the {@link CreativeModeTab}.
      */
     public static boolean isAllowedInTab(Item item, CreativeModeTab tab) {
-        return ((ItemInvokerMixin) item).callAllowedIn(tab);
+        return item.allowedIn(tab);
     }
 
 }

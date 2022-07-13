@@ -41,7 +41,8 @@
       "net/minecraft/class_1832": ["io/github/vampirestudios/vampirelib/api/extensions/TierExtensions"],
       "net/minecraft/class_1767": ["io/github/vampirestudios/vampirelib/api/extensions/DyeExtension"],
       "net/minecraft/class_3665": ["io/github/vampirestudios/vampirelib/api/extensions/ModelStateExtensions"],
-      "net/minecraft/class_4590": ["io/github/vampirestudios/vampirelib/api/extensions/TransformationExtensions"]
+      "net/minecraft/class_4590": ["io/github/vampirestudios/vampirelib/api/extensions/TransformationExtensions"],
+      "net/minecraft/class_1093": ["io/github/vampirestudios/vampirelib/api/extensions/SimpleBakedModelExtensions"]
     },
     "modmenu": {
       "links": {

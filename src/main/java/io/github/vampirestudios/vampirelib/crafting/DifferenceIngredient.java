@@ -1,21 +1,20 @@
 package io.github.vampirestudios.vampirelib.crafting;
 
+import java.util.Arrays;
+
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-
 import io.github.tropheusj.serialization_hooks.ingredient.IngredientDeserializer;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntComparators;
 import it.unimi.dsi.fastutil.ints.IntList;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.StackedContents;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
-
-import javax.annotation.Nullable;
-
-import java.util.Arrays;
 
 /**
  * Ingredient that matches everything from the first ingredient that is not included in the second ingredient

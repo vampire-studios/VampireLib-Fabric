@@ -702,7 +702,7 @@ public class Color {
     public static int[] intToRgb(int color) {
         int r = (color >> 16) & 0xFF;
         int g = (color >> 8) & 0xFF;
-        int b = (color >> 0) & 0xFF;
+        int b = (color) & 0xFF;
         return new int[] {
             r, g, b
         };
@@ -745,38 +745,38 @@ public class Color {
             float p = brightness * (1.0f - saturation);
             float q = brightness * (1.0f - saturation * f);
             float t = brightness * (1.0f - (saturation * (1.0f - f)));
-            switch ((int) h) {
-                case 0:
-                    r = (int) (brightness * 255.0f + 1f);
-                    g = (int) (t * 255.0f + 1f);
-                    b = (int) (p * 255.0f + 1f);
-                    break;
-                case 1:
-                    r = (int) (q * 255.0f + 1f);
-                    g = (int) (brightness * 255.0f + 1f);
-                    b = (int) (p * 255.0f + 1f);
-                    break;
-                case 2:
-                    r = (int) (p * 255.0f + 1f);
-                    g = (int) (brightness * 255.0f + 1f);
-                    b = (int) (t * 255.0f + 1f);
-                    break;
-                case 3:
-                    r = (int) (p * 255.0f + 1f);
-                    g = (int) (q * 255.0f + 1f);
-                    b = (int) (brightness * 255.0f + 1f);
-                    break;
-                case 4:
-                    r = (int) (t * 255.0f + 1f);
-                    g = (int) (p * 255.0f + 1f);
-                    b = (int) (brightness * 255.0f + 1f);
-                    break;
-                case 5:
-                    r = (int) (brightness * 255.0f + 1f);
-                    g = (int) (p * 255.0f + 1f);
-                    b = (int) (q * 255.0f + 1f);
-                    break;
-            }
+			switch ((int) h) {
+				case 0 -> {
+					r = (int) (brightness * 255.0f + 1f);
+					g = (int) (t * 255.0f + 1f);
+					b = (int) (p * 255.0f + 1f);
+				}
+				case 1 -> {
+					r = (int) (q * 255.0f + 1f);
+					g = (int) (brightness * 255.0f + 1f);
+					b = (int) (p * 255.0f + 1f);
+				}
+				case 2 -> {
+					r = (int) (p * 255.0f + 1f);
+					g = (int) (brightness * 255.0f + 1f);
+					b = (int) (t * 255.0f + 1f);
+				}
+				case 3 -> {
+					r = (int) (p * 255.0f + 1f);
+					g = (int) (q * 255.0f + 1f);
+					b = (int) (brightness * 255.0f + 1f);
+				}
+				case 4 -> {
+					r = (int) (t * 255.0f + 1f);
+					g = (int) (p * 255.0f + 1f);
+					b = (int) (brightness * 255.0f + 1f);
+				}
+				case 5 -> {
+					r = (int) (brightness * 255.0f + 1f);
+					g = (int) (p * 255.0f + 1f);
+					b = (int) (q * 255.0f + 1f);
+				}
+			}
         }
         return 0xff000000 | (r << 16) | (g << 8) | (b);
     }

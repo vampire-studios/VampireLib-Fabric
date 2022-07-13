@@ -693,9 +693,6 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.storage.loot.BuiltInLootTables;
-import net.minecraft.world.level.storage.loot.predicates.ExplosionCondition;
-import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 
@@ -703,7 +700,6 @@ import io.github.vampirestudios.vampirelib.api.BasicModClass;
 import io.github.vampirestudios.vampirelib.api.ConvertibleBlockPair;
 import io.github.vampirestudios.vampirelib.init.VBlockEntityTypes;
 import io.github.vampirestudios.vampirelib.init.VRegistries;
-import io.github.vampirestudios.vampirelib.loot.LootModifierManager;
 import io.github.vampirestudios.vampirelib.utils.Rands;
 import io.github.vampirestudios.vampirelib.utils.blendfunctions.BlendingFunction;
 import io.github.vampirestudios.vampirelib.utils.registry.BlockChiseler;
@@ -751,7 +747,7 @@ public class VampireLib extends BasicModClass {
     public static WoodRegistry TEST_NETHER_WOOD13;
 
     public VampireLib() {
-        super("vampirelib", "VampireLib", "4.10.0+build.1");
+        super("vampirelib", "VampireLib", "5.3.0+build.1");
     }
 
     @Override
@@ -763,24 +759,18 @@ public class VampireLib extends BasicModClass {
         VBlockEntityTypes.init();
         VRegistries.init();
         BlendingFunction.init();
-
-        Config.Creator configCreator = builder -> {
-            builder.field(TrackedValue.create("testing", "idk", "idk1", "idk2", "idk3"));
-            builder.field(TrackedValue.create(false, "testing", "idk1", "idk2", "idk3"));
-            builder.field(TrackedValue.create(1, "testing2", "idk1", "idk2", "idk3"));
-        };
-
-        Config config = ConfigImpl.create(QuiltConfigImpl.getConfigEnvironment(), INSTANCE.modId(), "testing", configCreator);
-        config.save();
-
-        CommandRegistrationCallback.EVENT.register((dispatcher, buildContext, environment) -> new ForgeCommand(dispatcher));
-
-        LootModifierManager.getSerializerForName(BuiltInLootTables.ABANDONED_MINESHAFT)
-            .makeConditions(new LootItemCondition[] {
-                ExplosionCondition.survivesExplosion().build()
-            });
+        CommandRegistrationCallback.EVENT.register((dispatcher, buildContext, environment) -> new VampireLibCommand(dispatcher));
 
         if (TEST_CONTENT_ENABLED) {
+			Config.Creator configCreator = builder -> {
+				builder.field(TrackedValue.create("testing", "idk", "idk1", "idk2", "idk3"));
+				builder.field(TrackedValue.create(false, "testing", "idk1", "idk2", "idk3"));
+				builder.field(TrackedValue.create(1, "testing2", "idk1", "idk2", "idk3"));
+			};
+
+			Config config = ConfigImpl.create(QuiltConfigImpl.getConfigEnvironment(), INSTANCE.modId(), "testing", configCreator);
+			config.save();
+
 			//Overworld
 			TEST_WOOD = WoodRegistry.of(identifier("test"))
 				.defaultBlocks().build();

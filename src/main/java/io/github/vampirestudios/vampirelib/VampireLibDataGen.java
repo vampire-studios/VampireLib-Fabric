@@ -67,9 +67,6 @@ import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
 import io.github.vampirestudios.vampirelib.api.datagen.CustomTagProviders;
 import io.github.vampirestudios.vampirelib.api.datagen.FabricLanguageProvider;
 import io.github.vampirestudios.vampirelib.init.VTags;
-import io.github.vampirestudios.vampirelib.mixins.IngredientAccessor;
-import io.github.vampirestudios.vampirelib.mixins.ShapedRecipeResultAccessor;
-import io.github.vampirestudios.vampirelib.mixins.ShapelessRecipeResultAccessor;
 import io.github.vampirestudios.vampirelib.utils.registry.WoodRegistry;
 
 import static io.github.vampirestudios.vampirelib.VampireLib.TEST_CONTENT_ENABLED;
@@ -790,7 +787,6 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
                 .add(Biomes.THE_END, Biomes.SMALL_END_ISLANDS, Biomes.END_BARRENS, Biomes.END_MIDLANDS, Biomes.END_HIGHLANDS);
 //            tag(BiomeTags.IS_END).addTag(VTags.Biomes.END);
 
-
             tag(Biomes.PLAINS, VTags.Biomes.IS_PLAINS);
             tag(Biomes.DESERT, VTags.Biomes.IS_HOT_OVERWORLD, VTags.Biomes.IS_DRY_OVERWORLD, VTags.Biomes.IS_SANDY);
             tag(Biomes.TAIGA, VTags.Biomes.IS_COLD_OVERWORLD, VTags.Biomes.IS_CONIFEROUS);
@@ -822,6 +818,33 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
             tag(Biomes.WARM_OCEAN, VTags.Biomes.IS_HOT_OVERWORLD);
             tag(VTags.Biomes.IS_COLD_OVERWORLD, Biomes.COLD_OCEAN, Biomes.DEEP_COLD_OCEAN, Biomes.DEEP_FROZEN_OCEAN, Biomes.SNOWY_SLOPES, Biomes.JAGGED_PEAKS);
             tag(Biomes.THE_VOID, VTags.Biomes.IS_VOID);
+            tag(Biomes.SUNFLOWER_PLAINS, VTags.Biomes.IS_PLAINS, VTags.Biomes.IS_RARE);
+            tag(Biomes.WINDSWEPT_GRAVELLY_HILLS, VTags.Biomes.IS_SPARSE_OVERWORLD, VTags.Biomes.IS_RARE);
+            tag(Biomes.FLOWER_FOREST, VTags.Biomes.IS_RARE);
+            tag(Biomes.ICE_SPIKES, VTags.Biomes.IS_COLD_OVERWORLD, VTags.Biomes.IS_SNOWY, VTags.Biomes.IS_RARE);
+            tag(Biomes.OLD_GROWTH_BIRCH_FOREST, VTags.Biomes.IS_DENSE_OVERWORLD, VTags.Biomes.IS_RARE);
+            tag(Biomes.OLD_GROWTH_SPRUCE_TAIGA, VTags.Biomes.IS_DENSE_OVERWORLD, VTags.Biomes.IS_RARE);
+            tag(Biomes.WINDSWEPT_SAVANNA, VTags.Biomes.IS_HOT_OVERWORLD, VTags.Biomes.IS_DRY_OVERWORLD, VTags.Biomes.IS_SPARSE_OVERWORLD, VTags.Biomes.IS_RARE);
+            tag(Biomes.ERODED_BADLANDS, VTags.Biomes.IS_HOT_OVERWORLD, VTags.Biomes.IS_DRY_OVERWORLD, VTags.Biomes.IS_SPARSE_OVERWORLD, VTags.Biomes.IS_RARE);
+            tag(Biomes.BAMBOO_JUNGLE, VTags.Biomes.IS_HOT_OVERWORLD, VTags.Biomes.IS_WET_OVERWORLD, VTags.Biomes.IS_RARE);
+            tag(Biomes.LUSH_CAVES, VTags.Biomes.IS_UNDERGROUND, VTags.Biomes.IS_LUSH, VTags.Biomes.IS_WET_OVERWORLD);
+            tag(Biomes.DRIPSTONE_CAVES, VTags.Biomes.IS_UNDERGROUND, VTags.Biomes.IS_SPARSE_OVERWORLD);
+            tag(Biomes.SOUL_SAND_VALLEY, VTags.Biomes.IS_HOT_NETHER, VTags.Biomes.IS_DRY_NETHER);
+            tag(Biomes.CRIMSON_FOREST, VTags.Biomes.IS_HOT_NETHER, VTags.Biomes.IS_DRY_NETHER);
+            tag(Biomes.WARPED_FOREST, VTags.Biomes.IS_HOT_NETHER, VTags.Biomes.IS_DRY_NETHER);
+            tag(Biomes.BASALT_DELTAS, VTags.Biomes.IS_HOT_NETHER, VTags.Biomes.IS_DRY_NETHER);
+            tag(Biomes.MANGROVE_SWAMP, VTags.Biomes.IS_WET, VTags.Biomes.IS_WET_OVERWORLD, VTags.Biomes.IS_HOT, VTags.Biomes.IS_HOT_OVERWORLD, VTags.Biomes.IS_SWAMP);
+            tag(Biomes.DEEP_DARK, VTags.Biomes.IS_UNDERGROUND, VTags.Biomes.IS_RARE, VTags.Biomes.IS_SPOOKY);
+
+            tag(VTags.Biomes.IS_HOT).addTag(VTags.Biomes.IS_HOT_OVERWORLD).addTag(VTags.Biomes.IS_HOT_NETHER).addOptionalTag(VTags.Biomes.IS_HOT_END.location());
+            tag(VTags.Biomes.IS_COLD).addTag(VTags.Biomes.IS_COLD_OVERWORLD).addOptionalTag(VTags.Biomes.IS_COLD_NETHER.location()).addTag(VTags.Biomes.IS_COLD_END);
+            tag(VTags.Biomes.IS_SPARSE).addTag(VTags.Biomes.IS_SPARSE_OVERWORLD).addOptionalTag(VTags.Biomes.IS_SPARSE_NETHER.location()).addOptionalTag(VTags.Biomes.IS_SPARSE_END.location());
+            tag(VTags.Biomes.IS_DENSE).addTag(VTags.Biomes.IS_DENSE_OVERWORLD).addOptionalTag(VTags.Biomes.IS_DENSE_NETHER.location()).addOptionalTag(VTags.Biomes.IS_DENSE_END.location());
+            tag(VTags.Biomes.IS_WET).addTag(VTags.Biomes.IS_WET_OVERWORLD).addOptionalTag(VTags.Biomes.IS_WET_NETHER.location()).addOptionalTag(VTags.Biomes.IS_WET_END.location());
+            tag(VTags.Biomes.IS_DRY).addTag(VTags.Biomes.IS_DRY_OVERWORLD).addTag(VTags.Biomes.IS_DRY_NETHER).addTag(VTags.Biomes.IS_DRY_END);
+
+            tag(VTags.Biomes.IS_WATER).addTag(BiomeTags.IS_OCEAN).addTag(BiomeTags.IS_RIVER);
+            tag(VTags.Biomes.IS_MOUNTAIN).addTag(VTags.Biomes.IS_PEAK).addTag(VTags.Biomes.IS_SLOPE);
         }
 
         @SafeVarargs
@@ -1236,7 +1259,7 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
         }
 
         private FinishedRecipe enhance(ShapelessRecipeBuilder.Result vanilla) {
-            List<Ingredient> ingredients = ((ShapelessRecipeResultAccessor)vanilla).getIngredients();
+            List<Ingredient> ingredients = vanilla.ingredients;
             boolean modified = false;
             for (int x = 0; x < ingredients.size(); x++) {
                 Ingredient ing = enhance(vanilla.getId(), ingredients.get(x));
@@ -1249,7 +1272,7 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
         }
 
         private FinishedRecipe enhance(ShapedRecipeBuilder.Result vanilla) {
-            Map<Character, Ingredient> ingredients = ((ShapedRecipeResultAccessor)vanilla).getKey();
+            Map<Character, Ingredient> ingredients = vanilla.key;
             boolean modified = false;
             for (Character x : ingredients.keySet()) {
                 Ingredient ing = enhance(vanilla.getId(), ingredients.get(x));
@@ -1267,7 +1290,7 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
 
             boolean modified = false;
             List<Value> items = new ArrayList<>();
-            for (Value entry : ((IngredientAccessor) vanilla).getValues()) {
+            for (Value entry : vanilla.values) {
                 if (entry instanceof ItemValue) {
                     ItemStack stack = entry.getItems().stream().findFirst().orElse(ItemStack.EMPTY);
                     TagKey<Item> replacement = replacements.get(stack.getItem());
@@ -1314,4 +1337,5 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
             this.tag(VTags.DimensionTypes.OVERWORLD_CAVES).add(DimensionType.OVERWORLD_CAVES_LOCATION);
         }
     }*/
+
 }

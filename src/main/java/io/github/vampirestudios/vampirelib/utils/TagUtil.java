@@ -1,6 +1,6 @@
 package io.github.vampirestudios.vampirelib.utils;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;

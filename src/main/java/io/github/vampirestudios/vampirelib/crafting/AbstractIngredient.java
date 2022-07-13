@@ -2,10 +2,9 @@ package io.github.vampirestudios.vampirelib.crafting;
 
 import java.util.stream.Stream;
 
-import javax.annotation.Nullable;
-
 import com.google.gson.JsonElement;
 import io.github.tropheusj.serialization_hooks.ingredient.BaseCustomIngredient;
+import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.tags.TagKey;

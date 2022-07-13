@@ -1,3 +1,4 @@
+/*
 package io.github.vampirestudios.vampirelib.client.model;
 
 import java.util.Collection;
@@ -46,7 +47,6 @@ import net.minecraft.server.packs.resources.ReloadableResourceManager;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.GsonHelper;
 
-import io.github.vampirestudios.vampirelib.api.extensions.TransformationExtensions;
 import io.github.vampirestudios.vampirelib.client.TransformationHelper;
 import io.github.vampirestudios.vampirelib.mixins.client.BlockModelAccessor;
 
@@ -104,7 +104,7 @@ public class ModelLoaderRegistry {
 		if (!transformData.isJsonObject()) {
 			try {
 				Transformation base = context.deserialize(transformData, Transformation.class);
-				return Optional.of(new SimpleModelState(ImmutableMap.of(), ((TransformationExtensions) (Object) base).blockCenterToCorner()));
+				return Optional.of(new SimpleModelState(ImmutableMap.of(), base.blockCenterToCorner()));
 			} catch (JsonParseException e) {
 				throw new JsonParseException("transform: expected a string, object or valid base transformation, got: " + transformData);
 			}
@@ -147,7 +147,7 @@ public class ModelLoaderRegistry {
 	private static void deserializeTRSR(JsonDeserializationContext context, EnumMap<ItemTransforms.TransformType, Transformation> transforms, JsonObject transform, String name, ItemTransforms.TransformType itemCameraTransform) {
 		if (transform.has(name)) {
 			Transformation t = context.deserialize(transform.remove(name), Transformation.class);
-			transforms.put(itemCameraTransform, ((TransformationExtensions) (Object) t).blockCenterToCorner());
+			transforms.put(itemCameraTransform, t.blockCenterToCorner());
 		}
 	}
 
@@ -175,10 +175,10 @@ public class ModelLoaderRegistry {
 					BlockElementFace blockpartface = blockpart.faces.get(direction);
 					TextureAtlasSprite textureatlassprite1 = spriteGetter.apply(owner.resolveTexture(blockpartface.texture));
 					if (blockpartface.cullForDirection == null) {
-						modelBuilder.addGeneralQuad(BlockModelAccessor.vl$bakeFace(blockpart, blockpartface, textureatlassprite1, direction, modelTransform, modelLocation));
+						modelBuilder.addUnculledFace(BlockModelAccessor.vl$bakeFace(blockpart, blockpartface, textureatlassprite1, direction, modelTransform, modelLocation));
 					} else {
-						modelBuilder.addFaceQuad(
-								((TransformationExtensions) (Object) modelTransform.getRotation()).rotateTransform(blockpartface.cullForDirection),
+						modelBuilder.addCulledFace(
+								modelTransform.getRotation().rotateTransform(blockpartface.cullForDirection),
 								BlockModelAccessor.vl$bakeFace(blockpart, blockpartface, textureatlassprite1, direction, modelTransform, modelLocation));
 					}
 				}
@@ -232,4 +232,4 @@ public class ModelLoaderRegistry {
 			}
 		}
 	}
-}
+}*/
