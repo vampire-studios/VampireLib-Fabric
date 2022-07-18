@@ -19,15 +19,23 @@
     "main": [
       "io.github.vampirestudios.vampirelib.VampireLib"
     ],
+    "init": [
+      "org.quiltmc.qsl.block.content.registry.impl.BlockContentRegistriesInitializer"
+    ],
     "client": [
       "io.github.vampirestudios.vampirelib.client.VampireLibClient"
+    ],
+    "client_init": [
+      "org.quiltmc.qsl.block.content.registry.impl.BlockContentRegistriesClientInitializer"
     ],
     "fabric-datagen": [
       "io.github.vampirestudios.vampirelib.VampireLibDataGen"
     ]
   },
   "mixins": [
-    "vampirelib.mixins.json"
+    "vampirelib.mixins.json",
+    "quilt_material_rule.mixins.json",
+    "quilt_block_content_registry.mixins.json"
   ],
   "accessWidener": "vampirelib.accesswidener",
   "depends": {

@@ -685,6 +685,7 @@ import org.quiltmc.config.api.values.TrackedValue;
 import org.quiltmc.config.impl.ConfigImpl;
 import org.quiltmc.loader.impl.config.QuiltConfigImpl;
 import org.quiltmc.qsl.command.api.CommandRegistrationCallback;
+import org.quiltmc.qsl.worldgen.material_rule.api.MaterialRuleRegistrationEvents;
 
 import net.minecraft.SharedConstants;
 import net.minecraft.sounds.SoundSource;
@@ -692,7 +693,11 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameRules;
+import net.minecraft.world.level.biome.Biomes;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.Noises;
+import net.minecraft.world.level.levelgen.SurfaceRules;
 
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 
@@ -747,7 +752,7 @@ public class VampireLib extends BasicModClass {
     public static WoodRegistry TEST_NETHER_WOOD13;
 
     public VampireLib() {
-        super("vampirelib", "VampireLib", "5.3.0+build.1");
+        super("vampirelib", "VampireLib", "5.4.0+build.1");
     }
 
     @Override
@@ -760,6 +765,52 @@ public class VampireLib extends BasicModClass {
         VRegistries.init();
         BlendingFunction.init();
         CommandRegistrationCallback.EVENT.register((dispatcher, buildContext, environment) -> new VampireLibCommand(dispatcher));
+
+		SurfaceRules.ConditionSource pinkNoise = SurfaceRules.noiseCondition(Noises.CALCITE, 0.0, 0.2);
+		SurfaceRules.ConditionSource whiteNoise = SurfaceRules.noiseCondition(Noises.CALCITE, 0.2, 0.4);
+		SurfaceRules.ConditionSource purpleNoise = SurfaceRules.noiseCondition(Noises.CALCITE, 0.4, 0.6);
+		SurfaceRules.ConditionSource blackNoise = SurfaceRules.noiseCondition(Noises.CALCITE, 0.6, 0.8);
+		SurfaceRules.ConditionSource blueNoise = SurfaceRules.noiseCondition(Noises.CALCITE, 0.8, 1.0);
+
+		SurfaceRules.ConditionSource pinkNoisePan = SurfaceRules.noiseCondition(Noises.CALCITE, 0.0, 0.2);
+		SurfaceRules.ConditionSource yellowNoisePan = SurfaceRules.noiseCondition(Noises.CALCITE, 0.8, 1.0);
+		SurfaceRules.ConditionSource blueNoisePan = SurfaceRules.noiseCondition(Noises.CALCITE, 0.8, 1.0);
+
+		SurfaceRules.RuleSource PINK_CONCRETE = SurfaceRules.state(Blocks.PINK_CONCRETE.defaultBlockState());
+		SurfaceRules.RuleSource WHITE_CONCRETE = SurfaceRules.state(Blocks.WHITE_CONCRETE.defaultBlockState());
+		SurfaceRules.RuleSource PURPLE_CONCRETE = SurfaceRules.state(Blocks.PURPLE_CONCRETE.defaultBlockState());
+		SurfaceRules.RuleSource BLACK_CONCRETE = SurfaceRules.state(Blocks.BLACK_CONCRETE.defaultBlockState());
+		SurfaceRules.RuleSource BLUE_CONCRETE = SurfaceRules.state(Blocks.BLUE_CONCRETE.defaultBlockState());
+		SurfaceRules.RuleSource YELLOW_CONCRETE = SurfaceRules.state(Blocks.YELLOW_CONCRETE.defaultBlockState());
+
+		//sometimes make it trans, but mostly make it genderfluid :D.
+		MaterialRuleRegistrationEvents.OVERWORLD_RULE_INIT.register(((materialRules) -> materialRules.add(
+			SurfaceRules.sequence(
+				SurfaceRules.ifTrue(
+					SurfaceRules.ON_FLOOR,
+					SurfaceRules.sequence(
+						SurfaceRules.ifTrue(pinkNoise, PINK_CONCRETE),
+						SurfaceRules.ifTrue(whiteNoise, WHITE_CONCRETE),
+						SurfaceRules.ifTrue(purpleNoise, PURPLE_CONCRETE),
+						SurfaceRules.ifTrue(blackNoise, BLACK_CONCRETE),
+						SurfaceRules.ifTrue(blueNoise, BLUE_CONCRETE)
+					)
+				),
+				SurfaceRules.ifTrue(
+					SurfaceRules.isBiome(Biomes.DESERT),
+					SurfaceRules.ifTrue(
+						SurfaceRules.ON_FLOOR,
+						SurfaceRules.sequence(
+							SurfaceRules.ifTrue(pinkNoise, PINK_CONCRETE),
+							SurfaceRules.ifTrue(whiteNoise, WHITE_CONCRETE),
+							SurfaceRules.ifTrue(purpleNoise, PURPLE_CONCRETE),
+							SurfaceRules.ifTrue(blackNoise, BLACK_CONCRETE),
+							SurfaceRules.ifTrue(blueNoise, BLUE_CONCRETE)
+						)
+					)
+				)
+			)
+		)));
 
         if (TEST_CONTENT_ENABLED) {
 			Config.Creator configCreator = builder -> {

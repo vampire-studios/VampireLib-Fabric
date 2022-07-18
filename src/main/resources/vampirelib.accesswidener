@@ -134,3 +134,8 @@ accessible field net/minecraft/client/renderer/block/model/ItemTransform$Deseria
 
 accessible method net/minecraft/client/renderer/block/model/BlockElement uvsByFace (Lnet/minecraft/core/Direction;)[F
 accessible method net/minecraft/client/renderer/block/model/BlockModel bakeFace (Lnet/minecraft/client/renderer/block/model/BlockElement;Lnet/minecraft/client/renderer/block/model/BlockElementFace;Lnet/minecraft/client/renderer/texture/TextureAtlasSprite;Lnet/minecraft/core/Direction;Lnet/minecraft/client/resources/model/ModelState;Lnet/minecraft/resources/ResourceLocation;)Lnet/minecraft/client/renderer/block/model/BakedQuad;
+
+accessible field net/minecraft/world/level/block/FireBlock igniteOdds Lit/unimi/dsi/fastutil/objects/Object2IntMap;
+accessible field net/minecraft/world/level/block/FireBlock burnOdds Lit/unimi/dsi/fastutil/objects/Object2IntMap;
+accessible field net/minecraft/world/item/ShovelItem FLATTENABLES Ljava/util/Map;
+accessible field net/minecraft/world/item/AxeItem STRIPPABLES Ljava/util/Map;
