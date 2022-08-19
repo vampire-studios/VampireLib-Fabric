@@ -1,11 +1,13 @@
 plugins {
 	id 'maven-publish'
 	id "com.modrinth.minotaur" version "2.+"
+	id "org.jetbrains.gradle.plugin.idea-ext" version "1.1.3"
+	id 'org.quiltmc.gradle.licenser' version '1.+'
 	alias(libs.plugins.quilt.loom)
 }
 
 archivesBaseName = project.archives_base_name
-version = "$mod_version+build.$build_number-${libs.versions.minecraft.get()}"
+version = "$mod_version+build.$build_number-$project.minecraft_version-beta"
 group = project.maven_group
 
 loom {
@@ -31,7 +33,7 @@ sourceSets {
 	main {
 		resources {
 			srcDirs += [
-				'src/main/generated'
+					'src/main/generated'
 			]
 		}
 	}
@@ -60,7 +62,7 @@ dependencies {
 	minecraft libs.minecraft
 	mappings loom.layered {
 		it.addLayer(quiltMappings.mappings("org.quiltmc:quilt-mappings:${libs.versions.quilt.mappings.get()}:v2"))
-		it.parchment("org.parchmentmc.data:parchment-1.18.2:2022.03.13@zip")
+		it.parchment("org.parchmentmc.data:parchment-1.19.2:${libs.versions.parchment.get()}@zip")
 		it.officialMojangMappings {
 			setNameSyntheticMembers(false)
 		}
@@ -98,6 +100,11 @@ java {
 tasks.withType(JavaCompile).configureEach {
 	it.options.release = 17
 	it.options.encoding = 'UTF-8'
+	it.options.compilerArgs += "--enable-preview"
+}
+
+tasks.withType(JavaExec) {
+	jvmArgs += "--enable-preview"
 }
 
 compileJava {
@@ -132,14 +139,72 @@ publishing {
 	}
 }
 
+license {
+	rule file('codeformat/HEADER')
+	rule file("codeformat/FABRIC_MODIFIED_HEADER")
+	rule file("codeformat/QUILT_MODIFIED_HEADER")
+	include '**/*.java'
+}
+
 modrinth {
-	token = System.getenv("MODRINTH_TOKEN")
-	projectId = "C7pWNmLQ"
+	token = MODRINTH_TOKEN
+	projectId = "vampirelib"
+	versionName = "VampireLib v${mod_version}+build.${build_number}-beta ($project.minecraft_version)"
 	versionNumber = project.version
-	versionType = "beta"
-	uploadFile = remapJar
-	gameVersions = ["1.19"]
+	versionType = this.getVersionType()
+	uploadFile = tasks.remapJar
+	gameVersions = ["1.19.1", "1.19.2"]
+	loaders = ["quilt"]
 	dependencies {
-		required.project "P7dR8mSH"
+		required.project("qsl")
+	}
+	// Changelog fetching
+	def changelogContent = fetchChangelog()
+
+	if (changelogContent) {
+		changelog = changelogContent
+	} else {
+		afterEvaluate {
+			tasks.modrinth.setEnabled(false)
+		}
+	}
+}
+
+boolean isMCVersionNonRelease() {
+	return project.minecraft_version.matches('^\\d\\dw\\d\\d[a-z]$')
+			|| project.minecraft_version.matches('\\d+\\.\\d+-(pre|rc)(\\d+)')
+}
+
+String getVersionType() {
+	if (isMCVersionNonRelease() || version.contains("-alpha")) {
+		return "alpha"
+	} else if (version.contains("-beta")) {
+		return "beta"
+	} else {
+		return "release"
+	}
+}
+
+String fetchChangelog() {
+	def changelogText = file('CHANGELOG.md').text
+	def regexVersion = ((String) version).replace('.', '\\.').replace('+', '\\+')
+	def changelogRegex = ~"###? ${regexVersion}(?: - .+)?\\n\\n(( *- .+\\n)+)"
+	def matcher = changelogText =~ changelogRegex
+
+	if (matcher.find()) {
+		String changelogContent = matcher.group(1)
+
+		def changelogLines = changelogText.split('\n')
+		def linkRefRegex = ~'^\\[([A-z0-9 _\\-/+.]+)]: '
+		for (int i = changelogLines.length - 1; i > 0; i--) {
+			def line = changelogLines[i]
+			if ((line =~ linkRefRegex).find())
+				changelogContent += '\n' + line
+			else break
+		}
+
+		return changelogContent
+	} else {
+		return null
 	}
 }

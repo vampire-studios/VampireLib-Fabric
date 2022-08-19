@@ -1,3 +1,20 @@
+/*
+ * Copyright (c) 2022 OliviaTheVampire
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package io.github.vampirestudios.vampirelib.mixins.client;
 
 import java.io.IOException;
@@ -5,6 +22,7 @@ import java.io.InputStream;
 import java.util.Set;
 import java.util.stream.Stream;
 
+import com.mojang.blaze3d.platform.NativeImage;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -12,16 +30,15 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
-import com.mojang.blaze3d.platform.NativeImage;
-
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.profiling.ProfilerFiller;
 
+import org.quiltmc.loader.api.QuiltLoader;
+
 import net.fabricmc.fabric.impl.client.texture.FabricSprite;
-import net.fabricmc.loader.api.FabricLoader;
 
 import io.github.vampirestudios.vampirelib.VampireLib;
 import io.github.vampirestudios.vampirelib.api.callbacks.client.TextureStitchCallback;
@@ -30,16 +47,20 @@ import io.github.vampirestudios.vampirelib.api.callbacks.client.TextureStitchCal
 public class TextureAtlasMixin {
 	private static final int vl_EMISSIVE_ALPHA = 254 << 24;
 
-	@Inject(method = "load(Lnet/minecraft/server/packs/resources/ResourceManager;Lnet/minecraft/client/renderer/texture/TextureAtlasSprite$Info;IIIII)Lnet/minecraft/client/renderer/texture/TextureAtlasSprite;", at = @At("HEAD"), cancellable = true)
+	@Inject(
+			method = "load(Lnet/minecraft/server/packs/resources/ResourceManager;Lnet/minecraft/client/renderer/texture/TextureAtlasSprite$Info;IIIII)Lnet/minecraft/client/renderer/texture/TextureAtlasSprite;",
+			at = @At("HEAD"), cancellable = true)
 	private void vl_loadSprites(ResourceManager container, TextureAtlasSprite.Info info, int atlasWidth, int atlasHeight, int maxLevel, int x, int y, CallbackInfoReturnable<TextureAtlasSprite> cir) {
-		if (!FabricLoader.getInstance().isModLoaded("optifabric") && !FabricLoader.getInstance().isModLoaded("bclib")) {
+		if (!QuiltLoader.isModLoaded("optifabric") && !QuiltLoader.isModLoaded("bclib")) {
 			ResourceLocation location = info.name();
-			ResourceLocation emissiveLocation = new ResourceLocation(location.getNamespace(), "textures/" + location.getPath() + "_e.png");
+			ResourceLocation emissiveLocation = new ResourceLocation(location.getNamespace(),
+					"textures/" + location.getPath() + "_e.png");
 			if (container.getResource(emissiveLocation).isPresent()) {
 				NativeImage sprite = null;
 				NativeImage emission = null;
 				try {
-					ResourceLocation spriteLocation = new ResourceLocation(location.getNamespace(), "textures/" + location.getPath() + ".png");
+					ResourceLocation spriteLocation = new ResourceLocation(location.getNamespace(),
+							"textures/" + location.getPath() + ".png");
 					InputStream resource = container.open(spriteLocation);
 					sprite = NativeImage.read(resource);
 
@@ -75,8 +96,9 @@ public class TextureAtlasMixin {
 	}
 
 	@Inject(method = "prepareToStitch",
-		at = @At(value = "INVOKE", target = "Lnet/minecraft/util/profiling/ProfilerFiller;popPush(Ljava/lang/String;)V", ordinal = 0,
-			shift = At.Shift.AFTER), locals = LocalCapture.CAPTURE_FAILHARD)
+			at = @At(value = "INVOKE",
+					 target = "Lnet/minecraft/util/profiling/ProfilerFiller;popPush(Ljava/lang/String;)V", ordinal = 0,
+					 shift = At.Shift.AFTER), locals = LocalCapture.CAPTURE_FAILHARD)
 	private void vl$preStitch(ResourceManager resourceManager, Stream<ResourceLocation> stream, ProfilerFiller profilerFiller, int i, CallbackInfoReturnable<TextureAtlas.Preparations> cir, Set<ResourceLocation> set) {
 		TextureStitchCallback.PRE.invoker().stitch((TextureAtlas) (Object) this, set::add);
 	}

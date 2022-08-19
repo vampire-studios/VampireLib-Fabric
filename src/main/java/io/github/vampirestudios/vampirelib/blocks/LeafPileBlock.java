@@ -1,3 +1,20 @@
+/*
+ * Copyright (c) 2022 OliviaTheVampire
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package io.github.vampirestudios.vampirelib.blocks;
 
 import java.util.ArrayList;
@@ -38,221 +55,229 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class LeafPileBlock extends FallingBlock implements BonemealableBlock {
 
-    public static final IntegerProperty LAYERS = IntegerProperty.create("layers", 0, 8);
-    protected static final VoxelShape[] LAYERS_TO_SHAPE = new VoxelShape[]{
-        Block.box(0.0D, 0.0D, 0.0D, 16.0D, 1.0D, 16.0D),
-        Block.box(0.0D, 0.0D, 0.0D, 16.0D, 2.0D, 16.0D),
-        Block.box(0.0D, 0.0D, 0.0D, 16.0D, 4.0D, 16.0D),
-        Block.box(0.0D, 0.0D, 0.0D, 16.0D, 6.0D, 16.0D),
-        Block.box(0.0D, 0.0D, 0.0D, 16.0D, 8.0D, 16.0D),
-        Block.box(0.0D, 0.0D, 0.0D, 16.0D, 10.0D, 16.0D),
-        Block.box(0.0D, 0.0D, 0.0D, 16.0D, 12.0D, 16.0D),
-        Block.box(0.0D, 0.0D, 0.0D, 16.0D, 14.0D, 16.0D),
-        Block.box(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D)};
-    private static final float[] COLLISIONS = new float[]{0, 1.7f, 1.6f, 1.5f, 1.3f, 1.1f, 0.8f, 0.5f};
-    private final List<SimpleParticleType> particles;
-    private final boolean hasFlowers; //if it can be boneMealed
-    private final Block floweryBlock;
-    private final boolean hasThorns; //if it can hurt & make podzol
+	public static final IntegerProperty LAYERS = IntegerProperty.create("layers", 0, 8);
+	protected static final VoxelShape[] LAYERS_TO_SHAPE = new VoxelShape[]{
+			Block.box(0.0D, 0.0D, 0.0D, 16.0D, 1.0D, 16.0D),
+			Block.box(0.0D, 0.0D, 0.0D, 16.0D, 2.0D, 16.0D),
+			Block.box(0.0D, 0.0D, 0.0D, 16.0D, 4.0D, 16.0D),
+			Block.box(0.0D, 0.0D, 0.0D, 16.0D, 6.0D, 16.0D),
+			Block.box(0.0D, 0.0D, 0.0D, 16.0D, 8.0D, 16.0D),
+			Block.box(0.0D, 0.0D, 0.0D, 16.0D, 10.0D, 16.0D),
+			Block.box(0.0D, 0.0D, 0.0D, 16.0D, 12.0D, 16.0D),
+			Block.box(0.0D, 0.0D, 0.0D, 16.0D, 14.0D, 16.0D),
+			Block.box(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D)
+	};
+	private static final float[] COLLISIONS = new float[]{0, 1.7f, 1.6f, 1.5f, 1.3f, 1.1f, 0.8f, 0.5f};
+	private final List<SimpleParticleType> particles;
+	private final boolean hasFlowers; //if it can be boneMealed
+	private final Block floweryBlock;
+	private final boolean hasThorns; //if it can hurt & make podzol
 
-    public LeafPileBlock(Properties settings, boolean hasFlowers, Block floweryBlock,
-                         boolean hasThorns, List<SimpleParticleType> particles) {
-        super(settings);
-        this.registerDefaultState(this.defaultBlockState().setValue(LAYERS, 1));
-        this.hasFlowers = hasFlowers;
-        this.floweryBlock = floweryBlock;
-        this.hasThorns = hasThorns;
-        this.particles = new ArrayList<>(particles);
-    }
+	public LeafPileBlock(
+			Properties settings, boolean hasFlowers, Block floweryBlock,
+			boolean hasThorns, List<SimpleParticleType> particles
+	) {
+		super(settings);
+		this.registerDefaultState(this.defaultBlockState().setValue(LAYERS, 1));
+		this.hasFlowers = hasFlowers;
+		this.floweryBlock = floweryBlock;
+		this.hasThorns = hasThorns;
+		this.particles = new ArrayList<>(particles);
+	}
 
-    @Override
-    public int getLightBlock(BlockState state, BlockGetter world, BlockPos pos) {
-        return 1;
-    }
+	@Override
+	public int getLightBlock(BlockState state, BlockGetter world, BlockPos pos) {
+		return 1;
+	}
 
-    protected int getLayers(BlockState state) {
-        return state.getValue(LAYERS);
-    }
+	protected int getLayers(BlockState state) {
+		return state.getValue(LAYERS);
+	}
 
-    @Override
-    public void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
-        int layers = this.getLayers(state);
+	@Override
+	public void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
+		int layers = this.getLayers(state);
 
-        if (layers > 3) {
-            if (entity instanceof LivingEntity && !(entity instanceof Fox || entity instanceof Bee)) {
-                float stuck = COLLISIONS[Math.max(0, layers - 1)];
-                entity.makeStuckInBlock(state, new Vec3(stuck, 1, stuck));
+		if (layers > 3) {
+			if (entity instanceof LivingEntity && !(entity instanceof Fox || entity instanceof Bee)) {
+				float stuck = COLLISIONS[Math.max(0, layers - 1)];
+				entity.makeStuckInBlock(state, new Vec3(stuck, 1, stuck));
 
-                if (layers >= 6 && this.hasThorns) {
-                    if (!level.isClientSide && (entity.xOld != entity.getX() || entity.zOld != entity.getZ())) {
-                        if (!(entity instanceof Player player) || player.getItemBySlot(EquipmentSlot.LEGS).isEmpty()) {
+				if (layers >= 6 && this.hasThorns) {
+					if (!level.isClientSide && (entity.xOld != entity.getX() || entity.zOld != entity.getZ())) {
+						if (!(entity instanceof Player player) || player.getItemBySlot(EquipmentSlot.LEGS).isEmpty()) {
 
-                            double d = Math.abs(entity.getX() - entity.xOld);
-                            double e = Math.abs(entity.getZ() - entity.zOld);
-                            if (d >= 0.003000000026077032D || e >= 0.003000000026077032D) {
-                                entity.hurt(DamageSource.SWEET_BERRY_BUSH, 0.5F * (layers - 5));
-                            }
-                        }
-                    }
-                }
-            }
-        }
+							double d = Math.abs(entity.getX() - entity.xOld);
+							double e = Math.abs(entity.getZ() - entity.zOld);
+							if (d >= 0.003000000026077032D || e >= 0.003000000026077032D) {
+								entity.hurt(DamageSource.SWEET_BERRY_BUSH, 0.5F * (layers - 5));
+							}
+						}
+					}
+				}
+			}
+		}
 
-        //particles
-        if (layers > 0 && level.isClientSide && (entity instanceof LivingEntity && entity.getFeetBlockState().is(this))) {
+		//particles
+		if (layers > 0 && level.isClientSide &&
+				(entity instanceof LivingEntity && entity.getFeetBlockState().is(this))) {
 
-            RandomSource random = level.getRandom();
-            boolean bl = entity.xOld != entity.getX() || entity.zOld != entity.getZ();
-            if (bl && random.nextBoolean()) {
-                //double yOff = (layers < 5) ? 0.5 : 1;
-                double y = pos.getY() + LAYERS_TO_SHAPE[layers].max(Direction.Axis.Y) + 0.0625;
-                int color = Minecraft.getInstance().getBlockColors().getColor(state, level, pos, 0);
-                for (var p : particles) {
-                    level.addParticle(p,
-                        entity.getX() + Mth.randomBetween(random, -0.2f, 0.2f),
-                        y,
-                        entity.getZ() + Mth.randomBetween(random, -0.2f, 0.2f),
-                        Mth.randomBetween(random, -0.75f, -1),
-                        color,
-                        0
-                    );
-                }
-            }
-        }
-    }
+			RandomSource random = level.getRandom();
+			boolean bl = entity.xOld != entity.getX() || entity.zOld != entity.getZ();
+			if (bl && random.nextBoolean()) {
+				//double yOff = (layers < 5) ? 0.5 : 1;
+				double y = pos.getY() + LAYERS_TO_SHAPE[layers].max(Direction.Axis.Y) + 0.0625;
+				int color = Minecraft.getInstance().getBlockColors().getColor(state, level, pos, 0);
+				for (var p : particles) {
+					level.addParticle(p,
+							entity.getX() + Mth.randomBetween(random, -0.2f, 0.2f),
+							y,
+							entity.getZ() + Mth.randomBetween(random, -0.2f, 0.2f),
+							Mth.randomBetween(random, -0.75f, -1),
+							color,
+							0
+					);
+				}
+			}
+		}
+	}
 
-    @Override
-    public boolean isPathfindable(BlockState state, BlockGetter world, BlockPos pos, PathComputationType type) {
-        return switch (type) {
-            case LAND -> getLayers(state) < 5;
-            case WATER -> getLayers(state) == 0;
-            case AIR -> false;
-        };
-    }
+	@Override
+	public boolean isPathfindable(BlockState state, BlockGetter world, BlockPos pos, PathComputationType type) {
+		return switch (type) {
+			case LAND -> getLayers(state) < 5;
+			case WATER -> getLayers(state) == 0;
+			case AIR -> false;
+		};
+	}
 
-    @Override
-    public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
-        return LAYERS_TO_SHAPE[getLayers(state)];
-    }
+	@Override
+	public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
+		return LAYERS_TO_SHAPE[getLayers(state)];
+	}
 
-    @Override
-    public VoxelShape getCollisionShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
-        return Shapes.empty();
-    }
+	@Override
+	public VoxelShape getCollisionShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
+		return Shapes.empty();
+	}
 
-    @Override
-    public VoxelShape getBlockSupportShape(BlockState state, BlockGetter world, BlockPos pos) {
-        return LAYERS_TO_SHAPE[getLayers(state)];
-    }
+	@Override
+	public VoxelShape getBlockSupportShape(BlockState state, BlockGetter world, BlockPos pos) {
+		return LAYERS_TO_SHAPE[getLayers(state)];
+	}
 
-    @Override
-    public VoxelShape getVisualShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
-        return LAYERS_TO_SHAPE[getLayers(state)];
-    }
+	@Override
+	public VoxelShape getVisualShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
+		return LAYERS_TO_SHAPE[getLayers(state)];
+	}
 
-    @Override
-    public boolean useShapeForLightOcclusion(BlockState state) {
-        return true;
-    }
+	@Override
+	public boolean useShapeForLightOcclusion(BlockState state) {
+		return true;
+	}
 
-    @Override
-    public boolean canSurvive(BlockState state, LevelReader world, BlockPos pos) {
-        BlockState below = world.getBlockState(pos.below());
-        if (!below.is(Blocks.BARRIER)) {
-            if (!below.is(Blocks.HONEY_BLOCK) && !below.is(Blocks.SOUL_SAND) &&
-                !(below.getFluidState().is(Fluids.WATER) && state.getValue(LAYERS) == 0)) {
-                return below.isFaceSturdy(world, pos.below(), Direction.UP) || below.is(this) && below.getValue(LAYERS) == 8;
-            } else {
-                return true;
-            }
-        } else {
-            return false;
-        }
-    }
+	@Override
+	public boolean canSurvive(BlockState state, LevelReader world, BlockPos pos) {
+		BlockState below = world.getBlockState(pos.below());
+		if (!below.is(Blocks.BARRIER)) {
+			if (!below.is(Blocks.HONEY_BLOCK) && !below.is(Blocks.SOUL_SAND) &&
+					!(below.getFluidState().is(Fluids.WATER) && state.getValue(LAYERS) == 0)) {
+				return below.isFaceSturdy(world, pos.below(), Direction.UP) ||
+						below.is(this) && below.getValue(LAYERS) == 8;
+			} else {
+				return true;
+			}
+		} else {
+			return false;
+		}
+	}
 
-    @Override
-    public BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor world, BlockPos pos, BlockPos neighborPos) {
-        if (direction == Direction.DOWN && state.getValue(LAYERS) <= 1) {
-            state = state.setValue(LAYERS, neighborState.is(Blocks.WATER) ? 0 : 1);
-        }
-        return !state.canSurvive(world, pos) ? Blocks.AIR.defaultBlockState() : super.updateShape(state, direction, neighborState, world, pos, neighborPos);
-    }
+	@Override
+	public BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor world, BlockPos pos, BlockPos neighborPos) {
+		if (direction == Direction.DOWN && state.getValue(LAYERS) <= 1) {
+			state = state.setValue(LAYERS, neighborState.is(Blocks.WATER) ? 0 : 1);
+		}
+		return !state.canSurvive(world, pos) ? Blocks.AIR.defaultBlockState() : super.updateShape(state, direction,
+				neighborState, world,
+				pos, neighborPos);
+	}
 
-    @Override
-    public boolean canBeReplaced(BlockState state, BlockPlaceContext context) {
-        int i = state.getValue(LAYERS);
-        if (context.getItemInHand().is(this.asItem()) && i < 8 && i > 0) {
+	@Override
+	public boolean canBeReplaced(BlockState state, BlockPlaceContext context) {
+		int i = state.getValue(LAYERS);
+		if (context.getItemInHand().is(this.asItem()) && i < 8 && i > 0) {
 
-            if (context.replacingClickedOnBlock()) {
-                return context.getClickedFace() == Direction.UP;
-            } else {
-                return true;
-            }
-        } else {
-            return i < 3;
-        }
-    }
+			if (context.replacingClickedOnBlock()) {
+				return context.getClickedFace() == Direction.UP;
+			} else {
+				return true;
+			}
+		} else {
+			return i < 3;
+		}
+	}
 
-    @Override
-    public BlockState getStateForPlacement(BlockPlaceContext ctx) {
-        BlockState blockState = ctx.getLevel().getBlockState(ctx.getClickedPos());
-        if (blockState.is(this)) {
-            int i = blockState.getValue(LAYERS);
-            return blockState.setValue(LAYERS, Math.min(8, i + 1));
-        } else {
-            if (blockState.getFluidState().is(Fluids.WATER)) return null;
-            BlockState below = ctx.getLevel().getBlockState(ctx.getClickedPos().below());
-            if (below.getFluidState().is(Fluids.WATER)) {
-                if (!blockState.isAir()) return null;
-                return this.defaultBlockState().setValue(LAYERS, 0);
-            }
-            return super.getStateForPlacement(ctx);
-        }
-    }
+	@Override
+	public BlockState getStateForPlacement(BlockPlaceContext ctx) {
+		BlockState blockState = ctx.getLevel().getBlockState(ctx.getClickedPos());
+		if (blockState.is(this)) {
+			int i = blockState.getValue(LAYERS);
+			return blockState.setValue(LAYERS, Math.min(8, i + 1));
+		} else {
+			if (blockState.getFluidState().is(Fluids.WATER)) return null;
+			BlockState below = ctx.getLevel().getBlockState(ctx.getClickedPos().below());
+			if (below.getFluidState().is(Fluids.WATER)) {
+				if (!blockState.isAir()) return null;
+				return this.defaultBlockState().setValue(LAYERS, 0);
+			}
+			return super.getStateForPlacement(ctx);
+		}
+	}
 
-    @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(LAYERS);
-    }
+	@Override
+	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+		builder.add(LAYERS);
+	}
 
-    @Override
-    public boolean isValidBonemealTarget(BlockGetter world, BlockPos pos, BlockState state, boolean isClient) {
-        return this.hasFlowers;
-    }
+	@Override
+	public boolean isValidBonemealTarget(BlockGetter world, BlockPos pos, BlockState state, boolean isClient) {
+		return this.hasFlowers;
+	}
 
-    @Override
-    public boolean isBonemealSuccess(Level world, RandomSource random, BlockPos pos, BlockState state) {
-        return this.hasFlowers;
-    }
+	@Override
+	public boolean isBonemealSuccess(Level world, RandomSource random, BlockPos pos, BlockState state) {
+		return this.hasFlowers;
+	}
 
-    @Override
-    public void performBonemeal(ServerLevel world, RandomSource random, BlockPos pos, BlockState state) {
-        for (var direction : Direction.values()) {
-            if (random.nextFloat() > 0.5f) {
-                var targetPos = pos.relative(direction);
-                BlockState targetBlock = world.getBlockState(targetPos);
-                world.setBlockAndUpdate(targetPos, floweryBlock.withPropertiesOf(targetBlock));
-            }
-        }
-    }
+	@Override
+	public void performBonemeal(ServerLevel world, RandomSource random, BlockPos pos, BlockState state) {
+		for (var direction : Direction.values()) {
+			if (random.nextFloat() > 0.5f) {
+				var targetPos = pos.relative(direction);
+				BlockState targetBlock = world.getBlockState(targetPos);
+				world.setBlockAndUpdate(targetPos, floweryBlock.withPropertiesOf(targetBlock));
+			}
+		}
+	}
 
-    @Override
-    public boolean isRandomlyTicking(BlockState state) {
-        int layers = this.getLayers(state);
-        return layers > 1 && this.hasThorns;
-    }
+	@Override
+	public boolean isRandomlyTicking(BlockState state) {
+		int layers = this.getLayers(state);
+		return layers > 1 && this.hasThorns;
+	}
 
-    @Override
-    public void randomTick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
-        int layers = this.getLayers(state);
-        if (layers > 1 && random.nextFloat() < 0.02) {
-            if (this.hasThorns) {
-                BlockState below = world.getBlockState(pos.below());
-                if (below.is(Blocks.GRASS_BLOCK) || below.is(Blocks.DIRT) || below.is(Blocks.COARSE_DIRT) || below.is(Blocks.ROOTED_DIRT)) {
-                    world.setBlock(pos.below(), Blocks.PODZOL.defaultBlockState(), 2);
-                }
-            }
-        }
-    }
+	@Override
+	public void randomTick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
+		int layers = this.getLayers(state);
+		if (layers > 1 && random.nextFloat() < 0.02) {
+			if (this.hasThorns) {
+				BlockState below = world.getBlockState(pos.below());
+				if (below.is(Blocks.GRASS_BLOCK) || below.is(Blocks.DIRT) || below.is(Blocks.COARSE_DIRT) ||
+						below.is(Blocks.ROOTED_DIRT)) {
+					world.setBlock(pos.below(), Blocks.PODZOL.defaultBlockState(), 2);
+				}
+			}
+		}
+	}
 
 }

@@ -1,3 +1,20 @@
+/*
+ * Copyright (c) 2022 OliviaTheVampire
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package io.github.vampirestudios.vampirelib.api;
 
 import net.minecraft.sounds.SoundEvent;
@@ -10,7 +27,7 @@ import net.fabricmc.fabric.api.registry.OxidizableBlocksRegistry;
 
 /**
  * This class is used to hold the link between two different blocks (See for example {@link OxidizableBlocksRegistry#registerOxidizableBlockPair(Block, Block)} and
- * {@link OxidizableBlocksRegistry#registerWaxableBlockPair(Block, Block)})
+ * {@link OxidizableBlocksRegistry#registerWaxableBlockPair(Block, Block)}).
  **/
 public class ConvertibleBlockPair {
 	private final Block original;
@@ -43,7 +60,7 @@ public class ConvertibleBlockPair {
 	 * @param original        - The original block which will be converted
 	 * @param converted       - The block that the original one will be converted to
 	 * @param conversionItems - The item that is used to convert the original block into the converted block
-	 * @param droppedItem    - The item that is dropped when converting the block
+	 * @param droppedItem     - The item that is dropped when converting the block
 	 **/
 	public ConvertibleBlockPair(Block original, Block converted, ConversionItem conversionItems, Item droppedItem) {
 		this(original, converted, conversionItems, null, null, droppedItem);
@@ -54,7 +71,7 @@ public class ConvertibleBlockPair {
 	 * @param converted       - The block that the original one will be converted to
 	 * @param conversionItems - The item that is used to convert the original block into the converted block
 	 * @param sound           - The item that is used to reverse the converted block into the original block
-	 * @param droppedItem    - The item that is dropped when converting the block
+	 * @param droppedItem     - The item that is dropped when converting the block
 	 **/
 	public ConvertibleBlockPair(Block original, Block converted, ConversionItem conversionItems, SoundEvent sound, Item droppedItem) {
 		this(original, converted, conversionItems, null, sound, droppedItem);
@@ -97,7 +114,8 @@ public class ConvertibleBlockPair {
 	 * @param converted      - The block that the original one will be converted to
 	 * @param conversionItem - The item that is used to convert the original block into the converted block
 	 * @param reversingItem  - The item that is used to reverse the converted block into the original block
-	 * @param sound          - The item that is used to reverse the converted block into the original block
+	 * @param sound          - The sound that will be played when converting the blocks
+	 * @param droppedItem    - The item that will be dropped when converting the original block into the converted block
 	 **/
 	public ConvertibleBlockPair(Block original, Block converted, ConversionItem conversionItem, ConversionItem reversingItem, SoundEvent sound, Item droppedItem) {
 		this.original = original;
@@ -108,36 +126,36 @@ public class ConvertibleBlockPair {
 		this.droppedItem = droppedItem;
 	}
 
+	public SoundEvent getSound() {
+		return this.sound;
+	}
+
 	public void setSound(SoundEvent sound) {
 		this.sound = sound;
 	}
 
-	public SoundEvent getSound() {
-		return sound;
-	}
-
 	public Block getOriginal() {
-		return original;
+		return this.original;
 	}
 
 	public Block getConverted() {
-		return converted;
+		return this.converted;
 	}
 
 	public ConversionItem getConversionItem() {
-		return conversionItem;
+		return this.conversionItem;
 	}
 
 	public ConversionItem getReversingItem() {
-		return reversingItem;
+		return this.reversingItem;
+	}
+
+	public Item getDroppedItem() {
+		return this.droppedItem;
 	}
 
 	public void setDroppedItem(Item droppedItem) {
 		this.droppedItem = droppedItem;
-	}
-
-	public Item getDroppedItem() {
-		return droppedItem;
 	}
 
 	public record ConversionItem(TagKey<Item> tag, Item item) {
@@ -157,12 +175,10 @@ public class ConvertibleBlockPair {
 
 		// Call this by parsing the stack in hand
 		public boolean matches(ItemStack stack) {
-			if (this.tag != null) {
-				return stack.is(this.tag);
-			} else {
+			if (this.tag != null) return stack.is(this.tag);
+			else {
 				return stack.is(this.item);
 			}
 		}
 	}
-
 }

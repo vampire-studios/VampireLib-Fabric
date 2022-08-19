@@ -1,10 +1,41 @@
-# VampireLib
+![Banner](https://bisecthosting.com/images/CF/VampLib/BH_VL_Title.png "Banner")
+# Library mod for all Vampire Studios Fabric mods.
+![](https://bisecthosting.com/images/CF/VampLib/BH_VL_Overview.png "")
 
-VampireLib is a library made by and used by Vampire Studios. It has a lot of utiility stuff to make a lot of things easier and also some few vanilla tweaks like making the structure block support 1024x1024x1024 instead of 48x48x48
+Features this libmod allows for:
 
-**Some features from the mod**
-- Making structure blocks support 1024x1024x1034
-- Wood type registry with all optional blocks
-- Stone type registry with all optional blocks
-- Entity registry
-- Datagen api
+- Custom Villager professions (with custom workstations and trades) and villager
+biome types
+- A lot of base classes
+  - Some GUI utils classes
+- Registry Helper class to make it easier to register things
+- Wood Registry for registering wood types, with possibility to choose which
+blocks, or if you want the full wood set. Also allows you to add upon already
+existing wood types.
+- Wood Type registry + a way to get specific ones or loop through all registered
+ones.
+- More Datagen classes
+- Convertible Blocks system, with customizable items for converting and
+reverting, even custom sounds and item drops.
+- WIP Block Spreading API
+- Item Group Sorting, allows you to put your items together with specific
+vanilla items instead of at the bottom at the tab.
+- More Events
+- Ported Forge tags to Quilt
+- Module System, allows you to divide your mod up in modules where you can use
+config options to choose which is enabled and disabled.
+- Lots of base classes for blocks.
+- Support for emissive textures.
+
+![](https://bisecthosting.com/images/CF/VampLib/BH_VL_Faq.png "")
+
+## Can you port this to forge?
+No, since I will not work on forge
+
+## Can I use this in my project?
+You can include this as a library but you're not not allowed to distribute any of the code and say it's yours
+
+![Community](https://bisecthosting.com/images/CF/VampLib/BH_VL_Community.png "Community")
+![Discord](https://img.shields.io/discord/901129108275216392?logo=Discord&amp;style=for-the-badge)
+
+![PromoCode](https://bisecthosting.com/images/CF/VampLib/BH_VL_BisectPromo.png "Promo Code")

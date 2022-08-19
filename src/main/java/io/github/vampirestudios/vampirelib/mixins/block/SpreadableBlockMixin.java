@@ -1,3 +1,20 @@
+/*
+ * Copyright (c) 2022 OliviaTheVampire
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package io.github.vampirestudios.vampirelib.mixins.block;
 
 import org.spongepowered.asm.mixin.Mixin;
@@ -40,7 +57,8 @@ public abstract class SpreadableBlockMixin extends SnowyDirtBlock implements Spr
 		} else if (blockState.getFluidState().getAmount() == 8) {
 			return false;
 		} else {
-			int i = LayerLightEngine.getLightBlockInto(levelReader, state, pos, blockState, blockPos, Direction.UP, blockState.getLightBlock(levelReader, blockPos));
+			int i = LayerLightEngine.getLightBlockInto(levelReader, state, pos, blockState, blockPos, Direction.UP,
+					blockState.getLightBlock(levelReader, blockPos));
 			return i < levelReader.getMaxLightLevel();
 		}
 	}
@@ -54,14 +72,18 @@ public abstract class SpreadableBlockMixin extends SnowyDirtBlock implements Spr
 	/**
 	 * @author OliviaTheVampire
 	 */
-	@Inject(method = "randomTick", at=@At("HEAD"), cancellable = true)
+	@Inject(method = "randomTick", at = @At("HEAD"), cancellable = true)
 	public void randomTick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random, CallbackInfo ci) {
 		if (!canBeGrass(state, world, pos)) {
-			if (!world.hasChunksAt(pos.offset(-1, -1, -1), pos.offset(1, 1, 1))) return; // Forge: prevent loading unloaded chunks when checking neighbor's light and spreading
-			if (SpreadBehaviors.canSpread(state, BlockSpreadingType.REVERT)) //Forge: switch to use SpreadBehaviors API, so this class can be used more easily
-				world.setBlockAndUpdate(pos, SpreadBehaviors.getSpreadState(state, world, pos, BlockSpreadingType.REVERT));
+			if (!world.hasChunksAt(pos.offset(-1, -1, -1), pos.offset(1, 1, 1)))
+				return; // Forge: prevent loading unloaded chunks when checking neighbor's light and spreading
+			if (SpreadBehaviors.getSpreadingBehavior(state.getBlock(), BlockSpreadingType.REVERT) !=
+					null) //Forge: switch to use SpreadBehaviors API, so this class can be used more easily
+				world.setBlockAndUpdate(pos,
+						SpreadBehaviors.getSpreadState(state, world, pos, BlockSpreadingType.REVERT));
 		} else {
-			if (!world.hasChunksAt(pos.offset(-3, -3, -3), pos.offset(3, 3, 3))) return; // Forge: prevent loading unloaded chunks when checking neighbor's light and spreading
+			if (!world.hasChunksAt(pos.offset(-3, -3, -3), pos.offset(3, 3, 3)))
+				return; // Forge: prevent loading unloaded chunks when checking neighbor's light and spreading
 			if (world.getLightEmission(pos.above()) >= 9) {
 				this.spread(state, world, pos, random, 4, 1);
 				BlockState blockState = this.defaultBlockState();
@@ -69,7 +91,9 @@ public abstract class SpreadableBlockMixin extends SnowyDirtBlock implements Spr
 				for (int i = 0; i < 4; ++i) {
 					BlockPos blockPos = pos.offset(random.nextInt(3) - 1, random.nextInt(5) - 3, random.nextInt(3) - 1);
 					if (world.getBlockState(blockPos).is(Blocks.DIRT) && canPropagate(blockState, world, blockPos)) {
-						world.setBlockAndUpdate(blockPos, blockState.setValue(SNOWY, world.getBlockState(blockPos.above()).is(Blocks.SNOW)));
+						world.setBlockAndUpdate(blockPos, blockState.setValue(SNOWY,
+								world.getBlockState(blockPos.above())
+										.is(Blocks.SNOW)));
 					}
 				}
 			}

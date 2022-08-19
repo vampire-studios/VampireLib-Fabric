@@ -1,3 +1,20 @@
+/*
+ * Copyright (c) 2022 OliviaTheVampire
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package io.github.vampirestudios.vampirelib.api.callbacks;
 
 import com.mojang.blaze3d.shaders.FogShape;
@@ -12,27 +29,33 @@ import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
 
 @Environment(EnvType.CLIENT)
-public class FogEvents {
-	public static final Event<SetDensity> SET_DENSITY = EventFactory.createArrayBacked(SetDensity.class, callbacks -> (info, density) -> {
-		for (SetDensity callback : callbacks) {
-			return callback.setDensity(info, density);
-		}
-		return density;
-	});
+public final class FogEvents {
+	public static final Event<SetDensity> SET_DENSITY = EventFactory.createArrayBacked(SetDensity.class,
+			callbacks -> (info, density) -> {
+				for (SetDensity callback : callbacks) {
+					return callback.setDensity(info, density);
+				}
 
-	public static final Event<SetColor> SET_COLOR = EventFactory.createArrayBacked(SetColor.class, callbacks -> (data, partialTicks) -> {
-		for (SetColor callback : callbacks) {
-			callback.setColor(data, partialTicks);
-		}
-	});
+				return density;
+			});
 
-	public static final Event<RenderFog> RENDER_FOG = EventFactory.createArrayBacked(RenderFog.class, callbacks -> (mode, type, camera, partialTick, renderDistance, nearDistance, farDistance, shape, fogData) -> {
-		for (RenderFog callback : callbacks) {
-			if (callback.onFogRender(mode, type, camera, partialTick, renderDistance, nearDistance, farDistance, shape, fogData))
-				return true;
-		}
-		return false;
-	});
+	public static final Event<SetColor> SET_COLOR = EventFactory.createArrayBacked(SetColor.class,
+			callbacks -> (data, partialTicks) -> {
+				for (SetColor callback : callbacks) {
+					callback.setColor(data, partialTicks);
+				}
+			});
+
+	public static final Event<RenderFog> RENDER_FOG = EventFactory.createArrayBacked(RenderFog.class,
+			callbacks -> (mode, type, camera, partialTick, renderDistance, nearDistance, farDistance, shape, fogData) -> {
+				for (RenderFog callback : callbacks) {
+					if (callback.onFogRender(mode, type, camera, partialTick, renderDistance, nearDistance, farDistance, shape, fogData)) {
+						return true;
+					}
+				}
+
+				return false;
+			});
 
 	private FogEvents() {
 	}
@@ -58,41 +81,41 @@ public class FogEvents {
 		private FogShape fogShape;
 
 		public FogData(float nearPlaneDistance, float farPlaneDistance, FogShape fogShape) {
-			setFarPlaneDistance(farPlaneDistance);
-			setNearPlaneDistance(nearPlaneDistance);
-			setFogShape(fogShape);
+			this.setFarPlaneDistance(farPlaneDistance);
+			this.setNearPlaneDistance(nearPlaneDistance);
+			this.setFogShape(fogShape);
 		}
 
 		public float getFarPlaneDistance() {
-			return farPlaneDistance;
-		}
-
-		public float getNearPlaneDistance() {
-			return nearPlaneDistance;
-		}
-
-		public FogShape getFogShape() {
-			return fogShape;
+			return this.farPlaneDistance;
 		}
 
 		public void setFarPlaneDistance(float distance) {
-			farPlaneDistance = distance;
+			this.farPlaneDistance = distance;
+		}
+
+		public float getNearPlaneDistance() {
+			return this.nearPlaneDistance;
 		}
 
 		public void setNearPlaneDistance(float distance) {
-			nearPlaneDistance = distance;
+			this.nearPlaneDistance = distance;
+		}
+
+		public FogShape getFogShape() {
+			return this.fogShape;
 		}
 
 		public void setFogShape(FogShape shape) {
-			fogShape = shape;
+			this.fogShape = shape;
 		}
 
 		public void scaleFarPlaneDistance(float factor) {
-			farPlaneDistance *= factor;
+			this.farPlaneDistance *= factor;
 		}
 
 		public void scaleNearPlaneDistance(float factor) {
-			nearPlaneDistance *= factor;
+			this.nearPlaneDistance *= factor;
 		}
 	}
 
@@ -110,27 +133,27 @@ public class FogEvents {
 		}
 
 		public Camera getCamera() {
-			return camera;
+			return this.camera;
 		}
 
 		public float getRed() {
-			return red;
-		}
-
-		public float getGreen() {
-			return green;
-		}
-
-		public float getBlue() {
-			return blue;
+			return this.red;
 		}
 
 		public void setRed(float red) {
 			this.red = red;
 		}
 
+		public float getGreen() {
+			return this.green;
+		}
+
 		public void setGreen(float green) {
 			this.green = green;
+		}
+
+		public float getBlue() {
+			return this.blue;
 		}
 
 		public void setBlue(float blue) {

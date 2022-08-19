@@ -1,17 +1,18 @@
 /*
- * Copyright (c) 2016, 2017, 2018, 2019 FabricMC
+ * Copyright (c) 2022 OliviaTheVampire
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package io.github.vampirestudios.vampirelib.api.datagen;
@@ -22,122 +23,59 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import com.google.gson.JsonObject;
-import org.jetbrains.annotations.NotNull;
 
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.effect.MobEffect;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.level.block.Block;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 
 /**
+ * Extend this class and implement {@link FabricLanguageProvider#generateLanguages(LanguageConsumer)}.
+ * Make sure to use {@link FabricLanguageProvider#FabricLanguageProvider(FabricDataGenerator, String)}  FabricLanguageProvider} to declare what language code is being generated if it isn't en_us
+ *
  * <p>Register an instance of the class with {@link FabricDataGenerator#addProvider} in a {@link net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint}
  */
 public abstract class FabricLanguageProvider implements DataProvider {
-    private final Map<String, String> data = new TreeMap<>();
-    protected final FabricDataGenerator dataGenerator;
-    private final String modId;
-    private final String locale;
+	protected final FabricDataGenerator dataGenerator;
+	private final String languageCode;
 
-    protected FabricLanguageProvider(FabricDataGenerator dataGenerator, String locale) {
-        this.dataGenerator = dataGenerator;
-        this.modId = dataGenerator.getModId();
-        this.locale = locale;
-    }
+	protected FabricLanguageProvider(FabricDataGenerator dataGenerator) {
+		this(dataGenerator, "en_us");
+	}
+
+	protected FabricLanguageProvider(FabricDataGenerator dataGenerator, String languageCode) {
+		this.dataGenerator = dataGenerator;
+		this.languageCode = languageCode;
+	}
 
 	/**
-	 * Registers all translations to be placed inside the lang file.
+	 * Implement this method to register languages.
+	 *
+	 * <p>Call {@link LanguageConsumer#addLanguage(String, String)} to add a language entry.
 	 */
-	protected abstract void addTranslations();
+	public abstract void generateLanguages(LanguageConsumer languageConsumer);
 
 	@Override
-	public void run(@NotNull CachedOutput cache) throws IOException {
-		addTranslations();
-		if (!data.isEmpty())
-			save(cache, data, this.dataGenerator.getOutputFolder().resolve("assets/" + modId + "/lang/" + locale + ".json"));
+	public void run(CachedOutput writer) throws IOException {
+		TreeMap<String, String> languageEntries = new TreeMap<>();
+
+		this.generateLanguages(languageEntries::put);
+
+		JsonObject langEntryJson = new JsonObject();
+
+		for (Map.Entry<String, String> entry : languageEntries.entrySet()) {
+			langEntryJson.addProperty(entry.getKey(), entry.getValue());
+		}
+
+		DataProvider.saveStable(writer, langEntryJson, this.getLangFilePath(this.languageCode));
+	}
+
+	private Path getLangFilePath(String code) {
+		return this.dataGenerator.getOutputFolder().resolve("assets/%s/lang/%s.json".formatted(this.dataGenerator.getModId(), code));
 	}
 
 	@Override
 	public String getName() {
-		return "Languages: " + locale;
+		return "Languages";
 	}
-
-	private void save(CachedOutput cache, Object object, Path target) throws IOException {
-        // TODO: DataProvider.saveStable handles the caching and hashing already, but creating the JSON Object this way seems unreliable. -C
-        JsonObject json = new JsonObject();
-        for (Map.Entry<String, String> pair : data.entrySet()) {
-            json.addProperty(pair.getKey(), pair.getValue());
-        }
-        DataProvider.saveStable(cache, json, target);
-	}
-
-    public void addBlock(Block key, String name) {
-        add(key, name);
-    }
-
-    public void add(Block key, String name) {
-        add(key.getDescriptionId(), name);
-    }
-
-    public void addItem(Item key, String name) {
-        add(key, name);
-    }
-
-    public void add(Item key, String name) {
-        add(key.getDescriptionId(), name);
-    }
-
-    public void addItemStack(ItemStack key, String name) {
-        add(key, name);
-    }
-
-    public void add(ItemStack key, String name) {
-        add(key.getDescriptionId(), name);
-    }
-
-    public void addEnchantment(Enchantment key, String name) {
-        add(key, name);
-    }
-
-    public void add(Enchantment key, String name) {
-        add(key.getDescriptionId(), name);
-    }
-
-    public void addBiome(ResourceKey<Biome> key, String name) {
-        add(key.location(), name);
-    }
-
-    public void add(ResourceLocation key, String name) {
-        add("biome." + key.getNamespace() + "." + key.getPath(), name);
-    }
-
-    public void addEffect(MobEffect key, String name) {
-        add(key, name);
-    }
-
-    public void add(MobEffect key, String name) {
-        add(key.getDescriptionId(), name);
-    }
-
-    public void addEntityType(EntityType<?> key, String name) {
-        add(key, name);
-    }
-
-    public void add(EntityType<?> key, String name) {
-        add(key.getDescriptionId(), name);
-    }
-
-    public void add(String key, String value) {
-        if (data.put(key, value) != null)
-            throw new IllegalStateException("Duplicate translation key " + key);
-    }
-
 }
