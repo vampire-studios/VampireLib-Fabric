@@ -1,4 +1,4 @@
-// 1.19.1	2022-08-09T20:32:41.1414793	Tags for minecraft:block
+// 1.19.2	2022-08-31T10:50:13.4610277	Tags for minecraft:block
 8a23702b05296c8af5014d6aa6e9265ded85c7d9 data\c\tags\blocks\enderman_place_on_blacklist.json
 2a58a8ad3ea9c111800f2c38b43b54fbb07d61ac data\c\tags\blocks\glass\silica.json
 4b4e91f8840d5fd5c2ddfa8f188976667e19b6df data\c\tags\blocks\glass\orange.json
@@ -37,6 +37,7 @@ e8e451a369b002abae37518fe592ebfa5effb981 data\c\tags\blocks\glass\black.json
 e8019413db92efbc829c6f0dc5436f7363e1e48a data\c\tags\blocks\glass_panes\magenta.json
 99b94b55b058ee89dbbfbac44968c831e424fe3f data\c\tags\blocks\glass_panes\light_gray.json
 9212ca84a2e8b19649d6bb4df0984a251cf676af data\c\tags\blocks\glass\light_blue.json
+871c42ea5ae1ed6b00f81c05446212ded927be24 data\c\tags\blocks\bookshelves.json
 fcb8220d6848b7b43390e98a397861b6656db5c6 data\c\tags\blocks\fences\nether_brick.json
 465b157e1dffa0e1fa6e244bd77468b042746b65 data\c\tags\blocks\sand.json
 53b6a113044241506dbee92c003a5ac3951df2c8 data\c\tags\blocks\glass\tinted.json
@@ -105,7 +106,7 @@ b7aab0b81dfdb3b2d0f09d04c2c2264cd058ea19 data\c\tags\blocks\storage_blocks\raw_i
 3e84a1482d1a3db133d5cf04e52e875491ecec8f data\c\tags\blocks\sand\red.json
 2b2f6acd794bb06fcdf2e3b928dfdc62f9f3d193 data\c\tags\blocks\ores_in_ground\stone.json
 b99fcb3584bb2ff50656a755bd12ccec41149993 data\c\tags\blocks\stone.json
-ceed1c78dc6bf9b4d132633252be855d364fbbd0 data\c\tags\blocks\fence_gates\wooden.json
+467a91f04ec3e9de1ac9e13c62b5379e31cfa467 data\c\tags\blocks\fence_gates\wooden.json
 219ec67757d585474ba0a2791ddaf5e8210711e9 data\c\tags\blocks\glass\cyan.json
 cf79e4cfa53bf431fbfe218fac590e9f526ef044 data\c\tags\blocks\storage_blocks.json
 b158ef647f8a7a9718634db0274230ea374bbb13 data\c\tags\blocks\storage_blocks\raw_copper.json

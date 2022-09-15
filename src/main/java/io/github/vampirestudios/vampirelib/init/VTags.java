@@ -41,6 +41,7 @@ public class VTags {
 
 		public static final TagKey<Block> BARRELS_WOODEN = tag("barrels/wooden");
 		public static final TagKey<Block> BARRELS = tag("barrels");
+		public static final TagKey<Block> BOOKSHELVES = tag("bookshelves");
 		public static final TagKey<Block> CHESTS_ENDER = tag("chests/ender");
 		public static final TagKey<Block> CHESTS_TRAPPED = tag("chests/trapped");
 		public static final TagKey<Block> CHESTS_WOODEN = tag("chests/wooden");
@@ -630,6 +631,9 @@ public class VTags {
 		public static final TagKey<Biome> IS_COLD_NETHER = tag("is_cold/nether");
 		public static final TagKey<Biome> IS_COLD_END = tag("is_cold/end");
 
+		public static final TagKey<Biome> IS_TEMPERATE_OVERWORLD = tag("is_temperate/overworld");
+		public static final TagKey<Biome> IS_TEMPERATE = tag("is_temperate");
+
 		public static final TagKey<Biome> IS_SPARSE = tag("is_sparse");
 		public static final TagKey<Biome> IS_SPARSE_OVERWORLD = tag("is_sparse/overworld");
 		public static final TagKey<Biome> IS_SPARSE_NETHER = tag("is_sparse/nether");
@@ -669,6 +673,8 @@ public class VTags {
 		public static final TagKey<Biome> IS_VOID = tag("is_void");
 		public static final TagKey<Biome> IS_UNDERGROUND = tag("is_underground");
 
+		public static final TagKey<Biome> IS_DESERT = tag("is_desert");
+
 		public static final TagKey<Biome> IS_CAVE = tag("is_cave");
 		public static final TagKey<Biome> IS_PEAK = tag("is_peak");
 		public static final TagKey<Biome> IS_SLOPE = tag("is_slope");
@@ -676,7 +682,6 @@ public class VTags {
 
 		public static final TagKey<Biome> IS_GRASSLAND = tag("is_grassland");
 		public static final TagKey<Biome> IS_ICY = tag("is_icy");
-		public static final TagKey<Biome> IS_DESERT = tag("is_desert");
 		public static final TagKey<Biome> IS_OUTER_END = tag("is_outer_end");
 
 		public static final TagKey<Biome> WITH_DEFAULT_MONSTER_SPAWNS = tag("with_default_monster_spawns");

@@ -20,6 +20,7 @@ package io.github.vampirestudios.vampirelib;
 import static io.github.vampirestudios.vampirelib.VampireLib.TEST_CONTENT_ENABLED;
 import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.BARRELS;
 import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.BARRELS_WOODEN;
+import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.BOOKSHELVES;
 import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.CHESTS;
 import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.CHESTS_ENDER;
 import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.CHESTS_TRAPPED;
@@ -455,12 +456,13 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
 
 		@Override
 		protected void generateTags() {
-			tagCustom(BARRELS_WOODEN).add(Blocks.BARREL);
 			tagCustom(BARRELS).addTag(BARRELS_WOODEN);
+			tagCustom(BARRELS_WOODEN).add(Blocks.BARREL);
+			tag(BOOKSHELVES).add(Blocks.BOOKSHELF);
+			tagCustom(CHESTS).addTags(CHESTS_ENDER, CHESTS_TRAPPED, CHESTS_WOODEN);
 			tagCustom(CHESTS_ENDER).add(Blocks.ENDER_CHEST);
 			tagCustom(CHESTS_TRAPPED).add(Blocks.TRAPPED_CHEST);
 			tagCustom(CHESTS_WOODEN).add(Blocks.CHEST, Blocks.TRAPPED_CHEST);
-			tagCustom(CHESTS).addTags(CHESTS_ENDER, CHESTS_TRAPPED, CHESTS_WOODEN);
 			tag(COBBLESTONE).addTag(COBBLESTONE_NORMAL).addTag(COBBLESTONE_INFESTED).addTag(COBBLESTONE_MOSSY)
 					.addTag(COBBLESTONE_DEEPSLATE);
 			tag(COBBLESTONE_NORMAL).add(Blocks.COBBLESTONE);
@@ -474,7 +476,7 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
 			tag(FENCE_GATES).addTag(FENCE_GATES_WOODEN);
 			tag(FENCE_GATES_WOODEN).add(Blocks.OAK_FENCE_GATE, Blocks.SPRUCE_FENCE_GATE, Blocks.BIRCH_FENCE_GATE,
 					Blocks.JUNGLE_FENCE_GATE, Blocks.ACACIA_FENCE_GATE, Blocks.DARK_OAK_FENCE_GATE,
-					Blocks.CRIMSON_FENCE_GATE, Blocks.WARPED_FENCE_GATE);
+					Blocks.CRIMSON_FENCE_GATE, Blocks.WARPED_FENCE_GATE, Blocks.MANGROVE_FENCE_GATE);
 			tagCustom(FENCES).addTags(FENCES_NETHER_BRICK, FENCES_WOODEN);
 			tag(FENCES_NETHER_BRICK).add(Blocks.NETHER_BRICK_FENCE);
 			getOrCreateTagBuilder(FENCES_WOODEN).forceAddTag(BlockTags.WOODEN_FENCES);
@@ -615,8 +617,8 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
 
 		private void addColored(Consumer<Block> consumer, TagKey<Block> group, String pattern) {
 			String prefix = group.location().getPath().toUpperCase(Locale.ENGLISH) + '_';
-			for (DyeColor color : DyeColor.values()) {
-				ResourceLocation key = new ResourceLocation("minecraft", pattern.replace("{color}", color.getName()));
+			for (DyeColor color  : DyeColor.values()) {
+				ResourceLocation key = new ResourceLocation("minecraft", pattern.replace("{color}",  color.getName()));
 				TagKey<Block> tag = getForgeTag(prefix + color.getName());
 				Block block = Registry.BLOCK.get(key);
 				if (block == Blocks.AIR)
@@ -825,24 +827,24 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
 					.add(Biomes.THE_END, Biomes.SMALL_END_ISLANDS, Biomes.END_BARRENS, Biomes.END_MIDLANDS, Biomes.END_HIGHLANDS);
 //            tag(BiomeTags.IS_END).addTag(VTags.Biomes.END);
 
-			tag(Biomes.PLAINS, VTags.Biomes.IS_PLAINS);
-			tag(Biomes.DESERT, VTags.Biomes.IS_HOT_OVERWORLD, VTags.Biomes.IS_DRY_OVERWORLD, VTags.Biomes.IS_SANDY);
+			tag(Biomes.PLAINS, VTags.Biomes.IS_PLAINS, VTags.Biomes.IS_TEMPERATE_OVERWORLD);
+			tag(Biomes.DESERT, VTags.Biomes.IS_HOT_OVERWORLD, VTags.Biomes.IS_DRY_OVERWORLD, VTags.Biomes.IS_SANDY, VTags.Biomes.IS_DESERT);
 			tag(Biomes.TAIGA, VTags.Biomes.IS_COLD_OVERWORLD, VTags.Biomes.IS_CONIFEROUS);
-			tag(Biomes.SWAMP, VTags.Biomes.IS_WET_OVERWORLD, VTags.Biomes.IS_SWAMP);
+			tag(Biomes.SWAMP, VTags.Biomes.IS_WET_OVERWORLD, VTags.Biomes.IS_SWAMP, VTags.Biomes.IS_TEMPERATE_OVERWORLD);
 			tag(Biomes.NETHER_WASTES, VTags.Biomes.IS_HOT_NETHER, VTags.Biomes.IS_DRY_NETHER);
 			tag(Biomes.THE_END, VTags.Biomes.IS_COLD_END, VTags.Biomes.IS_DRY_END);
 			tag(Biomes.FROZEN_OCEAN, VTags.Biomes.IS_COLD_OVERWORLD, VTags.Biomes.IS_SNOWY);
 			tag(Biomes.FROZEN_RIVER, VTags.Biomes.IS_COLD_OVERWORLD, VTags.Biomes.IS_SNOWY);
 			tag(Biomes.SNOWY_PLAINS, VTags.Biomes.IS_COLD_OVERWORLD, VTags.Biomes.IS_SNOWY, VTags.Biomes.IS_WASTELAND,
 					VTags.Biomes.IS_PLAINS);
-			tag(Biomes.MUSHROOM_FIELDS, VTags.Biomes.IS_MUSHROOM, VTags.Biomes.IS_RARE);
+			tag(Biomes.MUSHROOM_FIELDS, VTags.Biomes.IS_MUSHROOM, VTags.Biomes.IS_RARE, VTags.Biomes.IS_TEMPERATE_OVERWORLD);
 			tag(Biomes.JUNGLE, VTags.Biomes.IS_HOT_OVERWORLD, VTags.Biomes.IS_WET_OVERWORLD,
 					VTags.Biomes.IS_DENSE_OVERWORLD);
 			tag(Biomes.SPARSE_JUNGLE, VTags.Biomes.IS_HOT_OVERWORLD, VTags.Biomes.IS_WET_OVERWORLD,
 					VTags.Biomes.IS_RARE);
-			tag(Biomes.BEACH, VTags.Biomes.IS_WET_OVERWORLD, VTags.Biomes.IS_SANDY);
+			tag(Biomes.BEACH, VTags.Biomes.IS_WET_OVERWORLD, VTags.Biomes.IS_SANDY, VTags.Biomes.IS_TEMPERATE_OVERWORLD);
 			tag(Biomes.SNOWY_BEACH, VTags.Biomes.IS_COLD_OVERWORLD, VTags.Biomes.IS_SNOWY);
-			tag(Biomes.DARK_FOREST, VTags.Biomes.IS_SPOOKY, VTags.Biomes.IS_DENSE_OVERWORLD);
+			tag(Biomes.DARK_FOREST, VTags.Biomes.IS_SPOOKY, VTags.Biomes.IS_DENSE_OVERWORLD, VTags.Biomes.IS_TEMPERATE_OVERWORLD);
 			tag(Biomes.SNOWY_TAIGA, VTags.Biomes.IS_COLD_OVERWORLD, VTags.Biomes.IS_CONIFEROUS, VTags.Biomes.IS_SNOWY);
 			tag(Biomes.OLD_GROWTH_PINE_TAIGA, VTags.Biomes.IS_COLD_OVERWORLD, VTags.Biomes.IS_CONIFEROUS);
 			tag(Biomes.WINDSWEPT_FOREST, VTags.Biomes.IS_SPARSE_OVERWORLD);
@@ -852,7 +854,7 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
 			tag(Biomes.BADLANDS, VTags.Biomes.IS_SANDY, VTags.Biomes.IS_DRY_OVERWORLD);
 			tag(Biomes.WOODED_BADLANDS, VTags.Biomes.IS_SANDY, VTags.Biomes.IS_DRY_OVERWORLD,
 					VTags.Biomes.IS_SPARSE_OVERWORLD, VTags.Biomes.IS_SLOPE, VTags.Biomes.IS_PLATEAU);
-			tag(Biomes.MEADOW, VTags.Biomes.IS_PLAINS, VTags.Biomes.IS_PLATEAU, VTags.Biomes.IS_SLOPE);
+			tag(Biomes.MEADOW, VTags.Biomes.IS_PLAINS, VTags.Biomes.IS_PLATEAU, VTags.Biomes.IS_SLOPE, VTags.Biomes.IS_TEMPERATE_OVERWORLD);
 			tag(Biomes.GROVE, VTags.Biomes.IS_COLD_OVERWORLD, VTags.Biomes.IS_CONIFEROUS, VTags.Biomes.IS_SNOWY,
 					VTags.Biomes.IS_SLOPE);
 			tag(Biomes.SNOWY_SLOPES, VTags.Biomes.IS_SPARSE_OVERWORLD, VTags.Biomes.IS_SNOWY, VTags.Biomes.IS_SLOPE);
@@ -866,11 +868,13 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
 			tag(VTags.Biomes.IS_COLD_OVERWORLD, Biomes.COLD_OCEAN, Biomes.DEEP_COLD_OCEAN, Biomes.DEEP_FROZEN_OCEAN,
 					Biomes.SNOWY_SLOPES, Biomes.JAGGED_PEAKS);
 			tag(Biomes.THE_VOID, VTags.Biomes.IS_VOID);
-			tag(Biomes.SUNFLOWER_PLAINS, VTags.Biomes.IS_PLAINS, VTags.Biomes.IS_RARE);
+			tag(Biomes.FOREST, VTags.Biomes.IS_TEMPERATE_OVERWORLD);
+			tag(Biomes.SUNFLOWER_PLAINS, VTags.Biomes.IS_PLAINS, VTags.Biomes.IS_RARE, VTags.Biomes.IS_TEMPERATE_OVERWORLD);
 			tag(Biomes.WINDSWEPT_GRAVELLY_HILLS, VTags.Biomes.IS_SPARSE_OVERWORLD, VTags.Biomes.IS_RARE);
 			tag(Biomes.FLOWER_FOREST, VTags.Biomes.IS_RARE);
 			tag(Biomes.ICE_SPIKES, VTags.Biomes.IS_COLD_OVERWORLD, VTags.Biomes.IS_SNOWY, VTags.Biomes.IS_RARE);
-			tag(Biomes.OLD_GROWTH_BIRCH_FOREST, VTags.Biomes.IS_DENSE_OVERWORLD, VTags.Biomes.IS_RARE);
+			tag(Biomes.BIRCH_FOREST, VTags.Biomes.IS_TEMPERATE_OVERWORLD, VTags.Biomes.IS_DENSE_OVERWORLD);
+			tag(Biomes.OLD_GROWTH_BIRCH_FOREST, VTags.Biomes.IS_DENSE_OVERWORLD, VTags.Biomes.IS_RARE, VTags.Biomes.IS_TEMPERATE_OVERWORLD);
 			tag(Biomes.OLD_GROWTH_SPRUCE_TAIGA, VTags.Biomes.IS_DENSE_OVERWORLD, VTags.Biomes.IS_RARE);
 			tag(Biomes.WINDSWEPT_SAVANNA, VTags.Biomes.IS_HOT_OVERWORLD, VTags.Biomes.IS_DRY_OVERWORLD,
 					VTags.Biomes.IS_SPARSE_OVERWORLD, VTags.Biomes.IS_RARE);
@@ -886,16 +890,16 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
 			tag(Biomes.CRIMSON_FOREST, VTags.Biomes.IS_HOT_NETHER, VTags.Biomes.IS_DRY_NETHER);
 			tag(Biomes.WARPED_FOREST, VTags.Biomes.IS_HOT_NETHER, VTags.Biomes.IS_DRY_NETHER);
 			tag(Biomes.BASALT_DELTAS, VTags.Biomes.IS_HOT_NETHER, VTags.Biomes.IS_DRY_NETHER);
-			tag(Biomes.MANGROVE_SWAMP, VTags.Biomes.IS_WET, VTags.Biomes.IS_WET_OVERWORLD, VTags.Biomes.IS_HOT,
-					VTags.Biomes.IS_HOT_OVERWORLD, VTags.Biomes.IS_SWAMP);
+			tag(Biomes.MANGROVE_SWAMP, VTags.Biomes.IS_WET_OVERWORLD, VTags.Biomes.IS_HOT_OVERWORLD, VTags.Biomes.IS_SWAMP);
 			tag(Biomes.DEEP_DARK, VTags.Biomes.IS_UNDERGROUND, VTags.Biomes.IS_RARE, VTags.Biomes.IS_SPOOKY);
 
-//            tag(VTags.Biomes.IS_HOT).addTag(VTags.Biomes.IS_HOT_OVERWORLD).addTag(VTags.Biomes.IS_HOT_NETHER).addTag(VTags.Biomes.IS_HOT_END);
-//            tag(VTags.Biomes.IS_COLD).addTag(VTags.Biomes.IS_COLD_OVERWORLD).addTag(VTags.Biomes.IS_COLD_NETHER).addTag(VTags.Biomes.IS_COLD_END);
-//            tag(VTags.Biomes.IS_SPARSE).addTag(VTags.Biomes.IS_SPARSE_OVERWORLD).addTag(VTags.Biomes.IS_SPARSE_NETHER).addTag(VTags.Biomes.IS_SPARSE_END);
-//            tag(VTags.Biomes.IS_DENSE).addTag(VTags.Biomes.IS_DENSE_OVERWORLD).addTag(VTags.Biomes.IS_DENSE_NETHER).addTag(VTags.Biomes.IS_DENSE_END);
-//            tag(VTags.Biomes.IS_WET).addTag(VTags.Biomes.IS_WET_OVERWORLD).addTag(VTags.Biomes.IS_WET_NETHER).addTag(VTags.Biomes.IS_WET_END);
-//            tag(VTags.Biomes.IS_DRY).addTag(VTags.Biomes.IS_DRY_OVERWORLD).addTag(VTags.Biomes.IS_DRY_NETHER).addTag(VTags.Biomes.IS_DRY_END);
+            tag(VTags.Biomes.IS_HOT).addTag(VTags.Biomes.IS_HOT_OVERWORLD).addTag(VTags.Biomes.IS_HOT_NETHER).addOptionalTag(VTags.Biomes.IS_HOT_END.location());
+            tag(VTags.Biomes.IS_COLD).addTag(VTags.Biomes.IS_COLD_OVERWORLD).addOptionalTag(VTags.Biomes.IS_COLD_NETHER.location()).addTag(VTags.Biomes.IS_COLD_END);
+            tag(VTags.Biomes.IS_SPARSE).addTag(VTags.Biomes.IS_SPARSE_OVERWORLD).addOptionalTag(VTags.Biomes.IS_SPARSE_NETHER.location()).addOptionalTag(VTags.Biomes.IS_SPARSE_END.location());
+            tag(VTags.Biomes.IS_DENSE).addTag(VTags.Biomes.IS_DENSE_OVERWORLD).addOptionalTag(VTags.Biomes.IS_DENSE_NETHER.location()).addOptionalTag(VTags.Biomes.IS_DENSE_END.location());
+            tag(VTags.Biomes.IS_WET).addTag(VTags.Biomes.IS_WET_OVERWORLD).addOptionalTag(VTags.Biomes.IS_WET_NETHER.location()).addOptionalTag(VTags.Biomes.IS_WET_END.location());
+            tag(VTags.Biomes.IS_DRY).addTag(VTags.Biomes.IS_DRY_OVERWORLD).addTag(VTags.Biomes.IS_DRY_NETHER).addTag(VTags.Biomes.IS_DRY_END);
+			tag(VTags.Biomes.IS_TEMPERATE).addTag(VTags.Biomes.IS_TEMPERATE_OVERWORLD);
 
 			tag(VTags.Biomes.IS_WATER).addTag(BiomeTags.IS_OCEAN).addTag(BiomeTags.IS_RIVER);
 			tag(VTags.Biomes.IS_MOUNTAIN).addTag(VTags.Biomes.IS_PEAK).addTag(VTags.Biomes.IS_SLOPE);
@@ -911,7 +915,6 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
 
 			this.tag(VTags.Biomes.IS_GRASSLAND).add(Biomes.PLAINS, Biomes.SUNFLOWER_PLAINS);
 			this.tag(VTags.Biomes.IS_ICY).add(Biomes.SNOWY_PLAINS, Biomes.ICE_SPIKES);
-			this.tag(VTags.Biomes.IS_DESERT).add(Biomes.DESERT);
 			this.tag(VTags.Biomes.IS_OUTER_END)
 					.add(Biomes.END_HIGHLANDS, Biomes.END_MIDLANDS, Biomes.SMALL_END_ISLANDS, Biomes.END_BARRENS);
 

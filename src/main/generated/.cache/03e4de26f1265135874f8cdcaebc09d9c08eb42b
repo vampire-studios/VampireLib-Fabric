@@ -1,4 +1,4 @@
-// 1.19.1	2022-08-09T20:32:41.1334469	Tags for minecraft:item
+// 1.19.2	2022-08-31T10:50:13.4740431	Tags for minecraft:item
 2a58a8ad3ea9c111800f2c38b43b54fbb07d61ac data\c\tags\items\glass\silica.json
 4b4e91f8840d5fd5c2ddfa8f188976667e19b6df data\c\tags\items\glass\orange.json
 10e8d465515a3d3440c939f2af1f8fcad1ecf9e4 data\c\tags\items\sandstone_blocks.json
@@ -120,7 +120,7 @@ cfa612cb64f7e213d984ca4431202690f594df8a data\c\tags\items\ender_pearls.json
 003eb34c7b3ab128392f7233f6b756f8f5d5cc20 data\c\tags\items\dyes\black.json
 ff15ec4728ee2a812a71a93097203bc256dcbe66 data\c\tags\items\glass\colorless.json
 52165bdbf3a216cd9c426e56ed88dfd8855f82d1 data\c\tags\items\chests\trapped.json
-ceed1c78dc6bf9b4d132633252be855d364fbbd0 data\c\tags\items\fence_gates\wooden.json
+467a91f04ec3e9de1ac9e13c62b5379e31cfa467 data\c\tags\items\fence_gates\wooden.json
 c949ef89ebded7a5427dd02abef7e21c013e96f2 data\c\tags\items\normal_sandstone_blocks.json
 3238bd56650462b6b45fda869334b9da83dba8e7 data\c\tags\items\feathers.json
 e21225b848494580aaf5fc6ce45b6e9c1f440be0 data\c\tags\items\ingots\iron.json

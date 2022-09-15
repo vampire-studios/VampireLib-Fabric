@@ -72,6 +72,10 @@ dependencies {
 
 	modImplementation libs.bundles.qsl
 
+	modImplementation (libs.qsl) {
+		force = true
+	}
+
 	modImplementation(libs.clothconfig)
 	include(libs.clothconfig)
 
@@ -104,7 +108,7 @@ tasks.withType(JavaCompile).configureEach {
 }
 
 tasks.withType(JavaExec) {
-	jvmArgs += "--enable-preview"
+//	jvmArgs += "--enable-preview"
 }
 
 compileJava {
