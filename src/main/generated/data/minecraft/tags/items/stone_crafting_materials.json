@@ -1,8 +1,6 @@
 {
   "replace": false,
   "values": [
-    "minecraft:cobbled_deepslate",
-    "minecraft:cobblestone",
     "minecraft:andesite",
     "minecraft:diorite",
     "minecraft:granite"

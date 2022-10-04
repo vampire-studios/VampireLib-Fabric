@@ -72,10 +72,6 @@ dependencies {
 
 	modImplementation libs.bundles.qsl
 
-	modImplementation (libs.qsl) {
-		force = true
-	}
-
 	modImplementation(libs.clothconfig)
 	include(libs.clothconfig)
 

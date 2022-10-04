@@ -3,7 +3,6 @@
   "package": "io.github.vampirestudios.vampirelib.mixins",
   "compatibilityLevel": "JAVA_16",
   "mixins": [
-    "DyeColorMixin",
     "HandledScreenMixin",
     "LandPathNodeMakerMixin",
     "MixinItemEntity",
@@ -12,8 +11,6 @@
     "MixinServerPlayerEntity",
     "MixinSpawnHelper",
     "ServerPlayerEntityDamageMixin",
-    "TierMixin",
-    "TiersMixin",
     "block.BlockEntityTypeMixin",
     "block.GrassBlockMixin",
     "block.MyceliumBlockMixin",

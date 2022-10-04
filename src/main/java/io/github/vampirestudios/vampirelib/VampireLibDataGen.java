@@ -18,120 +18,28 @@
 package io.github.vampirestudios.vampirelib;
 
 import static io.github.vampirestudios.vampirelib.VampireLib.TEST_CONTENT_ENABLED;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.BARRELS;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.BARRELS_WOODEN;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.BOOKSHELVES;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.CHESTS;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.CHESTS_ENDER;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.CHESTS_TRAPPED;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.CHESTS_WOODEN;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.COBBLESTONE;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.COBBLESTONE_DEEPSLATE;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.COBBLESTONE_INFESTED;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.COBBLESTONE_MOSSY;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.COBBLESTONE_NORMAL;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.DIRT;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.ENDERMAN_PLACE_ON_BLACKLIST;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.END_STONES;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.FENCES_NETHER_BRICK;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.FENCES_WOODEN;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.FENCE_GATES_WOODEN;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.GLASS;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.GLASS_COLORLESS;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.GLASS_PANES;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.GLASS_PANES_COLORLESS;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.GLASS_SILICA;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.GLASS_TINTED;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.GRAVEL;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.NETHERRACK;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.OBSIDIAN;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.ORES;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.ORES_COAL;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.ORES_COPPER;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.ORES_DIAMOND;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.ORES_EMERALD;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.ORES_GOLD;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.ORES_IN_GROUND_DEEPSLATE;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.ORES_IN_GROUND_NETHERRACK;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.ORES_IN_GROUND_STONE;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.ORES_IRON;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.ORES_LAPIS;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.ORES_NETHERITE_SCRAP;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.ORES_QUARTZ;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.ORES_REDSTONE;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.ORE_BEARING_GROUND_DEEPSLATE;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.ORE_BEARING_GROUND_NETHERRACK;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.ORE_BEARING_GROUND_STONE;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.ORE_RATES_DENSE;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.ORE_RATES_SINGULAR;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.ORE_RATES_SPARSE;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.SAND;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.SANDSTONE;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.SAND_COLORLESS;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.SAND_RED;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.STAINED_GLASS;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.STAINED_GLASS_PANES;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.STONE;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.STORAGE_BLOCKS;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.STORAGE_BLOCKS_AMETHYST;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.STORAGE_BLOCKS_COAL;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.STORAGE_BLOCKS_COPPER;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.STORAGE_BLOCKS_DIAMOND;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.STORAGE_BLOCKS_EMERALD;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.STORAGE_BLOCKS_GOLD;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.STORAGE_BLOCKS_IRON;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.STORAGE_BLOCKS_LAPIS;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.STORAGE_BLOCKS_NETHERITE;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.STORAGE_BLOCKS_QUARTZ;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.STORAGE_BLOCKS_RAW_COPPER;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.STORAGE_BLOCKS_RAW_GOLD;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.STORAGE_BLOCKS_RAW_IRON;
-import static io.github.vampirestudios.vampirelib.init.VTags.Blocks.STORAGE_BLOCKS_REDSTONE;
-import static net.minecraft.tags.BlockTags.FENCES;
-import static net.minecraft.tags.BlockTags.FENCE_GATES;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
 import java.util.function.Consumer;
 
 import net.fabric.api.tag.convention.v1.ConventionalBiomeTags;
 import net.fabric.api.tag.convention.v1.ConventionalBlockTags;
 import net.fabric.api.tag.convention.v1.ConventionalItemTags;
 
-import net.minecraft.core.Registry;
 import net.minecraft.data.BuiltinRegistries;
 import net.minecraft.data.models.BlockModelGenerators;
 import net.minecraft.data.models.ItemModelGenerators;
 import net.minecraft.data.recipes.FinishedRecipe;
-import net.minecraft.data.recipes.ShapedRecipeBuilder;
-import net.minecraft.data.recipes.ShapelessRecipeBuilder;
 import net.minecraft.data.tags.BiomeTagsProvider;
 import net.minecraft.data.tags.TagsProvider;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BiomeTags;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.item.DyeColor;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.Ingredient.ItemValue;
-import net.minecraft.world.item.crafting.Ingredient.TagValue;
-import net.minecraft.world.item.crafting.Ingredient.Value;
-import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.biome.MultiNoiseBiomeSource;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.NoiseGeneratorSettings;
 
@@ -159,7 +67,6 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
 		}
 		VBlockTagsProvider blockTagsProvider = dataGenerator.addProvider(VBlockTagsProvider::new);
 		dataGenerator.addProvider(new VItemTagsProvider(dataGenerator, blockTagsProvider));
-		dataGenerator.addProvider(VRecipeReplacementProvider::new);
 		dataGenerator.addProvider(VEntityTypeTagsProvider::new);
 		dataGenerator.addProvider(VBiomeTagsProvider::new);
 		dataGenerator.addProvider(VNoiseSettingsTagsProvider::new);
@@ -456,106 +363,6 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
 
 		@Override
 		protected void generateTags() {
-			tagCustom(BARRELS).addTag(BARRELS_WOODEN);
-			tagCustom(BARRELS_WOODEN).add(Blocks.BARREL);
-			tag(BOOKSHELVES).add(Blocks.BOOKSHELF);
-			tagCustom(CHESTS).addTags(CHESTS_ENDER, CHESTS_TRAPPED, CHESTS_WOODEN);
-			tagCustom(CHESTS_ENDER).add(Blocks.ENDER_CHEST);
-			tagCustom(CHESTS_TRAPPED).add(Blocks.TRAPPED_CHEST);
-			tagCustom(CHESTS_WOODEN).add(Blocks.CHEST, Blocks.TRAPPED_CHEST);
-			tag(COBBLESTONE).addTag(COBBLESTONE_NORMAL).addTag(COBBLESTONE_INFESTED).addTag(COBBLESTONE_MOSSY)
-					.addTag(COBBLESTONE_DEEPSLATE);
-			tag(COBBLESTONE_NORMAL).add(Blocks.COBBLESTONE);
-			tag(COBBLESTONE_INFESTED).add(Blocks.INFESTED_COBBLESTONE);
-			tag(COBBLESTONE_MOSSY).add(Blocks.MOSSY_COBBLESTONE);
-			tag(COBBLESTONE_DEEPSLATE).add(Blocks.COBBLED_DEEPSLATE);
-			tag(DIRT).add(Blocks.DIRT, Blocks.GRASS_BLOCK, Blocks.COARSE_DIRT, Blocks.PODZOL, Blocks.MYCELIUM,
-					Blocks.ROOTED_DIRT);
-			tag(END_STONES).add(Blocks.END_STONE);
-			tag(ENDERMAN_PLACE_ON_BLACKLIST);
-			tag(FENCE_GATES).addTag(FENCE_GATES_WOODEN);
-			tag(FENCE_GATES_WOODEN).add(Blocks.OAK_FENCE_GATE, Blocks.SPRUCE_FENCE_GATE, Blocks.BIRCH_FENCE_GATE,
-					Blocks.JUNGLE_FENCE_GATE, Blocks.ACACIA_FENCE_GATE, Blocks.DARK_OAK_FENCE_GATE,
-					Blocks.CRIMSON_FENCE_GATE, Blocks.WARPED_FENCE_GATE, Blocks.MANGROVE_FENCE_GATE);
-			tagCustom(FENCES).addTags(FENCES_NETHER_BRICK, FENCES_WOODEN);
-			tag(FENCES_NETHER_BRICK).add(Blocks.NETHER_BRICK_FENCE);
-			getOrCreateTagBuilder(FENCES_WOODEN).forceAddTag(BlockTags.WOODEN_FENCES);
-			tag(GLASS).addTag(GLASS_COLORLESS).addTag(STAINED_GLASS).addTag(GLASS_TINTED);
-			tag(GLASS_COLORLESS).add(Blocks.GLASS);
-			tag(GLASS_SILICA).add(Blocks.GLASS, Blocks.BLACK_STAINED_GLASS, Blocks.BLUE_STAINED_GLASS,
-					Blocks.BROWN_STAINED_GLASS, Blocks.CYAN_STAINED_GLASS, Blocks.GRAY_STAINED_GLASS,
-					Blocks.GREEN_STAINED_GLASS, Blocks.LIGHT_BLUE_STAINED_GLASS,
-					Blocks.LIGHT_GRAY_STAINED_GLASS, Blocks.LIME_STAINED_GLASS,
-					Blocks.MAGENTA_STAINED_GLASS, Blocks.ORANGE_STAINED_GLASS, Blocks.PINK_STAINED_GLASS,
-					Blocks.PURPLE_STAINED_GLASS, Blocks.RED_STAINED_GLASS, Blocks.WHITE_STAINED_GLASS,
-					Blocks.YELLOW_STAINED_GLASS);
-			tag(GLASS_TINTED).add(Blocks.TINTED_GLASS);
-			addColored(tag(STAINED_GLASS)::add, GLASS, "{color}_stained_glass");
-			tag(GLASS_PANES).addTag(GLASS_PANES_COLORLESS).addTag(STAINED_GLASS_PANES);
-			tag(GLASS_PANES_COLORLESS).add(Blocks.GLASS_PANE);
-			addColored(tag(STAINED_GLASS_PANES)::add, GLASS_PANES, "{color}_stained_glass_pane");
-			tag(GRAVEL).add(Blocks.GRAVEL);
-			tag(NETHERRACK).add(Blocks.NETHERRACK);
-			tag(OBSIDIAN).add(Blocks.OBSIDIAN);
-			tag(ORE_BEARING_GROUND_DEEPSLATE).add(Blocks.DEEPSLATE);
-			tag(ORE_BEARING_GROUND_NETHERRACK).add(Blocks.NETHERRACK);
-			tag(ORE_BEARING_GROUND_STONE).add(Blocks.STONE);
-			tag(ORE_RATES_DENSE).add(Blocks.COPPER_ORE, Blocks.DEEPSLATE_COPPER_ORE, Blocks.DEEPSLATE_LAPIS_ORE,
-					Blocks.DEEPSLATE_REDSTONE_ORE, Blocks.LAPIS_ORE, Blocks.REDSTONE_ORE);
-			tag(ORE_RATES_SINGULAR).add(Blocks.ANCIENT_DEBRIS, Blocks.COAL_ORE, Blocks.DEEPSLATE_COAL_ORE,
-					Blocks.DEEPSLATE_DIAMOND_ORE, Blocks.DEEPSLATE_EMERALD_ORE,
-					Blocks.DEEPSLATE_GOLD_ORE, Blocks.DEEPSLATE_IRON_ORE, Blocks.DIAMOND_ORE,
-					Blocks.EMERALD_ORE, Blocks.GOLD_ORE, Blocks.IRON_ORE, Blocks.NETHER_QUARTZ_ORE);
-			tag(ORE_RATES_SPARSE).add(Blocks.NETHER_GOLD_ORE);
-			tagCustom(ORES).addTags(ORES_COAL, ORES_COPPER, ORES_DIAMOND, ORES_EMERALD, ORES_GOLD, ORES_IRON,
-					ORES_LAPIS, ORES_REDSTONE, ORES_QUARTZ, ORES_NETHERITE_SCRAP);
-			getOrCreateTagBuilder(ORES_COAL).forceAddTag(BlockTags.COAL_ORES);
-			getOrCreateTagBuilder(ORES_COPPER).forceAddTag(BlockTags.COPPER_ORES);
-			getOrCreateTagBuilder(ORES_DIAMOND).forceAddTag(BlockTags.DIAMOND_ORES);
-			getOrCreateTagBuilder(ORES_EMERALD).forceAddTag(BlockTags.EMERALD_ORES);
-			getOrCreateTagBuilder(ORES_GOLD).forceAddTag(BlockTags.GOLD_ORES);
-			getOrCreateTagBuilder(ORES_IRON).forceAddTag(BlockTags.IRON_ORES);
-			getOrCreateTagBuilder(ORES_LAPIS).forceAddTag(BlockTags.LAPIS_ORES);
-			tag(ORES_QUARTZ).add(Blocks.NETHER_QUARTZ_ORE);
-			getOrCreateTagBuilder(ORES_REDSTONE).forceAddTag(BlockTags.REDSTONE_ORES);
-			tag(ORES_NETHERITE_SCRAP).add(Blocks.ANCIENT_DEBRIS);
-			tag(ORES_IN_GROUND_DEEPSLATE).add(Blocks.DEEPSLATE_COAL_ORE, Blocks.DEEPSLATE_COPPER_ORE,
-					Blocks.DEEPSLATE_DIAMOND_ORE, Blocks.DEEPSLATE_EMERALD_ORE,
-					Blocks.DEEPSLATE_GOLD_ORE, Blocks.DEEPSLATE_IRON_ORE,
-					Blocks.DEEPSLATE_LAPIS_ORE, Blocks.DEEPSLATE_REDSTONE_ORE);
-			tag(ORES_IN_GROUND_NETHERRACK).add(Blocks.NETHER_GOLD_ORE, Blocks.NETHER_QUARTZ_ORE);
-			tag(ORES_IN_GROUND_STONE).add(Blocks.COAL_ORE, Blocks.COPPER_ORE, Blocks.DIAMOND_ORE, Blocks.EMERALD_ORE,
-					Blocks.GOLD_ORE, Blocks.IRON_ORE, Blocks.LAPIS_ORE, Blocks.REDSTONE_ORE);
-			tagCustom(SAND).addTags(SAND_COLORLESS, SAND_RED);
-			tag(SAND_COLORLESS).add(Blocks.SAND);
-			tag(SAND_RED).add(Blocks.RED_SAND);
-			tag(SANDSTONE).add(Blocks.SANDSTONE, Blocks.CUT_SANDSTONE, Blocks.CHISELED_SANDSTONE,
-					Blocks.SMOOTH_SANDSTONE, Blocks.RED_SANDSTONE, Blocks.CUT_RED_SANDSTONE,
-					Blocks.CHISELED_RED_SANDSTONE, Blocks.SMOOTH_RED_SANDSTONE);
-			tag(STONE).add(Blocks.ANDESITE, Blocks.DIORITE, Blocks.GRANITE, Blocks.INFESTED_STONE, Blocks.STONE,
-					Blocks.POLISHED_ANDESITE, Blocks.POLISHED_DIORITE, Blocks.POLISHED_GRANITE, Blocks.DEEPSLATE,
-					Blocks.POLISHED_DEEPSLATE, Blocks.INFESTED_DEEPSLATE, Blocks.TUFF);
-			tagCustom(STORAGE_BLOCKS).addTags(STORAGE_BLOCKS_AMETHYST, STORAGE_BLOCKS_COAL, STORAGE_BLOCKS_COPPER,
-					STORAGE_BLOCKS_DIAMOND, STORAGE_BLOCKS_EMERALD, STORAGE_BLOCKS_GOLD,
-					STORAGE_BLOCKS_IRON, STORAGE_BLOCKS_LAPIS, STORAGE_BLOCKS_QUARTZ,
-					STORAGE_BLOCKS_RAW_COPPER, STORAGE_BLOCKS_RAW_GOLD,
-					STORAGE_BLOCKS_RAW_IRON, STORAGE_BLOCKS_REDSTONE,
-					STORAGE_BLOCKS_NETHERITE);
-			tag(STORAGE_BLOCKS_AMETHYST).add(Blocks.AMETHYST_BLOCK);
-			tag(STORAGE_BLOCKS_COAL).add(Blocks.COAL_BLOCK);
-			tag(STORAGE_BLOCKS_COPPER).add(Blocks.COPPER_BLOCK, Blocks.CUT_COPPER);
-			tag(STORAGE_BLOCKS_DIAMOND).add(Blocks.DIAMOND_BLOCK);
-			tag(STORAGE_BLOCKS_EMERALD).add(Blocks.EMERALD_BLOCK);
-			tag(STORAGE_BLOCKS_GOLD).add(Blocks.GOLD_BLOCK);
-			tag(STORAGE_BLOCKS_IRON).add(Blocks.IRON_BLOCK);
-			tag(STORAGE_BLOCKS_LAPIS).add(Blocks.LAPIS_BLOCK);
-			tag(STORAGE_BLOCKS_QUARTZ).add(Blocks.QUARTZ_BLOCK);
-			tag(STORAGE_BLOCKS_RAW_COPPER).add(Blocks.RAW_COPPER_BLOCK);
-			tag(STORAGE_BLOCKS_RAW_GOLD).add(Blocks.RAW_GOLD_BLOCK);
-			tag(STORAGE_BLOCKS_RAW_IRON).add(Blocks.RAW_IRON_BLOCK);
-			tag(STORAGE_BLOCKS_REDSTONE).add(Blocks.REDSTONE_BLOCK);
-			tag(STORAGE_BLOCKS_NETHERITE).add(Blocks.NETHERITE_BLOCK);
-
 			generateVillagerJobSitesTag();
 			generateSandstoneTags();
 		}
@@ -614,30 +421,6 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
 					.addOptionalTag(ConventionalBlockTags.NORMAL_SANDSTONE_SLABS)
 					.addOptionalTag(ConventionalBlockTags.RED_SANDSTONE_SLABS);
 		}
-
-		private void addColored(Consumer<Block> consumer, TagKey<Block> group, String pattern) {
-			String prefix = group.location().getPath().toUpperCase(Locale.ENGLISH) + '_';
-			for (DyeColor color  : DyeColor.values()) {
-				ResourceLocation key = new ResourceLocation("minecraft", pattern.replace("{color}",  color.getName()));
-				TagKey<Block> tag = getForgeTag(prefix + color.getName());
-				Block block = Registry.BLOCK.get(key);
-				if (block == Blocks.AIR)
-					throw new IllegalStateException("Unknown vanilla block: " + key);
-				tag(tag).add(block);
-				consumer.accept(block);
-			}
-		}
-
-		@SuppressWarnings("unchecked")
-		private TagKey<Block> getForgeTag(String name) {
-			try {
-				name = name.toUpperCase(Locale.ENGLISH);
-				return (TagKey<Block>) VTags.Blocks.class.getDeclaredField(name).get(null);
-			} catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException e) {
-				throw new IllegalStateException(VTags.Blocks.class.getName() + " is missing tag name: " + name);
-			}
-		}
-
 	}
 
 	private static class VBiomeTagsProvider extends BiomeTagsProvider {
@@ -827,83 +610,6 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
 					.add(Biomes.THE_END, Biomes.SMALL_END_ISLANDS, Biomes.END_BARRENS, Biomes.END_MIDLANDS, Biomes.END_HIGHLANDS);
 //            tag(BiomeTags.IS_END).addTag(VTags.Biomes.END);
 
-			tag(Biomes.PLAINS, VTags.Biomes.IS_PLAINS, VTags.Biomes.IS_TEMPERATE_OVERWORLD);
-			tag(Biomes.DESERT, VTags.Biomes.IS_HOT_OVERWORLD, VTags.Biomes.IS_DRY_OVERWORLD, VTags.Biomes.IS_SANDY, VTags.Biomes.IS_DESERT);
-			tag(Biomes.TAIGA, VTags.Biomes.IS_COLD_OVERWORLD, VTags.Biomes.IS_CONIFEROUS);
-			tag(Biomes.SWAMP, VTags.Biomes.IS_WET_OVERWORLD, VTags.Biomes.IS_SWAMP, VTags.Biomes.IS_TEMPERATE_OVERWORLD);
-			tag(Biomes.NETHER_WASTES, VTags.Biomes.IS_HOT_NETHER, VTags.Biomes.IS_DRY_NETHER);
-			tag(Biomes.THE_END, VTags.Biomes.IS_COLD_END, VTags.Biomes.IS_DRY_END);
-			tag(Biomes.FROZEN_OCEAN, VTags.Biomes.IS_COLD_OVERWORLD, VTags.Biomes.IS_SNOWY);
-			tag(Biomes.FROZEN_RIVER, VTags.Biomes.IS_COLD_OVERWORLD, VTags.Biomes.IS_SNOWY);
-			tag(Biomes.SNOWY_PLAINS, VTags.Biomes.IS_COLD_OVERWORLD, VTags.Biomes.IS_SNOWY, VTags.Biomes.IS_WASTELAND,
-					VTags.Biomes.IS_PLAINS);
-			tag(Biomes.MUSHROOM_FIELDS, VTags.Biomes.IS_MUSHROOM, VTags.Biomes.IS_RARE, VTags.Biomes.IS_TEMPERATE_OVERWORLD);
-			tag(Biomes.JUNGLE, VTags.Biomes.IS_HOT_OVERWORLD, VTags.Biomes.IS_WET_OVERWORLD,
-					VTags.Biomes.IS_DENSE_OVERWORLD);
-			tag(Biomes.SPARSE_JUNGLE, VTags.Biomes.IS_HOT_OVERWORLD, VTags.Biomes.IS_WET_OVERWORLD,
-					VTags.Biomes.IS_RARE);
-			tag(Biomes.BEACH, VTags.Biomes.IS_WET_OVERWORLD, VTags.Biomes.IS_SANDY, VTags.Biomes.IS_TEMPERATE_OVERWORLD);
-			tag(Biomes.SNOWY_BEACH, VTags.Biomes.IS_COLD_OVERWORLD, VTags.Biomes.IS_SNOWY);
-			tag(Biomes.DARK_FOREST, VTags.Biomes.IS_SPOOKY, VTags.Biomes.IS_DENSE_OVERWORLD, VTags.Biomes.IS_TEMPERATE_OVERWORLD);
-			tag(Biomes.SNOWY_TAIGA, VTags.Biomes.IS_COLD_OVERWORLD, VTags.Biomes.IS_CONIFEROUS, VTags.Biomes.IS_SNOWY);
-			tag(Biomes.OLD_GROWTH_PINE_TAIGA, VTags.Biomes.IS_COLD_OVERWORLD, VTags.Biomes.IS_CONIFEROUS);
-			tag(Biomes.WINDSWEPT_FOREST, VTags.Biomes.IS_SPARSE_OVERWORLD);
-			tag(Biomes.SAVANNA, VTags.Biomes.IS_HOT_OVERWORLD, VTags.Biomes.IS_SPARSE_OVERWORLD);
-			tag(Biomes.SAVANNA_PLATEAU, VTags.Biomes.IS_HOT_OVERWORLD, VTags.Biomes.IS_SPARSE_OVERWORLD,
-					VTags.Biomes.IS_RARE, VTags.Biomes.IS_SLOPE, VTags.Biomes.IS_PLATEAU);
-			tag(Biomes.BADLANDS, VTags.Biomes.IS_SANDY, VTags.Biomes.IS_DRY_OVERWORLD);
-			tag(Biomes.WOODED_BADLANDS, VTags.Biomes.IS_SANDY, VTags.Biomes.IS_DRY_OVERWORLD,
-					VTags.Biomes.IS_SPARSE_OVERWORLD, VTags.Biomes.IS_SLOPE, VTags.Biomes.IS_PLATEAU);
-			tag(Biomes.MEADOW, VTags.Biomes.IS_PLAINS, VTags.Biomes.IS_PLATEAU, VTags.Biomes.IS_SLOPE, VTags.Biomes.IS_TEMPERATE_OVERWORLD);
-			tag(Biomes.GROVE, VTags.Biomes.IS_COLD_OVERWORLD, VTags.Biomes.IS_CONIFEROUS, VTags.Biomes.IS_SNOWY,
-					VTags.Biomes.IS_SLOPE);
-			tag(Biomes.SNOWY_SLOPES, VTags.Biomes.IS_SPARSE_OVERWORLD, VTags.Biomes.IS_SNOWY, VTags.Biomes.IS_SLOPE);
-			tag(Biomes.JAGGED_PEAKS, VTags.Biomes.IS_SPARSE_OVERWORLD, VTags.Biomes.IS_SNOWY, VTags.Biomes.IS_PEAK);
-			tag(Biomes.STONY_PEAKS, VTags.Biomes.IS_HOT_OVERWORLD, VTags.Biomes.IS_PEAK);
-			tag(VTags.Biomes.IS_COLD_END, Biomes.SMALL_END_ISLANDS, Biomes.END_MIDLANDS, Biomes.END_HIGHLANDS,
-					Biomes.END_BARRENS);
-			tag(VTags.Biomes.IS_DRY_END, Biomes.SMALL_END_ISLANDS, Biomes.END_MIDLANDS, Biomes.END_HIGHLANDS,
-					Biomes.END_BARRENS);
-			tag(Biomes.WARM_OCEAN, VTags.Biomes.IS_HOT_OVERWORLD);
-			tag(VTags.Biomes.IS_COLD_OVERWORLD, Biomes.COLD_OCEAN, Biomes.DEEP_COLD_OCEAN, Biomes.DEEP_FROZEN_OCEAN,
-					Biomes.SNOWY_SLOPES, Biomes.JAGGED_PEAKS);
-			tag(Biomes.THE_VOID, VTags.Biomes.IS_VOID);
-			tag(Biomes.FOREST, VTags.Biomes.IS_TEMPERATE_OVERWORLD);
-			tag(Biomes.SUNFLOWER_PLAINS, VTags.Biomes.IS_PLAINS, VTags.Biomes.IS_RARE, VTags.Biomes.IS_TEMPERATE_OVERWORLD);
-			tag(Biomes.WINDSWEPT_GRAVELLY_HILLS, VTags.Biomes.IS_SPARSE_OVERWORLD, VTags.Biomes.IS_RARE);
-			tag(Biomes.FLOWER_FOREST, VTags.Biomes.IS_RARE);
-			tag(Biomes.ICE_SPIKES, VTags.Biomes.IS_COLD_OVERWORLD, VTags.Biomes.IS_SNOWY, VTags.Biomes.IS_RARE);
-			tag(Biomes.BIRCH_FOREST, VTags.Biomes.IS_TEMPERATE_OVERWORLD, VTags.Biomes.IS_DENSE_OVERWORLD);
-			tag(Biomes.OLD_GROWTH_BIRCH_FOREST, VTags.Biomes.IS_DENSE_OVERWORLD, VTags.Biomes.IS_RARE, VTags.Biomes.IS_TEMPERATE_OVERWORLD);
-			tag(Biomes.OLD_GROWTH_SPRUCE_TAIGA, VTags.Biomes.IS_DENSE_OVERWORLD, VTags.Biomes.IS_RARE);
-			tag(Biomes.WINDSWEPT_SAVANNA, VTags.Biomes.IS_HOT_OVERWORLD, VTags.Biomes.IS_DRY_OVERWORLD,
-					VTags.Biomes.IS_SPARSE_OVERWORLD, VTags.Biomes.IS_RARE);
-			tag(Biomes.ERODED_BADLANDS, VTags.Biomes.IS_HOT_OVERWORLD, VTags.Biomes.IS_DRY_OVERWORLD,
-					VTags.Biomes.IS_SPARSE_OVERWORLD, VTags.Biomes.IS_RARE);
-			tag(Biomes.BAMBOO_JUNGLE, VTags.Biomes.IS_HOT_OVERWORLD, VTags.Biomes.IS_WET_OVERWORLD,
-					VTags.Biomes.IS_RARE);
-			tag(Biomes.LUSH_CAVES, VTags.Biomes.IS_UNDERGROUND, VTags.Biomes.IS_LUSH, VTags.Biomes.IS_WET_OVERWORLD,
-					VTags.Biomes.IS_CAVE);
-			tag(Biomes.DRIPSTONE_CAVES, VTags.Biomes.IS_UNDERGROUND, VTags.Biomes.IS_SPARSE_OVERWORLD,
-					VTags.Biomes.IS_CAVE);
-			tag(Biomes.SOUL_SAND_VALLEY, VTags.Biomes.IS_HOT_NETHER, VTags.Biomes.IS_DRY_NETHER);
-			tag(Biomes.CRIMSON_FOREST, VTags.Biomes.IS_HOT_NETHER, VTags.Biomes.IS_DRY_NETHER);
-			tag(Biomes.WARPED_FOREST, VTags.Biomes.IS_HOT_NETHER, VTags.Biomes.IS_DRY_NETHER);
-			tag(Biomes.BASALT_DELTAS, VTags.Biomes.IS_HOT_NETHER, VTags.Biomes.IS_DRY_NETHER);
-			tag(Biomes.MANGROVE_SWAMP, VTags.Biomes.IS_WET_OVERWORLD, VTags.Biomes.IS_HOT_OVERWORLD, VTags.Biomes.IS_SWAMP);
-			tag(Biomes.DEEP_DARK, VTags.Biomes.IS_UNDERGROUND, VTags.Biomes.IS_RARE, VTags.Biomes.IS_SPOOKY);
-
-            tag(VTags.Biomes.IS_HOT).addTag(VTags.Biomes.IS_HOT_OVERWORLD).addTag(VTags.Biomes.IS_HOT_NETHER).addOptionalTag(VTags.Biomes.IS_HOT_END.location());
-            tag(VTags.Biomes.IS_COLD).addTag(VTags.Biomes.IS_COLD_OVERWORLD).addOptionalTag(VTags.Biomes.IS_COLD_NETHER.location()).addTag(VTags.Biomes.IS_COLD_END);
-            tag(VTags.Biomes.IS_SPARSE).addTag(VTags.Biomes.IS_SPARSE_OVERWORLD).addOptionalTag(VTags.Biomes.IS_SPARSE_NETHER.location()).addOptionalTag(VTags.Biomes.IS_SPARSE_END.location());
-            tag(VTags.Biomes.IS_DENSE).addTag(VTags.Biomes.IS_DENSE_OVERWORLD).addOptionalTag(VTags.Biomes.IS_DENSE_NETHER.location()).addOptionalTag(VTags.Biomes.IS_DENSE_END.location());
-            tag(VTags.Biomes.IS_WET).addTag(VTags.Biomes.IS_WET_OVERWORLD).addOptionalTag(VTags.Biomes.IS_WET_NETHER.location()).addOptionalTag(VTags.Biomes.IS_WET_END.location());
-            tag(VTags.Biomes.IS_DRY).addTag(VTags.Biomes.IS_DRY_OVERWORLD).addTag(VTags.Biomes.IS_DRY_NETHER).addTag(VTags.Biomes.IS_DRY_END);
-			tag(VTags.Biomes.IS_TEMPERATE).addTag(VTags.Biomes.IS_TEMPERATE_OVERWORLD);
-
-			tag(VTags.Biomes.IS_WATER).addTag(BiomeTags.IS_OCEAN).addTag(BiomeTags.IS_RIVER);
-			tag(VTags.Biomes.IS_MOUNTAIN).addTag(VTags.Biomes.IS_PEAK).addTag(VTags.Biomes.IS_SLOPE);
-
 			tag(net.fabricmc.fabric.api.tag.convention.v1.ConventionalBiomeTags.ICY)
 					.add(Biomes.FROZEN_PEAKS)
 					.add(Biomes.ICE_SPIKES);
@@ -946,381 +652,18 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
 
 		@Override
 		protected void generateTags() {
-			copyOreTags();
-			copyStorageBlockTags();
-			copyGlassTags();
-			copyFenceTags();
 			copyCobblestoneTags();
-			copyChestTags();
-			copyMiscTags();
 
-			generateGemTags();
-			generateRawTags();
-			generateRodTags();
-			generateHeadTags();
-			generateIngotTags();
-			generateNuggetTags();
-			generateMobLootTags();
-			generateCropTags();
-			generateDustTags();
-			generateSeedTags();
-			generateMiscTags();
-			generateToolTags();
-			generateArmorTags();
 			generateFoodTags();
 			generateVillageJobSitesTag();
 			generateSandstoneTags();
 		}
 
-		private void copyOreTags() {
-			copy(VTags.Blocks.ORE_BEARING_GROUND_DEEPSLATE, VTags.Items.ORE_BEARING_GROUND_DEEPSLATE);
-			copy(VTags.Blocks.ORE_BEARING_GROUND_NETHERRACK, VTags.Items.ORE_BEARING_GROUND_NETHERRACK);
-			copy(VTags.Blocks.ORE_BEARING_GROUND_STONE, VTags.Items.ORE_BEARING_GROUND_STONE);
-			copy(VTags.Blocks.ORE_RATES_DENSE, VTags.Items.ORE_RATES_DENSE);
-			copy(VTags.Blocks.ORE_RATES_SINGULAR, VTags.Items.ORE_RATES_SINGULAR);
-			copy(VTags.Blocks.ORE_RATES_SPARSE, VTags.Items.ORE_RATES_SPARSE);
-			copy(VTags.Blocks.ORES, VTags.Items.ORES);
-			copy(VTags.Blocks.ORES_COAL, VTags.Items.ORES_COAL);
-			copy(VTags.Blocks.ORES_COPPER, VTags.Items.ORES_COPPER);
-			copy(VTags.Blocks.ORES_DIAMOND, VTags.Items.ORES_DIAMOND);
-			copy(VTags.Blocks.ORES_EMERALD, VTags.Items.ORES_EMERALD);
-			copy(VTags.Blocks.ORES_GOLD, VTags.Items.ORES_GOLD);
-			copy(VTags.Blocks.ORES_IRON, VTags.Items.ORES_IRON);
-			copy(VTags.Blocks.ORES_LAPIS, VTags.Items.ORES_LAPIS);
-			copy(VTags.Blocks.ORES_QUARTZ, VTags.Items.ORES_QUARTZ);
-			copy(VTags.Blocks.ORES_REDSTONE, VTags.Items.ORES_REDSTONE);
-			copy(VTags.Blocks.ORES_NETHERITE_SCRAP, VTags.Items.ORES_NETHERITE_SCRAP);
-			copy(VTags.Blocks.ORES_IN_GROUND_DEEPSLATE, VTags.Items.ORES_IN_GROUND_DEEPSLATE);
-			copy(VTags.Blocks.ORES_IN_GROUND_NETHERRACK, VTags.Items.ORES_IN_GROUND_NETHERRACK);
-			copy(VTags.Blocks.ORES_IN_GROUND_STONE, VTags.Items.ORES_IN_GROUND_STONE);
-		}
-
-		private void copyStorageBlockTags() {
-			copy(VTags.Blocks.STAINED_GLASS, VTags.Items.STAINED_GLASS);
-			copy(VTags.Blocks.STAINED_GLASS_PANES, VTags.Items.STAINED_GLASS_PANES);
-			copy(VTags.Blocks.STONE, VTags.Items.STONE);
-			copy(VTags.Blocks.STORAGE_BLOCKS, VTags.Items.STORAGE_BLOCKS);
-			copy(VTags.Blocks.STORAGE_BLOCKS_AMETHYST, VTags.Items.STORAGE_BLOCKS_AMETHYST);
-			copy(VTags.Blocks.STORAGE_BLOCKS_COAL, VTags.Items.STORAGE_BLOCKS_COAL);
-			copy(VTags.Blocks.STORAGE_BLOCKS_COPPER, VTags.Items.STORAGE_BLOCKS_COPPER);
-			copy(VTags.Blocks.STORAGE_BLOCKS_DIAMOND, VTags.Items.STORAGE_BLOCKS_DIAMOND);
-			copy(VTags.Blocks.STORAGE_BLOCKS_EMERALD, VTags.Items.STORAGE_BLOCKS_EMERALD);
-			copy(VTags.Blocks.STORAGE_BLOCKS_GOLD, VTags.Items.STORAGE_BLOCKS_GOLD);
-			copy(VTags.Blocks.STORAGE_BLOCKS_IRON, VTags.Items.STORAGE_BLOCKS_IRON);
-			copy(VTags.Blocks.STORAGE_BLOCKS_LAPIS, VTags.Items.STORAGE_BLOCKS_LAPIS);
-			copy(VTags.Blocks.STORAGE_BLOCKS_QUARTZ, VTags.Items.STORAGE_BLOCKS_QUARTZ);
-			copy(VTags.Blocks.STORAGE_BLOCKS_REDSTONE, VTags.Items.STORAGE_BLOCKS_REDSTONE);
-			copy(VTags.Blocks.STORAGE_BLOCKS_RAW_COPPER, VTags.Items.STORAGE_BLOCKS_RAW_COPPER);
-			copy(VTags.Blocks.STORAGE_BLOCKS_RAW_GOLD, VTags.Items.STORAGE_BLOCKS_RAW_GOLD);
-			copy(VTags.Blocks.STORAGE_BLOCKS_RAW_IRON, VTags.Items.STORAGE_BLOCKS_RAW_IRON);
-			copy(VTags.Blocks.STORAGE_BLOCKS_NETHERITE, VTags.Items.STORAGE_BLOCKS_NETHERITE);
-		}
-
-		private void copyGlassTags() {
-			copy(VTags.Blocks.GLASS, VTags.Items.GLASS);
-			copy(VTags.Blocks.GLASS_SILICA, VTags.Items.GLASS_SILICA);
-			copy(VTags.Blocks.GLASS_TINTED, VTags.Items.GLASS_TINTED);
-			copy(VTags.Blocks.GLASS_COLORLESS, VTags.Items.GLASS_COLORLESS);
-			copyColored(VTags.Blocks.GLASS, VTags.Items.GLASS);
-			copy(VTags.Blocks.GLASS_PANES_COLORLESS, VTags.Items.GLASS_PANES_COLORLESS);
-			copy(VTags.Blocks.GLASS_PANES, VTags.Items.GLASS_PANES);
-			copy(VTags.Blocks.STAINED_GLASS_PANES, VTags.Items.STAINED_GLASS_PANES);
-			copyColored(VTags.Blocks.GLASS_PANES, VTags.Items.GLASS_PANES);
-		}
-
-		private void copyFenceTags() {
-			copy(VTags.Blocks.FENCE_GATES, VTags.Items.FENCE_GATES);
-			copy(VTags.Blocks.FENCE_GATES_WOODEN, VTags.Items.FENCE_GATES_WOODEN);
-			copy(VTags.Blocks.FENCES, VTags.Items.FENCES);
-			copy(VTags.Blocks.FENCES_NETHER_BRICK, VTags.Items.FENCES_NETHER_BRICK);
-			copy(VTags.Blocks.FENCES_WOODEN, VTags.Items.FENCES_WOODEN);
-		}
-
 		private void copyCobblestoneTags() {
-			copy(VTags.Blocks.COBBLESTONE_NORMAL, VTags.Items.COBBLESTONE_NORMAL);
-			copy(VTags.Blocks.COBBLESTONE_INFESTED, VTags.Items.COBBLESTONE_INFESTED);
-			copy(VTags.Blocks.COBBLESTONE_MOSSY, VTags.Items.COBBLESTONE_MOSSY);
-			copy(VTags.Blocks.COBBLESTONE_DEEPSLATE, VTags.Items.COBBLESTONE_DEEPSLATE);
-			copy(VTags.Blocks.COBBLESTONE_DEEPSLATE, ItemTags.STONE_CRAFTING_MATERIALS);
-			copy(VTags.Blocks.COBBLESTONE_NORMAL, ItemTags.STONE_CRAFTING_MATERIALS);
-
 			getOrCreateTagBuilder(ItemTags.STONE_CRAFTING_MATERIALS)
 					.add(Items.ANDESITE, Items.DIORITE, Items.GRANITE);
 			getOrCreateTagBuilder(ItemTags.STONE_TOOL_MATERIALS)
 					.addTag(ItemTags.STONE_CRAFTING_MATERIALS);
-		}
-
-		private void copyChestTags() {
-			copy(VTags.Blocks.CHESTS, VTags.Items.CHESTS);
-			copy(VTags.Blocks.CHESTS_ENDER, VTags.Items.CHESTS_ENDER);
-			copy(VTags.Blocks.CHESTS_TRAPPED, VTags.Items.CHESTS_TRAPPED);
-			copy(VTags.Blocks.CHESTS_WOODEN, VTags.Items.CHESTS_WOODEN);
-		}
-
-		private void copyMiscTags() {
-			copy(VTags.Blocks.END_STONES, VTags.Items.END_STONES);
-			copy(VTags.Blocks.GRAVEL, VTags.Items.GRAVEL);
-			copy(VTags.Blocks.NETHERRACK, VTags.Items.NETHERRACK);
-			copy(VTags.Blocks.OBSIDIAN, VTags.Items.OBSIDIAN);
-		}
-
-		private void generateGemTags() {
-			getOrCreateTagBuilder(VTags.Items.GEMS)
-					.addTag(VTags.Items.GEMS_AMETHYST)
-					.addTag(VTags.Items.GEMS_DIAMOND)
-					.addTag(VTags.Items.GEMS_EMERALD)
-					.addTag(VTags.Items.GEMS_LAPIS)
-					.addTag(VTags.Items.GEMS_PRISMARINE)
-					.addTag(VTags.Items.GEMS_QUARTZ);
-
-			getOrCreateTagBuilder(VTags.Items.GEMS_AMETHYST)
-					.add(Items.AMETHYST_SHARD);
-			getOrCreateTagBuilder(VTags.Items.GEMS_DIAMOND)
-					.add(Items.DIAMOND);
-			getOrCreateTagBuilder(VTags.Items.GEMS_EMERALD)
-					.add(Items.EMERALD);
-			getOrCreateTagBuilder(VTags.Items.GEMS_LAPIS)
-					.add(Items.LAPIS_LAZULI);
-			getOrCreateTagBuilder(VTags.Items.GEMS_PRISMARINE)
-					.add(Items.PRISMARINE_CRYSTALS);
-			getOrCreateTagBuilder(VTags.Items.GEMS_QUARTZ)
-					.add(Items.QUARTZ);
-		}
-
-		private void generateRawTags() {
-			getOrCreateTagBuilder(VTags.Items.RAW_MATERIALS)
-					.addTag(VTags.Items.RAW_MATERIALS_COPPER)
-					.addTag(VTags.Items.RAW_MATERIALS_GOLD)
-					.addTag(VTags.Items.RAW_MATERIALS_IRON);
-			getOrCreateTagBuilder(VTags.Items.RAW_MATERIALS_COPPER).add(Items.RAW_COPPER);
-			getOrCreateTagBuilder(VTags.Items.RAW_MATERIALS_GOLD).add(Items.RAW_GOLD);
-			getOrCreateTagBuilder(VTags.Items.RAW_MATERIALS_IRON).add(Items.RAW_IRON);
-		}
-
-		private void generateRodTags() {
-			getOrCreateTagBuilder(VTags.Items.RODS)
-					.addTag(VTags.Items.RODS_BLAZE)
-					.addTag(VTags.Items.RODS_WOODEN);
-			getOrCreateTagBuilder(VTags.Items.RODS_BLAZE).add(Items.BLAZE_ROD);
-			getOrCreateTagBuilder(VTags.Items.RODS_WOODEN).add(Items.STICK);
-		}
-
-		private void generateHeadTags() {
-			getOrCreateTagBuilder(VTags.Items.HEADS)
-					.add(Items.CREEPER_HEAD)
-					.add(Items.DRAGON_HEAD)
-					.add(Items.PLAYER_HEAD)
-					.add(Items.SKELETON_SKULL)
-					.add(Items.WITHER_SKELETON_SKULL)
-					.add(Items.ZOMBIE_HEAD);
-		}
-
-		private void generateIngotTags() {
-			getOrCreateTagBuilder(VTags.Items.INGOTS)
-					.addTag(VTags.Items.INGOTS_BRICK)
-					.addTag(VTags.Items.INGOTS_COPPER)
-					.addTag(VTags.Items.INGOTS_GOLD)
-					.addTag(VTags.Items.INGOTS_IRON)
-					.addTag(VTags.Items.INGOTS_NETHERITE)
-					.addTag(VTags.Items.INGOTS_NETHER_BRICK);
-			getOrCreateTagBuilder(VTags.Items.INGOTS_BRICK)
-					.add(Items.BRICK);
-			getOrCreateTagBuilder(VTags.Items.INGOTS_COPPER)
-					.add(Items.COPPER_INGOT);
-			getOrCreateTagBuilder(VTags.Items.INGOTS_GOLD)
-					.add(Items.GOLD_INGOT);
-			getOrCreateTagBuilder(VTags.Items.INGOTS_IRON)
-					.add(Items.IRON_INGOT);
-			getOrCreateTagBuilder(VTags.Items.INGOTS_NETHERITE)
-					.add(Items.NETHERITE_INGOT);
-			getOrCreateTagBuilder(VTags.Items.INGOTS_NETHER_BRICK)
-					.add(Items.NETHER_BRICK);
-		}
-
-		private void generateNuggetTags() {
-			getOrCreateTagBuilder(VTags.Items.NUGGETS)
-					.addTag(VTags.Items.NUGGETS_IRON)
-					.addTag(VTags.Items.NUGGETS_GOLD);
-			tagCustom(VTags.Items.NUGGETS_IRON).add(Items.IRON_NUGGET);
-			tagCustom(VTags.Items.NUGGETS_GOLD).add(Items.GOLD_NUGGET);
-		}
-
-		private void generateMobLootTags() {
-			getOrCreateTagBuilder(VTags.Items.BONES)
-					.add(Items.BONE);
-			getOrCreateTagBuilder(VTags.Items.EGGS)
-					.add(Items.EGG);
-			getOrCreateTagBuilder(VTags.Items.ENDER_PEARLS)
-					.add(Items.ENDER_PEARL);
-			getOrCreateTagBuilder(VTags.Items.FEATHERS)
-					.add(Items.FEATHER);
-			getOrCreateTagBuilder(VTags.Items.GUNPOWDER)
-					.add(Items.GUNPOWDER);
-			getOrCreateTagBuilder(VTags.Items.LEATHER)
-					.add(Items.LEATHER);
-			getOrCreateTagBuilder(VTags.Items.MUSHROOMS)
-					.add(Items.BROWN_MUSHROOM, Items.RED_MUSHROOM);
-			getOrCreateTagBuilder(VTags.Items.NETHER_STARS)
-					.add(Items.NETHER_STAR);
-			getOrCreateTagBuilder(VTags.Items.STRING)
-					.add(Items.STRING);
-			getOrCreateTagBuilder(VTags.Items.SLIMEBALLS)
-					.add(Items.SLIME_BALL);
-		}
-
-		private void generateCropTags() {
-			getOrCreateTagBuilder(VTags.Items.CROPS)
-					.addTag(VTags.Items.CROPS_BEETROOT)
-					.addTag(VTags.Items.CROPS_CARROT)
-					.addTag(VTags.Items.CROPS_NETHER_WART)
-					.addTag(VTags.Items.CROPS_POTATO)
-					.addTag(VTags.Items.CROPS_WHEAT);
-
-			getOrCreateTagBuilder(VTags.Items.CROPS_BEETROOT)
-					.add(Items.BEETROOT);
-			getOrCreateTagBuilder(VTags.Items.CROPS_CARROT)
-					.add(Items.CARROT);
-			getOrCreateTagBuilder(VTags.Items.CROPS_NETHER_WART)
-					.add(Items.NETHER_WART);
-			getOrCreateTagBuilder(VTags.Items.CROPS_POTATO)
-					.add(Items.POTATO);
-			getOrCreateTagBuilder(VTags.Items.CROPS_WHEAT)
-					.add(Items.WHEAT);
-		}
-
-		private void generateDustTags() {
-			getOrCreateTagBuilder(VTags.Items.DUSTS)
-					.addTag(VTags.Items.DUSTS_GLOWSTONE)
-					.addTag(VTags.Items.DUSTS_PRISMARINE)
-					.addTag(VTags.Items.DUSTS_REDSTONE);
-
-			getOrCreateTagBuilder(VTags.Items.DUSTS_GLOWSTONE)
-					.add(Items.GLOWSTONE_DUST);
-			getOrCreateTagBuilder(VTags.Items.DUSTS_PRISMARINE)
-					.add(Items.PRISMARINE_SHARD);
-			getOrCreateTagBuilder(VTags.Items.DUSTS_REDSTONE)
-					.add(Items.REDSTONE);
-		}
-
-		private void generateSeedTags() {
-			getOrCreateTagBuilder(VTags.Items.SEEDS)
-					.addTag(VTags.Items.SEEDS_BEETROOT)
-					.addTag(VTags.Items.SEEDS_MELON)
-					.addTag(VTags.Items.SEEDS_PUMPKIN)
-					.addTag(VTags.Items.SEEDS_WHEAT);
-
-			getOrCreateTagBuilder(VTags.Items.SEEDS_BEETROOT)
-					.add(Items.BEETROOT_SEEDS);
-			getOrCreateTagBuilder(VTags.Items.SEEDS_MELON)
-					.add(Items.MELON_SEEDS);
-			getOrCreateTagBuilder(VTags.Items.SEEDS_PUMPKIN)
-					.add(Items.PUMPKIN_SEEDS);
-			getOrCreateTagBuilder(VTags.Items.SEEDS_WHEAT)
-					.add(Items.WHEAT_SEEDS);
-		}
-
-		private void generateMiscTags() {
-			getOrCreateTagBuilder(VTags.Items.BOOKSHELVES)
-					.add(Items.BOOKSHELF);
-			addColored(tagCustom(VTags.Items.DYES)::addTags);
-			getOrCreateTagBuilder(VTags.Items.ENCHANTING_FUELS)
-					.addTag(VTags.Items.GEMS_LAPIS);
-			getOrCreateTagBuilder(VTags.Items.SHEARS)
-					.add(Items.SHEARS);
-		}
-
-		private void generateToolTags() {
-			getOrCreateTagBuilder(VTags.Items.TOOLS)
-					.addTag(VTags.Items.TOOLS_SWORDS)
-					.addTag(VTags.Items.TOOLS_AXES)
-					.addTag(VTags.Items.TOOLS_PICKAXES)
-					.addTag(VTags.Items.TOOLS_SHOVELS)
-					.addTag(VTags.Items.TOOLS_HOES)
-					.addTag(VTags.Items.TOOLS_SHIELDS)
-					.addTag(VTags.Items.TOOLS_BOWS)
-					.addTag(VTags.Items.TOOLS_CROSSBOWS)
-					.addTag(VTags.Items.TOOLS_FISHING_RODS)
-					.addTag(VTags.Items.TOOLS_TRIDENTS);
-
-			getOrCreateTagBuilder(VTags.Items.TOOLS_SWORDS)
-					.add(Items.WOODEN_SWORD)
-					.add(Items.STONE_SWORD)
-					.add(Items.IRON_SWORD)
-					.add(Items.GOLDEN_SWORD)
-					.add(Items.DIAMOND_SWORD)
-					.add(Items.NETHERITE_SWORD);
-			getOrCreateTagBuilder(VTags.Items.TOOLS_AXES).add(Items.WOODEN_AXE)
-					.add(Items.STONE_AXE)
-					.add(Items.IRON_AXE)
-					.add(Items.GOLDEN_AXE)
-					.add(Items.DIAMOND_AXE)
-					.add(Items.NETHERITE_AXE);
-			getOrCreateTagBuilder(VTags.Items.TOOLS_PICKAXES).add(Items.WOODEN_PICKAXE)
-					.add(Items.STONE_PICKAXE)
-					.add(Items.IRON_PICKAXE)
-					.add(Items.GOLDEN_PICKAXE)
-					.add(Items.DIAMOND_PICKAXE)
-					.add(Items.NETHERITE_PICKAXE);
-			getOrCreateTagBuilder(VTags.Items.TOOLS_SHOVELS).add(Items.WOODEN_SHOVEL)
-					.add(Items.STONE_SHOVEL)
-					.add(Items.IRON_SHOVEL)
-					.add(Items.GOLDEN_SHOVEL)
-					.add(Items.DIAMOND_SHOVEL)
-					.add(Items.NETHERITE_SHOVEL);
-			getOrCreateTagBuilder(VTags.Items.TOOLS_HOES).add(Items.WOODEN_HOE)
-					.add(Items.STONE_HOE)
-					.add(Items.IRON_HOE)
-					.add(Items.GOLDEN_HOE)
-					.add(Items.DIAMOND_HOE)
-					.add(Items.NETHERITE_HOE);
-			getOrCreateTagBuilder(VTags.Items.TOOLS_SHIELDS)
-					.add(Items.SHIELD);
-			getOrCreateTagBuilder(VTags.Items.TOOLS_BOWS)
-					.add(Items.BOW);
-			getOrCreateTagBuilder(VTags.Items.TOOLS_CROSSBOWS)
-					.add(Items.CROSSBOW);
-			getOrCreateTagBuilder(VTags.Items.TOOLS_FISHING_RODS)
-					.add(Items.FISHING_ROD);
-			getOrCreateTagBuilder(VTags.Items.TOOLS_TRIDENTS)
-					.add(Items.TRIDENT);
-		}
-
-		private void generateArmorTags() {
-			getOrCreateTagBuilder(VTags.Items.ARMORS)
-					.addTag(VTags.Items.ARMORS_HELMETS)
-					.addTag(VTags.Items.ARMORS_CHESTPLATES)
-					.addTag(VTags.Items.ARMORS_LEGGINGS)
-					.addTag(VTags.Items.ARMORS_BOOTS);
-
-			getOrCreateTagBuilder(VTags.Items.ARMORS_HELMETS)
-					.add(Items.LEATHER_HELMET)
-					.add(Items.TURTLE_HELMET)
-					.add(Items.CHAINMAIL_HELMET)
-					.add(Items.IRON_HELMET)
-					.add(Items.GOLDEN_HELMET)
-					.add(Items.DIAMOND_HELMET)
-					.add(Items.NETHERITE_HELMET);
-			getOrCreateTagBuilder(VTags.Items.ARMORS_CHESTPLATES)
-					.add(Items.LEATHER_CHESTPLATE)
-					.add(Items.CHAINMAIL_CHESTPLATE)
-					.add(Items.IRON_CHESTPLATE)
-					.add(Items.GOLDEN_CHESTPLATE)
-					.add(Items.DIAMOND_CHESTPLATE)
-					.add(Items.NETHERITE_CHESTPLATE);
-			getOrCreateTagBuilder(VTags.Items.ARMORS_LEGGINGS)
-					.add(Items.LEATHER_LEGGINGS)
-					.add(Items.CHAINMAIL_LEGGINGS)
-					.add(Items.IRON_LEGGINGS)
-					.add(Items.GOLDEN_LEGGINGS)
-					.add(Items.DIAMOND_LEGGINGS)
-					.add(Items.NETHERITE_LEGGINGS);
-			getOrCreateTagBuilder(VTags.Items.ARMORS_BOOTS)
-					.add(Items.LEATHER_BOOTS)
-					.add(Items.CHAINMAIL_BOOTS)
-					.add(Items.IRON_BOOTS)
-					.add(Items.GOLDEN_BOOTS)
-					.add(Items.DIAMOND_BOOTS)
-					.add(Items.NETHERITE_BOOTS);
 		}
 
 		private void generateFoodTags() {
@@ -1361,11 +704,7 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
 		}
 
 		private void generateVillageJobSitesTag() {
-			copy(VTags.Blocks.BARRELS_WOODEN, VTags.Items.BARRELS_WOODEN);
-			copy(VTags.Blocks.BARRELS, VTags.Items.BARRELS);
-
 			getOrCreateTagBuilder(ConventionalItemTags.VILLAGER_JOB_SITES)
-					.addOptionalTag(VTags.Items.BARRELS)
 					.add(Items.BARREL)
 					.add(Items.BLAST_FURNACE)
 					.add(Items.BREWING_STAND)
@@ -1382,11 +721,6 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
 		}
 
 		private void generateSandstoneTags() {
-			copy(VTags.Blocks.SAND, VTags.Items.SAND);
-			copy(VTags.Blocks.SAND_COLORLESS, VTags.Items.SAND_COLORLESS);
-			copy(VTags.Blocks.SAND_RED, VTags.Items.SAND_RED);
-			copy(VTags.Blocks.SANDSTONE, VTags.Items.SANDSTONE);
-
 			getOrCreateTagBuilder(ConventionalItemTags.NORMAL_SANDSTONE_BLOCKS)
 					.add(Items.SANDSTONE)
 					.add(Items.CUT_SANDSTONE)
@@ -1403,7 +737,6 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
 
 			getOrCreateTagBuilder(ConventionalItemTags.NORMAL_SANDSTONE_SLABS)
 					.add(Items.SANDSTONE_SLAB)
-//                .add(Items.CUT_SANDSTONE_SLAB)
 					.add(Items.SMOOTH_SANDSTONE_SLAB);
 			getOrCreateTagBuilder(ConventionalItemTags.RED_SANDSTONE_SLABS)
 					.add(Items.RED_SANDSTONE_SLAB)
@@ -1422,51 +755,6 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
 			getOrCreateTagBuilder(ConventionalItemTags.SANDSTONE_STAIRS)
 					.addOptionalTag(ConventionalItemTags.NORMAL_SANDSTONE_SLABS)
 					.addOptionalTag(ConventionalItemTags.RED_SANDSTONE_SLABS);
-		}
-
-		private void addColored(Consumer<TagKey<Item>> consumer) {
-			String prefix = VTags.Items.DYES.location().getPath().toUpperCase(Locale.ENGLISH) + '_';
-			for (DyeColor color : DyeColor.values()) {
-				ResourceLocation key = new ResourceLocation("minecraft",
-						"{color}_dye".replace("{color}", color.getName()));
-				TagKey<Item> tag = getForgeItemTag(prefix + color.getName());
-				Item item = Registry.ITEM.get(key);
-				if (item == Items.AIR)
-					throw new IllegalStateException("Unknown vanilla item: " + key);
-				tag(tag).add(item);
-				consumer.accept(tag);
-			}
-		}
-
-		private void copyColored(TagKey<Block> blockGroup, TagKey<Item> itemGroup) {
-			String blockPre = blockGroup.location().getPath().toUpperCase(Locale.ENGLISH) + '_';
-			String itemPre = itemGroup.location().getPath().toUpperCase(Locale.ENGLISH) + '_';
-			for (DyeColor color : DyeColor.values()) {
-				TagKey<Block> from = getForgeBlockTag(blockPre + color.getName());
-				TagKey<Item> to = getForgeItemTag(itemPre + color.getName());
-				copy(from, to);
-			}
-			copy(getForgeBlockTag(blockPre + "colorless"), getForgeItemTag(itemPre + "colorless"));
-		}
-
-		@SuppressWarnings("unchecked")
-		private TagKey<Block> getForgeBlockTag(String name) {
-			try {
-				name = name.toUpperCase(Locale.ENGLISH);
-				return (TagKey<Block>) VTags.Blocks.class.getDeclaredField(name).get(null);
-			} catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException e) {
-				throw new IllegalStateException(VTags.Blocks.class.getName() + " is missing tag name: " + name);
-			}
-		}
-
-		@SuppressWarnings("unchecked")
-		private TagKey<Item> getForgeItemTag(String name) {
-			try {
-				name = name.toUpperCase(Locale.ENGLISH);
-				return (TagKey<Item>) VTags.Items.class.getDeclaredField(name).get(null);
-			} catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException e) {
-				throw new IllegalStateException(VTags.Items.class.getName() + " is missing tag name: " + name);
-			}
 		}
 	}
 
@@ -1609,112 +897,6 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
 					EntityType.ZOMBIFIED_PIGLIN);
 
 			tag(VTags.EntityTypes.NPC).add(EntityType.PIGLIN, EntityType.VILLAGER, EntityType.WANDERING_TRADER);
-		}
-	}
-
-	private static class VRecipeReplacementProvider extends FabricRecipeProvider {
-		private final Map<Item, TagKey<Item>> replacements = new HashMap<>();
-		private final Set<ResourceLocation> excludes = new HashSet<>();
-
-		private VRecipeReplacementProvider(FabricDataGenerator dataGenerator) {
-			super(dataGenerator);
-		}
-
-		private void exclude(ItemLike item) {
-			excludes.add(Registry.ITEM.getKey(item.asItem()));
-		}
-
-		private void replace(ItemLike item, TagKey<Item> tag) {
-			replacements.put(item.asItem(), tag);
-		}
-
-		@Override
-		protected void generateRecipes(Consumer<FinishedRecipe> exporter) {
-			replace(Items.STICK, VTags.Items.RODS_WOODEN);
-			replace(Items.GOLD_INGOT, VTags.Items.INGOTS_GOLD);
-			replace(Items.IRON_INGOT, VTags.Items.INGOTS_IRON);
-			replace(Items.NETHERITE_INGOT, VTags.Items.INGOTS_NETHERITE);
-			replace(Items.DIAMOND, VTags.Items.GEMS_DIAMOND);
-			replace(Items.EMERALD, VTags.Items.GEMS_EMERALD);
-			replace(Items.CHEST, VTags.Items.CHESTS_WOODEN);
-			replace(Blocks.COBBLESTONE, ItemTags.STONE_CRAFTING_MATERIALS);
-			replace(Blocks.COBBLED_DEEPSLATE, VTags.Items.COBBLESTONE_DEEPSLATE);
-
-			exclude(Blocks.GOLD_BLOCK);
-			exclude(Items.GOLD_NUGGET);
-			exclude(Blocks.IRON_BLOCK);
-			exclude(Items.IRON_NUGGET);
-			exclude(Blocks.DIAMOND_BLOCK);
-			exclude(Blocks.EMERALD_BLOCK);
-			exclude(Blocks.NETHERITE_BLOCK);
-
-			exclude(Blocks.COBBLESTONE_STAIRS);
-			exclude(Blocks.COBBLESTONE_SLAB);
-			exclude(Blocks.COBBLESTONE_WALL);
-			exclude(Blocks.COBBLED_DEEPSLATE_STAIRS);
-			exclude(Blocks.COBBLED_DEEPSLATE_SLAB);
-			exclude(Blocks.COBBLED_DEEPSLATE_WALL);
-
-			buildCraftingRecipes(vanilla -> {
-				FinishedRecipe modified = enhance(vanilla);
-				if (modified != null)
-					exporter.accept(modified);
-			});
-		}
-
-		private FinishedRecipe enhance(FinishedRecipe vanilla) {
-			if (vanilla instanceof ShapelessRecipeBuilder.Result result)
-				return enhance(result);
-			if (vanilla instanceof ShapedRecipeBuilder.Result result)
-				return enhance(result);
-			return null;
-		}
-
-		private FinishedRecipe enhance(ShapelessRecipeBuilder.Result vanilla) {
-			List<Ingredient> ingredients = vanilla.ingredients;
-			boolean modified = false;
-			for (int x = 0; x < ingredients.size(); x++) {
-				Ingredient ing = enhance(vanilla.getId(), ingredients.get(x));
-				if (ing != null) {
-					ingredients.set(x, ing);
-					modified = true;
-				}
-			}
-			return modified ? vanilla : null;
-		}
-
-		private FinishedRecipe enhance(ShapedRecipeBuilder.Result vanilla) {
-			Map<Character, Ingredient> ingredients = vanilla.key;
-			boolean modified = false;
-			for (Character x : ingredients.keySet()) {
-				Ingredient ing = enhance(vanilla.getId(), ingredients.get(x));
-				if (ing != null) {
-					ingredients.put(x, ing);
-					modified = true;
-				}
-			}
-			return modified ? vanilla : null;
-		}
-
-		private Ingredient enhance(ResourceLocation name, Ingredient vanilla) {
-			if (excludes.contains(name))
-				return null;
-
-			boolean modified = false;
-			List<Value> items = new ArrayList<>();
-			for (Value entry : vanilla.values) {
-				if (entry instanceof ItemValue) {
-					ItemStack stack = entry.getItems().stream().findFirst().orElse(ItemStack.EMPTY);
-					TagKey<Item> replacement = replacements.get(stack.getItem());
-					if (replacement != null) {
-						items.add(new TagValue(replacement));
-						modified = true;
-					} else
-						items.add(entry);
-				} else
-					items.add(entry);
-			}
-			return modified ? Ingredient.fromValues(items.stream()) : null;
 		}
 	}
 
