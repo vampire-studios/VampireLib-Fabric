@@ -17,65 +17,97 @@
 
 package io.github.vampirestudios.vampirelib;
 
+import static io.github.vampirestudios.vampirelib.VampireLib.BLOCK_WITH_CUSTOM_MODEL;
+import static io.github.vampirestudios.vampirelib.VampireLib.BLOCK_WITH_EMPTY_MODEL;
 import static io.github.vampirestudios.vampirelib.VampireLib.TEST_CONTENT_ENABLED;
 
+import java.io.File;
+import java.io.Reader;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
 import net.fabric.api.tag.convention.v1.ConventionalBiomeTags;
 import net.fabric.api.tag.convention.v1.ConventionalBlockTags;
 import net.fabric.api.tag.convention.v1.ConventionalItemTags;
 
-import net.minecraft.data.BuiltinRegistries;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.data.DataProvider;
 import net.minecraft.data.models.BlockModelGenerators;
 import net.minecraft.data.models.ItemModelGenerators;
+import net.minecraft.data.models.blockstates.MultiVariantGenerator;
+import net.minecraft.data.models.blockstates.Variant;
+import net.minecraft.data.models.blockstates.VariantProperties;
+import net.minecraft.data.models.model.ModelTemplate;
+import net.minecraft.data.models.model.TextureMapping;
+import net.minecraft.data.models.model.TextureSlot;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.tags.BiomeTagsProvider;
-import net.minecraft.data.tags.TagsProvider;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.BiomeTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Biomes;
-import net.minecraft.world.level.biome.MultiNoiseBiomeSource;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.levelgen.NoiseGeneratorSettings;
 
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
+import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricModelProvider;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
 
+import io.github.vampirestudios.vampirelib.api.datagen.BlockModelBuilder;
 import io.github.vampirestudios.vampirelib.api.datagen.CustomTagProviders;
-import io.github.vampirestudios.vampirelib.api.datagen.FabricLanguageProvider;
-import io.github.vampirestudios.vampirelib.api.datagen.LanguageConsumer;
+import io.github.vampirestudios.vampirelib.api.datagen.DisplayBuilder;
+import io.github.vampirestudios.vampirelib.api.datagen.FabricSoundProvider;
+import io.github.vampirestudios.vampirelib.api.datagen.SoundBuilder;
 import io.github.vampirestudios.vampirelib.init.VTags;
 import io.github.vampirestudios.vampirelib.utils.registry.WoodRegistry;
 
 public class VampireLibDataGen implements DataGeneratorEntrypoint {
 	@Override
 	public void onInitializeDataGenerator(FabricDataGenerator dataGenerator) {
+		FabricDataGenerator.Pack pack = dataGenerator.createPack();
 		if (TEST_CONTENT_ENABLED) {
-			dataGenerator.addProvider(WoodTypeBlockStateDefinitionProvider::new);
-			dataGenerator.addProvider(WoodTypeEnglishLanguageProvider::new);
-			dataGenerator.addProvider(WoodTypeFrenchLanguageProvider::new);
-			dataGenerator.addProvider(WoodTypeRecipeProvider::new);
-			WoodTypeBlockTagProvider blockTagsProvider = dataGenerator.addProvider(WoodTypeBlockTagProvider::new);
-			dataGenerator.addProvider(new WoodTypeItemTagProvider(dataGenerator, blockTagsProvider));
+			pack.addProvider(WoodTypeBlockStateDefinitionProvider::new);
+			pack.addProvider((FabricDataGenerator.Pack.Factory<DataProvider>) output -> new WoodTypeTranslationProvider(output, "en_us"));
+			pack.addProvider((FabricDataGenerator.Pack.Factory<DataProvider>) output -> new WoodTypeTranslationProvider(output, "fr_fr"));
+			pack.addProvider((FabricDataGenerator.Pack.Factory<DataProvider>) output -> new WoodTypeTranslationProvider(output, "no_no"));
+			pack.addProvider(WoodTypeRecipeProvider::new);
+			WoodTypeBlockTagProvider blockTagsProvider = pack.addProvider(WoodTypeBlockTagProvider::new);
+			pack.addProvider((output, registriesFuture) -> new WoodTypeItemTagProvider(output, blockTagsProvider, registriesFuture));
 		}
-		VBlockTagsProvider blockTagsProvider = dataGenerator.addProvider(VBlockTagsProvider::new);
-		dataGenerator.addProvider(new VItemTagsProvider(dataGenerator, blockTagsProvider));
-		dataGenerator.addProvider(VEntityTypeTagsProvider::new);
-		dataGenerator.addProvider(VBiomeTagsProvider::new);
-		dataGenerator.addProvider(VNoiseSettingsTagsProvider::new);
-//        dataGenerator.addProvider(VDimensionTypeTagsProvider::new);
+//		VBlockTagsProvider blockTagsProvider = pack.addProvider(VBlockTagsProvider::new);
+//		pack.addProvider((output, registriesFuture) -> new VItemTagsProvider(output, blockTagsProvider, registriesFuture));
+//		pack.addProvider(VBiomeTagsProvider::new);
+	}
+
+	private static class TestSoundProvider extends FabricSoundProvider {
+		private TestSoundProvider(FabricDataOutput dataOutput) {
+			super(dataOutput);
+		}
+
+		@Override
+		public void generateSounds(SoundGenerator soundGenerator) {
+			soundGenerator.add(SoundEvents.METAL_BREAK, true,
+					SoundBuilder.sound(VampireLib.INSTANCE.identifier("replacement_sound_1")),
+					SoundBuilder.sound(VampireLib.INSTANCE.identifier("replacement_sound_2")).setVolume(0.5f).setPitch(0.5f),
+					SoundBuilder.event(VampireLib.INSTANCE.identifier("replacement_event")).setWeight(2));
+			soundGenerator.add(SoundEvents.DEEPSLATE_BREAK, true,
+					SoundBuilder.event(VampireLib.INSTANCE.identifier("replacement_event")));
+		}
 	}
 
 	//Wood Type Test Generation
 	private static class WoodTypeBlockStateDefinitionProvider extends FabricModelProvider {
-		private WoodTypeBlockStateDefinitionProvider(FabricDataGenerator generator) {
+		private WoodTypeBlockStateDefinitionProvider(FabricDataOutput generator) {
 			super(generator);
 		}
 
@@ -113,6 +145,25 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
 			generateWoodTypeAssets(blockStateModelGenerator, VampireLib.TEST_NETHER_WOOD11);
 			generateWoodTypeAssets(blockStateModelGenerator, VampireLib.TEST_NETHER_WOOD12);
 			generateWoodTypeAssets(blockStateModelGenerator, VampireLib.TEST_NETHER_WOOD13);
+
+			// TODO: needs more simplification
+			TextureSlot texture1 = TextureSlot.create("texture1");
+			TextureSlot texture2 = TextureSlot.create("texture2");
+			ModelTemplate customModel = BlockModelBuilder.createNew(VampireLib.INSTANCE.identifier("custom"))
+					.addTextureKey(texture1)
+					.addTextureKey(texture2)
+					.addDisplay(DisplayBuilder.Position.FIXED, new DisplayBuilder()
+							.rotate(45, 45, 45)
+							.scale(2))
+					.noAmbientOcclusion()
+					.build();
+			TextureMapping customTextureMap = new TextureMapping()
+					.put(texture1, VampireLib.INSTANCE.identifier("block_with_custom_model_1"))
+					.put(texture2, VampireLib.INSTANCE.identifier("block_with_custom_model_2"));
+			blockStateModelGenerator.blockStateOutput.accept(MultiVariantGenerator.multiVariant(BLOCK_WITH_CUSTOM_MODEL,
+					Variant.variant().with(VariantProperties.MODEL, customModel.create(BLOCK_WITH_CUSTOM_MODEL, customTextureMap, blockStateModelGenerator.modelOutput))));
+
+			blockStateModelGenerator.registerEmptyModel(BLOCK_WITH_EMPTY_MODEL);
 		}
 
 		@Override
@@ -125,105 +176,67 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
 		}
 	}
 
-	private static class WoodTypeEnglishLanguageProvider extends FabricLanguageProvider {
-		private WoodTypeEnglishLanguageProvider(FabricDataGenerator dataGenerator) {
-			super(dataGenerator, "en_us");
+	private static class WoodTypeTranslationProvider extends FabricLanguageProvider {
+		private Map<String, String> lang;
+
+		private WoodTypeTranslationProvider(FabricDataOutput dataGenerator, String langCode) {
+			super(dataGenerator, langCode);
+			File file = new File("translations/" + langCode + ".json");
+			try(Reader reader = Files.newBufferedReader(Paths.get(file.toURI()))) {
+				lang = VampireLib.GSON.fromJson(reader, Map.class);
+			} catch(Exception ignored) {
+				lang = new HashMap<>();
+			}
 		}
 
 		@Override
-		public void generateLanguages(LanguageConsumer languageConsumer) {
-			addWoodTypeLang(VampireLib.TEST_WOOD, languageConsumer);
-			addWoodTypeLang(VampireLib.TEST_WOOD1, languageConsumer);
-			addWoodTypeLang(VampireLib.TEST_WOOD2, languageConsumer);
-			addWoodTypeLang(VampireLib.TEST_WOOD3, languageConsumer);
-			addWoodTypeLang(VampireLib.TEST_WOOD4, languageConsumer);
-			addWoodTypeLang(VampireLib.TEST_WOOD5, languageConsumer);
-			addWoodTypeLang(VampireLib.TEST_WOOD6, languageConsumer);
-			addWoodTypeLang(VampireLib.TEST_WOOD7, languageConsumer);
-			addWoodTypeLang(VampireLib.TEST_WOOD8, languageConsumer);
-			addWoodTypeLang(VampireLib.TEST_WOOD9, languageConsumer);
-			addWoodTypeLang(VampireLib.TEST_WOOD10, languageConsumer);
-			addWoodTypeLang(VampireLib.TEST_WOOD11, languageConsumer);
-			addWoodTypeLang(VampireLib.TEST_WOOD12, languageConsumer);
-			addWoodTypeLang(VampireLib.TEST_WOOD13, languageConsumer);
-			addWoodTypeLang(VampireLib.TEST_WOOD14, languageConsumer);
-			addWoodTypeLang(VampireLib.TEST_WOOD15, languageConsumer);
-			addWoodTypeLang(VampireLib.TEST_WOOD16, languageConsumer);
+		public void generateTranslations(TranslationBuilder translationBuilder) {
+			addWoodTypeLang(VampireLib.TEST_WOOD, translationBuilder);
+			addWoodTypeLang(VampireLib.TEST_WOOD1, translationBuilder);
+			addWoodTypeLang(VampireLib.TEST_WOOD2, translationBuilder);
+			addWoodTypeLang(VampireLib.TEST_WOOD3, translationBuilder);
+			addWoodTypeLang(VampireLib.TEST_WOOD4, translationBuilder);
+			addWoodTypeLang(VampireLib.TEST_WOOD5, translationBuilder);
+			addWoodTypeLang(VampireLib.TEST_WOOD6, translationBuilder);
+			addWoodTypeLang(VampireLib.TEST_WOOD7, translationBuilder);
+			addWoodTypeLang(VampireLib.TEST_WOOD8, translationBuilder);
+			addWoodTypeLang(VampireLib.TEST_WOOD9, translationBuilder);
+			addWoodTypeLang(VampireLib.TEST_WOOD10, translationBuilder);
+			addWoodTypeLang(VampireLib.TEST_WOOD11, translationBuilder);
+			addWoodTypeLang(VampireLib.TEST_WOOD12, translationBuilder);
+			addWoodTypeLang(VampireLib.TEST_WOOD13, translationBuilder);
+			addWoodTypeLang(VampireLib.TEST_WOOD14, translationBuilder);
+			addWoodTypeLang(VampireLib.TEST_WOOD15, translationBuilder);
+			addWoodTypeLang(VampireLib.TEST_WOOD16, translationBuilder);
 
-			addWoodTypeLang(VampireLib.TEST_NETHER_WOOD, languageConsumer);
-			addWoodTypeLang(VampireLib.TEST_NETHER_WOOD1, languageConsumer);
-			addWoodTypeLang(VampireLib.TEST_NETHER_WOOD2, languageConsumer);
-			addWoodTypeLang(VampireLib.TEST_NETHER_WOOD3, languageConsumer);
-			addWoodTypeLang(VampireLib.TEST_NETHER_WOOD4, languageConsumer);
-			addWoodTypeLang(VampireLib.TEST_NETHER_WOOD5, languageConsumer);
-			addWoodTypeLang(VampireLib.TEST_NETHER_WOOD6, languageConsumer);
-			addWoodTypeLang(VampireLib.TEST_NETHER_WOOD7, languageConsumer);
-			addWoodTypeLang(VampireLib.TEST_NETHER_WOOD8, languageConsumer);
-			addWoodTypeLang(VampireLib.TEST_NETHER_WOOD9, languageConsumer);
-			addWoodTypeLang(VampireLib.TEST_NETHER_WOOD10, languageConsumer);
-			addWoodTypeLang(VampireLib.TEST_NETHER_WOOD11, languageConsumer);
-			addWoodTypeLang(VampireLib.TEST_NETHER_WOOD12, languageConsumer);
-			addWoodTypeLang(VampireLib.TEST_NETHER_WOOD13, languageConsumer);
+			addWoodTypeLang(VampireLib.TEST_NETHER_WOOD, translationBuilder);
+			addWoodTypeLang(VampireLib.TEST_NETHER_WOOD1, translationBuilder);
+			addWoodTypeLang(VampireLib.TEST_NETHER_WOOD2, translationBuilder);
+			addWoodTypeLang(VampireLib.TEST_NETHER_WOOD3, translationBuilder);
+			addWoodTypeLang(VampireLib.TEST_NETHER_WOOD4, translationBuilder);
+			addWoodTypeLang(VampireLib.TEST_NETHER_WOOD5, translationBuilder);
+			addWoodTypeLang(VampireLib.TEST_NETHER_WOOD6, translationBuilder);
+			addWoodTypeLang(VampireLib.TEST_NETHER_WOOD7, translationBuilder);
+			addWoodTypeLang(VampireLib.TEST_NETHER_WOOD8, translationBuilder);
+			addWoodTypeLang(VampireLib.TEST_NETHER_WOOD9, translationBuilder);
+			addWoodTypeLang(VampireLib.TEST_NETHER_WOOD10, translationBuilder);
+			addWoodTypeLang(VampireLib.TEST_NETHER_WOOD11, translationBuilder);
+			addWoodTypeLang(VampireLib.TEST_NETHER_WOOD12, translationBuilder);
+			addWoodTypeLang(VampireLib.TEST_NETHER_WOOD13, translationBuilder);
 		}
 
-		private void addWoodTypeLang(WoodRegistry woodRegistry, LanguageConsumer languageConsumer) {
-			woodRegistry.generateLang(languageConsumer);
-		}
-	}
-
-	private static class WoodTypeFrenchLanguageProvider extends FabricLanguageProvider {
-		private WoodTypeFrenchLanguageProvider(FabricDataGenerator dataGenerator) {
-			super(dataGenerator, "fr_fr");
-		}
-
-		@Override
-		public void generateLanguages(LanguageConsumer languageConsumer) {
-			addWoodTypeLang(VampireLib.TEST_WOOD, languageConsumer);
-			addWoodTypeLang(VampireLib.TEST_WOOD1, languageConsumer);
-			addWoodTypeLang(VampireLib.TEST_WOOD2, languageConsumer);
-			addWoodTypeLang(VampireLib.TEST_WOOD3, languageConsumer);
-			addWoodTypeLang(VampireLib.TEST_WOOD4, languageConsumer);
-			addWoodTypeLang(VampireLib.TEST_WOOD5, languageConsumer);
-			addWoodTypeLang(VampireLib.TEST_WOOD6, languageConsumer);
-			addWoodTypeLang(VampireLib.TEST_WOOD7, languageConsumer);
-			addWoodTypeLang(VampireLib.TEST_WOOD8, languageConsumer);
-			addWoodTypeLang(VampireLib.TEST_WOOD9, languageConsumer);
-			addWoodTypeLang(VampireLib.TEST_WOOD10, languageConsumer);
-			addWoodTypeLang(VampireLib.TEST_WOOD11, languageConsumer);
-			addWoodTypeLang(VampireLib.TEST_WOOD12, languageConsumer);
-			addWoodTypeLang(VampireLib.TEST_WOOD13, languageConsumer);
-			addWoodTypeLang(VampireLib.TEST_WOOD14, languageConsumer);
-			addWoodTypeLang(VampireLib.TEST_WOOD15, languageConsumer);
-			addWoodTypeLang(VampireLib.TEST_WOOD16, languageConsumer);
-
-			addWoodTypeLang(VampireLib.TEST_NETHER_WOOD, languageConsumer);
-			addWoodTypeLang(VampireLib.TEST_NETHER_WOOD1, languageConsumer);
-			addWoodTypeLang(VampireLib.TEST_NETHER_WOOD2, languageConsumer);
-			addWoodTypeLang(VampireLib.TEST_NETHER_WOOD3, languageConsumer);
-			addWoodTypeLang(VampireLib.TEST_NETHER_WOOD4, languageConsumer);
-			addWoodTypeLang(VampireLib.TEST_NETHER_WOOD5, languageConsumer);
-			addWoodTypeLang(VampireLib.TEST_NETHER_WOOD6, languageConsumer);
-			addWoodTypeLang(VampireLib.TEST_NETHER_WOOD7, languageConsumer);
-			addWoodTypeLang(VampireLib.TEST_NETHER_WOOD8, languageConsumer);
-			addWoodTypeLang(VampireLib.TEST_NETHER_WOOD9, languageConsumer);
-			addWoodTypeLang(VampireLib.TEST_NETHER_WOOD10, languageConsumer);
-			addWoodTypeLang(VampireLib.TEST_NETHER_WOOD11, languageConsumer);
-			addWoodTypeLang(VampireLib.TEST_NETHER_WOOD12, languageConsumer);
-			addWoodTypeLang(VampireLib.TEST_NETHER_WOOD13, languageConsumer);
-		}
-
-		private void addWoodTypeLang(WoodRegistry woodRegistry, LanguageConsumer languageConsumer) {
-			woodRegistry.generateLang(languageConsumer);
+		private void addWoodTypeLang(WoodRegistry woodRegistry, FabricLanguageProvider.TranslationBuilder translationBuilder) {
+			woodRegistry.generateLang(translationBuilder, lang);
 		}
 	}
 
 	private static class WoodTypeRecipeProvider extends FabricRecipeProvider {
-		private WoodTypeRecipeProvider(FabricDataGenerator dataGenerator) {
+		private WoodTypeRecipeProvider(FabricDataOutput dataGenerator) {
 			super(dataGenerator);
 		}
 
 		@Override
-		protected void generateRecipes(Consumer<FinishedRecipe> exporter) {
+		public void buildRecipes(Consumer<FinishedRecipe> exporter) {
 			generateWoodTypeRecipes(exporter, VampireLib.TEST_WOOD);
 			generateWoodTypeRecipes(exporter, VampireLib.TEST_WOOD1);
 			generateWoodTypeRecipes(exporter, VampireLib.TEST_WOOD2);
@@ -264,12 +277,12 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
 	}
 
 	private static class WoodTypeBlockTagProvider extends CustomTagProviders.CustomBlockTagProvider {
-		private WoodTypeBlockTagProvider(FabricDataGenerator dataGenerator) {
-			super(dataGenerator);
+		private WoodTypeBlockTagProvider(FabricDataOutput dataGenerator, CompletableFuture<HolderLookup.Provider> completableFuture) {
+			super(dataGenerator, completableFuture);
 		}
 
 		@Override
-		protected void generateTags() {
+		protected void addTags(HolderLookup.Provider provider) {
 			this.generateWoodTypeRecipes(VampireLib.TEST_WOOD);
 			this.generateWoodTypeRecipes(VampireLib.TEST_WOOD1);
 			this.generateWoodTypeRecipes(VampireLib.TEST_WOOD2);
@@ -310,12 +323,12 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
 	}
 
 	private static class WoodTypeItemTagProvider extends CustomTagProviders.CustomItemTagProvider {
-		private WoodTypeItemTagProvider(FabricDataGenerator dataGenerator, CustomBlockTagProvider blockTagProvider) {
-			super(dataGenerator, blockTagProvider);
+		private WoodTypeItemTagProvider(FabricDataOutput dataGenerator, CustomBlockTagProvider blockTagProvider, CompletableFuture<HolderLookup.Provider> registriesFuture) {
+			super(dataGenerator, registriesFuture, blockTagProvider);
 		}
 
 		@Override
-		protected void generateTags() {
+		protected void addTags(HolderLookup.Provider arg) {
 			this.generateWoodTypeRecipes(VampireLib.TEST_WOOD);
 			this.generateWoodTypeRecipes(VampireLib.TEST_WOOD1);
 			this.generateWoodTypeRecipes(VampireLib.TEST_WOOD2);
@@ -357,12 +370,12 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
 
 	//VampireLib generators
 	private static class VBlockTagsProvider extends CustomTagProviders.CustomBlockTagProvider {
-		private VBlockTagsProvider(FabricDataGenerator dataGenerator) {
-			super(dataGenerator);
+		private VBlockTagsProvider(FabricDataOutput dataGenerator, CompletableFuture<HolderLookup.Provider> completableFuture) {
+			super(dataGenerator, completableFuture);
 		}
 
 		@Override
-		protected void generateTags() {
+		protected void addTags(HolderLookup.Provider arg) {
 			generateVillagerJobSitesTag();
 			generateSandstoneTags();
 		}
@@ -424,12 +437,12 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
 	}
 
 	private static class VBiomeTagsProvider extends BiomeTagsProvider {
-		private VBiomeTagsProvider(FabricDataGenerator dataGenerator) {
-			super(dataGenerator);
+		private VBiomeTagsProvider(FabricDataOutput dataGenerator, CompletableFuture<HolderLookup.Provider> completableFuture) {
+			super(dataGenerator, completableFuture);
 		}
 
 		@Override
-		protected void addTags() {
+		protected void addTags(HolderLookup.Provider arg) {
 			tag(VTags.Biomes.HILLS)
 //                .addOptionalTag(ConventionalBiomeTags.EXTREME_HILLS.location())
 					.add(Biomes.FLOWER_FOREST, Biomes.ICE_SPIKES, Biomes.WINDSWEPT_HILLS, Biomes.WINDSWEPT_GRAVELLY_HILLS,
@@ -625,11 +638,11 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
 					.add(Biomes.END_HIGHLANDS, Biomes.END_MIDLANDS, Biomes.SMALL_END_ISLANDS, Biomes.END_BARRENS);
 
 			this.tag(VTags.Biomes.WITHOUT_DEFAULT_MONSTER_SPAWNS).add(Biomes.MUSHROOM_FIELDS, Biomes.DEEP_DARK);
-			TagAppender<Biome> withMonsterSpawns = this.tag(VTags.Biomes.WITH_DEFAULT_MONSTER_SPAWNS);
-			MultiNoiseBiomeSource.Preset.OVERWORLD.possibleBiomes().forEach((biome) -> {
+			/*TagAppender<Biome> withMonsterSpawns = this.tag(VTags.Biomes.WITH_DEFAULT_MONSTER_SPAWNS);
+			MultiNoiseBiomeSource.Preset.OVERWORLD.possibleBiomes(arg.asGetterLookup()).forEach((biome) -> {
 				if (biome != Biomes.MUSHROOM_FIELDS && biome != Biomes.DEEP_DARK)
 					withMonsterSpawns.add(biome);
-			});
+			});*/
 		}
 
 		@SafeVarargs
@@ -646,12 +659,12 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
 	}
 
 	private static class VItemTagsProvider extends CustomTagProviders.CustomItemTagProvider {
-		private VItemTagsProvider(FabricDataGenerator dataGenerator, CustomTagProviders.CustomBlockTagProvider blockTagProvider) {
-			super(dataGenerator, blockTagProvider);
+		private VItemTagsProvider(FabricDataOutput dataGenerator, CustomTagProviders.CustomBlockTagProvider blockTagProvider, CompletableFuture<HolderLookup.Provider> completableFuture) {
+			super(dataGenerator, completableFuture, blockTagProvider);
 		}
 
 		@Override
-		protected void generateTags() {
+		protected void addTags(HolderLookup.Provider arg) {
 			copyCobblestoneTags();
 
 			generateFoodTags();
@@ -757,179 +770,5 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
 					.addOptionalTag(ConventionalItemTags.RED_SANDSTONE_SLABS);
 		}
 	}
-
-	private static class VEntityTypeTagsProvider extends CustomTagProviders.VEntityTagProvider {
-		public VEntityTypeTagsProvider(FabricDataGenerator dataGenerator) {
-			super(dataGenerator);
-		}
-
-		@Override
-		protected void generateTags() {
-			tag(VTags.EntityTypes.BOSSES).addTag(VTags.EntityTypes.DRAGONS).add(EntityType.WITHER);
-
-			tag(VTags.EntityTypes.DRAGONS).add(EntityType.ENDER_DRAGON);
-
-			tag(VTags.EntityTypes.GOLEMS).add(EntityType.IRON_GOLEM, EntityType.SNOW_GOLEM);
-
-			tag(VTags.EntityTypes.BUILDABLE_MOBS).addTag(VTags.EntityTypes.GOLEMS).add(EntityType.WITHER);
-
-			tag(VTags.EntityTypes.BIG_NOSES).addTag(VTags.EntityTypes.ILLAGERS)
-					.add(EntityType.WITCH, EntityType.VILLAGER, EntityType.ZOMBIE_VILLAGER);
-			tag(VTags.EntityTypes.ILLAGERS).add(EntityType.PILLAGER, EntityType.ILLUSIONER, EntityType.VINDICATOR,
-					EntityType.EVOKER);
-
-			/*
-			 * Many of these mob types do not appear in vanilla Minecraft, and are thus left empty here
-			 */
-			tagCustom(VTags.EntityTypes.ELEMENTAL).addTags(VTags.EntityTypes.ELEMENTAL_FIRE,
-					VTags.EntityTypes.ELEMENTAL_ICE,
-					VTags.EntityTypes.ELEMENTAL_METAL);
-			tag(VTags.EntityTypes.ELEMENTAL_FIRE).add(EntityType.BLAZE);
-			tag(VTags.EntityTypes.ELEMENTAL_ICE).add(EntityType.SNOW_GOLEM);
-			tag(VTags.EntityTypes.ELEMENTAL_METAL).add(EntityType.IRON_GOLEM);
-
-			tagCustom(VTags.EntityTypes.ELEMENTAL_ATTACKS).addTags(VTags.EntityTypes.ELEMENTAL_ATTACKS_ELECTRIC,
-					VTags.EntityTypes.ELEMENTAL_ATTACKS_FIRE,
-					VTags.EntityTypes.ELEMENTAL_ATTACKS_ICE);
-			tag(VTags.EntityTypes.ELEMENTAL_ATTACKS_ELECTRIC).add(EntityType.LIGHTNING_BOLT);
-			tag(VTags.EntityTypes.ELEMENTAL_ATTACKS_FIRE).add(EntityType.FIREBALL, EntityType.SMALL_FIREBALL);
-			tag(VTags.EntityTypes.ELEMENTAL_ATTACKS_ICE).add(EntityType.SNOWBALL);
-
-			tag(VTags.EntityTypes.ARTHROPODS).add(EntityType.BEE, EntityType.CAVE_SPIDER, EntityType.ENDERMITE,
-					EntityType.SILVERFISH, EntityType.SPIDER);
-
-			tag(VTags.EntityTypes.AVIANS).addTag(VTags.EntityTypes.AVIANS_FOWLS).add(EntityType.PARROT);
-			tag(VTags.EntityTypes.AVIANS_FOWLS).add(EntityType.CHICKEN);
-
-			tag(VTags.EntityTypes.AQUATIC).add(EntityType.AXOLOTL, EntityType.COD, EntityType.DOLPHIN,
-					EntityType.ELDER_GUARDIAN,
-					EntityType.GLOW_SQUID, EntityType.GUARDIAN, EntityType.PUFFERFISH,
-					EntityType.SALMON, EntityType.SQUID,
-					EntityType.TROPICAL_FISH,
-					EntityType.TURTLE/*, EntityType.FROG, EntityType.TADPOLE*/);
-			tag(VTags.EntityTypes.FISH).add(EntityType.COD, EntityType.PUFFERFISH, EntityType.SALMON,
-					EntityType.TROPICAL_FISH);
-			tag(VTags.EntityTypes.CEPHALOPODS).add(EntityType.GLOW_SQUID, EntityType.SQUID);
-			tag(VTags.EntityTypes.GUARDIANS).add(EntityType.ELDER_GUARDIAN, EntityType.GUARDIAN);
-
-			tag(VTags.EntityTypes.REPTILES).add(EntityType.TURTLE);
-
-			tagCustom(VTags.EntityTypes.MAMMALS)
-					.addTags(VTags.EntityTypes.MAMMALS_BOVINES, VTags.EntityTypes.MAMMALS_CAMELIDS,
-							VTags.EntityTypes.MAMMALS_CANIDS,
-							VTags.EntityTypes.MAMMALS_CAPRINES, VTags.EntityTypes.MAMMALS_EQUINES,
-							VTags.EntityTypes.MAMMALS_FELINES,
-							VTags.EntityTypes.MAMMALS_SWINES, VTags.EntityTypes.MAMMALS_URSIDS
-					).add(EntityType.BAT, EntityType.RABBIT);
-			tag(VTags.EntityTypes.MAMMALS_BOVINES).addTag(VTags.EntityTypes.MAMMALS_BOVINES_CATTLE)
-					.add(EntityType.SHEEP);
-			tag(VTags.EntityTypes.MAMMALS_BOVINES_CATTLE).add(EntityType.COW, EntityType.MOOSHROOM);
-			tag(VTags.EntityTypes.MAMMALS_CAMELIDS).add(EntityType.LLAMA, EntityType.TRADER_LLAMA);
-			tag(VTags.EntityTypes.MAMMALS_CANIDS).add(EntityType.FOX, EntityType.WOLF);
-			tag(VTags.EntityTypes.MAMMALS_CAPRINES).add(EntityType.GOAT);
-			tag(VTags.EntityTypes.MAMMALS_EQUINES).add(EntityType.DONKEY, EntityType.HORSE, EntityType.ZOMBIE_HORSE,
-					EntityType.SKELETON_HORSE, EntityType.MULE);
-			tag(VTags.EntityTypes.MAMMALS_FELINES).add(EntityType.CAT, EntityType.OCELOT);
-			tag(VTags.EntityTypes.MAMMALS_SWINES).add(EntityType.HOGLIN, EntityType.PIG);
-			tag(VTags.EntityTypes.MAMMALS_URSIDS).add(EntityType.PANDA, EntityType.POLAR_BEAR);
-
-			tag(VTags.EntityTypes.GHOSTS).add(EntityType.VEX, EntityType.PHANTOM, EntityType.GHAST);
-
-			tagCustom(VTags.EntityTypes.MILKABLE).addTags(VTags.EntityTypes.MAMMALS_BOVINES_CATTLE,
-					VTags.EntityTypes.MAMMALS_CAPRINES);
-			tag(VTags.EntityTypes.MUSHROOM_COWS).add(EntityType.MOOSHROOM);
-
-			tag(VTags.EntityTypes.BLIND_MOBS);
-
-			tagCustom(VTags.EntityTypes.FLYING).addTags(VTags.EntityTypes.BOSSES, VTags.EntityTypes.GHOSTS)
-					.add(EntityType.BAT, EntityType.BEE,
-							EntityType.ENDER_DRAGON, EntityType.PARROT, EntityType.WITHER);
-			tagCustom(VTags.EntityTypes.LAND).addTags(VTags.EntityTypes.CREEPERS, VTags.EntityTypes.SKELETONS,
-							VTags.EntityTypes.ZOMBIES)
-					.add(EntityType.BLAZE, EntityType.CAT, EntityType.CAVE_SPIDER,
-							EntityType.CHICKEN, EntityType.DONKEY, EntityType.ENDERMAN,
-							EntityType.ENDERMITE, EntityType.EVOKER, EntityType.FOX,
-							EntityType.GOAT, EntityType.HOGLIN, EntityType.HORSE,
-							EntityType.ILLUSIONER,
-							EntityType.IRON_GOLEM, EntityType.LLAMA, EntityType.MAGMA_CUBE,
-							EntityType.MULE, EntityType.OCELOT, EntityType.PANDA, EntityType.PIG,
-							EntityType.PIGLIN, EntityType.PIGLIN_BRUTE, EntityType.PILLAGER,
-							EntityType.PLAYER, EntityType.POLAR_BEAR, EntityType.RABBIT,
-							EntityType.RAVAGER, EntityType.SHEEP, EntityType.SHULKER,
-							EntityType.SILVERFISH, EntityType.SLIME, EntityType.SNOW_GOLEM,
-							EntityType.SPIDER,
-							EntityType.TRADER_LLAMA, EntityType.VILLAGER, EntityType.VINDICATOR,
-							EntityType.WANDERING_TRADER, EntityType.WITCH, EntityType.WOLF
-					);
-
-			tag(VTags.EntityTypes.VOLCANIC).add(EntityType.STRIDER);
-			tag(VTags.EntityTypes.HELL_MOBS).addTag(VTags.EntityTypes.VOLCANIC)
-					.add(EntityType.MAGMA_CUBE, EntityType.GHAST, EntityType.PIGLIN,
-							EntityType.PIGLIN_BRUTE,
-							EntityType.BLAZE, EntityType.WITHER_SKELETON,
-							EntityType.ZOMBIFIED_PIGLIN, EntityType.HOGLIN
-					);
-
-			tagCustom(VTags.EntityTypes.ENEMIES).addTags(VTags.EntityTypes.BOSSES,
-							VTags.EntityTypes.CREEPERS/*, EntityTypeTags.RAIDERS*/)
-					.add(EntityType.BLAZE, EntityType.CAVE_SPIDER, EntityType.DROWNED,
-							EntityType.ELDER_GUARDIAN, EntityType.ENDERMAN,
-							EntityType.ENDERMITE,
-							EntityType.GHAST, EntityType.GUARDIAN, EntityType.HOGLIN,
-							EntityType.HUSK, EntityType.MAGMA_CUBE, EntityType.PHANTOM,
-							EntityType.PIGLIN,
-							EntityType.PIGLIN_BRUTE, EntityType.SHULKER, EntityType.SILVERFISH,
-							EntityType.SKELETON, EntityType.SLIME, EntityType.SPIDER,
-							EntityType.STRAY,
-							EntityType.VEX, EntityType.WITHER_SKELETON, EntityType.ZOGLIN,
-							EntityType.ZOMBIE, EntityType.ZOMBIE_VILLAGER,
-							EntityType.ZOMBIFIED_PIGLIN
-					);
-			tag(VTags.EntityTypes.CREEPERS).add(EntityType.CREEPER);
-
-			tagCustom(VTags.EntityTypes.UNDEAD).addTags(VTags.EntityTypes.SKELETONS, VTags.EntityTypes.ZOMBIES)
-					.add(EntityType.PHANTOM, EntityType.WITHER);
-			tag(VTags.EntityTypes.SKELETONS).add(EntityType.SKELETON, EntityType.WITHER_SKELETON,
-					EntityType.SKELETON_HORSE);
-			tag(VTags.EntityTypes.ZOMBIES).add(EntityType.DROWNED, EntityType.HUSK, EntityType.ZOGLIN,
-					EntityType.ZOMBIE,
-					EntityType.ZOMBIE_HORSE, EntityType.ZOMBIE_VILLAGER,
-					EntityType.ZOMBIFIED_PIGLIN);
-
-			tag(VTags.EntityTypes.NPC).add(EntityType.PIGLIN, EntityType.VILLAGER, EntityType.WANDERING_TRADER);
-		}
-	}
-
-	private static class VNoiseSettingsTagsProvider extends TagsProvider<NoiseGeneratorSettings> {
-		private VNoiseSettingsTagsProvider(FabricDataGenerator dataGenerator) {
-			super(dataGenerator, BuiltinRegistries.NOISE_GENERATOR_SETTINGS);
-		}
-
-		@Override
-		protected void addTags() {
-			this.tag(VTags.NoiseSettings.AMPLIFIED).add(NoiseGeneratorSettings.AMPLIFIED);
-			this.tag(VTags.NoiseSettings.CAVES).add(NoiseGeneratorSettings.CAVES);
-			this.tag(VTags.NoiseSettings.END).add(NoiseGeneratorSettings.END);
-			this.tag(VTags.NoiseSettings.FLOATING_ISLANDS).add(NoiseGeneratorSettings.FLOATING_ISLANDS);
-			this.tag(VTags.NoiseSettings.NETHER).add(NoiseGeneratorSettings.NETHER);
-			this.tag(VTags.NoiseSettings.OVERWORLD).add(NoiseGeneratorSettings.OVERWORLD);
-		}
-	}
-
-    /*private static class VDimensionTypeTagsProvider extends CustomTagProviders.DimensionTypeTagProvider {
-        private VDimensionTypeTagsProvider(FabricDataGenerator dataGenerator) {
-            super(dataGenerator);
-        }
-
-        @Override
-        protected void generateTags() {
-            this.tag(VTags.DimensionTypes.END).add(DimensionType.END_LOCATION);
-            this.tag(VTags.DimensionTypes.NETHER).add(DimensionType.NETHER_LOCATION);
-            this.tag(VTags.DimensionTypes.OVERWORLD)
-                .addTag(VTags.DimensionTypes.OVERWORLD_CAVES)
-                .add(DimensionType.OVERWORLD_LOCATION);
-            this.tag(VTags.DimensionTypes.OVERWORLD_CAVES).add(DimensionType.OVERWORLD_CAVES_LOCATION);
-        }
-    }*/
 
 }

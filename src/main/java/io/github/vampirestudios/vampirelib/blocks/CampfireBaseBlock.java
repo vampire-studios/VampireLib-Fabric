@@ -17,31 +17,16 @@
 
 package io.github.vampirestudios.vampirelib.blocks;
 
-import net.minecraft.core.NonNullList;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CampfireBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.material.MaterialColor;
 
-import io.github.vampirestudios.vampirelib.api.itemGroupSorting.VanillaTargetedItemGroupFiller;
-
 public class CampfireBaseBlock extends CampfireBlock {
-	private final VanillaTargetedItemGroupFiller FILLER;
-
 	public CampfireBaseBlock(boolean soul) {
 		super(!soul, soul ? 1 : 2, BlockBehaviour.Properties.of(Material.WOOD, MaterialColor.COLOR_BROWN).strength(2.0F)
 				.sound(SoundType.WOOD)
 				.lightLevel(value -> soul ? 10 : 15).randomTicks());
-		FILLER = new VanillaTargetedItemGroupFiller(soul ? Blocks.SOUL_CAMPFIRE.asItem() : Blocks.CAMPFIRE.asItem());
 	}
-
-	@Override
-	public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> list) {
-		FILLER.fillItem(this.asItem(), group, list);
-	}
-
 }

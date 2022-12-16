@@ -17,25 +17,11 @@
 
 package io.github.vampirestudios.vampirelib.blocks;
 
-import net.minecraft.core.NonNullList;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RotatedPillarBlock;
 
-import io.github.vampirestudios.vampirelib.api.itemGroupSorting.ModdedTargetedItemGroupFiller;
-
 public class CompatPillarBlock extends RotatedPillarBlock {
-	private final ModdedTargetedItemGroupFiller FILLER;
-
 	public CompatPillarBlock(String modId, Block modBlock, Properties settings) {
 		super(settings);
-		this.FILLER = new ModdedTargetedItemGroupFiller(modId, modBlock.asItem());
 	}
-
-	@Override
-	public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> list) {
-		FILLER.fillItem(this.asItem(), group, list);
-	}
-
 }

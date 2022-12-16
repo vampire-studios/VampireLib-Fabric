@@ -28,7 +28,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
 
-import io.github.vampirestudios.vampirelib.Something;
+import io.github.vampirestudios.vampirelib.init.VRegistries;
 import io.github.vampirestudios.vampirelib.modules.api.ClientFeature;
 import io.github.vampirestudios.vampirelib.modules.api.CommonFeature;
 import io.github.vampirestudios.vampirelib.modules.api.ServerFeature;
@@ -49,27 +49,27 @@ public final class FeatureManager {
 	}
 
 	public static FeatureManager createFeatureManager(ResourceLocation modIdentifier) {
-		return Registry.register(Something.FEATURE_MANAGERS, modIdentifier, new FeatureManager());
+		return Registry.register(VRegistries.FEATURE_MANAGERS, modIdentifier, new FeatureManager());
 	}
 
 	public static FeatureManager getFeatureManager(ResourceLocation modIdentifier) {
-		return Something.FEATURE_MANAGERS.get(modIdentifier);
+		return VRegistries.FEATURE_MANAGERS.get(modIdentifier);
 	}
 
 	public void registerCommonFeature(CommonFeature module) {
-		if (!COMMON_FEATURES.getOptional(module.getRegistryName()).isPresent()) {
+		if (COMMON_FEATURES.getOptional(module.getRegistryName()).isEmpty()) {
 			Registry.register(COMMON_FEATURES, module.getRegistryName(), module);
 		}
 	}
 
 	public void registerClientFeature(ClientFeature module) {
-		if (!CLIENT_FEATURES.getOptional(module.getRegistryName()).isPresent()) {
+		if (CLIENT_FEATURES.getOptional(module.getRegistryName()).isEmpty()) {
 			Registry.register(CLIENT_FEATURES, module.getRegistryName(), module);
 		}
 	}
 
 	public void registerServerFeature(ServerFeature module) {
-		if (!SERVER_FEATURES.getOptional(module.getRegistryName()).isPresent()) {
+		if (SERVER_FEATURES.getOptional(module.getRegistryName()).isEmpty()) {
 			Registry.register(SERVER_FEATURES, module.getRegistryName(), module);
 		}
 	}
@@ -88,11 +88,9 @@ public final class FeatureManager {
 
 	public void initCommon(String modId) {
 		COMMON_FEATURES.forEach(feature -> {
-			if (!this.commonFeatures.contains(feature)) {
+			if (!this.commonFeatures.contains(feature))
 				if (feature.getRegistryName().getNamespace().equals(modId)) feature.initCommon();
-			}
 		});
-
 		ConsoleUtils.logCommonFeatures();
 	}
 

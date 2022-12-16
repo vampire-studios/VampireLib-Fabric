@@ -17,20 +17,9 @@
 
 package io.github.vampirestudios.vampirelib.utils;
 
-import java.util.Map;
-
-import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.block.state.properties.SlabType;
-
-import io.github.vampirestudios.artifice.api.ArtificeResourcePack;
-import io.github.vampirestudios.artifice.api.builder.assets.BlockStateBuilder;
-import io.github.vampirestudios.artifice.api.builder.assets.BlockStateBuilder.Variant;
-import io.github.vampirestudios.artifice.api.builder.assets.ModelBuilder;
-import io.github.vampirestudios.artifice.api.resource.StringResource;
-
+@Deprecated
 public class ArtificeGenerationHelper {
-	public static void generateBasicBlockState(ArtificeResourcePack.ClientResourcePackBuilder clientResourcePackBuilder, ResourceLocation name) {
+	/*public static void generateBasicBlockState(ArtificeResourcePack.ClientResourcePackBuilder clientResourcePackBuilder, ResourceLocation name) {
 		clientResourcePackBuilder.addBlockState(name, new BlockStateBuilder().variant("", new Variant().model(
 				Utils.prependToPath(name, "block/"))));
 	}
@@ -408,6 +397,6 @@ public class ArtificeGenerationHelper {
 				.parent(new ResourceLocation("block/template_orientable_trapdoor_top"))
 				.texture("texture", texture)
 		);
-	}
+	}*/
 
 }

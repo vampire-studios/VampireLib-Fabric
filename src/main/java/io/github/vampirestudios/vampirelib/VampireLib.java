@@ -20,22 +20,38 @@ package io.github.vampirestudios.vampirelib;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+
 import net.minecraft.SharedConstants;
+import net.minecraft.core.Holder;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameRules;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
-
-import org.quiltmc.loader.api.ModContainer;
+import net.minecraft.world.level.material.Material;
 
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
+import net.fabricmc.fabric.api.event.registry.DynamicRegistrySetupCallback;
 
 import io.github.vampirestudios.vampirelib.api.BasicModClass;
 import io.github.vampirestudios.vampirelib.api.ConvertibleBlockPair;
-import io.github.vampirestudios.vampirelib.init.VRegistries;
+import io.github.vampirestudios.vampirelib.api.debug_renderers.DebugFeatureSync;
 import io.github.vampirestudios.vampirelib.utils.Rands;
 import io.github.vampirestudios.vampirelib.utils.blendfunctions.BlendingFunction;
 import io.github.vampirestudios.vampirelib.utils.registry.BlockChiseler;
@@ -45,6 +61,11 @@ public class VampireLib extends BasicModClass {
 	public static final VampireLib INSTANCE = new VampireLib();
 
 	public static final List<ConvertibleBlockPair> CONVERTIBLE_BLOCKS = new ArrayList<>();
+
+	public static final Gson GSON = new GsonBuilder()
+			.setLenient().setPrettyPrinting()
+			.create();
+
 	public static final boolean TEST_CONTENT_ENABLED = false;
 
 	public static WoodRegistry TEST_WOOD;
@@ -80,21 +101,40 @@ public class VampireLib extends BasicModClass {
 	public static WoodRegistry TEST_NETHER_WOOD12;
 	public static WoodRegistry TEST_NETHER_WOOD13;
 
+	public static Block BLOCK_WITH_CUSTOM_MODEL;
+	public static Block BLOCK_WITH_EMPTY_MODEL;
+
 	public VampireLib() {
 		super("vampirelib", "VampireLib", "5.5.0+build.1");
 	}
 
 	@Override
-	public void onInitialize(ModContainer modContainer) {
+	public void onInitialize() {
 		shouldNotPrintVersionMessage();
 		getLogger().info(String.format("%s running %s v%s for %s",
 				Rands.chance(15) ? "Your are" : (Rands.chance(15) ? "You're" : "You are"),
 				modName(), modVersion(), SharedConstants.getCurrentVersion().getName()));
 		BlockChiseler.setup();
-		VRegistries.init();
 		BlendingFunction.init();
+		DebugFeatureSync.init();
+
+		try {
+			DynamicRegistryRegistry.registerBefore(Registries.BIOME, DynamicData.BEFORE_KEY, DynamicData.CODEC);
+			DynamicRegistryRegistry.registerAfter(Registries.BIOME, DynamicData.AFTER_KEY, DynamicData.CODEC);
+			DynamicRegistryRegistry.register(ResourceKey.createRegistryKey(new ResourceLocation(INSTANCE.modId(), "worldgen/biome")), Codec.BOOL);
+		} catch (IllegalStateException ignored) {
+			INSTANCE.getLogger().info("DynamicRegistryRegistry path clash test passed!");
+		}
+
+		DynamicRegistrySetupCallback.EVENT.register(registryManager -> {
+			registryManager.registerEntryAdded(Registries.BIOME, (rawId, id, object) -> INSTANCE.getLogger().info("Biome added: {}", id));
+			registryManager.registerEntryAdded(Registries.BIOME, (rawId, id, object) -> INSTANCE.getLogger().info("Biome added: {}", id));
+			registryManager.registerEntryAdded(DynamicData.BEFORE_KEY, (rawId, id, object) -> INSTANCE.getLogger().info("Before biome data: {}", id));
+			registryManager.registerEntryAdded(DynamicData.AFTER_KEY, (rawId, id, object) -> INSTANCE.getLogger().info("After biome data: {}", id));
+		});
 
 		if (TEST_CONTENT_ENABLED) {
+
 			//Overworld
 			TEST_WOOD = WoodRegistry.of(identifier("test"))
 					.defaultBlocks().build();
@@ -107,32 +147,32 @@ public class VampireLib extends BasicModClass {
 					.defaultBlocksColoredLeaves().defaultExtras().build();
 
 			TEST_WOOD4 = WoodRegistry.of(identifier("test4"))
-					.defaultBlocks().defaultExtras().ladder().build();
+					.defaultBlocks().defaultExtras().build();
 			TEST_WOOD5 = WoodRegistry.of(identifier("test5"))
-					.defaultBlocksColoredLeaves().defaultExtras().ladder().build();
+					.defaultBlocksColoredLeaves().defaultExtras().build();
 
 			TEST_WOOD6 = WoodRegistry.of(identifier("test6"))
-					.defaultBlocks().defaultExtras().ladder().bookshelf().build();
+					.defaultBlocks().defaultExtras().build();
 			TEST_WOOD7 = WoodRegistry.of(identifier("test7"))
-					.defaultBlocksColoredLeaves().defaultExtras().ladder().bookshelf().build();
+					.defaultBlocksColoredLeaves().defaultExtras().build();
 
 			TEST_WOOD8 = WoodRegistry.of(identifier("test8"))
-					.defaultBlocks().defaultExtras().ladder().bookshelf()
+					.defaultBlocks().defaultExtras()
 					.build();
 			TEST_WOOD9 = WoodRegistry.of(identifier("test9"))
-					.defaultBlocksColoredLeaves().defaultExtras().ladder().bookshelf()
+					.defaultBlocksColoredLeaves().defaultExtras()
 					.build();
 
 			TEST_WOOD10 = WoodRegistry.of(identifier("test10"))
-					.defaultBlocks().defaultExtras().ladder().bookshelf().build();
+					.defaultBlocks().defaultExtras().build();
 			TEST_WOOD11 = WoodRegistry.of(identifier("test11"))
-					.defaultBlocksColoredLeaves().defaultExtras().ladder().bookshelf()
+					.defaultBlocksColoredLeaves().defaultExtras()
 					.build();
 
 			TEST_WOOD12 = WoodRegistry.of(identifier("test12"))
-					.defaultBlocks().defaultExtras().ladder().bookshelf().build();
+					.defaultBlocks().defaultExtras().build();
 			TEST_WOOD13 = WoodRegistry.of(identifier("test13"))
-					.defaultBlocksColoredLeaves().defaultExtras().ladder().bookshelf()
+					.defaultBlocksColoredLeaves().defaultExtras()
 					.build();
 
 			TEST_WOOD14 = WoodRegistry.of(identifier("test14"))
@@ -156,40 +196,42 @@ public class VampireLib extends BasicModClass {
 					.mushroomLike().defaultBlocksColoredLeaves().defaultExtras().build();
 
 			TEST_NETHER_WOOD4 = WoodRegistry.of(identifier("test4_nether"))
-					.mushroomLike().defaultBlocks().defaultExtras().ladder().build();
+					.mushroomLike().defaultBlocks().defaultExtras().build();
 			TEST_NETHER_WOOD5 = WoodRegistry.of(identifier("test5_nether"))
-					.mushroomLike().defaultBlocksColoredLeaves().defaultExtras().ladder()
+					.mushroomLike().defaultBlocksColoredLeaves().defaultExtras()
 					.build();
 
 			TEST_NETHER_WOOD6 = WoodRegistry.of(identifier("test6_nether"))
-					.mushroomLike().defaultBlocks().defaultExtras().ladder().bookshelf()
+					.mushroomLike().defaultBlocks().defaultExtras()
 					.nonFlammable().build();
 			TEST_NETHER_WOOD7 = WoodRegistry.of(identifier("test7_nether"))
-					.mushroomLike().defaultBlocksColoredLeaves().defaultExtras().ladder()
-					.bookshelf().build();
+					.mushroomLike().defaultBlocksColoredLeaves().defaultExtras()
+					.build();
 
 			TEST_NETHER_WOOD8 = WoodRegistry.of(identifier("test8_nether"))
-					.mushroomLike().defaultBlocks().defaultExtras().ladder().bookshelf()
+					.mushroomLike().defaultBlocks().defaultExtras()
 					.nonFlammable().build();
 			TEST_NETHER_WOOD9 = WoodRegistry.of(identifier("test9_nether"))
-					.defaultBlocksColoredLeaves().defaultExtras().ladder().bookshelf()
+					.defaultBlocksColoredLeaves().defaultExtras()
 					.nonFlammable().build();
 
 			TEST_NETHER_WOOD10 = WoodRegistry.of(identifier("test10_nether"))
-					.mushroomLike().defaultBlocks().defaultExtras().ladder().bookshelf()
+					.mushroomLike().defaultBlocks().defaultExtras()
 					.nonFlammable().build();
 			TEST_NETHER_WOOD11 = WoodRegistry.of(identifier("test11_nether"))
-					.mushroomLike().defaultBlocksColoredLeaves().defaultExtras().ladder()
-					.bookshelf().nonFlammable().build();
+					.mushroomLike().defaultBlocksColoredLeaves().defaultExtras()
+					.nonFlammable().build();
 
 			TEST_NETHER_WOOD12 = WoodRegistry.of(identifier("test12_nether"))
-					.mushroomLike().defaultBlocks().defaultExtras().ladder().bookshelf()
+					.mushroomLike().defaultBlocks().defaultExtras()
 					.nonFlammable().build();
 			TEST_NETHER_WOOD13 = WoodRegistry.of(identifier("test13_nether"))
-					.mushroomLike().defaultBlocksColoredLeaves().defaultExtras().ladder()
-					.bookshelf()
+					.mushroomLike().defaultBlocksColoredLeaves().defaultExtras()
 					.nonFlammable().build();
 		}
+
+		BLOCK_WITH_CUSTOM_MODEL = createBlock("block_with_custom_model", false);
+		BLOCK_WITH_EMPTY_MODEL = createBlock("block_with_empty_model", false);
 
 		UseBlockCallback.EVENT.register((player, world, hand, hitResult) -> {
 			if (!world.isClientSide) {
@@ -251,6 +293,24 @@ public class VampireLib extends BasicModClass {
 			}
 			return InteractionResult.PASS;
 		});
+	}
+
+	private static Block createBlock(String name, boolean hasItem) {
+		Block block = Registry.register(BuiltInRegistries.BLOCK, INSTANCE.identifier(name), new Block(BlockBehaviour.Properties.of(Material.STONE)));
+
+		if (hasItem) {
+			Registry.register(BuiltInRegistries.ITEM, INSTANCE.identifier(name), new BlockItem(block, new Item.Properties()));
+		}
+
+		return block;
+	}
+
+	private record DynamicData(Holder<Biome> biome) {
+		private static final ResourceKey<Registry<DynamicData>> BEFORE_KEY = ResourceKey.createRegistryKey(new ResourceLocation(INSTANCE.modId(), "fabric-api/before_biome"));
+		private static final ResourceKey<Registry<DynamicData>> AFTER_KEY = ResourceKey.createRegistryKey(new ResourceLocation(INSTANCE.modId(), "fabric-api/after_biome"));
+		private static final Codec<DynamicData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+				Biome.CODEC.fieldOf("biome").forGetter(DynamicData::biome)
+		).apply(instance, DynamicData::new));
 	}
 
 }

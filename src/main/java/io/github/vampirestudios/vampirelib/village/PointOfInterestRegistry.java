@@ -18,16 +18,17 @@
 package io.github.vampirestudios.vampirelib.village;
 
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.ai.village.poi.PoiType;
 
 public interface PointOfInterestRegistry {
 
 	static PoiType register(ResourceLocation id, PoiType pointOfInterestTypeCustom) {
-		if (!Registry.POINT_OF_INTEREST_TYPE.containsKey(id) &&
+		if (!BuiltInRegistries.POINT_OF_INTEREST_TYPE.containsKey(id) &&
 				!pointOfInterestTypeCustom.matchingStates().isEmpty())
-			return Registry.register(Registry.POINT_OF_INTEREST_TYPE, id, pointOfInterestTypeCustom);
-		else return Registry.POINT_OF_INTEREST_TYPE.get(id);
+			return Registry.register(BuiltInRegistries.POINT_OF_INTEREST_TYPE, id, pointOfInterestTypeCustom);
+		else return BuiltInRegistries.POINT_OF_INTEREST_TYPE.get(id);
 	}
 
 }

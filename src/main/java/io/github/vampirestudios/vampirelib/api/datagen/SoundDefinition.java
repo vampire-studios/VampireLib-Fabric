@@ -47,7 +47,7 @@ public final class SoundDefinition {
 
 	/**
 	 * Creates a new sound definition for the specified sound event. Also adds a sound file to the definition based on the name of the sound
-	 * <b><i>NOTE: THE NAMESPACE OF THE SOUND IS IGNORED AND WILL BE ASSIGNED TO THE ONE IN THE {@link FabricSoundProvider}</i></b>
+	 * <b><i>NOTE: THE NAMESPACE OF THE SOUND IS IGNORED AND WILL BE ASSIGNED TO THE ONE IN THE {@link LegacyFabricSoundProvider}</i></b>
 	 *
 	 * @param sound The sound to create a full definition for
 	 *
@@ -59,7 +59,7 @@ public final class SoundDefinition {
 
 	/**
 	 * Creates a new sound definition for the specified sound event.
-	 * <b><i>NOTE: THE NAMESPACE OF THE SOUND IS IGNORED AND WILL BE ASSIGNED TO THE ONE IN THE {@link FabricSoundProvider}</i></b>
+	 * <b><i>NOTE: THE NAMESPACE OF THE SOUND IS IGNORED AND WILL BE ASSIGNED TO THE ONE IN THE {@link LegacyFabricSoundProvider}</i></b>
 	 *
 	 * @param sound The sound to create a definition for
 	 *

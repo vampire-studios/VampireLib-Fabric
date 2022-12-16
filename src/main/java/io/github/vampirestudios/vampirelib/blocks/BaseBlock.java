@@ -17,24 +17,15 @@
 
 package io.github.vampirestudios.vampirelib.blocks;
 
-import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 
-import io.github.vampirestudios.vampirelib.api.itemGroupSorting.VanillaTargetedItemGroupFiller;
+import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 
 public class BaseBlock extends Block {
-	private final VanillaTargetedItemGroupFiller FILLER;
-
-	public BaseBlock(Block vanillaBlock, Properties settings) {
+	public BaseBlock(Block vanillaBlock, CreativeModeTab creativeModeTab, Properties settings) {
 		super(settings);
-		FILLER = new VanillaTargetedItemGroupFiller(vanillaBlock.asItem());
-	}
-
-	@Override
-	public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> stacks) {
-		FILLER.fillItem(this.asItem(), group, stacks);
+		ItemGroupEvents.modifyEntriesEvent(creativeModeTab).register(entries -> entries.addAfter(vanillaBlock, this.asItem()));
 	}
 
 }

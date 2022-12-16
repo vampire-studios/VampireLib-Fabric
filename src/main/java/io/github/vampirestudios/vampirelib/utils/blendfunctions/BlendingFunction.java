@@ -17,19 +17,14 @@
 
 package io.github.vampirestudios.vampirelib.utils.blendfunctions;
 
-import java.util.function.Function;
-
 import com.mojang.serialization.Codec;
 
-import net.minecraft.core.Registry;
-
 import io.github.vampirestudios.vampirelib.VampireLib;
-import io.github.vampirestudios.vampirelib.init.VRegistries;
 import io.github.vampirestudios.vampirelib.utils.registry.ResourceLocationUtils;
 
 public interface BlendingFunction {
-	Codec<BlendingFunction> CODEC = VRegistries.BLENDING_FUNCTION.byNameCodec().dispatchStable(BlendingFunction::codec,
-			Function.identity());
+//	Codec<BlendingFunction> CODEC = VRegistries.BLENDING_FUNCTION.byNameCodec().dispatchStable(BlendingFunction::codec,
+//			Function.identity());
 
 	Codec<? extends BlendingFunction> codec();
 
@@ -42,7 +37,7 @@ public interface BlendingFunction {
 
 	static void init() {
 		ResourceLocationUtils.setModInstance(VampireLib.INSTANCE);
-		Registry.register(VRegistries.BLENDING_FUNCTION, ResourceLocationUtils.modId("ease_in_out_circ"),
+		/*Registry.register(VRegistries.BLENDING_FUNCTION, ResourceLocationUtils.modId("ease_in_out_circ"),
 				EaseInOutCirc.CODEC);
 		Registry.register(VRegistries.BLENDING_FUNCTION, ResourceLocationUtils.modId("ease_out_bounce"),
 				EaseOutBounce.CODEC);
@@ -52,7 +47,7 @@ public interface BlendingFunction {
 				EaseOutElastic.CODEC);
 		Registry.register(VRegistries.BLENDING_FUNCTION, ResourceLocationUtils.modId("ease_in_circ"), EaseInCirc.CODEC);
 		Registry.register(VRegistries.BLENDING_FUNCTION, ResourceLocationUtils.modId("ease_out_quint"),
-				EaseOutQuint.CODEC);
+				EaseOutQuint.CODEC);*/
 	}
 
 	record EaseInOutCirc() implements BlendingFunction {

@@ -17,8 +17,7 @@ indent_style = tab
 ij_java_imports_layout = $*,|,java.**,|,javax.**,|,*,|,net.minecraft.**,|,org.quiltmc.**,|,net.fabricmc.**,|,io.github.vampirestudios.**
 
 [*.json]
-indent_style = space
-indent_size = 2
+indent_style = tab
 
 [*.properties]
 indent_style = space

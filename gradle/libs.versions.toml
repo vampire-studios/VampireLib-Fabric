@@ -1,30 +1,27 @@
 [versions]
-    minecraft = '1.19.2'
-    quilt_mappings = '1.19.2+build.14'
-    quilt_loader = '0.17.5-beta.3'
+    minecraft = '1.19.3'
+    quilt_mappings = '1.19.3+build.1'
+    loader_version='0.14.11'
     parchment = '2022.08.14'
 
-    quilted_fabric_api = '4.0.0-beta.13+0.62.0-1.19.2'
-    qsl = '3.0.0-beta.16+1.19.2'
+    fabric = "0.68.1+1.19.3"
 
-    artifice = '0.30.1+build.2-1.19'
-    clothconfig = '7.0.72'
-    terraformwoodapi = '4.1.0'
+    clothconfig = '9.0.93'
+    terraformwoodapi = '5.0.0-beta.1'
 
 [libraries]
     minecraft = { module = 'com.mojang:minecraft', version.ref = 'minecraft' }
     quilt_mappings = { module = 'org.quiltmc:quilt-mappings', version.ref = 'quilt_mappings' }
-    quilt_loader = { module = 'org.quiltmc:quilt-loader', version.ref = 'quilt_loader' }
+    fabric_loader = { module = 'net.fabricmc:fabric-loader', version.ref = 'loader_version' }
 
-    quilted_fabric_api = { module = "org.quiltmc.quilted-fabric-api:quilted-fabric-api", version.ref = "quilted_fabric_api" }
-    quilted_fabric_api_deprecated = { module = "org.quiltmc.quilted-fabric-api:quilted-fabric-api-deprecated", version.ref = "quilted_fabric_api" }
-    qsl = { module = "org.quiltmc:qsl", version.ref = "qsl"}
+    fabric_api = { module = "net.fabricmc.fabric-api:fabric-api", version.ref = "fabric" }
+    fabric_api_deprecated = { module = "net.fabricmc.fabric-api:fabric-api-deprecated", version.ref = "fabric" }
+
     clothconfig = { module = 'me.shedaniel.cloth:cloth-config-fabric', version.ref = 'clothconfig' }
-    artifice = { module = 'io.github.vampirestudios:artifice', version.ref = 'artifice' }
     terraformwoodapi = { module = 'com.terraformersmc.terraform-api:terraform-wood-api-v1', version.ref = 'terraformwoodapi' }
 
 [plugins]
-    quilt_loom = { id = "org.quiltmc.loom", version = "0.12.+" }
+    quilt_loom = { id = "org.quiltmc.loom", version = "1.0.+" }
 
 [bundles]
-    qsl = ["quilted_fabric_api", "quilted_fabric_api_deprecated"]
+    fabric = ["fabric_api", "fabric_api_deprecated"]

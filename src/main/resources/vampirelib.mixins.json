@@ -3,13 +3,18 @@
   "package": "io.github.vampirestudios.vampirelib.mixins",
   "compatibilityLevel": "JAVA_16",
   "mixins": [
+    "BlockStateModelGeneratorMixin",
     "HandledScreenMixin",
+    "ItemModelGeneratorMixin",
+    "ItemStackMixin",
     "LandPathNodeMakerMixin",
     "MixinItemEntity",
     "MixinLivingEntity",
     "MixinMobSpawnerLogic",
     "MixinServerPlayerEntity",
     "MixinSpawnHelper",
+    "RegistryLoaderAccessor",
+    "RegistryLoaderMixin",
     "ServerPlayerEntityDamageMixin",
     "block.BlockEntityTypeMixin",
     "block.GrassBlockMixin",
@@ -21,11 +26,14 @@
     "item.MixinBookOnLectern"
   ],
   "client": [
+    "TooltipComponentMixin",
     "client.BlockColorsMixin",
     "client.CameraInvokerMixin",
     "client.CameraMixin",
+    "client.DebugRendererMixin",
+    "client.MinecraftClientMixin",
     "client.ShaderInstanceMixin",
-    "client.TextureAtlasMixin"
+    "client.TextureAtlasMixinOld"
   ],
   "injectors": {
     "defaultRequire": 1

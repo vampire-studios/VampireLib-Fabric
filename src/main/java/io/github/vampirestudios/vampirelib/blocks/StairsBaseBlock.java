@@ -17,25 +17,11 @@
 
 package io.github.vampirestudios.vampirelib.blocks;
 
-import net.minecraft.core.NonNullList;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.StairBlock;
 
-import io.github.vampirestudios.vampirelib.api.itemGroupSorting.VanillaTargetedItemGroupFiller;
-
 public class StairsBaseBlock extends StairBlock {
-	private final VanillaTargetedItemGroupFiller FILLER;
-
-	public StairsBaseBlock(Block block, Block vanillaBlock) {
+	public StairsBaseBlock(Block block) {
 		super(block.defaultBlockState(), Properties.copy(block));
-		FILLER = new VanillaTargetedItemGroupFiller(vanillaBlock.asItem());
 	}
-
-	@Override
-	public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> list) {
-		FILLER.fillItem(this.asItem(), group, list);
-	}
-
 }

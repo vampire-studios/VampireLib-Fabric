@@ -22,17 +22,24 @@ import java.util.List;
 
 import net.minecraft.SharedConstants;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.client.renderer.BiomeColors;
+import net.minecraft.world.item.BundleItem;
 import net.minecraft.world.level.FoliageColor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
-import org.quiltmc.loader.api.ModContainer;
-
+import net.fabricmc.fabric.api.client.rendering.v1.TooltipComponentCallback;
 import net.fabricmc.fabric.impl.client.rendering.ColorProviderRegistryImpl;
 
 import io.github.vampirestudios.vampirelib.VampireLib;
 import io.github.vampirestudios.vampirelib.api.BasicModClass;
+import io.github.vampirestudios.vampirelib.api.callbacks.DebugRendererRegistrationCallback;
+import io.github.vampirestudios.vampirelib.api.callbacks.ItemTooltipDataCallback;
+import io.github.vampirestudios.vampirelib.api.debug_renderers.DebugFeatureSync;
+import io.github.vampirestudios.vampirelib.api.debug_renderers.VanillaDebugFeatures;
+import io.github.vampirestudios.vampirelib.item.BundledTooltipComponentImpl;
+import io.github.vampirestudios.vampirelib.item.BundledTooltipData;
 import io.github.vampirestudios.vampirelib.utils.Rands;
 
 public class VampireLibClient extends BasicModClass {
@@ -44,11 +51,18 @@ public class VampireLibClient extends BasicModClass {
 	}
 
 	@Override
-	public void onInitializeClient(ModContainer modContainer) {
+	public void onInitializeClient() {
 		shouldNotPrintVersionMessage();
 		getLogger().info(String.format("%s running %s v%s on client-side for %s",
 				Rands.chance(15) ? "Your are" : (Rands.chance(15) ? "You're" : "You are"),
 				modName(), modVersion(), SharedConstants.getCurrentVersion().getName()));
+		TooltipComponentCallback.EVENT.register(maybe -> {
+			if (maybe instanceof BundledTooltipData data) {
+				return new BundledTooltipComponentImpl(data.list().stream().map(ClientTooltipComponent::create).toList());
+			}
+
+			return null;
+		});
 		COLORED_LEAVES.forEach(coloredLeaves -> {
 			if (coloredLeaves.usesBiomeColor) {
 				ColorProviderRegistryImpl.BLOCK.register((block, world, pos, layer) -> world != null && pos != null ?
@@ -66,6 +80,36 @@ public class VampireLibClient extends BasicModClass {
 				ColorProviderRegistryImpl.ITEM.register((item, layer) -> coloredLeaves.color,
 						coloredLeaves.leavesBlock);
 			}
+		});
+
+
+
+		ItemTooltipDataCallback.EVENT.register((stack, list) -> {
+			// Re adds tooltip data's of bundles so items are rendered twice.
+			if (stack.getItem() instanceof BundleItem bundle) {
+				bundle.getTooltipImage(stack).ifPresent(list::add);
+			}
+		});
+
+		DebugFeatureSync.clientInit();
+
+		DebugRendererRegistrationCallback.EVENT.register(registrar -> {
+			var debugRenderer = Minecraft.getInstance().debugRenderer;
+			registrar.register(VanillaDebugFeatures.PATHFINDING, debugRenderer.pathfindingRenderer);
+			registrar.register(VanillaDebugFeatures.WATER, debugRenderer.waterDebugRenderer);
+			registrar.register(VanillaDebugFeatures.HEIGHTMAP, debugRenderer.heightMapRenderer);
+			registrar.register(VanillaDebugFeatures.NEIGHBORS_UPDATE, debugRenderer.neighborsUpdateRenderer);
+			registrar.register(VanillaDebugFeatures.STRUCTURE, debugRenderer.structureRenderer);
+			registrar.register(VanillaDebugFeatures.LIGHT, debugRenderer.lightDebugRenderer);
+			registrar.register(VanillaDebugFeatures.WORLD_GEN_ATTEMPT, debugRenderer.worldGenAttemptRenderer);
+			registrar.register(VanillaDebugFeatures.SOLID_FACE, debugRenderer.solidFaceRenderer);
+			registrar.register(VanillaDebugFeatures.CHUNK, debugRenderer.chunkRenderer);
+			registrar.register(VanillaDebugFeatures.BRAIN, debugRenderer.brainDebugRenderer);
+			registrar.register(VanillaDebugFeatures.VILLAGE_SECTIONS, debugRenderer.villageSectionsDebugRenderer);
+			registrar.register(VanillaDebugFeatures.BEE, debugRenderer.beeDebugRenderer);
+			registrar.register(VanillaDebugFeatures.RAID, debugRenderer.raidDebugRenderer);
+			registrar.register(VanillaDebugFeatures.GOAL_SELECTOR, debugRenderer.goalSelectorRenderer);
+			registrar.register(VanillaDebugFeatures.GAME_EVENT, debugRenderer.gameEventListenerRenderer);
 		});
 	}
 

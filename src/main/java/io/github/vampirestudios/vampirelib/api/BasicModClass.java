@@ -17,7 +17,9 @@
 
 package io.github.vampirestudios.vampirelib.api;
 
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.ConfigHolder;
@@ -28,17 +30,21 @@ import org.slf4j.LoggerFactory;
 import net.minecraft.SharedConstants;
 import net.minecraft.resources.ResourceLocation;
 
-import org.quiltmc.loader.api.ModContainer;
-import org.quiltmc.qsl.base.api.entrypoint.ModInitializer;
-import org.quiltmc.qsl.base.api.entrypoint.client.ClientModInitializer;
-
+import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.fabricmc.api.EnvironmentInterface;
+import net.fabricmc.api.EnvironmentInterfaces;
+import net.fabricmc.api.ModInitializer;
 
-import io.github.vampirestudios.vampirelib.Something;
 import io.github.vampirestudios.vampirelib.modules.FeatureManager;
 
+@EnvironmentInterfaces(
+		@EnvironmentInterface(value = EnvType.CLIENT, itf = ClientModInitializer.class)
+)
 public abstract class BasicModClass implements ModInitializer, ClientModInitializer {
+	private static final Map<ResourceLocation, FeatureManager> FEATURE_MANAGERS = new HashMap<>();
+
 	public static FeatureManager featureManager;
 	private final String modId;
 	private final String modName;
@@ -64,7 +70,7 @@ public abstract class BasicModClass implements ModInitializer, ClientModInitiali
 	 * @param modVersion the version of this mod
 	 */
 	protected BasicModClass(String modName, String modVersion) {
-		this(modName, modVersion, false);
+		this(modName, modName, modVersion, false);
 	}
 
 	/**
@@ -102,7 +108,9 @@ public abstract class BasicModClass implements ModInitializer, ClientModInitiali
 		this.modName = modName;
 		this.modVersion = modVersion;
 		this.logger = LoggerFactory.getLogger(this.modName + (client ? " Client" : ""));
-		if (!client) featureManager = this.registerFeatureManager();
+		if (!client) {
+			featureManager = registerFeatureManager();
+		}
 	}
 
 	/**
@@ -113,10 +121,12 @@ public abstract class BasicModClass implements ModInitializer, ClientModInitiali
 	 */
 	private FeatureManager registerFeatureManager() {
 		ResourceLocation id = new ResourceLocation(this.modId, "feature_manager");
-		if (Something.FEATURE_MANAGERS.containsKey(id)) {
-			return Something.FEATURE_MANAGERS.get(id);
+		if (FEATURE_MANAGERS.containsKey(id)) {
+			return FEATURE_MANAGERS.get(id);
 		} else {
-			return FeatureManager.createFeatureManager(id);
+			FeatureManager manager = FeatureManager.createFeatureManager(id);
+			FEATURE_MANAGERS.put(id, manager);
+			return manager;
 		}
 	}
 
@@ -243,7 +253,7 @@ public abstract class BasicModClass implements ModInitializer, ClientModInitiali
 	}
 
 	@Override
-	public void onInitialize(ModContainer mod) {
+	public void onInitialize() {
 		if (this.printVersionMessage) {
 			this.getLogger().info("You're now running {} v{} for {}", this.modName(), this.modVersion(),
 					SharedConstants.getCurrentVersion().getName());
@@ -252,7 +262,7 @@ public abstract class BasicModClass implements ModInitializer, ClientModInitiali
 
 	@Environment(EnvType.CLIENT)
 	@Override
-	public void onInitializeClient(ModContainer mod) {
+	public void onInitializeClient() {
 		if (this.printVersionMessage) {
 			this.getLogger().info("You're now running {} v{} on Client-Side for {}", this.modName(), this.modVersion(),
 					SharedConstants.getCurrentVersion().getName());

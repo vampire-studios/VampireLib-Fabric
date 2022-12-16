@@ -18,30 +18,18 @@
 package io.github.vampirestudios.vampirelib.blocks;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.NonNullList;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.WeatheringCopper;
 import net.minecraft.world.level.block.state.BlockState;
 
-import io.github.vampirestudios.vampirelib.api.itemGroupSorting.ModdedTargetedItemGroupFiller;
-
 public class CompatOxidizableBlock extends Block implements WeatheringCopper {
-	private final ModdedTargetedItemGroupFiller FILLER;
 	private final WeatherState oxidizationLevel;
 
-	public CompatOxidizableBlock(String modId, Block modBlock, WeatherState oxidizationLevel, Properties settings) {
+	public CompatOxidizableBlock(WeatherState oxidizationLevel, Properties settings) {
 		super(settings);
 		this.oxidizationLevel = oxidizationLevel;
-		this.FILLER = new ModdedTargetedItemGroupFiller(modId, modBlock.asItem());
-	}
-
-	@Override
-	public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> list) {
-		FILLER.fillItem(this.asItem(), group, list);
 	}
 
 	@Override
