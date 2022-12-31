@@ -17,30 +17,16 @@
 
 package io.github.vampirestudios.vampirelib.blocks;
 
-import net.minecraft.core.NonNullList;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SaplingBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.grower.AbstractTreeGrower;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.Material;
 
-import io.github.vampirestudios.vampirelib.api.itemGroupSorting.VanillaTargetedItemGroupFiller;
-
 public class SaplingBaseBlock extends SaplingBlock {
-	private final VanillaTargetedItemGroupFiller FILLER;
-
 	public SaplingBaseBlock(AbstractTreeGrower treeGrower) {
 		super(treeGrower, BlockBehaviour.Properties.of(Material.PLANT).noCollission().randomTicks().instabreak()
 				.sound(SoundType.GRASS));
-		FILLER = new VanillaTargetedItemGroupFiller(Blocks.DARK_OAK_SAPLING.asItem());
-	}
-
-	@Override
-	public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> list) {
-		FILLER.fillItem(this.asItem(), group, list);
 	}
 
 }

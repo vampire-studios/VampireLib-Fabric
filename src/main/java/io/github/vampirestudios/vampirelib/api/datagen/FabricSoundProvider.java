@@ -17,69 +17,142 @@
 
 package io.github.vampirestudios.vampirelib.api.datagen;
 
-import java.io.IOException;
-import java.nio.file.Path;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.function.Consumer;
-
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import org.jetbrains.annotations.NotNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
+import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
+import net.minecraft.data.PackOutput;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
+import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
+import java.nio.file.Path;
+import java.util.*;
+import java.util.concurrent.CompletableFuture;
 
 /**
- * Register an instance of the class with {@link FabricDataGenerator#addProvider} in a {@link net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint}.
+ * Register an instance of the class with {@link FabricDataGenerator.Pack#addProvider} in a {@link net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint}.
  */
 public abstract class FabricSoundProvider implements DataProvider {
-	private static final Logger LOGGER = LoggerFactory.getLogger(FabricSoundProvider.class);
-
-	protected final FabricDataGenerator dataGenerator;
+	protected final FabricDataOutput dataOutput;
 	protected final String modId;
 
-	protected FabricSoundProvider(FabricDataGenerator dataGenerator) {
-		this.dataGenerator = dataGenerator;
-		this.modId = dataGenerator.getModId();
+	protected FabricSoundProvider(FabricDataOutput dataOutput) {
+		this.dataOutput = dataOutput;
+		this.modId = dataOutput.getModId();
 	}
 
 	/**
-	 * Registers all sound instances to be generated.
+	 * Implement this method to register sounds.
 	 *
-	 * @param registry The registry to validate and create files
+	 * <p>Call {@link SoundGenerator#add(SoundEvent, SoundBuilder...)} to add a list of sound entries
+	 * for a given {@link SoundEvent}.
 	 */
-	protected abstract void registerSounds(Consumer<SoundDefinition> registry);
+	public abstract void generateSounds(SoundGenerator soundGenerator);
 
 	@Override
-	public void run(@NotNull CachedOutput cache) throws IOException {
-		Path path = this.dataGenerator.getOutputFolder().resolve("assets/" + this.modId + "/sounds.json");
-		Set<SoundDefinition> sounds = new HashSet<>();
-		Consumer<SoundDefinition> registry = sound -> {
-			if (!sounds.add(sound)) {
-				throw new IllegalStateException("Duplicate sound " + sound.getSoundId());
+	public CompletableFuture<?> run(@NotNull CachedOutput cache) {
+		HashMap<String, JsonObject> soundEvents = new HashMap<>();
+
+		generateSounds(((sound, replace, subtitle, entries) -> {
+			Objects.requireNonNull(sound);
+			Objects.requireNonNull(entries);
+
+			List<ResourceLocation> keys = Arrays.stream(entries).map(SoundBuilder::getName).toList();
+
+			if (!keys.stream().filter(i -> Collections.frequency(keys, i) > 1).toList().isEmpty()) {
+				throw new RuntimeException("Entries for sound event " + sound.getLocation() + " contain duplicate sound names. Event will be omitted.");
 			}
-		};
 
-		this.registerSounds(registry);
+			JsonObject soundEventData = new JsonObject();
+			JsonArray soundEntries = new JsonArray();
 
-		JsonObject json = new JsonObject();
-		sounds.stream().sorted(Comparator.comparing(SoundDefinition::getSoundId))
-				.forEachOrdered(definition -> json.add(definition.getSoundId(), definition.toJson()));
+			Arrays.asList(entries).forEach(s -> soundEntries.add(s.build()));
+			soundEventData.add("sounds", soundEntries);
 
-		try {
-			DataProvider.saveStable(cache, json, path);
-		} catch (IOException e) {
-			LOGGER.error("Couldn't save {}", path, e);
+			if (replace) {
+				soundEventData.addProperty("replace", true);
+			}
+
+			if (subtitle != null) {
+				soundEventData.addProperty("subtitle", subtitle);
+			}
+
+			soundEvents.put(sound.getLocation().toString(), soundEventData);
+		}));
+
+		JsonObject soundsJson = new JsonObject();
+
+		for (Map.Entry<String, JsonObject> entry : soundEvents.entrySet()) {
+			soundsJson.add(entry.getKey(), entry.getValue());
 		}
+
+		Path soundsPath = dataOutput
+				.createPathProvider(PackOutput.Target.RESOURCE_PACK, ".")
+				.json(new ResourceLocation(dataOutput.getModId(), "sounds"));
+		return DataProvider.saveStable(cache, soundsJson, soundsPath.normalize());
 	}
 
 	@Override
 	public String getName() {
-		return "Sound Definitions";
+		return "Sounds";
+	}
+
+	@ApiStatus.NonExtendable
+	@FunctionalInterface
+	public interface SoundGenerator {
+		/**
+		 * Adds an individual {@link SoundEvent} and its respective sounds to your mod's <code>sounds.json</code> file.
+		 *
+		 * @param sound The {@link SoundEvent} to add an entry for.
+		 * @param replace Set this to <code>true</code> if this entry corresponds to a sound event from vanilla
+		 *                Minecraft or some other mod's namespace, in order to replace the default sounds from the
+		 *                original namespace's sounds file via your own namespace's resource pack.
+		 * @param subtitle An optional subtitle to use for the event, given as a translation key for the subtitle.
+		 * @param sounds A list of {@link SoundBuilder} instances from which to generate individual sound entry data for
+		 *                this event.
+		 */
+		void add(SoundEvent sound, boolean replace, @Nullable String subtitle, SoundBuilder... sounds);
+
+		/**
+		 * Adds an individual {@link SoundEvent} and its respective sounds to your mod's <code>sounds.json</code> file.
+		 *
+		 * @param sound The {@link SoundEvent} to add an entry for.
+		 * @param replace Set this to <code>true</code> if this entry corresponds to a sound event from vanilla
+		 *                Minecraft or some other mod's namespace, in order to replace the default sounds from the
+		 *                original namespace's sounds file via your own namespace's resource pack.
+		 * @param sounds A list of {@link SoundBuilder} instances from which to generate individual sound entry data for
+		 *                this event.
+		 */
+		default void add(SoundEvent sound, boolean replace, SoundBuilder... sounds) {
+			add(sound, replace, null, sounds);
+		}
+
+		/**
+		 * Adds an individual {@link SoundEvent} and its respective sounds to your mod's <code>sounds.json</code> file.
+		 *
+		 * @param sound The {@link SoundEvent} to add an entry for.
+		 * @param subtitle An optional subtitle to use for the event, given as a translation key for the subtitle.
+		 * @param sounds A list of {@link SoundBuilder} instances from which to generate individual sound entry data for
+		 *                this event.
+		 */
+		default void add(SoundEvent sound, @Nullable String subtitle, SoundBuilder... sounds) {
+			add(sound, false, subtitle, sounds);
+		}
+
+		/**
+		 * Adds an individual {@link SoundEvent} and its respective sounds to your mod's <code>sounds.json</code> file.
+		 *
+		 * @param sound The {@link SoundEvent} to add an entry for.
+		 * @param sounds A list of {@link SoundBuilder} instances from which to generate individual sound entry data for
+		 *                this event.
+		 */
+		default void add(SoundEvent sound, SoundBuilder... sounds) {
+			add(sound, false, null, sounds);
+		}
 	}
 }

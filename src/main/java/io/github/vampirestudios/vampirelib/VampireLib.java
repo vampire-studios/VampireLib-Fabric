@@ -29,8 +29,6 @@ import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 
-import org.quiltmc.loader.api.ModContainer;
-
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 
 import io.github.vampirestudios.vampirelib.api.BasicModClass;
@@ -85,7 +83,7 @@ public class VampireLib extends BasicModClass {
 	}
 
 	@Override
-	public void onInitialize(ModContainer modContainer) {
+	public void onInitialize() {
 		shouldNotPrintVersionMessage();
 		getLogger().info(String.format("%s running %s v%s for %s",
 				Rands.chance(15) ? "Your are" : (Rands.chance(15) ? "You're" : "You are"),

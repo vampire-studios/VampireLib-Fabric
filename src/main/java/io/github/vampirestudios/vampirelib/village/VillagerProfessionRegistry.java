@@ -20,6 +20,7 @@ package io.github.vampirestudios.vampirelib.village;
 import com.google.common.collect.ImmutableSet;
 
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
@@ -43,13 +44,13 @@ public interface VillagerProfessionRegistry {
 	}
 
 	static VillagerProfession register(ResourceLocation name, ResourceKey<PoiType> workStation, ImmutableSet<Item> gatherableItems, ImmutableSet<Block> secondaryJobSites, SoundEvent workSound) {
-		return Registry.register(Registry.VILLAGER_PROFESSION, name,
+		return Registry.register(BuiltInRegistries.VILLAGER_PROFESSION, name,
 				new VillagerProfession(name.toString(), holder -> holder.is(workStation), PoiType.NONE,
 						gatherableItems, secondaryJobSites, workSound));
 	}
 
 	static VillagerProfession register(String name, ResourceKey<PoiType> workStation, ImmutableSet<Item> gatherableItems, ImmutableSet<Block> secondaryJobSites, SoundEvent workSound) {
-		return Registry.register(Registry.VILLAGER_PROFESSION, name,
+		return Registry.register(BuiltInRegistries.VILLAGER_PROFESSION, name,
 				new VillagerProfession(name, holder -> holder.is(workStation), PoiType.NONE,
 						gatherableItems, secondaryJobSites, workSound));
 	}

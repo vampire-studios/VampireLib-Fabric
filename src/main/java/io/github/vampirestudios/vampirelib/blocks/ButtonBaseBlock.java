@@ -17,35 +17,14 @@
 
 package io.github.vampirestudios.vampirelib.blocks;
 
-import net.minecraft.core.NonNullList;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.ButtonBlock;
 
-import io.github.vampirestudios.vampirelib.api.itemGroupSorting.VanillaTargetedItemGroupFiller;
-
 public class ButtonBaseBlock extends ButtonBlock {
-	private final VanillaTargetedItemGroupFiller FILLER;
-	private final boolean wooden;
 
 	public ButtonBaseBlock(boolean wooden, Block vanillaBlock, Properties settings) {
-		super(wooden, settings);
-		this.wooden = wooden;
-		FILLER = new VanillaTargetedItemGroupFiller(vanillaBlock.asItem());
-	}
-
-	@Override
-	public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> list) {
-		FILLER.fillItem(this.asItem(), group, list);
-	}
-
-	@Override
-	protected SoundEvent getSound(boolean pressed) {
-		return this.wooden ? pressed ? SoundEvents.WOODEN_BUTTON_CLICK_ON : SoundEvents.WOODEN_BUTTON_CLICK_OFF :
-				pressed ? SoundEvents.STONE_BUTTON_CLICK_ON : SoundEvents.STONE_BUTTON_CLICK_OFF;
+		super(settings, 15, wooden, SoundEvents.WOODEN_BUTTON_CLICK_OFF, SoundEvents.WOODEN_BUTTON_CLICK_ON);
 	}
 
 }

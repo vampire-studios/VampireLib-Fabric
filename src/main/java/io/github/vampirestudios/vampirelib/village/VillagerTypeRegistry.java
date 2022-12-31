@@ -25,6 +25,7 @@ import java.util.Optional;
 
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
@@ -36,7 +37,7 @@ public interface VillagerTypeRegistry {
 
 	@SafeVarargs
 	static VillagerType register(ResourceLocation id, ResourceKey<Biome>... biomes) {
-		VillagerType villagerType = Registry.register(Registry.VILLAGER_TYPE, id, new VillagerType(id.getPath()));
+		VillagerType villagerType = Registry.register(BuiltInRegistries.VILLAGER_TYPE, id, new VillagerType(id.getPath()));
 		for (ResourceKey<Biome> biome : biomes) {
 			if (customVillagerTypes.containsKey(biome)) customVillagerTypes.get(biome).add(villagerType);
 			else customVillagerTypes.put(biome, new ArrayList<>(Collections.singleton(villagerType)));

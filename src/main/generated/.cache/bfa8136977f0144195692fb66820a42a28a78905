@@ -1,0 +1,7 @@
+// 1.19.3	2022-12-29T21:02:54.5380607	VampireLib/Tags for minecraft:worldgen/noise_settings
+45b8551c91e21d216f642ce29b6432219617a850 data\c\tags\worldgen\noise_settings\nether.json
+fdf8da12288a95c2b1cf282c26b596495313b332 data\c\tags\worldgen\noise_settings\amplified.json
+9ff8a4c1814dc22076f72383929cf1452068c25e data\c\tags\worldgen\noise_settings\floating_islands.json
+e651ef2618479c142ccf39e4ca99f05071cd9e01 data\c\tags\worldgen\noise_settings\end.json
+f888ff05eee7943471d8dba0debb96cb90eca568 data\c\tags\worldgen\noise_settings\caves.json
+b17b144612be59deafac03f8be9c0b90adcfc4d2 data\c\tags\worldgen\noise_settings\overworld.json

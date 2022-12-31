@@ -24,7 +24,7 @@ import com.google.common.collect.Lists;
 import org.jetbrains.annotations.NotNull;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.TagKey;
@@ -35,15 +35,7 @@ import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.npc.VillagerDataHolder;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.entity.npc.VillagerType;
-import net.minecraft.world.item.DyeColor;
-import net.minecraft.world.item.DyeItem;
-import net.minecraft.world.item.DyeableArmorItem;
-import net.minecraft.world.item.DyeableLeatherItem;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.MapItem;
-import net.minecraft.world.item.SuspiciousStewItem;
+import net.minecraft.world.item.*;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.PotionBrewing;
 import net.minecraft.world.item.alchemy.PotionUtils;
@@ -242,7 +234,7 @@ public class TradeOfferFactories {
 
 		public MerchantOffer getOffer(Entity entity_1, RandomSource random_1) {
 			ItemStack itemStack_1 = new ItemStack(Items.EMERALD, this.price);
-			List<Potion> list_1 = Registry.POTION.stream().filter((potion_1x) ->
+			List<Potion> list_1 = BuiltInRegistries.POTION.stream().filter((potion_1x) ->
 							!potion_1x.getEffects().isEmpty() &&
 									PotionBrewing.isBrewablePotion(potion_1x))
 					.toList();
@@ -386,10 +378,10 @@ public class TradeOfferFactories {
 		private final int experience;
 
 		public TypeAwareBuyForOneEmeraldFactory(int int_1, int int_2, int int_3, Map<VillagerType, Item> map_1) {
-			Registry.VILLAGER_TYPE.stream().filter((villagerType_1) -> !map_1.containsKey(villagerType_1)).findAny()
+			BuiltInRegistries.VILLAGER_TYPE.stream().filter((villagerType_1) -> !map_1.containsKey(villagerType_1)).findAny()
 					.ifPresent((villagerType_1) -> {
 						throw new IllegalStateException("Missing trade for villager type: " +
-								Registry.VILLAGER_TYPE.getKey(villagerType_1));
+								BuiltInRegistries.VILLAGER_TYPE.getKey(villagerType_1));
 					});
 			this.map = map_1;
 			this.count = int_1;

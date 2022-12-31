@@ -27,8 +27,6 @@ import net.minecraft.world.level.FoliageColor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
-import org.quiltmc.loader.api.ModContainer;
-
 import net.fabricmc.fabric.impl.client.rendering.ColorProviderRegistryImpl;
 
 import io.github.vampirestudios.vampirelib.VampireLib;
@@ -44,7 +42,7 @@ public class VampireLibClient extends BasicModClass {
 	}
 
 	@Override
-	public void onInitializeClient(ModContainer modContainer) {
+	public void onInitializeClient() {
 		shouldNotPrintVersionMessage();
 		getLogger().info(String.format("%s running %s v%s on client-side for %s",
 				Rands.chance(15) ? "Your are" : (Rands.chance(15) ? "You're" : "You are"),

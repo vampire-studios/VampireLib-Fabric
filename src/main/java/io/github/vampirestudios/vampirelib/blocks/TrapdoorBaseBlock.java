@@ -17,25 +17,13 @@
 
 package io.github.vampirestudios.vampirelib.blocks;
 
-import net.minecraft.core.NonNullList;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.TrapDoorBlock;
 
-import io.github.vampirestudios.vampirelib.api.itemGroupSorting.VanillaTargetedItemGroupFiller;
-
 public class TrapdoorBaseBlock extends TrapDoorBlock {
-	private final VanillaTargetedItemGroupFiller FILLER;
-
 	public TrapdoorBaseBlock(Block vanillaBlock, Properties properties) {
-		super(properties);
-		FILLER = new VanillaTargetedItemGroupFiller(vanillaBlock.asItem());
-	}
-
-	@Override
-	public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> list) {
-		FILLER.fillItem(this.asItem(), group, list);
+		super(properties, SoundEvents.WOODEN_TRAPDOOR_CLOSE, SoundEvents.WOODEN_TRAPDOOR_OPEN);
 	}
 
 }

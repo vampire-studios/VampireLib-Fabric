@@ -17,7 +17,7 @@
 
 package io.github.vampirestudios.vampirelib.init;
 
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.effect.MobEffect;
@@ -35,7 +35,7 @@ public class VTags {
 
 	public static class Blocks {
 		public static TagKey<Block> tag(String id) {
-			return TagKey.create(Registry.BLOCK_REGISTRY, new ResourceLocation("c", id));
+			return TagKey.create(Registries.BLOCK, new ResourceLocation("c", id));
 		}
 	}
 
@@ -47,7 +47,7 @@ public class VTags {
 		public static final TagKey<Item> BUCKETS = tag("buckets");
 
 		public static TagKey<Item> tag(String id) {
-			return TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation("c", id));
+			return TagKey.create(Registries.ITEM, new ResourceLocation("c", id));
 		}
 	}
 
@@ -146,7 +146,7 @@ public class VTags {
 		public static final TagKey<EntityType<?>> NPC = tag("npc");
 
 		private static TagKey<EntityType<?>> tag(String name) {
-			return TagKey.create(Registry.ENTITY_TYPE_REGISTRY, new ResourceLocation("c", name));
+			return TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation("c", name));
 		}
 	}
 
@@ -210,7 +210,7 @@ public class VTags {
 		public static final TagKey<Biome> WITHOUT_DEFAULT_MONSTER_SPAWNS = tag("without_default_monster_spawns");
 
 		private static TagKey<Biome> tag(String name) {
-			return TagKey.create(Registry.BIOME_REGISTRY, new ResourceLocation("c", name));
+			return TagKey.create(Registries.BIOME, new ResourceLocation("c", name));
 		}
 	}
 
@@ -223,7 +223,7 @@ public class VTags {
 		public static final TagKey<NoiseGeneratorSettings> OVERWORLD = tag("overworld");
 
 		private static TagKey<NoiseGeneratorSettings> tag(String name) {
-			return TagKey.create(Registry.NOISE_GENERATOR_SETTINGS_REGISTRY, new ResourceLocation("c", name));
+			return TagKey.create(Registries.NOISE_SETTINGS, new ResourceLocation("c", name));
 		}
 	}
 
@@ -234,7 +234,7 @@ public class VTags {
 		public static final TagKey<DimensionType> OVERWORLD_CAVES = tag("overworld/caves");
 
 		private static TagKey<DimensionType> tag(String name) {
-			return TagKey.create(Registry.DIMENSION_TYPE_REGISTRY, new ResourceLocation("c", name));
+			return TagKey.create(Registries.DIMENSION_TYPE, new ResourceLocation("c", name));
 		}
 	}
 
@@ -246,7 +246,7 @@ public class VTags {
 		public static final TagKey<MobEffect> LASTING = tag("lasting");
 
 		private static TagKey<MobEffect> tag(String name) {
-			return TagKey.create(Registry.MOB_EFFECT_REGISTRY, new ResourceLocation("c", name));
+			return TagKey.create(Registries.MOB_EFFECT, new ResourceLocation("c", name));
 		}
 	}
 
@@ -273,7 +273,7 @@ public class VTags {
 		public static final TagKey<Enchantment> FEET_ENCHANTMENTS = tag("armors/feet");
 
 		private static TagKey<Enchantment> tag(String name) {
-			return TagKey.create(Registry.ENCHANTMENT_REGISTRY, new ResourceLocation("c", name));
+			return TagKey.create(Registries.ENCHANTMENT, new ResourceLocation("c", name));
 		}
 	}
 
@@ -285,7 +285,7 @@ public class VTags {
 		public static final TagKey<Potion> LASTING_POTIONS = tag("lasting");
 
 		private static TagKey<Potion> tag(String name) {
-			return TagKey.create(Registry.POTION_REGISTRY, new ResourceLocation("c", name));
+			return TagKey.create(Registries.POTION, new ResourceLocation("c", name));
 		}
 	}
 
@@ -299,7 +299,7 @@ public class VTags {
 		public static final TagKey<PaintingVariant> FOUR_X_FOUR = tag("4x4");
 
 		private static TagKey<PaintingVariant> tag(String name) {
-			return TagKey.create(Registry.PAINTING_VARIANT_REGISTRY, new ResourceLocation("c", name));
+			return TagKey.create(Registries.PAINTING_VARIANT, new ResourceLocation("c", name));
 		}
 	}
 

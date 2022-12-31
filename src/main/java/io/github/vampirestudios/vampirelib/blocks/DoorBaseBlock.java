@@ -18,32 +18,20 @@
 package io.github.vampirestudios.vampirelib.blocks;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.NonNullList;
-import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.DoorBlock;
 import net.minecraft.world.level.block.state.BlockState;
 
-import io.github.vampirestudios.vampirelib.api.itemGroupSorting.VanillaTargetedItemGroupFiller;
-
 public class DoorBaseBlock extends DoorBlock {
-	private final VanillaTargetedItemGroupFiller FILLER;
-
 	public DoorBaseBlock(Block vanillaBlock, Properties settings) {
-		super(settings);
-		FILLER = new VanillaTargetedItemGroupFiller(vanillaBlock.asItem());
-	}
-
-	@Override
-	public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> list) {
-		FILLER.fillItem(this.asItem(), group, list);
+		super(settings, SoundEvents.WOODEN_DOOR_CLOSE, SoundEvents.WOODEN_DOOR_OPEN);
 	}
 
 	@Override
 	public ItemStack getCloneItemStack(BlockGetter blockView_1, BlockPos blockPos_1, BlockState blockState_1) {
 		return new ItemStack(this);
 	}
-
 }

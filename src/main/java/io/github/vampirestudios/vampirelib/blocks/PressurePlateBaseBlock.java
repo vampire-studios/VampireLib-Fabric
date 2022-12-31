@@ -17,25 +17,13 @@
 
 package io.github.vampirestudios.vampirelib.blocks;
 
-import net.minecraft.core.NonNullList;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.Block;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.level.block.PressurePlateBlock;
 
-import io.github.vampirestudios.vampirelib.api.itemGroupSorting.VanillaTargetedItemGroupFiller;
-
 public class PressurePlateBaseBlock extends PressurePlateBlock {
-	private final VanillaTargetedItemGroupFiller FILLER;
 
-	public PressurePlateBaseBlock(Block vanillaBlock, Properties settings, Sensitivity sensitivity) {
-		super(sensitivity, settings);
-		FILLER = new VanillaTargetedItemGroupFiller(vanillaBlock.asItem());
-	}
-
-	@Override
-	public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> list) {
-		FILLER.fillItem(this.asItem(), group, list);
+	public PressurePlateBaseBlock(Properties settings, Sensitivity sensitivity) {
+		super(sensitivity, settings, SoundEvents.WOODEN_PRESSURE_PLATE_CLICK_OFF, SoundEvents.WOODEN_PRESSURE_PLATE_CLICK_ON);
 	}
 
 }

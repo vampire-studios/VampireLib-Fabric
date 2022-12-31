@@ -19,14 +19,10 @@ package io.github.vampirestudios.vampirelib.blocks;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.NonNullList;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -35,11 +31,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-import io.github.vampirestudios.vampirelib.api.itemGroupSorting.VanillaTargetedItemGroupFiller;
-
 public class RodBaseBlock extends io.github.vampirestudios.vampirelib.blocks.DirectionalBlock {
-	private final VanillaTargetedItemGroupFiller FILLER;
-
 	protected static final VoxelShape BB_AXIS_Y = Block.box(0.375D, 0.0D, 0.375D, 0.625D, 1.0D, 0.625D);
 	protected static final VoxelShape BB_AXIS_Z = Block.box(0.375D, 0.375D, 0.0D, 0.625D, 0.625D, 1.0D);
 	protected static final VoxelShape BB_AXIS_X = Block.box(0.0D, 0.375D, 0.375D, 1.0D, 0.625D, 0.625D);
@@ -55,12 +47,6 @@ public class RodBaseBlock extends io.github.vampirestudios.vampirelib.blocks.Dir
 				.lightLevel(blockState -> 13) : BlockBehaviour.Properties.of(
 				material));
 		this.registerDefaultState(this.defaultBlockState().setValue(FACING, Direction.UP));
-		FILLER = new VanillaTargetedItemGroupFiller(Blocks.END_ROD.asItem());
-	}
-
-	@Override
-	public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> list) {
-		FILLER.fillItem(this.asItem(), group, list);
 	}
 
 	@Override

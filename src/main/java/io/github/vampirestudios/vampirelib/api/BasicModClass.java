@@ -28,16 +28,12 @@ import org.slf4j.LoggerFactory;
 import net.minecraft.SharedConstants;
 import net.minecraft.resources.ResourceLocation;
 
-import org.quiltmc.loader.api.ModContainer;
-import org.quiltmc.qsl.base.api.entrypoint.ModInitializer;
-import org.quiltmc.qsl.base.api.entrypoint.client.ClientModInitializer;
-
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import net.fabricmc.api.*;
 
 import io.github.vampirestudios.vampirelib.Something;
 import io.github.vampirestudios.vampirelib.modules.FeatureManager;
 
+@EnvironmentInterface(value = EnvType.CLIENT, itf = ClientModInitializer.class)
 public abstract class BasicModClass implements ModInitializer, ClientModInitializer {
 	public static FeatureManager featureManager;
 	private final String modId;
@@ -243,7 +239,7 @@ public abstract class BasicModClass implements ModInitializer, ClientModInitiali
 	}
 
 	@Override
-	public void onInitialize(ModContainer mod) {
+	public void onInitialize() {
 		if (this.printVersionMessage) {
 			this.getLogger().info("You're now running {} v{} for {}", this.modName(), this.modVersion(),
 					SharedConstants.getCurrentVersion().getName());
@@ -252,7 +248,7 @@ public abstract class BasicModClass implements ModInitializer, ClientModInitiali
 
 	@Environment(EnvType.CLIENT)
 	@Override
-	public void onInitializeClient(ModContainer mod) {
+	public void onInitializeClient() {
 		if (this.printVersionMessage) {
 			this.getLogger().info("You're now running {} v{} on Client-Side for {}", this.modName(), this.modVersion(),
 					SharedConstants.getCurrentVersion().getName());

@@ -21,6 +21,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.Lifecycle;
 
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceKey;
 
 import io.github.vampirestudios.vampirelib.VampireLib;
@@ -35,7 +36,7 @@ public class VRegistries {
 		ResourceLocationUtils.setModInstance(VampireLib.INSTANCE);
 		BLENDING_FUNCTION_RESOURCE_KEY = ResourceKey.createRegistryKey(
 				ResourceLocationUtils.modId("blending_function"));
-		BLENDING_FUNCTION = Registry.registerSimple(BLENDING_FUNCTION_RESOURCE_KEY, Lifecycle.stable(),
+		BLENDING_FUNCTION = BuiltInRegistries.registerSimple(BLENDING_FUNCTION_RESOURCE_KEY, Lifecycle.stable(),
 				registry -> BlendingFunction.CODEC);
 	}
 

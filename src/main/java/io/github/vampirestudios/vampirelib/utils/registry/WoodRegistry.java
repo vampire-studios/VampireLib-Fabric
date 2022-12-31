@@ -17,64 +17,35 @@
 
 package io.github.vampirestudios.vampirelib.utils.registry;
 
-import static net.minecraft.data.loot.BlockLoot.createSingleItemTableWithSilkTouch;
-import static net.minecraft.data.models.BlockModelGenerators.createDoor;
-import static net.minecraft.data.models.BlockModelGenerators.createHorizontalFacingDispatch;
-import static net.minecraft.data.models.BlockModelGenerators.createSimpleBlock;
-import static net.minecraft.data.models.BlockModelGenerators.createTrapdoor;
-import static net.minecraft.data.recipes.RecipeProvider.has;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
 import com.terraformersmc.terraform.boat.api.TerraformBoatType;
-import com.terraformersmc.terraform.boat.api.TerraformBoatTypeRegistry;
-import com.terraformersmc.terraform.boat.api.client.TerraformBoatClientHelper;
-import com.terraformersmc.terraform.boat.api.item.TerraformBoatItemHelper;
+import com.terraformersmc.terraform.sign.block.TerraformSignBlock;
 import com.terraformersmc.terraform.sign.block.TerraformWallSignBlock;
-import org.apache.commons.lang3.text.WordUtils;
 
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.core.Registry;
-import net.minecraft.data.loot.BlockLoot;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.models.BlockModelGenerators;
-import net.minecraft.data.models.blockstates.MultiVariantGenerator;
-import net.minecraft.data.models.blockstates.VariantProperties;
-import net.minecraft.data.models.model.ModelLocationUtils;
-import net.minecraft.data.models.model.ModelTemplates;
-import net.minecraft.data.models.model.TextureMapping;
-import net.minecraft.data.models.model.TextureSlot;
-import net.minecraft.data.models.model.TexturedModel;
 import net.minecraft.data.recipes.FinishedRecipe;
-import net.minecraft.data.recipes.RecipeProvider;
-import net.minecraft.data.recipes.ShapedRecipeBuilder;
-import net.minecraft.data.recipes.ShapelessRecipeBuilder;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.SignItem;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.ComposterBlock;
-import net.minecraft.world.level.block.PressurePlateBlock;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.grower.AbstractTreeGrower;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.HugeFungusConfiguration;
-import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
-
-import org.quiltmc.qsl.block.extensions.api.QuiltBlockSettings;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootTableProvider;
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.fabricmc.fabric.api.registry.FlammableBlockRegistry;
 import net.fabricmc.fabric.api.registry.FuelRegistry;
@@ -83,25 +54,7 @@ import net.fabricmc.fabric.impl.blockrenderlayer.BlockRenderLayerMapImpl;
 import net.fabricmc.loader.api.FabricLoader;
 
 import io.github.vampirestudios.vampirelib.api.datagen.CustomTagProviders;
-import io.github.vampirestudios.vampirelib.api.datagen.LanguageConsumer;
-import io.github.vampirestudios.vampirelib.blocks.BaseBeehiveBlock;
-import io.github.vampirestudios.vampirelib.blocks.BaseBlock;
-import io.github.vampirestudios.vampirelib.blocks.BaseLogAndWoodBlock;
-import io.github.vampirestudios.vampirelib.blocks.ButtonBaseBlock;
-import io.github.vampirestudios.vampirelib.blocks.CustomLadderBlock;
-import io.github.vampirestudios.vampirelib.blocks.DoorBaseBlock;
-import io.github.vampirestudios.vampirelib.blocks.ExpandedTerraformSignBlock;
-import io.github.vampirestudios.vampirelib.blocks.FenceBaseBlock;
-import io.github.vampirestudios.vampirelib.blocks.FenceGateBaseBlock;
-import io.github.vampirestudios.vampirelib.blocks.FlowerPotBaseBlock;
-import io.github.vampirestudios.vampirelib.blocks.FungusBaseBlock;
-import io.github.vampirestudios.vampirelib.blocks.LeavesBaseBlock;
-import io.github.vampirestudios.vampirelib.blocks.PressurePlateBaseBlock;
-import io.github.vampirestudios.vampirelib.blocks.SaplingBaseBlock;
-import io.github.vampirestudios.vampirelib.blocks.SlabBaseBlock;
-import io.github.vampirestudios.vampirelib.blocks.StairsBaseBlock;
-import io.github.vampirestudios.vampirelib.blocks.TrapdoorBaseBlock;
-import io.github.vampirestudios.vampirelib.blocks.WartBlockBaseBlock;
+import io.github.vampirestudios.vampirelib.blocks.*;
 import io.github.vampirestudios.vampirelib.blocks.entity.IBlockEntityType;
 import io.github.vampirestudios.vampirelib.client.VampireLibClient;
 import io.github.vampirestudios.vampirelib.utils.Utils;
@@ -163,8 +116,8 @@ public class WoodRegistry {
 		this.name = name;
 		this.saplingGenerator = saplingGenerator;
 		this.fungusGenerator = fungusGenerator;
-		this.logsTag = TagKey.create(Registry.BLOCK_REGISTRY, Utils.appendToPath(name, "_logs"));
-		this.logsItemTag = TagKey.create(Registry.ITEM_REGISTRY, Utils.appendToPath(name, "_logs"));
+		this.logsTag = TagKey.create(Registries.BLOCK, Utils.appendToPath(name, "_logs"));
+		this.logsItemTag = TagKey.create(Registries.ITEM, Utils.appendToPath(name, "_logs"));
 	}
 
 	public static WoodRegistry.Builder of(ResourceLocation name) {
@@ -316,7 +269,7 @@ public class WoodRegistry {
 	}
 
 	public void generateBlockTags(CustomTagProviders.CustomBlockTagProvider blockTags) {
-		if (log != null) blockTags.tagCustom(logsTag).add(log);
+		/*if (log != null) blockTags.tagCustom(logsTag).add(log);
 		if (strippedLog != null) blockTags.tagCustom(logsTag).add(strippedLog);
 		if (wood != null) blockTags.tagCustom(logsTag).add(wood);
 		if (strippedWood != null) blockTags.tagCustom(logsTag).add(strippedWood);
@@ -394,11 +347,11 @@ public class WoodRegistry {
 			if (slab != null) nonFlammableWoodTag.add(slab);
 			if (stairs != null) nonFlammableWoodTag.add(stairs);
 			if (bookshelf != null) nonFlammableWoodTag.add(bookshelf);
-		}
+		}*/
 	}
 
 	public void generateItemTags(CustomTagProviders.CustomItemTagProvider itemsTag) {
-		if ((log != null || strippedLog != null || wood != null || strippedWood != null) && logsTag != null &&
+		/*if ((log != null || strippedLog != null || wood != null || strippedWood != null) && logsTag != null &&
 				logsItemTag != null) itemsTag.copy(logsTag, logsItemTag);
 		itemsTag.copy(BlockTags.LOGS, ItemTags.LOGS);
 		itemsTag.copy(BlockTags.LOGS_THAT_BURN, ItemTags.LOGS_THAT_BURN);
@@ -415,7 +368,7 @@ public class WoodRegistry {
 		itemsTag.copy(BlockTags.NON_FLAMMABLE_WOOD, ItemTags.NON_FLAMMABLE_WOOD);
 		itemsTag.copy(BlockTags.STANDING_SIGNS, ItemTags.SIGNS);
 		if (boatItem != null) itemsTag.tagCustom(ItemTags.BOATS).add(boatItem);
-		if (chestBoatItem != null) itemsTag.tagCustom(ItemTags.CHEST_BOATS).add(chestBoatItem);
+		if (chestBoatItem != null) itemsTag.tagCustom(ItemTags.CHEST_BOATS).add(chestBoatItem);*/
 	}
 
 	@Environment(EnvType.CLIENT)
@@ -425,7 +378,7 @@ public class WoodRegistry {
 
 	@Environment(EnvType.CLIENT)
 	public void generateModels(BlockModelGenerators blockStateModelGenerator, boolean customPottedTexture) {
-		TextureMapping logMapping = new TextureMapping()
+		/*TextureMapping logMapping = new TextureMapping()
 				.put(TextureSlot.SIDE, new ResourceLocation(name.getNamespace(),
 						String.format("wood_sets/%s/%s", name.getPath(),
 								mushroomLike ? "stem" : "log")))
@@ -749,12 +702,12 @@ public class WoodRegistry {
 			ResourceLocation resourceLocation3 = ModelTemplates.BUTTON_INVENTORY.create(button, planksMapping,
 					blockStateModelGenerator.modelOutput);
 			blockStateModelGenerator.delegateItemModel(button, resourceLocation3);
-		}
+		}*/
 	}
 
 	@Environment(EnvType.CLIENT)
-	public void generateLang(LanguageConsumer languageProvider) {
-		String translatedName = WordUtils.capitalizeFully(name.getPath().replace("_", " "));
+	public void generateLang(FabricLanguageProvider.TranslationBuilder languageProvider) {
+		/*String translatedName = WordUtils.capitalizeFully(name.getPath().replace("_", " "));
 		if (log != null) languageProvider.addLanguage(log, translatedName + (mushroomLike ? " Stem" : " Log"));
 		if (strippedLog != null)
 			languageProvider.addLanguage(strippedLog, "Stripped " + translatedName + (mushroomLike ? " Stem" : " Log"));
@@ -813,11 +766,11 @@ public class WoodRegistry {
 		if (bookshelf != null) languageProvider.addLanguage(bookshelf, translatedName + " Bookshelf");
 		if (signItem != null) languageProvider.addLanguage(sign, translatedName + " Sign");
 		if (boatItem != null) languageProvider.addLanguage(boatItem, translatedName + " Boat");
-		if (chestBoatItem != null) languageProvider.addLanguage(chestBoatItem, translatedName + " Boat with Chest");
+		if (chestBoatItem != null) languageProvider.addLanguage(chestBoatItem, translatedName + " Boat with Chest");*/
 	}
 
 	public void generateLoot(FabricBlockLootTableProvider lootTablesProvider) {
-		if (log != null) lootTablesProvider.dropSelf(log);
+		/*if (log != null) lootTablesProvider.dropSelf(log);
 		if (strippedLog != null) lootTablesProvider.dropSelf(strippedLog);
 		if (wood != null) lootTablesProvider.dropSelf(wood);
 		if (strippedWood != null) lootTablesProvider.dropSelf(strippedWood);
@@ -912,11 +865,11 @@ public class WoodRegistry {
 		if (bookshelf != null) lootTablesProvider.add(bookshelf,
 				block -> createSingleItemTableWithSilkTouch(block, Items.BOOK,
 						ConstantValue.exactly(
-								3.0F)));
+								3.0F)));*/
 	}
 
 	public void generateRecipes(Consumer<FinishedRecipe> exporter) {
-		if (planks != null && logsItemTag != null) RecipeProvider.planksFromLogs(exporter, planks, logsItemTag);
+		/*if (planks != null && logsItemTag != null) RecipeProvider.planksFromLogs(exporter, planks, logsItemTag);
 		if (wood != null && log != null) RecipeProvider.woodFromLogs(exporter, wood, log);
 		if (strippedWood != null && strippedLog != null)
 			RecipeProvider.woodFromLogs(exporter, strippedWood, strippedLog);
@@ -938,7 +891,7 @@ public class WoodRegistry {
 		if (signItem != null && planks != null) RecipeProvider.signBuilder(signItem, Ingredient.of(planks));
 		if (bookshelf != null && planks != null)
 			ShapedRecipeBuilder.shaped(bookshelf).define('#', planks).define('X', Items.BOOK).pattern("###")
-					.pattern("XXX").pattern("###").unlockedBy("has_book", has(Items.BOOK)).save(exporter);
+					.pattern("XXX").pattern("###").unlockedBy("has_book", has(Items.BOOK)).save(exporter);*/
 	}
 
 	public static class Builder {
@@ -1003,8 +956,7 @@ public class WoodRegistry {
 			Block block = woodRegistry.mushroomLike ? Blocks.WARPED_STEM : Blocks.DARK_OAK_LOG;
 			BlockBehaviour.Properties blockSettings = FabricBlockSettings.copyOf(block);
 			woodRegistry.log = registryHelper.blocks()
-					.registerBlock(new BaseLogAndWoodBlock(blockSettings, block), logName,
-							CreativeModeTab.TAB_BUILDING_BLOCKS);
+					.registerBlock(new BaseLogAndWoodBlock(blockSettings, block), logName);
 			return this;
 		}
 
@@ -1013,8 +965,7 @@ public class WoodRegistry {
 			Block block = woodRegistry.mushroomLike ? Blocks.WARPED_HYPHAE : Blocks.DARK_OAK_WOOD;
 			BlockBehaviour.Properties blockSettings = FabricBlockSettings.copyOf(block);
 			woodRegistry.wood = registryHelper.blocks()
-					.registerBlock(new BaseLogAndWoodBlock(blockSettings, block), woodName,
-							CreativeModeTab.TAB_BUILDING_BLOCKS);
+					.registerBlock(new BaseLogAndWoodBlock(blockSettings, block), woodName);
 			return this;
 		}
 
@@ -1024,8 +975,7 @@ public class WoodRegistry {
 			BlockBehaviour.Properties blockSettings = FabricBlockSettings.copyOf(block);
 			woodRegistry.strippedLog = registryHelper.blocks()
 					.registerBlock(new BaseLogAndWoodBlock(blockSettings, block),
-							"stripped_" + logName,
-							CreativeModeTab.TAB_BUILDING_BLOCKS);
+							"stripped_" + logName);
 			return this;
 		}
 
@@ -1035,24 +985,22 @@ public class WoodRegistry {
 			BlockBehaviour.Properties blockSettings = FabricBlockSettings.copyOf(block);
 			woodRegistry.strippedWood = registryHelper.blocks()
 					.registerBlock(new BaseLogAndWoodBlock(blockSettings, block),
-							"stripped_" + woodName,
-							CreativeModeTab.TAB_BUILDING_BLOCKS);
+							"stripped_" + woodName);
 			return this;
 		}
 
 		public Builder stairs() {
 			Block block = woodRegistry.mushroomLike ? Blocks.WARPED_STAIRS : Blocks.DARK_OAK_STAIRS;
-			woodRegistry.stairs = registryHelper.blocks().registerBlock(new StairsBaseBlock(woodRegistry.planks, block),
-					name.getPath() + "_stairs",
-					CreativeModeTab.TAB_BUILDING_BLOCKS);
+			woodRegistry.stairs = registryHelper.blocks().registerBlock(new StairBlock(woodRegistry.planks.defaultBlockState(),
+							FabricBlockSettings.copyOf(block)), name.getPath() + "_stairs");
 			return this;
 		}
 
 		public Builder slab() {
 			Block block = woodRegistry.mushroomLike ? Blocks.WARPED_SLAB : Blocks.DARK_OAK_SLAB;
 			woodRegistry.slab = registryHelper.blocks().registerBlock(
-					new SlabBaseBlock(FabricBlockSettings.copy(woodRegistry.planks), block),
-					name.getPath() + "_slab", CreativeModeTab.TAB_BUILDING_BLOCKS);
+					new SlabBlock(FabricBlockSettings.copy(woodRegistry.planks)),
+					name.getPath() + "_slab", CreativeModeTabs.BUILDING_BLOCKS);
 			return this;
 		}
 
@@ -1060,16 +1008,16 @@ public class WoodRegistry {
 			Block block = woodRegistry.mushroomLike ? Blocks.WARPED_PLANKS : Blocks.DARK_OAK_PLANKS;
 			woodRegistry.planks = registryHelper.blocks().registerBlock(
 					new BaseBlock(block, FabricBlockSettings.copyOf(Blocks.OAK_PLANKS)),
-					name.getPath() + "_planks", CreativeModeTab.TAB_BUILDING_BLOCKS);
+					name.getPath() + "_planks", CreativeModeTabs.BUILDING_BLOCKS);
 			return this;
 		}
 
 		public Builder leaves() {
 			String leavesName = woodRegistry.mushroomLike ? "_wart_block" : "_leaves";
 			Block block = woodRegistry.mushroomLike ? Blocks.WARPED_WART_BLOCK : Blocks.FLOWERING_AZALEA_LEAVES;
-			CreativeModeTab creativeModeTab = woodRegistry.mushroomLike ? CreativeModeTab.TAB_BUILDING_BLOCKS : CreativeModeTab.TAB_DECORATIONS;
+			CreativeModeTab creativeModeTab = woodRegistry.mushroomLike ? CreativeModeTabs.BUILDING_BLOCKS : CreativeModeTabs.NATURAL_BLOCKS;
 			woodRegistry.leaves = registryHelper.blocks().registerBlock(
-					woodRegistry.mushroomLike ? new WartBlockBaseBlock(block) :
+					woodRegistry.mushroomLike ? new Block(FabricBlockSettings.copyOf(block)) :
 							new LeavesBaseBlock(block), name.getPath() + leavesName,
 					creativeModeTab);
 			return this;
@@ -1078,7 +1026,7 @@ public class WoodRegistry {
 		public Builder leaves(String nameIn) {
 			String leavesName = woodRegistry.mushroomLike ? "_wart_block" : "_leaves";
 			Block block = woodRegistry.mushroomLike ? Blocks.WARPED_WART_BLOCK : Blocks.FLOWERING_AZALEA_LEAVES;
-			CreativeModeTab creativeModeTab = woodRegistry.mushroomLike ? CreativeModeTab.TAB_BUILDING_BLOCKS : CreativeModeTab.TAB_DECORATIONS;
+			CreativeModeTab creativeModeTab = woodRegistry.mushroomLike ? CreativeModeTabs.BUILDING_BLOCKS : CreativeModeTabs.NATURAL_BLOCKS;
 			woodRegistry.leaves = registryHelper.blocks().registerBlock(new LeavesBaseBlock(block), nameIn + leavesName,
 					creativeModeTab);
 			return this;
@@ -1087,7 +1035,7 @@ public class WoodRegistry {
 		public Builder leaves(String... nameIn) {
 			String leavesName = woodRegistry.mushroomLike ? "_wart_block" : "_leaves";
 			Block block = woodRegistry.mushroomLike ? Blocks.WARPED_WART_BLOCK : Blocks.FLOWERING_AZALEA_LEAVES;
-			CreativeModeTab creativeModeTab = woodRegistry.mushroomLike ? CreativeModeTab.TAB_BUILDING_BLOCKS : CreativeModeTab.TAB_DECORATIONS;
+			CreativeModeTab creativeModeTab = woodRegistry.mushroomLike ? CreativeModeTabs.BUILDING_BLOCKS : CreativeModeTabs.NATURAL_BLOCKS;
 			for (String name : nameIn) {
 				woodRegistry.leaves = registryHelper.blocks()
 						.registerBlock(new LeavesBaseBlock(block), name + leavesName,
@@ -1100,7 +1048,7 @@ public class WoodRegistry {
 		public Builder coloredLeaves() {
 			String leavesName = woodRegistry.mushroomLike ? "_wart_block" : "_leaves";
 			Block block = woodRegistry.mushroomLike ? Blocks.WARPED_WART_BLOCK : Blocks.FLOWERING_AZALEA_LEAVES;
-			CreativeModeTab creativeModeTab = woodRegistry.mushroomLike ? CreativeModeTab.TAB_BUILDING_BLOCKS : CreativeModeTab.TAB_DECORATIONS;
+			CreativeModeTab creativeModeTab = woodRegistry.mushroomLike ? CreativeModeTabs.BUILDING_BLOCKS : CreativeModeTabs.NATURAL_BLOCKS;
 			woodRegistry.leaves = registryHelper.blocks()
 					.registerBlock(new LeavesBaseBlock(block), name.getPath() + leavesName,
 							creativeModeTab);
@@ -1111,7 +1059,7 @@ public class WoodRegistry {
 		public Builder coloredLeaves(int color) {
 			String leavesName = woodRegistry.mushroomLike ? "_wart_block" : "_leaves";
 			Block block = woodRegistry.mushroomLike ? Blocks.WARPED_WART_BLOCK : Blocks.FLOWERING_AZALEA_LEAVES;
-			CreativeModeTab creativeModeTab = woodRegistry.mushroomLike ? CreativeModeTab.TAB_BUILDING_BLOCKS : CreativeModeTab.TAB_DECORATIONS;
+			CreativeModeTab creativeModeTab = woodRegistry.mushroomLike ? CreativeModeTabs.BUILDING_BLOCKS : CreativeModeTabs.NATURAL_BLOCKS;
 			woodRegistry.leaves = registryHelper.blocks()
 					.registerBlock(new LeavesBaseBlock(block), name.getPath() + leavesName,
 							creativeModeTab);
@@ -1122,7 +1070,7 @@ public class WoodRegistry {
 		public Builder coloredLeaves(String nameIn) {
 			String leavesName = woodRegistry.mushroomLike ? "_wart_block" : "_leaves";
 			Block block = woodRegistry.mushroomLike ? Blocks.WARPED_WART_BLOCK : Blocks.FLOWERING_AZALEA_LEAVES;
-			CreativeModeTab creativeModeTab = woodRegistry.mushroomLike ? CreativeModeTab.TAB_BUILDING_BLOCKS : CreativeModeTab.TAB_DECORATIONS;
+			CreativeModeTab creativeModeTab = woodRegistry.mushroomLike ? CreativeModeTabs.BUILDING_BLOCKS : CreativeModeTabs.NATURAL_BLOCKS;
 			woodRegistry.leaves = registryHelper.blocks().registerBlock(new LeavesBaseBlock(block), nameIn + leavesName,
 					creativeModeTab);
 			VampireLibClient.ColoredLeaves coloredLeaves = new VampireLibClient.ColoredLeaves(woodRegistry.leaves,
@@ -1134,7 +1082,7 @@ public class WoodRegistry {
 		public Builder coloredLeaves(String... nameIn) {
 			String leavesName = woodRegistry.mushroomLike ? "_wart_block" : "_leaves";
 			Block block = woodRegistry.mushroomLike ? Blocks.WARPED_WART_BLOCK : Blocks.FLOWERING_AZALEA_LEAVES;
-			CreativeModeTab creativeModeTab = woodRegistry.mushroomLike ? CreativeModeTab.TAB_BUILDING_BLOCKS : CreativeModeTab.TAB_DECORATIONS;
+			CreativeModeTab creativeModeTab = woodRegistry.mushroomLike ? CreativeModeTabs.BUILDING_BLOCKS : CreativeModeTabs.NATURAL_BLOCKS;
 			for (String name : nameIn) {
 				woodRegistry.leaves = registryHelper.blocks()
 						.registerBlock(new LeavesBaseBlock(block), name + leavesName,
@@ -1148,7 +1096,7 @@ public class WoodRegistry {
 		public Builder coloredLeaves(String nameIn, int color) {
 			String leavesName = woodRegistry.mushroomLike ? "_wart_block" : "_leaves";
 			Block block = woodRegistry.mushroomLike ? Blocks.WARPED_WART_BLOCK : Blocks.FLOWERING_AZALEA_LEAVES;
-			CreativeModeTab creativeModeTab = woodRegistry.mushroomLike ? CreativeModeTab.TAB_BUILDING_BLOCKS : CreativeModeTab.TAB_DECORATIONS;
+			CreativeModeTab creativeModeTab = woodRegistry.mushroomLike ? CreativeModeTabs.BUILDING_BLOCKS : CreativeModeTabs.NATURAL_BLOCKS;
 			woodRegistry.leaves = registryHelper.blocks().registerBlock(new LeavesBaseBlock(block), nameIn + leavesName,
 					creativeModeTab);
 			VampireLibClient.COLORED_LEAVES.add(new VampireLibClient.ColoredLeaves(woodRegistry.leaves, true, color));
@@ -1158,7 +1106,7 @@ public class WoodRegistry {
 		public Builder coloredLeaves(int color, String... nameIn) {
 			String leavesName = woodRegistry.mushroomLike ? "_wart_block" : "_leaves";
 			Block block = woodRegistry.mushroomLike ? Blocks.WARPED_WART_BLOCK : Blocks.FLOWERING_AZALEA_LEAVES;
-			CreativeModeTab creativeModeTab = woodRegistry.mushroomLike ? CreativeModeTab.TAB_BUILDING_BLOCKS : CreativeModeTab.TAB_DECORATIONS;
+			CreativeModeTab creativeModeTab = woodRegistry.mushroomLike ? CreativeModeTabs.BUILDING_BLOCKS : CreativeModeTabs.NATURAL_BLOCKS;
 			for (String name : nameIn) {
 				woodRegistry.leaves = registryHelper.blocks()
 						.registerBlock(new LeavesBaseBlock(block), name + leavesName,
@@ -1173,7 +1121,7 @@ public class WoodRegistry {
 		public Builder coloredLeaves(ColoredBlock... coloredLeavesBlocks) {
 			String leavesName = woodRegistry.mushroomLike ? "_wart_block" : "_leaves";
 			Block block = woodRegistry.mushroomLike ? Blocks.WARPED_WART_BLOCK : Blocks.FLOWERING_AZALEA_LEAVES;
-			CreativeModeTab creativeModeTab = woodRegistry.mushroomLike ? CreativeModeTab.TAB_BUILDING_BLOCKS : CreativeModeTab.TAB_DECORATIONS;
+			CreativeModeTab creativeModeTab = woodRegistry.mushroomLike ? CreativeModeTabs.BUILDING_BLOCKS : CreativeModeTabs.NATURAL_BLOCKS;
 			for (ColoredBlock coloredLeavesBlock : coloredLeavesBlocks) {
 				woodRegistry.leaves = registryHelper.blocks().registerBlock(new LeavesBaseBlock(block),
 						coloredLeavesBlock.name + leavesName,
@@ -1188,11 +1136,11 @@ public class WoodRegistry {
 		public Builder sapling() {
 			if (!woodRegistry.mushroomLike) woodRegistry.sapling = registryHelper.blocks().registerBlock(
 					new SaplingBaseBlock(woodRegistry.saplingGenerator),
-					name.getPath() + "_sapling", CreativeModeTab.TAB_DECORATIONS);
+					name.getPath() + "_sapling", CreativeModeTabs.NATURAL_BLOCKS);
 			else woodRegistry.sapling = registryHelper.blocks()
 					.registerBlock(new FungusBaseBlock(woodRegistry.fungusGenerator),
 							name.getPath() + "_fungus",
-							CreativeModeTab.TAB_DECORATIONS);
+							CreativeModeTabs.NATURAL_BLOCKS);
 			return this;
 		}
 
@@ -1206,11 +1154,11 @@ public class WoodRegistry {
 		public Builder sapling(String nameIn) {
 			if (!woodRegistry.mushroomLike) woodRegistry.sapling = registryHelper.blocks().registerBlock(
 					new SaplingBaseBlock(woodRegistry.saplingGenerator),
-					nameIn + "_sapling", CreativeModeTab.TAB_DECORATIONS);
+					nameIn + "_sapling", CreativeModeTabs.NATURAL_BLOCKS);
 			else woodRegistry.sapling = registryHelper.blocks()
 					.registerBlock(new FungusBaseBlock(woodRegistry.fungusGenerator),
 							nameIn + "_fungus",
-							CreativeModeTab.TAB_DECORATIONS);
+							CreativeModeTabs.NATURAL_BLOCKS);
 			return this;
 		}
 
@@ -1226,12 +1174,12 @@ public class WoodRegistry {
 				if (!woodRegistry.mushroomLike) {
 					woodRegistry.sapling = registryHelper.blocks().registerBlock(
 							new SaplingBaseBlock(woodRegistry.saplingGenerator),
-							saplingName + "_sapling", CreativeModeTab.TAB_DECORATIONS);
+							saplingName + "_sapling", CreativeModeTabs.NATURAL_BLOCKS);
 					woodRegistry.availableSaplings.add(saplingName + "_sapling");
 				} else {
 					woodRegistry.sapling = registryHelper.blocks().registerBlock(
 							new FungusBaseBlock(woodRegistry.fungusGenerator),
-							saplingName + "_fungus", CreativeModeTab.TAB_DECORATIONS);
+							saplingName + "_fungus", CreativeModeTabs.NATURAL_BLOCKS);
 					woodRegistry.availableSaplings.add(saplingName + "_fungus");
 				}
 			}
@@ -1252,8 +1200,8 @@ public class WoodRegistry {
 		public Builder fence() {
 			Block block = woodRegistry.mushroomLike ? Blocks.WARPED_FENCE : Blocks.DARK_OAK_FENCE;
 			woodRegistry.fence = registryHelper.blocks().registerBlock(
-					new FenceBaseBlock(block, BlockBehaviour.Properties.copy(woodRegistry.planks)),
-					name.getPath() + "_fence", CreativeModeTab.TAB_DECORATIONS);
+					new FenceBlock(BlockBehaviour.Properties.copy(woodRegistry.planks)),
+					name.getPath() + "_fence", CreativeModeTabs.FUNCTIONAL_BLOCKS);
 			return this;
 		}
 
@@ -1261,7 +1209,7 @@ public class WoodRegistry {
 			Block block = woodRegistry.mushroomLike ? Blocks.WARPED_FENCE_GATE : Blocks.DARK_OAK_FENCE_GATE;
 			woodRegistry.fenceGate = registryHelper.blocks().registerBlock(
 					new FenceGateBaseBlock(block, BlockBehaviour.Properties.copy(woodRegistry.planks)),
-					name.getPath() + "_fence_gate", CreativeModeTab.TAB_REDSTONE);
+					name.getPath() + "_fence_gate", CreativeModeTabs.REDSTONE_BLOCKS);
 			return this;
 		}
 
@@ -1269,8 +1217,7 @@ public class WoodRegistry {
 			woodRegistry.bookshelf = registryHelper.blocks().registerBlock(new BaseBlock(Blocks.BOOKSHELF,
 							BlockBehaviour.Properties.copy(
 									woodRegistry.planks)),
-					name.getPath() + "_bookshelf",
-					CreativeModeTab.TAB_BUILDING_BLOCKS);
+					name.getPath() + "_bookshelf");
 			return this;
 		}
 
@@ -1278,7 +1225,7 @@ public class WoodRegistry {
 			Block block = woodRegistry.mushroomLike ? Blocks.WARPED_DOOR : Blocks.DARK_OAK_DOOR;
 			woodRegistry.door = registryHelper.blocks().registerBlock(
 					new DoorBaseBlock(block, BlockBehaviour.Properties.copy(woodRegistry.planks)),
-					name.getPath() + "_door", CreativeModeTab.TAB_REDSTONE);
+					name.getPath() + "_door", CreativeModeTabs.REDSTONE_BLOCKS);
 			return this;
 		}
 
@@ -1286,7 +1233,7 @@ public class WoodRegistry {
 			Block block = woodRegistry.mushroomLike ? Blocks.WARPED_TRAPDOOR : Blocks.DARK_OAK_TRAPDOOR;
 			woodRegistry.trapdoor = registryHelper.blocks().registerBlock(
 					new TrapdoorBaseBlock(block, BlockBehaviour.Properties.copy(woodRegistry.planks)),
-					name.getPath() + "_trapdoor", CreativeModeTab.TAB_REDSTONE);
+					name.getPath() + "_trapdoor", CreativeModeTabs.REDSTONE_BLOCKS);
 			return this;
 		}
 
@@ -1294,29 +1241,28 @@ public class WoodRegistry {
 			Block block = woodRegistry.mushroomLike ? Blocks.WARPED_BUTTON : Blocks.DARK_OAK_BUTTON;
 			woodRegistry.button = registryHelper.blocks().registerBlock(
 					new ButtonBaseBlock(true, block, BlockBehaviour.Properties.copy(woodRegistry.planks)),
-					name.getPath() + "_button", CreativeModeTab.TAB_REDSTONE);
+					name.getPath() + "_button", CreativeModeTabs.REDSTONE_BLOCKS);
 			return this;
 		}
 
 		public Builder pressurePlate(PressurePlateBlock.Sensitivity type) {
 			Block block = woodRegistry.mushroomLike ? Blocks.WARPED_PRESSURE_PLATE : Blocks.DARK_OAK_PRESSURE_PLATE;
 			woodRegistry.pressurePlate = registryHelper.blocks().registerBlock(
-					new PressurePlateBaseBlock(block, BlockBehaviour.Properties.copy(woodRegistry.planks), type),
-					name.getPath() + "_pressure_plate", CreativeModeTab.TAB_REDSTONE);
+					new PressurePlateBaseBlock(BlockBehaviour.Properties.copy(woodRegistry.planks), type),
+					name.getPath() + "_pressure_plate", CreativeModeTabs.REDSTONE_BLOCKS);
 			return this;
 		}
 
 		public Builder ladder() {
 			woodRegistry.ladder = registryHelper.blocks().registerBlock(new CustomLadderBlock(),
-					name.getPath() + "_ladder",
-					CreativeModeTab.TAB_DECORATIONS);
+					name.getPath() + "_ladder", CreativeModeTabs.NATURAL_BLOCKS);
 			return this;
 		}
 
 		public Builder beehive() {
 			woodRegistry.beehive = registryHelper.blocks().registerBlock(
 					new BaseBeehiveBlock(BlockBehaviour.Properties.copy(Blocks.BEEHIVE)),
-					name.getPath() + "_beehive", CreativeModeTab.TAB_DECORATIONS);
+					name.getPath() + "_beehive", CreativeModeTabs.FUNCTIONAL_BLOCKS);
 			((IBlockEntityType) BlockEntityType.BEEHIVE).vlAddBlocks(woodRegistry.beehive);
 			return this;
 		}
@@ -1327,29 +1273,29 @@ public class WoodRegistry {
 			ResourceLocation signTexture = new ResourceLocation(this.name.getNamespace(),
 					"wood_types/" + this.name.getPath() + "/sign");
 			this.woodRegistry.sign = this.registryHelper.blocks().registerBlockWithoutItem(this.name.getPath() + "_sign",
-					new ExpandedTerraformSignBlock(baseBlock, signTexture, QuiltBlockSettings.copyOf(Blocks.OAK_SIGN)));
+					new TerraformSignBlock(signTexture, FabricBlockSettings.copyOf(Blocks.OAK_SIGN)));
 			this.woodRegistry.wallSign = this.registryHelper.blocks().registerBlockWithoutItem(this.name.getPath() + "_wall_sign",
-					new TerraformWallSignBlock(signTexture, QuiltBlockSettings.copyOf(Blocks.OAK_WALL_SIGN)));
+					new TerraformWallSignBlock(signTexture, FabricBlockSettings.copyOf(Blocks.OAK_WALL_SIGN)));
 			this.woodRegistry.signItem = this.registryHelper.items().registerItem(this.name.getPath() + "_sign", new SignItem(
-					new Item.Properties().durability(16).tab(CreativeModeTab.TAB_DECORATIONS), this.woodRegistry.sign,
+					new Item.Properties().durability(16), this.woodRegistry.sign,
 					this.woodRegistry.wallSign));
 			((IBlockEntityType) BlockEntityType.SIGN).vlAddBlocks(this.woodRegistry.sign, this.woodRegistry.wallSign);
 			return this;
 		}
 
 		public Builder boat() {
-			this.woodRegistry.boatItem = TerraformBoatItemHelper.registerBoatItem(Utils.appendToPath(this.name, "_boat"),
-					() -> this.woodRegistry.boatType, false);
-			woodRegistry.chestBoatItem = TerraformBoatItemHelper.registerBoatItem(
-					Utils.appendToPath(this.name, "_chest_boat"), () -> this.woodRegistry.boatType, true);
-			woodRegistry.boatType = Registry.register(TerraformBoatTypeRegistry.INSTANCE, name,
-					new TerraformBoatType.Builder().item(woodRegistry.boatItem)
-							.chestItem(
-									woodRegistry.chestBoatItem)
-							.build());
-			if (FabricLoader.getInstance().getEnvironmentType().equals(EnvType.CLIENT)) {
-				TerraformBoatClientHelper.registerModelLayers(name);
-			}
+//			this.woodRegistry.boatItem = TerraformBoatItemHelper.registerBoatItem(Utils.appendToPath(this.name, "_boat"),
+//					() -> this.woodRegistry.boatType, false);
+//			woodRegistry.chestBoatItem = TerraformBoatItemHelper.registerBoatItem(
+//					Utils.appendToPath(this.name, "_chest_boat"), () -> this.woodRegistry.boatType, true);
+//			woodRegistry.boatType = Registry.register(TerraformBoatTypeRegistry.INSTANCE, name,
+//					new TerraformBoatType.Builder().item(woodRegistry.boatItem)
+//							.chestItem(
+//									woodRegistry.chestBoatItem)
+//							.build());
+//			if (FabricLoader.getInstance().getEnvironmentType().equals(EnvType.CLIENT)) {
+//				TerraformBoatClientHelper.registerModelLayers(name);
+//			}
 			return this;
 		}
 

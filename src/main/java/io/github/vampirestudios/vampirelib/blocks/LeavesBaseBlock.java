@@ -17,31 +17,17 @@
 
 package io.github.vampirestudios.vampirelib.blocks;
 
-import net.minecraft.core.NonNullList;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.ItemStack;
+import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.LeavesBlock;
 
-import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
-
-import io.github.vampirestudios.vampirelib.api.itemGroupSorting.VanillaTargetedItemGroupFiller;
-
 public class LeavesBaseBlock extends LeavesBlock {
-	private VanillaTargetedItemGroupFiller FILLER;
-
 	public LeavesBaseBlock(Block parent) {
 		this(parent, true);
 	}
 
 	public LeavesBaseBlock(Block parent, boolean realign) {
 		super(FabricBlockSettings.copyOf(parent));
-		if (realign) FILLER = new VanillaTargetedItemGroupFiller(parent.asItem());
-	}
-
-	@Override
-	public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> list) {
-		FILLER.fillItem(this.asItem(), group, list);
 	}
 
 }

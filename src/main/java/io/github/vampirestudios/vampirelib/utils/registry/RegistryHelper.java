@@ -17,25 +17,23 @@
 
 package io.github.vampirestudios.vampirelib.utils.registry;
 
+import net.minecraft.core.Direction;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.SpawnEggItem;
-import net.minecraft.world.item.StandingAndWallBlockItem;
+import net.minecraft.world.item.*;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 
+import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
-import net.fabricmc.loader.api.FabricLoader;
 
 public record RegistryHelper(String modId) {
 	public static RegistryHelper createRegistryHelper(String modId) {
@@ -58,27 +56,28 @@ public record RegistryHelper(String modId) {
 		}
 
 		public Block registerBlock(Block block, String name) {
-			registerBlock(block, name, CreativeModeTab.TAB_DECORATIONS);
+			registerBlock(block, name, CreativeModeTabs.BUILDING_BLOCKS);
 			return block;
 		}
 
 		public Block registerBlock(Block block, String name, CreativeModeTab itemGroup) {
-			Registry.register(Registry.BLOCK, new ResourceLocation(modId, name), block);
-			Registry.register(Registry.ITEM, new ResourceLocation(modId, name),
-					new BlockItem(block, new Item.Properties().tab(itemGroup)));
+			Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(modId, name), block);
+			Item item = Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(modId, name),
+					new BlockItem(block, new Item.Properties()));
+			ItemGroupEvents.modifyEntriesEvent(itemGroup).register(entries -> entries.accept(item));
 			return block;
 		}
 
 		public Block registerBlockWithWallBlock(Block block, Block wallBlock, String name) {
-			Registry.register(Registry.BLOCK, new ResourceLocation(modId, name), block);
-			Registry.register(Registry.ITEM, new ResourceLocation(modId, name),
-					new StandingAndWallBlockItem(block, wallBlock, new Item.Properties()
-							.tab(CreativeModeTab.TAB_DECORATIONS)));
+			Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(modId, name), block);
+			Item item = Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(modId, name),
+					new StandingAndWallBlockItem(block, wallBlock, new Item.Properties(), Direction.DOWN));
+			ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.BUILDING_BLOCKS).register(entries -> entries.accept(item));
 			return block;
 		}
 
 		public Block registerBlockWithoutItem(String name, Block block) {
-			Registry.register(Registry.BLOCK, new ResourceLocation(modId, name), block);
+			Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(modId, name), block);
 			return block;
 		}
 	}
@@ -91,54 +90,46 @@ public record RegistryHelper(String modId) {
 		}
 
 		public Item registerItem(String name, Item item) {
-			return Registry.register(Registry.ITEM, new ResourceLocation(modId, name), item);
-		}
-
-		public Item registerCompatItem(String modName, String itemName, Item.Properties settings, CreativeModeTab itemGroup) {
-			if (!FabricLoader.getInstance().isModLoaded(modName)) {
-				return registerItem(itemName, new Item(settings.tab(itemGroup)));
-			} else {
-				return null;
-			}
+			return Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(modId, name), item);
 		}
 
 		public Item registerSpawnEgg(String name, EntityType<? extends Mob> entity, int primaryColor, int secondaryColor) {
 			Item item = registerItem(name + "_spawn_egg",
-					new SpawnEggItem(entity, primaryColor, secondaryColor, new Item.Properties()
-							.tab(CreativeModeTab.TAB_MISC)));
+					new SpawnEggItem(entity, primaryColor, secondaryColor, new Item.Properties()));
+			ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.SPAWN_EGGS).register(entries -> entries.accept(item));
 			SpawnEggItem.BY_ID.put(entity, (SpawnEggItem) item);
 			return item;
 		}
 
 		public Potion registerPotion(String name, Potion potion) {
-			return Registry.register(Registry.POTION, new ResourceLocation(modId, name), potion);
+			return Registry.register(BuiltInRegistries.POTION, new ResourceLocation(modId, name), potion);
 		}
 	}
 
 	public <T extends BlockEntity> BlockEntityType<T> registerBlockEntity(FabricBlockEntityTypeBuilder.Factory<T> blockEntityType, Class<? extends Block> block, String name) {
 		FabricBlockEntityTypeBuilder<T> builder = FabricBlockEntityTypeBuilder.create(blockEntityType,
 				collectBlocks(block));
-		return Registry.register(Registry.BLOCK_ENTITY_TYPE, new ResourceLocation(modId, name), builder.build());
+		return Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, new ResourceLocation(modId, name), builder.build());
 	}
 
 	public <T extends BlockEntity> BlockEntityType<T> registerBlockEntity(FabricBlockEntityTypeBuilder<T> builder, String name) {
-		return Registry.register(Registry.BLOCK_ENTITY_TYPE, new ResourceLocation(modId, name), builder.build());
+		return Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, new ResourceLocation(modId, name), builder.build());
 	}
 
 	public static Block[] collectBlocks(Class<?> blockClass) {
-		return Registry.BLOCK.stream().filter(blockClass::isInstance).toArray(Block[]::new);
+		return BuiltInRegistries.BLOCK.stream().filter(blockClass::isInstance).toArray(Block[]::new);
 	}
 
 	public <T extends Entity> EntityType<T> registerEntity(FabricEntityTypeBuilder<T> builder, String name) {
-		return Registry.register(Registry.ENTITY_TYPE, new ResourceLocation(modId, name), builder.build());
+		return Registry.register(BuiltInRegistries.ENTITY_TYPE, new ResourceLocation(modId, name), builder.build());
 	}
 
 	public SoundEvent createSoundEvent(String name) {
-		return Registry.register(Registry.SOUND_EVENT, name, new SoundEvent(new ResourceLocation(modId, name)));
+		return Registry.register(BuiltInRegistries.SOUND_EVENT, name, SoundEvent.createVariableRangeEvent(new ResourceLocation(modId, name)));
 	}
 
 	public SoundEvent registerSoundEvent(SoundEvent soundEvent, String name) {
-		return Registry.register(Registry.SOUND_EVENT, new ResourceLocation(modId, name), soundEvent);
+		return Registry.register(BuiltInRegistries.SOUND_EVENT, new ResourceLocation(modId, name), soundEvent);
 	}
 
 }

@@ -24,8 +24,8 @@
     "client.BlockColorsMixin",
     "client.CameraInvokerMixin",
     "client.CameraMixin",
-    "client.ShaderInstanceMixin",
-    "client.TextureAtlasMixin"
+    "client.ShaderInstanceMixin"/*,
+    "client.TextureAtlasMixin"*/
   ],
   "injectors": {
     "defaultRequire": 1
