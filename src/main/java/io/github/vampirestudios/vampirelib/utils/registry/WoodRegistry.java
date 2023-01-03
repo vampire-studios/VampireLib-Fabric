@@ -30,8 +30,9 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.data.models.BlockModelGenerators;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.TagKey;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.SignItem;
@@ -955,8 +956,8 @@ public class WoodRegistry {
 			String logName = woodRegistry.mushroomLike ? name.getPath() + "_stem" : this.name.getPath() + "_log";
 			Block block = woodRegistry.mushroomLike ? Blocks.WARPED_STEM : Blocks.DARK_OAK_LOG;
 			BlockBehaviour.Properties blockSettings = FabricBlockSettings.copyOf(block);
-			woodRegistry.log = registryHelper.blocks()
-					.registerBlock(new BaseLogAndWoodBlock(blockSettings, block), logName);
+			woodRegistry.log = registryHelper.blocks().registerBlock(new RotatedPillarBlock(blockSettings),
+					logName, CreativeModeTabs.BUILDING_BLOCKS, CreativeModeTabs.NATURAL_BLOCKS);
 			return this;
 		}
 
@@ -964,8 +965,8 @@ public class WoodRegistry {
 			String woodName = woodRegistry.mushroomLike ? name.getPath() + "_hyphae" : name.getPath() + "_wood";
 			Block block = woodRegistry.mushroomLike ? Blocks.WARPED_HYPHAE : Blocks.DARK_OAK_WOOD;
 			BlockBehaviour.Properties blockSettings = FabricBlockSettings.copyOf(block);
-			woodRegistry.wood = registryHelper.blocks()
-					.registerBlock(new BaseLogAndWoodBlock(blockSettings, block), woodName);
+			woodRegistry.wood = registryHelper.blocks().registerBlock(new RotatedPillarBlock(blockSettings),
+					woodName, CreativeModeTabs.BUILDING_BLOCKS);
 			return this;
 		}
 
@@ -973,9 +974,8 @@ public class WoodRegistry {
 			String logName = woodRegistry.mushroomLike ? name.getPath() + "_stem" : name.getPath() + "_log";
 			Block block = woodRegistry.mushroomLike ? Blocks.STRIPPED_WARPED_STEM : Blocks.STRIPPED_DARK_OAK_LOG;
 			BlockBehaviour.Properties blockSettings = FabricBlockSettings.copyOf(block);
-			woodRegistry.strippedLog = registryHelper.blocks()
-					.registerBlock(new BaseLogAndWoodBlock(blockSettings, block),
-							"stripped_" + logName);
+			woodRegistry.strippedLog = registryHelper.blocks().registerBlock(new RotatedPillarBlock(blockSettings),
+							"stripped_" + logName, CreativeModeTabs.BUILDING_BLOCKS);
 			return this;
 		}
 
@@ -983,9 +983,8 @@ public class WoodRegistry {
 			String woodName = woodRegistry.mushroomLike ? name.getPath() + "_hyphae" : name.getPath() + "_wood";
 			Block block = woodRegistry.mushroomLike ? Blocks.STRIPPED_WARPED_HYPHAE : Blocks.STRIPPED_DARK_OAK_WOOD;
 			BlockBehaviour.Properties blockSettings = FabricBlockSettings.copyOf(block);
-			woodRegistry.strippedWood = registryHelper.blocks()
-					.registerBlock(new BaseLogAndWoodBlock(blockSettings, block),
-							"stripped_" + woodName);
+			woodRegistry.strippedWood = registryHelper.blocks().registerBlock(new RotatedPillarBlock(blockSettings),
+							"stripped_" + woodName, CreativeModeTabs.BUILDING_BLOCKS);
 			return this;
 		}
 
@@ -999,7 +998,7 @@ public class WoodRegistry {
 		public Builder slab() {
 			Block block = woodRegistry.mushroomLike ? Blocks.WARPED_SLAB : Blocks.DARK_OAK_SLAB;
 			woodRegistry.slab = registryHelper.blocks().registerBlock(
-					new SlabBlock(FabricBlockSettings.copy(woodRegistry.planks)),
+					new SlabBlock(FabricBlockSettings.copy(block)),
 					name.getPath() + "_slab", CreativeModeTabs.BUILDING_BLOCKS);
 			return this;
 		}
@@ -1007,7 +1006,7 @@ public class WoodRegistry {
 		public Builder planks() {
 			Block block = woodRegistry.mushroomLike ? Blocks.WARPED_PLANKS : Blocks.DARK_OAK_PLANKS;
 			woodRegistry.planks = registryHelper.blocks().registerBlock(
-					new BaseBlock(block, FabricBlockSettings.copyOf(Blocks.OAK_PLANKS)),
+					new Block(FabricBlockSettings.copyOf(block)),
 					name.getPath() + "_planks", CreativeModeTabs.BUILDING_BLOCKS);
 			return this;
 		}
@@ -1015,31 +1014,28 @@ public class WoodRegistry {
 		public Builder leaves() {
 			String leavesName = woodRegistry.mushroomLike ? "_wart_block" : "_leaves";
 			Block block = woodRegistry.mushroomLike ? Blocks.WARPED_WART_BLOCK : Blocks.FLOWERING_AZALEA_LEAVES;
-			CreativeModeTab creativeModeTab = woodRegistry.mushroomLike ? CreativeModeTabs.BUILDING_BLOCKS : CreativeModeTabs.NATURAL_BLOCKS;
 			woodRegistry.leaves = registryHelper.blocks().registerBlock(
 					woodRegistry.mushroomLike ? new Block(FabricBlockSettings.copyOf(block)) :
-							new LeavesBaseBlock(block), name.getPath() + leavesName,
-					creativeModeTab);
+							new LeavesBlock(FabricBlockSettings.copyOf(block)), name.getPath() + leavesName,
+					CreativeModeTabs.NATURAL_BLOCKS);
 			return this;
 		}
 
 		public Builder leaves(String nameIn) {
 			String leavesName = woodRegistry.mushroomLike ? "_wart_block" : "_leaves";
 			Block block = woodRegistry.mushroomLike ? Blocks.WARPED_WART_BLOCK : Blocks.FLOWERING_AZALEA_LEAVES;
-			CreativeModeTab creativeModeTab = woodRegistry.mushroomLike ? CreativeModeTabs.BUILDING_BLOCKS : CreativeModeTabs.NATURAL_BLOCKS;
-			woodRegistry.leaves = registryHelper.blocks().registerBlock(new LeavesBaseBlock(block), nameIn + leavesName,
-					creativeModeTab);
+			woodRegistry.leaves = registryHelper.blocks().registerBlock(new LeavesBlock(FabricBlockSettings.copyOf(block)), nameIn + leavesName,
+					CreativeModeTabs.NATURAL_BLOCKS);
 			return this;
 		}
 
 		public Builder leaves(String... nameIn) {
 			String leavesName = woodRegistry.mushroomLike ? "_wart_block" : "_leaves";
 			Block block = woodRegistry.mushroomLike ? Blocks.WARPED_WART_BLOCK : Blocks.FLOWERING_AZALEA_LEAVES;
-			CreativeModeTab creativeModeTab = woodRegistry.mushroomLike ? CreativeModeTabs.BUILDING_BLOCKS : CreativeModeTabs.NATURAL_BLOCKS;
 			for (String name : nameIn) {
 				woodRegistry.leaves = registryHelper.blocks()
-						.registerBlock(new LeavesBaseBlock(block), name + leavesName,
-								creativeModeTab);
+						.registerBlock(new LeavesBlock(FabricBlockSettings.copyOf(block)), name + leavesName,
+								CreativeModeTabs.NATURAL_BLOCKS);
 				woodRegistry.availableLeaves.add(name + leavesName);
 			}
 			return this;
@@ -1048,10 +1044,9 @@ public class WoodRegistry {
 		public Builder coloredLeaves() {
 			String leavesName = woodRegistry.mushroomLike ? "_wart_block" : "_leaves";
 			Block block = woodRegistry.mushroomLike ? Blocks.WARPED_WART_BLOCK : Blocks.FLOWERING_AZALEA_LEAVES;
-			CreativeModeTab creativeModeTab = woodRegistry.mushroomLike ? CreativeModeTabs.BUILDING_BLOCKS : CreativeModeTabs.NATURAL_BLOCKS;
 			woodRegistry.leaves = registryHelper.blocks()
-					.registerBlock(new LeavesBaseBlock(block), name.getPath() + leavesName,
-							creativeModeTab);
+					.registerBlock(new LeavesBlock(FabricBlockSettings.copyOf(block)), name.getPath() + leavesName,
+							CreativeModeTabs.NATURAL_BLOCKS);
 			VampireLibClient.COLORED_LEAVES.add(new VampireLibClient.ColoredLeaves(woodRegistry.leaves, true));
 			return this;
 		}
@@ -1059,10 +1054,9 @@ public class WoodRegistry {
 		public Builder coloredLeaves(int color) {
 			String leavesName = woodRegistry.mushroomLike ? "_wart_block" : "_leaves";
 			Block block = woodRegistry.mushroomLike ? Blocks.WARPED_WART_BLOCK : Blocks.FLOWERING_AZALEA_LEAVES;
-			CreativeModeTab creativeModeTab = woodRegistry.mushroomLike ? CreativeModeTabs.BUILDING_BLOCKS : CreativeModeTabs.NATURAL_BLOCKS;
 			woodRegistry.leaves = registryHelper.blocks()
-					.registerBlock(new LeavesBaseBlock(block), name.getPath() + leavesName,
-							creativeModeTab);
+					.registerBlock(new LeavesBlock(FabricBlockSettings.copyOf(block)), name.getPath() + leavesName,
+							CreativeModeTabs.NATURAL_BLOCKS);
 			VampireLibClient.COLORED_LEAVES.add(new VampireLibClient.ColoredLeaves(woodRegistry.leaves, true, color));
 			return this;
 		}
@@ -1070,9 +1064,8 @@ public class WoodRegistry {
 		public Builder coloredLeaves(String nameIn) {
 			String leavesName = woodRegistry.mushroomLike ? "_wart_block" : "_leaves";
 			Block block = woodRegistry.mushroomLike ? Blocks.WARPED_WART_BLOCK : Blocks.FLOWERING_AZALEA_LEAVES;
-			CreativeModeTab creativeModeTab = woodRegistry.mushroomLike ? CreativeModeTabs.BUILDING_BLOCKS : CreativeModeTabs.NATURAL_BLOCKS;
-			woodRegistry.leaves = registryHelper.blocks().registerBlock(new LeavesBaseBlock(block), nameIn + leavesName,
-					creativeModeTab);
+			woodRegistry.leaves = registryHelper.blocks().registerBlock(new LeavesBlock(FabricBlockSettings.copyOf(block)), nameIn + leavesName,
+					CreativeModeTabs.NATURAL_BLOCKS);
 			VampireLibClient.ColoredLeaves coloredLeaves = new VampireLibClient.ColoredLeaves(woodRegistry.leaves,
 					true);
 			VampireLibClient.COLORED_LEAVES.add(coloredLeaves);
@@ -1082,11 +1075,10 @@ public class WoodRegistry {
 		public Builder coloredLeaves(String... nameIn) {
 			String leavesName = woodRegistry.mushroomLike ? "_wart_block" : "_leaves";
 			Block block = woodRegistry.mushroomLike ? Blocks.WARPED_WART_BLOCK : Blocks.FLOWERING_AZALEA_LEAVES;
-			CreativeModeTab creativeModeTab = woodRegistry.mushroomLike ? CreativeModeTabs.BUILDING_BLOCKS : CreativeModeTabs.NATURAL_BLOCKS;
 			for (String name : nameIn) {
 				woodRegistry.leaves = registryHelper.blocks()
-						.registerBlock(new LeavesBaseBlock(block), name + leavesName,
-								creativeModeTab);
+						.registerBlock(new LeavesBlock(FabricBlockSettings.copyOf(block)), name + leavesName,
+								CreativeModeTabs.NATURAL_BLOCKS);
 				VampireLibClient.COLORED_LEAVES.add(new VampireLibClient.ColoredLeaves(woodRegistry.leaves, true));
 				woodRegistry.availableLeaves.add(name + leavesName);
 			}
@@ -1096,9 +1088,8 @@ public class WoodRegistry {
 		public Builder coloredLeaves(String nameIn, int color) {
 			String leavesName = woodRegistry.mushroomLike ? "_wart_block" : "_leaves";
 			Block block = woodRegistry.mushroomLike ? Blocks.WARPED_WART_BLOCK : Blocks.FLOWERING_AZALEA_LEAVES;
-			CreativeModeTab creativeModeTab = woodRegistry.mushroomLike ? CreativeModeTabs.BUILDING_BLOCKS : CreativeModeTabs.NATURAL_BLOCKS;
-			woodRegistry.leaves = registryHelper.blocks().registerBlock(new LeavesBaseBlock(block), nameIn + leavesName,
-					creativeModeTab);
+			woodRegistry.leaves = registryHelper.blocks().registerBlock(new LeavesBlock(FabricBlockSettings.copyOf(block)), nameIn + leavesName,
+					CreativeModeTabs.NATURAL_BLOCKS);
 			VampireLibClient.COLORED_LEAVES.add(new VampireLibClient.ColoredLeaves(woodRegistry.leaves, true, color));
 			return this;
 		}
@@ -1106,11 +1097,10 @@ public class WoodRegistry {
 		public Builder coloredLeaves(int color, String... nameIn) {
 			String leavesName = woodRegistry.mushroomLike ? "_wart_block" : "_leaves";
 			Block block = woodRegistry.mushroomLike ? Blocks.WARPED_WART_BLOCK : Blocks.FLOWERING_AZALEA_LEAVES;
-			CreativeModeTab creativeModeTab = woodRegistry.mushroomLike ? CreativeModeTabs.BUILDING_BLOCKS : CreativeModeTabs.NATURAL_BLOCKS;
 			for (String name : nameIn) {
 				woodRegistry.leaves = registryHelper.blocks()
-						.registerBlock(new LeavesBaseBlock(block), name + leavesName,
-								creativeModeTab);
+						.registerBlock(new LeavesBlock(FabricBlockSettings.copyOf(block)), name + leavesName,
+								CreativeModeTabs.NATURAL_BLOCKS);
 				VampireLibClient.COLORED_LEAVES.add(
 						new VampireLibClient.ColoredLeaves(woodRegistry.leaves, true, color));
 				woodRegistry.availableLeaves.add(name + leavesName);
@@ -1121,11 +1111,10 @@ public class WoodRegistry {
 		public Builder coloredLeaves(ColoredBlock... coloredLeavesBlocks) {
 			String leavesName = woodRegistry.mushroomLike ? "_wart_block" : "_leaves";
 			Block block = woodRegistry.mushroomLike ? Blocks.WARPED_WART_BLOCK : Blocks.FLOWERING_AZALEA_LEAVES;
-			CreativeModeTab creativeModeTab = woodRegistry.mushroomLike ? CreativeModeTabs.BUILDING_BLOCKS : CreativeModeTabs.NATURAL_BLOCKS;
 			for (ColoredBlock coloredLeavesBlock : coloredLeavesBlocks) {
-				woodRegistry.leaves = registryHelper.blocks().registerBlock(new LeavesBaseBlock(block),
+				woodRegistry.leaves = registryHelper.blocks().registerBlock(new LeavesBlock(FabricBlockSettings.copyOf(block)),
 						coloredLeavesBlock.name + leavesName,
-						creativeModeTab);
+						CreativeModeTabs.NATURAL_BLOCKS);
 				VampireLibClient.COLORED_LEAVES.add(
 						new VampireLibClient.ColoredLeaves(woodRegistry.leaves, true, coloredLeavesBlock.color));
 				woodRegistry.availableLeaves.add(coloredLeavesBlock.name + leavesName);
@@ -1200,55 +1189,75 @@ public class WoodRegistry {
 		public Builder fence() {
 			Block block = woodRegistry.mushroomLike ? Blocks.WARPED_FENCE : Blocks.DARK_OAK_FENCE;
 			woodRegistry.fence = registryHelper.blocks().registerBlock(
-					new FenceBlock(BlockBehaviour.Properties.copy(woodRegistry.planks)),
+					new FenceBlock(BlockBehaviour.Properties.copy(block)),
 					name.getPath() + "_fence", CreativeModeTabs.FUNCTIONAL_BLOCKS);
 			return this;
 		}
 
 		public Builder fenceGate() {
 			Block block = woodRegistry.mushroomLike ? Blocks.WARPED_FENCE_GATE : Blocks.DARK_OAK_FENCE_GATE;
+			SoundEvent offSound = woodRegistry.mushroomLike ? SoundEvents.NETHER_WOOD_FENCE_GATE_CLOSE
+					: SoundEvents.FENCE_GATE_CLOSE;
+			SoundEvent onSound = woodRegistry.mushroomLike ? SoundEvents.NETHER_WOOD_FENCE_GATE_OPEN
+					: SoundEvents.FENCE_GATE_OPEN;
 			woodRegistry.fenceGate = registryHelper.blocks().registerBlock(
-					new FenceGateBaseBlock(block, BlockBehaviour.Properties.copy(woodRegistry.planks)),
+					new FenceGateBlock(BlockBehaviour.Properties.copy(block), offSound, onSound),
 					name.getPath() + "_fence_gate", CreativeModeTabs.REDSTONE_BLOCKS);
 			return this;
 		}
 
 		public Builder bookshelf() {
-			woodRegistry.bookshelf = registryHelper.blocks().registerBlock(new BaseBlock(Blocks.BOOKSHELF,
-							BlockBehaviour.Properties.copy(
-									woodRegistry.planks)),
+			woodRegistry.bookshelf = registryHelper.blocks().registerBlock(new Block(
+					BlockBehaviour.Properties.copy(woodRegistry.planks)),
 					name.getPath() + "_bookshelf");
 			return this;
 		}
 
 		public Builder door() {
 			Block block = woodRegistry.mushroomLike ? Blocks.WARPED_DOOR : Blocks.DARK_OAK_DOOR;
+			SoundEvent offSound = woodRegistry.mushroomLike ? SoundEvents.NETHER_WOOD_DOOR_CLOSE
+					: SoundEvents.WOODEN_DOOR_CLOSE;
+			SoundEvent onSound = woodRegistry.mushroomLike ? SoundEvents.NETHER_WOOD_DOOR_OPEN
+					: SoundEvents.WOODEN_DOOR_OPEN;
 			woodRegistry.door = registryHelper.blocks().registerBlock(
-					new DoorBaseBlock(block, BlockBehaviour.Properties.copy(woodRegistry.planks)),
+					new DoorBaseBlock(BlockBehaviour.Properties.copy(block), offSound, onSound),
 					name.getPath() + "_door", CreativeModeTabs.REDSTONE_BLOCKS);
 			return this;
 		}
 
 		public Builder trapdoor() {
 			Block block = woodRegistry.mushroomLike ? Blocks.WARPED_TRAPDOOR : Blocks.DARK_OAK_TRAPDOOR;
+			SoundEvent offSound = woodRegistry.mushroomLike ? SoundEvents.NETHER_WOOD_DOOR_CLOSE
+					: SoundEvents.WOODEN_DOOR_CLOSE;
+			SoundEvent onSound = woodRegistry.mushroomLike ? SoundEvents.NETHER_WOOD_DOOR_OPEN
+					: SoundEvents.WOODEN_DOOR_OPEN;
 			woodRegistry.trapdoor = registryHelper.blocks().registerBlock(
-					new TrapdoorBaseBlock(block, BlockBehaviour.Properties.copy(woodRegistry.planks)),
+					new TrapDoorBlock(BlockBehaviour.Properties.copy(block), offSound, onSound),
 					name.getPath() + "_trapdoor", CreativeModeTabs.REDSTONE_BLOCKS);
 			return this;
 		}
 
 		public Builder button() {
 			Block block = woodRegistry.mushroomLike ? Blocks.WARPED_BUTTON : Blocks.DARK_OAK_BUTTON;
-			woodRegistry.button = registryHelper.blocks().registerBlock(
-					new ButtonBaseBlock(true, block, BlockBehaviour.Properties.copy(woodRegistry.planks)),
+			SoundEvent offSound = woodRegistry.mushroomLike ? SoundEvents.NETHER_WOOD_BUTTON_CLICK_OFF
+					: SoundEvents.WOODEN_BUTTON_CLICK_OFF;
+			SoundEvent onSound = woodRegistry.mushroomLike ? SoundEvents.NETHER_WOOD_BUTTON_CLICK_ON
+					: SoundEvents.WOODEN_BUTTON_CLICK_ON;
+			woodRegistry.button = registryHelper.blocks().registerBlock(new ButtonBlock(
+					BlockBehaviour.Properties.copy(block), 15,
+							true, offSound, onSound),
 					name.getPath() + "_button", CreativeModeTabs.REDSTONE_BLOCKS);
 			return this;
 		}
 
 		public Builder pressurePlate(PressurePlateBlock.Sensitivity type) {
 			Block block = woodRegistry.mushroomLike ? Blocks.WARPED_PRESSURE_PLATE : Blocks.DARK_OAK_PRESSURE_PLATE;
+			SoundEvent offSound = woodRegistry.mushroomLike ? SoundEvents.NETHER_WOOD_PRESSURE_PLATE_CLICK_OFF
+					: SoundEvents.WOODEN_PRESSURE_PLATE_CLICK_OFF;
+			SoundEvent onSound = woodRegistry.mushroomLike ? SoundEvents.NETHER_WOOD_PRESSURE_PLATE_CLICK_ON
+					: SoundEvents.WOODEN_PRESSURE_PLATE_CLICK_ON;
 			woodRegistry.pressurePlate = registryHelper.blocks().registerBlock(
-					new PressurePlateBaseBlock(BlockBehaviour.Properties.copy(woodRegistry.planks), type),
+					new PressurePlateBlock(type, BlockBehaviour.Properties.copy(block), offSound, onSound),
 					name.getPath() + "_pressure_plate", CreativeModeTabs.REDSTONE_BLOCKS);
 			return this;
 		}
@@ -1261,7 +1270,7 @@ public class WoodRegistry {
 
 		public Builder beehive() {
 			woodRegistry.beehive = registryHelper.blocks().registerBlock(
-					new BaseBeehiveBlock(BlockBehaviour.Properties.copy(Blocks.BEEHIVE)),
+					new BeehiveBlock(BlockBehaviour.Properties.copy(Blocks.BEEHIVE)),
 					name.getPath() + "_beehive", CreativeModeTabs.FUNCTIONAL_BLOCKS);
 			((IBlockEntityType) BlockEntityType.BEEHIVE).vlAddBlocks(woodRegistry.beehive);
 			return this;

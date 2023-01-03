@@ -1,4 +1,10 @@
-package io.github.vampirestudios.vampirelib.api;
+package io.github.vampirestudios.vampirelib.api.datagen;
+
+import java.nio.file.Path;
+import java.util.Collections;
+import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.function.BiConsumer;
 
 import com.google.common.collect.ImmutableList;
 import com.google.gson.JsonArray;
@@ -8,24 +14,20 @@ import com.mojang.logging.LogUtils;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.JsonOps;
-import io.github.vampirestudios.vampirelib.api.datagen.ExistingFileHelper;
-import io.github.vampirestudios.vampirelib.api.datagen.ExistingFileHelper.ResourceType;
-import io.github.vampirestudios.vampirelib.utils.LamdbaExceptionUtils;
-import net.fabricmc.fabric.api.resource.conditions.v1.ConditionJsonProvider;
-import net.fabricmc.fabric.api.resource.conditions.v1.ResourceConditions;
+import org.slf4j.Logger;
+
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackType;
-import org.slf4j.Logger;
 
-import java.nio.file.Path;
-import java.util.Collections;
-import java.util.Map;
-import java.util.concurrent.CompletableFuture;
-import java.util.function.BiConsumer;
+import net.fabricmc.fabric.api.resource.conditions.v1.ConditionJsonProvider;
+import net.fabricmc.fabric.api.resource.conditions.v1.ResourceConditions;
+
+import io.github.vampirestudios.vampirelib.api.datagen.ExistingFileHelper.ResourceType;
+import io.github.vampirestudios.vampirelib.utils.LamdbaExceptionUtils;
 
 /**
  * <p>Dataprovider for using a Codec to generate jsons.

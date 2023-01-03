@@ -4,7 +4,6 @@
   "compatibilityLevel": "JAVA_16",
   "mixins": [
     "HandledScreenMixin",
-    "LandPathNodeMakerMixin",
     "MixinItemEntity",
     "MixinLivingEntity",
     "MixinMobSpawnerLogic",
@@ -23,9 +22,7 @@
   "client": [
     "client.BlockColorsMixin",
     "client.CameraInvokerMixin",
-    "client.CameraMixin",
-    "client.ShaderInstanceMixin"/*,
-    "client.TextureAtlasMixin"*/
+    "client.ShaderInstanceMixin"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -783,14 +783,14 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
 			/*
 			 * Many of these mob types do not appear in vanilla Minecraft, and are thus left empty here
 			 */
-			tagCustom(VTags.EntityTypes.ELEMENTAL).addTags(VTags.EntityTypes.ELEMENTAL_FIRE,
+			tag(VTags.EntityTypes.ELEMENTAL).addTags(VTags.EntityTypes.ELEMENTAL_FIRE,
 					VTags.EntityTypes.ELEMENTAL_ICE,
 					VTags.EntityTypes.ELEMENTAL_METAL);
 			tag(VTags.EntityTypes.ELEMENTAL_FIRE).add(EntityType.BLAZE);
 			tag(VTags.EntityTypes.ELEMENTAL_ICE).add(EntityType.SNOW_GOLEM);
 			tag(VTags.EntityTypes.ELEMENTAL_METAL).add(EntityType.IRON_GOLEM);
 
-			tagCustom(VTags.EntityTypes.ELEMENTAL_ATTACKS).addTags(VTags.EntityTypes.ELEMENTAL_ATTACKS_ELECTRIC,
+			tag(VTags.EntityTypes.ELEMENTAL_ATTACKS).addTags(VTags.EntityTypes.ELEMENTAL_ATTACKS_ELECTRIC,
 					VTags.EntityTypes.ELEMENTAL_ATTACKS_FIRE,
 					VTags.EntityTypes.ELEMENTAL_ATTACKS_ICE);
 			tag(VTags.EntityTypes.ELEMENTAL_ATTACKS_ELECTRIC).add(EntityType.LIGHTNING_BOLT);
@@ -816,7 +816,7 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
 
 			tag(VTags.EntityTypes.REPTILES).add(EntityType.TURTLE);
 
-			tagCustom(VTags.EntityTypes.MAMMALS)
+			tag(VTags.EntityTypes.MAMMALS)
 					.addTags(VTags.EntityTypes.MAMMALS_BOVINES, VTags.EntityTypes.MAMMALS_CAMELIDS,
 							VTags.EntityTypes.MAMMALS_CANIDS,
 							VTags.EntityTypes.MAMMALS_CAPRINES, VTags.EntityTypes.MAMMALS_EQUINES,
@@ -837,16 +837,16 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
 
 			tag(VTags.EntityTypes.GHOSTS).add(EntityType.VEX, EntityType.PHANTOM, EntityType.GHAST);
 
-			tagCustom(VTags.EntityTypes.MILKABLE).addTags(VTags.EntityTypes.MAMMALS_BOVINES_CATTLE,
+			tag(VTags.EntityTypes.MILKABLE).addTags(VTags.EntityTypes.MAMMALS_BOVINES_CATTLE,
 					VTags.EntityTypes.MAMMALS_CAPRINES);
 			tag(VTags.EntityTypes.MUSHROOM_COWS).add(EntityType.MOOSHROOM);
 
 			tag(VTags.EntityTypes.BLIND_MOBS);
 
-			tagCustom(VTags.EntityTypes.FLYING).addTags(VTags.EntityTypes.BOSSES, VTags.EntityTypes.GHOSTS)
+			tag(VTags.EntityTypes.FLYING).addTags(VTags.EntityTypes.BOSSES, VTags.EntityTypes.GHOSTS)
 					.add(EntityType.BAT, EntityType.BEE,
 							EntityType.ENDER_DRAGON, EntityType.PARROT, EntityType.WITHER);
-			tagCustom(VTags.EntityTypes.LAND).addTags(VTags.EntityTypes.CREEPERS, VTags.EntityTypes.SKELETONS,
+			tag(VTags.EntityTypes.LAND).addTags(VTags.EntityTypes.CREEPERS, VTags.EntityTypes.SKELETONS,
 							VTags.EntityTypes.ZOMBIES)
 					.add(EntityType.BLAZE, EntityType.CAT, EntityType.CAVE_SPIDER,
 							EntityType.CHICKEN, EntityType.DONKEY, EntityType.ENDERMAN,
@@ -872,7 +872,7 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
 							EntityType.ZOMBIFIED_PIGLIN, EntityType.HOGLIN
 					);
 
-			tagCustom(VTags.EntityTypes.ENEMIES).addTags(VTags.EntityTypes.BOSSES,
+			tag(VTags.EntityTypes.ENEMIES).addTags(VTags.EntityTypes.BOSSES,
 							VTags.EntityTypes.CREEPERS/*, EntityTypeTags.RAIDERS*/)
 					.add(EntityType.BLAZE, EntityType.CAVE_SPIDER, EntityType.DROWNED,
 							EntityType.ELDER_GUARDIAN, EntityType.ENDERMAN,
@@ -889,7 +889,7 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
 					);
 			tag(VTags.EntityTypes.CREEPERS).add(EntityType.CREEPER);
 
-			tagCustom(VTags.EntityTypes.UNDEAD).addTags(VTags.EntityTypes.SKELETONS, VTags.EntityTypes.ZOMBIES)
+			tag(VTags.EntityTypes.UNDEAD).addTags(VTags.EntityTypes.SKELETONS, VTags.EntityTypes.ZOMBIES)
 					.add(EntityType.PHANTOM, EntityType.WITHER);
 			tag(VTags.EntityTypes.SKELETONS).add(EntityType.SKELETON, EntityType.WITHER_SKELETON,
 					EntityType.SKELETON_HORSE);

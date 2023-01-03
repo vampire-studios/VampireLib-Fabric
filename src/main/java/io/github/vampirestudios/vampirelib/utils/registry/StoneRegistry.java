@@ -17,13 +17,11 @@
 
 package io.github.vampirestudios.vampirelib.utils.registry;
 
-import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
-
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 
-import io.github.vampirestudios.vampirelib.blocks.WallBaseBlock;
+import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 
 public class StoneRegistry {
 
@@ -330,7 +328,7 @@ public class StoneRegistry {
 
 		public Builder wall() {
 			stoneRegistry.wall = registryHelper.blocks().registerBlock(
-					new WallBaseBlock(BlockBehaviour.Properties.copy(Blocks.COBBLESTONE_WALL)),
+					new WallBlock(BlockBehaviour.Properties.copy(Blocks.COBBLESTONE_WALL)),
 					name.getPath() + "_wall");
 			return this;
 		}
@@ -390,7 +388,7 @@ public class StoneRegistry {
 
 		public Builder cobblestoneWall() {
 			stoneRegistry.cobblestoneWall = registryHelper.blocks().registerBlock(
-					new WallBaseBlock(BlockBehaviour.Properties.copy(Blocks.COBBLESTONE_WALL)),
+					new WallBlock(BlockBehaviour.Properties.copy(Blocks.COBBLESTONE_WALL)),
 					name.getPath() + "_cobblestone_wall");
 			return this;
 		}
@@ -443,7 +441,7 @@ public class StoneRegistry {
 
 		public Builder polishedWall() {
 			stoneRegistry.polishedWall = registryHelper.blocks().registerBlock(
-					new WallBaseBlock(BlockBehaviour.Properties.copy(stoneRegistry.cobblestone)),
+					new WallBlock(BlockBehaviour.Properties.copy(stoneRegistry.cobblestone)),
 					"polished_" + name.getPath() + "_wall");
 			return this;
 		}
@@ -491,7 +489,7 @@ public class StoneRegistry {
 
 		public Builder brickWall() {
 			stoneRegistry.brickWall = registryHelper.blocks().registerBlock(
-					new WallBaseBlock(BlockBehaviour.Properties.copy(Blocks.BRICK_WALL)),
+					new WallBlock(BlockBehaviour.Properties.copy(Blocks.BRICK_WALL)),
 					name.getPath() + "_brick_wall");
 			return this;
 		}
@@ -515,7 +513,7 @@ public class StoneRegistry {
 
 		public Builder crackedBricksWall() {
 			stoneRegistry.crackedBricksWall = registryHelper.blocks().registerBlock(
-					new WallBaseBlock(BlockBehaviour.Properties.copy(Blocks.COBBLESTONE_WALL)),
+					new WallBlock(BlockBehaviour.Properties.copy(Blocks.COBBLESTONE_WALL)),
 					"cracked_" + name.getPath() + "_bricks_wall");
 			return this;
 		}
@@ -587,7 +585,7 @@ public class StoneRegistry {
 
 		public Builder mossyBricksWall() {
 			stoneRegistry.mossyBricksWall = registryHelper.blocks().registerBlock(
-					new WallBaseBlock(BlockBehaviour.Properties.copy(Blocks.COBBLESTONE_WALL)),
+					new WallBlock(BlockBehaviour.Properties.copy(Blocks.COBBLESTONE_WALL)),
 					"mossy_" + name.getPath() + "_bricks_wall");
 			return this;
 		}
@@ -647,7 +645,7 @@ public class StoneRegistry {
 
 		public StoneRegistry.Builder smallBricksWall() {
 			this.stoneRegistry.smallBricksWall = registryHelper.blocks().registerBlock(
-					new WallBaseBlock(BlockBehaviour.Properties.copy(Blocks.BRICK_WALL)),
+					new WallBlock(BlockBehaviour.Properties.copy(Blocks.BRICK_WALL)),
 					"small_" + this.name.getPath() + "_bricks_wall");
 			return this;
 		}
@@ -695,7 +693,7 @@ public class StoneRegistry {
 
 		public StoneRegistry.Builder tinyBricksWall() {
 			this.stoneRegistry.tinyBricksWall = registryHelper.blocks().registerBlock(
-					new WallBaseBlock(BlockBehaviour.Properties.copy(Blocks.BRICK_WALL)),
+					new WallBlock(BlockBehaviour.Properties.copy(Blocks.BRICK_WALL)),
 					"tiny_" + this.name.getPath() + "_bricks_wall");
 			return this;
 		}
@@ -743,7 +741,7 @@ public class StoneRegistry {
 
 		public StoneRegistry.Builder herringboneBricksWall() {
 			this.stoneRegistry.herringboneBricksWall = registryHelper.blocks().registerBlock(
-					new WallBaseBlock(BlockBehaviour.Properties.copy(Blocks.BRICK_WALL)),
+					new WallBlock(BlockBehaviour.Properties.copy(Blocks.BRICK_WALL)),
 					this.name.getPath() + "_herringbone_bricks_wall");
 			return this;
 		}

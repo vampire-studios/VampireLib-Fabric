@@ -60,11 +60,13 @@ public record RegistryHelper(String modId) {
 			return block;
 		}
 
-		public Block registerBlock(Block block, String name, CreativeModeTab itemGroup) {
+		public Block registerBlock(Block block, String name, CreativeModeTab... itemGroups) {
 			Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(modId, name), block);
 			Item item = Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(modId, name),
 					new BlockItem(block, new Item.Properties()));
-			ItemGroupEvents.modifyEntriesEvent(itemGroup).register(entries -> entries.accept(item));
+			for (CreativeModeTab itemGroup : itemGroups) {
+				ItemGroupEvents.modifyEntriesEvent(itemGroup).register(entries -> entries.accept(item));
+			}
 			return block;
 		}
 

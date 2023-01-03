@@ -18,16 +18,16 @@
 package io.github.vampirestudios.vampirelib.blocks;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.DoorBlock;
 import net.minecraft.world.level.block.state.BlockState;
 
 public class DoorBaseBlock extends DoorBlock {
-	public DoorBaseBlock(Block vanillaBlock, Properties settings) {
-		super(settings, SoundEvents.WOODEN_DOOR_CLOSE, SoundEvents.WOODEN_DOOR_OPEN);
+
+	public DoorBaseBlock(Properties properties, SoundEvent closeSound, SoundEvent openSound) {
+		super(properties, closeSound, openSound);
 	}
 
 	@Override

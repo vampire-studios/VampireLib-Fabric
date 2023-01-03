@@ -17,8 +17,14 @@
 
 package io.github.vampirestudios.vampirelib.api.datagen;
 
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
+import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
+import java.util.function.Function;
+import java.util.stream.Stream;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -39,13 +45,9 @@ import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.levelgen.NoiseGeneratorSettings;
 import net.minecraft.world.level.levelgen.synth.NormalNoise;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.Objects;
-import java.util.concurrent.CompletableFuture;
-import java.util.function.Function;
-import java.util.stream.Stream;
+import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
 
 public abstract class CustomTagProviders<T> extends FabricTagProvider<T> {
 	/**
@@ -62,12 +64,8 @@ public abstract class CustomTagProviders<T> extends FabricTagProvider<T> {
 		super(dataGenerator, registryKey, registriesFuture);
 	}
 
-	public CustomFabricTagBuilder getOrCreateTagBuilderCustom(TagKey<T> tag) {
-		return new CustomFabricTagBuilder(super.tag(tag));
-	}
-
 	@Override
-	public CustomFabricTagBuilder tag(@NotNull TagKey<T> tag) {
+	public @NotNull CustomFabricTagBuilder tag(@NotNull TagKey<T> tag) {
 		return new CustomFabricTagBuilder(super.tag(tag));
 	}
 
@@ -75,26 +73,11 @@ public abstract class CustomTagProviders<T> extends FabricTagProvider<T> {
 		public CustomBlockTagProvider(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> registriesFuture) {
 			super(output, Registries.BLOCK, registriesFuture);
 		}
-
-		@Deprecated(since = "5.7.0+build.1-1.19.3-beta")
-		public CustomFabricTagBuilder tagCustom(TagKey<Block> tag) {
-			return this.getOrCreateTagBuilderCustom(tag);
-		}
 	}
 
 	public abstract static class CustomBiomeTagProvider extends CustomTagProviders<Biome> {
 		protected CustomBiomeTagProvider(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> registriesFuture) {
 			super(output, Registries.BIOME, registriesFuture);
-		}
-
-		@Deprecated(since = "5.7.0+build.1-1.19.3-beta")
-		public CustomFabricTagBuilder tagCustom(TagKey<Biome> tag) {
-			return getOrCreateTagBuilderCustom(tag);
-		}
-
-		@Deprecated(since = "5.7.0+build.1-1.19.3-beta")
-		public CustomFabricTagBuilder tagCustom(ResourceKey<Biome> biome, TagKey<Biome> tag) {
-			return getOrCreateTagBuilderCustom(tag).add(biome);
 		}
 	}
 
@@ -133,11 +116,6 @@ public abstract class CustomTagProviders<T> extends FabricTagProvider<T> {
 			TagBuilder itemTagBuilder = this.getOrCreateRawBuilder(itemTag);
 			blockTagBuilder.build().forEach(itemTagBuilder::add);
 		}
-
-		@Deprecated(since = "5.7.0+build.1-1.19.3-beta")
-		public CustomFabricTagBuilder tagCustom(TagKey<Item> tag) {
-			return getOrCreateTagBuilderCustom(tag);
-		}
 	}
 
 	/**
@@ -153,21 +131,11 @@ public abstract class CustomTagProviders<T> extends FabricTagProvider<T> {
 			return BuiltInRegistries.ENCHANTMENT.getResourceKey(element)
 					.orElseThrow(() -> new IllegalArgumentException("Enchantment " + element + " is not registered"));
 		}
-
-		@Deprecated(since = "5.7.0+build.1-1.19.3-beta")
-		public CustomFabricTagBuilder tagCustom(TagKey<Enchantment> tag) {
-			return getOrCreateTagBuilderCustom(tag);
-		}
 	}
 
 	public abstract static class VEntityTagProvider extends CustomTagProviders<EntityType<?>> {
 		public VEntityTagProvider(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> registriesFuture) {
 			super(output, Registries.ENTITY_TYPE, registriesFuture);
-		}
-
-		@Deprecated(since = "5.7.0+build.1-1.19.3-beta")
-		public CustomFabricTagBuilder tagCustom(TagKey<EntityType<?>> tag) {
-			return getOrCreateTagBuilderCustom(tag);
 		}
 	}
 
@@ -183,11 +151,6 @@ public abstract class CustomTagProviders<T> extends FabricTagProvider<T> {
 		protected ResourceKey<GameEvent> reverseLookup(GameEvent element) {
 			return element.builtInRegistryHolder().key();
 		}
-
-		@Deprecated(since = "5.7.0+build.1-1.19.3-beta")
-		public CustomFabricTagBuilder tagCustom(TagKey<GameEvent> tag) {
-			return getOrCreateTagBuilderCustom(tag);
-		}
 	}
 
 	/**
@@ -198,21 +161,11 @@ public abstract class CustomTagProviders<T> extends FabricTagProvider<T> {
 		protected MobEffectTagProvider(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> completableFuture) {
 			super(output, Registries.MOB_EFFECT, completableFuture);
 		}
-
-		@Deprecated(since = "5.7.0+build.1-1.19.3-beta")
-		public CustomFabricTagBuilder tagCustom(TagKey<MobEffect> tag) {
-			return getOrCreateTagBuilderCustom(tag);
-		}
 	}
 
 	public abstract static class NoiseSettingsTagProvider extends CustomTagProviders<NoiseGeneratorSettings> {
 		protected NoiseSettingsTagProvider(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> completableFuture) {
 			super(output, Registries.NOISE_SETTINGS, completableFuture);
-		}
-
-		@Deprecated(since = "5.7.0+build.1-1.19.3-beta")
-		public CustomFabricTagBuilder tagCustom(TagKey<NoiseGeneratorSettings> tag) {
-			return getOrCreateTagBuilderCustom(tag);
 		}
 	}
 
@@ -220,21 +173,11 @@ public abstract class CustomTagProviders<T> extends FabricTagProvider<T> {
 		protected DimensionTypeTagProvider(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> completableFuture) {
 			super(output, Registries.DIMENSION_TYPE, completableFuture);
 		}
-
-		@Deprecated(since = "5.7.0+build.1-1.19.3-beta")
-		public CustomFabricTagBuilder tagCustom(TagKey<DimensionType> tag) {
-			return getOrCreateTagBuilderCustom(tag);
-		}
 	}
 
 	public abstract static class DimensionTagProvider extends CustomTagProviders<Level> {
 		protected DimensionTagProvider(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> completableFuture) {
 			super(output, Registries.DIMENSION, completableFuture);
-		}
-
-		@Deprecated(since = "5.7.0+build.1-1.19.3-beta")
-		public CustomFabricTagBuilder tagCustom(TagKey<Level> tag) {
-			return getOrCreateTagBuilderCustom(tag);
 		}
 	}
 
@@ -245,11 +188,6 @@ public abstract class CustomTagProviders<T> extends FabricTagProvider<T> {
 	public abstract static class NoiseTagProvider extends CustomTagProviders<NormalNoise.NoiseParameters> {
 		protected NoiseTagProvider(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> completableFuture) {
 			super(output, Registries.NOISE, completableFuture);
-		}
-
-		@Deprecated(since = "5.7.0+build.1-1.19.3-beta")
-		public CustomFabricTagBuilder tagCustom(TagKey<NormalNoise.NoiseParameters> tag) {
-			return getOrCreateTagBuilderCustom(tag);
 		}
 	}
 

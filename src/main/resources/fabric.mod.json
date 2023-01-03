@@ -34,10 +34,6 @@
     "java": ">=17"
   },
   "custom": {
-    "loom:injected_interfaces": {
-      "net/minecraft/class_1832": ["io/github/vampirestudios/vampirelib/api/extensions/TierExtensions"],
-      "net/minecraft/class_1767": ["io/github/vampirestudios/vampirelib/api/extensions/DyeExtension"]
-    },
     "modmenu": {
       "links": {
         "modmenu.discord": "https://discord.gg/63hmSTxyDA"

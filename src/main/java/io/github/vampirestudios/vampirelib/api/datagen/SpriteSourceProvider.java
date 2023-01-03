@@ -14,8 +14,6 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackType;
 
-import io.github.vampirestudios.vampirelib.api.JsonCodecProvider;
-
 public abstract class SpriteSourceProvider extends JsonCodecProvider<List<SpriteSource>> {
 	protected static final ResourceLocation BLOCKS_ATLAS = new ResourceLocation("blocks");
 	protected static final ResourceLocation BANNER_PATTERNS_ATLAS = new ResourceLocation("banner_patterns");
