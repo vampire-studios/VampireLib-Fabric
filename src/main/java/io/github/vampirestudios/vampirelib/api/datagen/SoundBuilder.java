@@ -20,12 +20,10 @@ import com.google.common.base.Preconditions;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
-
 import net.minecraft.resources.ResourceLocation;
 
 /**
- * Utility class for building a {@link SoundEntry} with a given set of properties, without necessarily passing them all
- * as parameters.
+ * Utility class for building a sound entry with a given set of properties, without necessarily passing them all as parameters.
  */
 public class SoundBuilder {
 	private final ResourceLocation name;
@@ -122,9 +120,6 @@ public class SoundBuilder {
 		return this;
 	}
 
-	/**
-	 * Return a finalised {@link SoundEntry} instance to generate data from.
-	 */
 	private boolean allDefaults() {
 		return volume == 1 && pitch == 1 && weight == 1 && attenuationDistance == 16 && !stream && !preload && !event;
 	}

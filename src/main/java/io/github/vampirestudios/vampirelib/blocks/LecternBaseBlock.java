@@ -55,8 +55,7 @@ public class LecternBaseBlock extends LecternBlock {
 
 	private static void placeBook(Player playerEntity, Level world, BlockPos pos, BlockState state, ItemStack stack) {
 		BlockEntity be = world.getBlockEntity(pos);
-		if (be instanceof LecternBlockEntity) {
-			LecternBlockEntity lecternBe = (LecternBlockEntity) be;
+		if (be instanceof LecternBlockEntity lecternBe) {
 			lecternBe.setBook(stack.split(1));
 			resetBookState(world, pos, state, true);
 			world.playSound(null, pos, SoundEvents.BOOK_PUT, SoundSource.BLOCKS, 1.0F, 1.0F);
@@ -84,8 +83,7 @@ public class LecternBaseBlock extends LecternBlock {
 
 	private void popBook(BlockState state, Level world, BlockPos pos) {
 		BlockEntity be = world.getBlockEntity(pos);
-		if (be instanceof LecternBlockEntity) {
-			LecternBlockEntity lecternBe = (LecternBlockEntity) be;
+		if (be instanceof LecternBlockEntity lecternBe) {
 			Direction direction_1 = state.getValue(FACING);
 			ItemStack stack = lecternBe.getBook().copy();
 			float float_1 = 0.25F * (float) direction_1.getStepX();

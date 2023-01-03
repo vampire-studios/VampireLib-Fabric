@@ -84,9 +84,12 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
 			WoodTypeBlockTagProvider blockTagsProvider = pack.addProvider(WoodTypeBlockTagProvider::new);
 			pack.addProvider((output, registriesFuture) -> new WoodTypeItemTagProvider(output, blockTagsProvider, registriesFuture));
 		}
-//		VBlockTagsProvider blockTagsProvider = pack.addProvider(VBlockTagsProvider::new);
-//		pack.addProvider((output, registriesFuture) -> new VItemTagsProvider(output, blockTagsProvider, registriesFuture));
-//		pack.addProvider(VBiomeTagsProvider::new);
+		VBlockTagsProvider blockTagsProvider = pack.addProvider(VBlockTagsProvider::new);
+		pack.addProvider((output, registriesFuture) -> new VItemTagsProvider(output, registriesFuture, blockTagsProvider));
+		pack.addProvider(VEntityTypeTagsProvider::new);
+		pack.addProvider(VBiomeTagsProvider::new);
+		pack.addProvider(VNoiseSettingsTagsProvider::new);
+		pack.addProvider(VDimensionTypeTagsProvider::new);
 	}
 
 	private static class TestSoundProvider extends FabricSoundProvider {
@@ -638,11 +641,11 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
 					.add(Biomes.END_HIGHLANDS, Biomes.END_MIDLANDS, Biomes.SMALL_END_ISLANDS, Biomes.END_BARRENS);
 
 			this.tag(VTags.Biomes.WITHOUT_DEFAULT_MONSTER_SPAWNS).add(Biomes.MUSHROOM_FIELDS, Biomes.DEEP_DARK);
-			/*TagAppender<Biome> withMonsterSpawns = this.tag(VTags.Biomes.WITH_DEFAULT_MONSTER_SPAWNS);
-			MultiNoiseBiomeSource.Preset.OVERWORLD.possibleBiomes(arg.asGetterLookup()).forEach((biome) -> {
+			TagAppender<Biome> withMonsterSpawns = this.tag(VTags.Biomes.WITH_DEFAULT_MONSTER_SPAWNS);
+			MultiNoiseBiomeSource.Preset.OVERWORLD.possibleBiomes(arg.lookupOrThrow(Registries.BIOME)).forEach((biome) -> {
 				if (biome != Biomes.MUSHROOM_FIELDS && biome != Biomes.DEEP_DARK)
 					withMonsterSpawns.add(biome);
-			});*/
+			});
 		}
 
 		@SafeVarargs
@@ -659,7 +662,7 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
 	}
 
 	private static class VItemTagsProvider extends CustomTagProviders.CustomItemTagProvider {
-		private VItemTagsProvider(FabricDataOutput dataGenerator, CustomTagProviders.CustomBlockTagProvider blockTagProvider, CompletableFuture<HolderLookup.Provider> completableFuture) {
+		private VItemTagsProvider(FabricDataOutput dataGenerator, CompletableFuture<HolderLookup.Provider> completableFuture, CustomBlockTagProvider blockTagProvider) {
 			super(dataGenerator, completableFuture, blockTagProvider);
 		}
 
@@ -770,5 +773,179 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
 					.addOptionalTag(ConventionalItemTags.RED_SANDSTONE_SLABS);
 		}
 	}
+
+	private static class VEntityTypeTagsProvider extends CustomTagProviders.VEntityTagProvider {
+		public VEntityTypeTagsProvider(FabricDataOutput dataGenerator, CompletableFuture<HolderLookup.Provider> completableFuture) {
+			super(dataGenerator, completableFuture);
+		}
+
+		@Override
+		protected void addTags(HolderLookup.Provider arg) {
+			tag(VTags.EntityTypes.BOSSES).addTag(VTags.EntityTypes.DRAGONS).add(EntityType.WITHER);
+
+			tag(VTags.EntityTypes.DRAGONS).add(EntityType.ENDER_DRAGON);
+
+			tag(VTags.EntityTypes.GOLEMS).add(EntityType.IRON_GOLEM, EntityType.SNOW_GOLEM);
+
+			tag(VTags.EntityTypes.BUILDABLE_MOBS).addTag(VTags.EntityTypes.GOLEMS).add(EntityType.WITHER);
+
+			tag(VTags.EntityTypes.BIG_NOSES).addTag(VTags.EntityTypes.ILLAGERS)
+					.add(EntityType.WITCH, EntityType.VILLAGER, EntityType.ZOMBIE_VILLAGER);
+			tag(VTags.EntityTypes.ILLAGERS).add(EntityType.PILLAGER, EntityType.ILLUSIONER, EntityType.VINDICATOR,
+					EntityType.EVOKER);
+
+			/*
+			 * Many of these mob types do not appear in vanilla Minecraft, and are thus left empty here
+			 */
+			tag(VTags.EntityTypes.ELEMENTAL).addTags(VTags.EntityTypes.ELEMENTAL_FIRE,
+					VTags.EntityTypes.ELEMENTAL_ICE,
+					VTags.EntityTypes.ELEMENTAL_METAL);
+			tag(VTags.EntityTypes.ELEMENTAL_FIRE).add(EntityType.BLAZE);
+			tag(VTags.EntityTypes.ELEMENTAL_ICE).add(EntityType.SNOW_GOLEM);
+			tag(VTags.EntityTypes.ELEMENTAL_METAL).add(EntityType.IRON_GOLEM);
+
+			tag(VTags.EntityTypes.ELEMENTAL_ATTACKS).addTags(VTags.EntityTypes.ELEMENTAL_ATTACKS_ELECTRIC,
+					VTags.EntityTypes.ELEMENTAL_ATTACKS_FIRE,
+					VTags.EntityTypes.ELEMENTAL_ATTACKS_ICE);
+			tag(VTags.EntityTypes.ELEMENTAL_ATTACKS_ELECTRIC).add(EntityType.LIGHTNING_BOLT);
+			tag(VTags.EntityTypes.ELEMENTAL_ATTACKS_FIRE).add(EntityType.FIREBALL, EntityType.SMALL_FIREBALL);
+			tag(VTags.EntityTypes.ELEMENTAL_ATTACKS_ICE).add(EntityType.SNOWBALL);
+
+			tag(VTags.EntityTypes.ARTHROPODS).add(EntityType.BEE, EntityType.CAVE_SPIDER, EntityType.ENDERMITE,
+					EntityType.SILVERFISH, EntityType.SPIDER);
+
+			tag(VTags.EntityTypes.AVIANS).addTag(VTags.EntityTypes.AVIANS_FOWLS).add(EntityType.PARROT);
+			tag(VTags.EntityTypes.AVIANS_FOWLS).add(EntityType.CHICKEN);
+
+			tag(VTags.EntityTypes.AQUATIC).add(EntityType.AXOLOTL, EntityType.COD, EntityType.DOLPHIN,
+					EntityType.ELDER_GUARDIAN,
+					EntityType.GLOW_SQUID, EntityType.GUARDIAN, EntityType.PUFFERFISH,
+					EntityType.SALMON, EntityType.SQUID,
+					EntityType.TROPICAL_FISH,
+					EntityType.TURTLE/*, EntityType.FROG, EntityType.TADPOLE*/);
+			tag(VTags.EntityTypes.FISH).add(EntityType.COD, EntityType.PUFFERFISH, EntityType.SALMON,
+					EntityType.TROPICAL_FISH);
+			tag(VTags.EntityTypes.CEPHALOPODS).add(EntityType.GLOW_SQUID, EntityType.SQUID);
+			tag(VTags.EntityTypes.GUARDIANS).add(EntityType.ELDER_GUARDIAN, EntityType.GUARDIAN);
+
+			tag(VTags.EntityTypes.REPTILES).add(EntityType.TURTLE);
+
+			tag(VTags.EntityTypes.MAMMALS)
+					.addTags(VTags.EntityTypes.MAMMALS_BOVINES, VTags.EntityTypes.MAMMALS_CAMELIDS,
+							VTags.EntityTypes.MAMMALS_CANIDS,
+							VTags.EntityTypes.MAMMALS_CAPRINES, VTags.EntityTypes.MAMMALS_EQUINES,
+							VTags.EntityTypes.MAMMALS_FELINES,
+							VTags.EntityTypes.MAMMALS_SWINES, VTags.EntityTypes.MAMMALS_URSIDS
+					).add(EntityType.BAT, EntityType.RABBIT);
+			tag(VTags.EntityTypes.MAMMALS_BOVINES).addTag(VTags.EntityTypes.MAMMALS_BOVINES_CATTLE)
+					.add(EntityType.SHEEP);
+			tag(VTags.EntityTypes.MAMMALS_BOVINES_CATTLE).add(EntityType.COW, EntityType.MOOSHROOM);
+			tag(VTags.EntityTypes.MAMMALS_CAMELIDS).add(EntityType.LLAMA, EntityType.TRADER_LLAMA);
+			tag(VTags.EntityTypes.MAMMALS_CANIDS).add(EntityType.FOX, EntityType.WOLF);
+			tag(VTags.EntityTypes.MAMMALS_CAPRINES).add(EntityType.GOAT);
+			tag(VTags.EntityTypes.MAMMALS_EQUINES).add(EntityType.DONKEY, EntityType.HORSE, EntityType.ZOMBIE_HORSE,
+					EntityType.SKELETON_HORSE, EntityType.MULE);
+			tag(VTags.EntityTypes.MAMMALS_FELINES).add(EntityType.CAT, EntityType.OCELOT);
+			tag(VTags.EntityTypes.MAMMALS_SWINES).add(EntityType.HOGLIN, EntityType.PIG);
+			tag(VTags.EntityTypes.MAMMALS_URSIDS).add(EntityType.PANDA, EntityType.POLAR_BEAR);
+
+			tag(VTags.EntityTypes.GHOSTS).add(EntityType.VEX, EntityType.PHANTOM, EntityType.GHAST);
+
+			tag(VTags.EntityTypes.MILKABLE).addTags(VTags.EntityTypes.MAMMALS_BOVINES_CATTLE,
+					VTags.EntityTypes.MAMMALS_CAPRINES);
+			tag(VTags.EntityTypes.MUSHROOM_COWS).add(EntityType.MOOSHROOM);
+
+			tag(VTags.EntityTypes.BLIND_MOBS);
+
+			tag(VTags.EntityTypes.FLYING).addTags(VTags.EntityTypes.BOSSES, VTags.EntityTypes.GHOSTS)
+					.add(EntityType.BAT, EntityType.BEE,
+							EntityType.ENDER_DRAGON, EntityType.PARROT, EntityType.WITHER);
+			tag(VTags.EntityTypes.LAND).addTags(VTags.EntityTypes.CREEPERS, VTags.EntityTypes.SKELETONS,
+							VTags.EntityTypes.ZOMBIES)
+					.add(EntityType.BLAZE, EntityType.CAT, EntityType.CAVE_SPIDER,
+							EntityType.CHICKEN, EntityType.DONKEY, EntityType.ENDERMAN,
+							EntityType.ENDERMITE, EntityType.EVOKER, EntityType.FOX,
+							EntityType.GOAT, EntityType.HOGLIN, EntityType.HORSE,
+							EntityType.ILLUSIONER,
+							EntityType.IRON_GOLEM, EntityType.LLAMA, EntityType.MAGMA_CUBE,
+							EntityType.MULE, EntityType.OCELOT, EntityType.PANDA, EntityType.PIG,
+							EntityType.PIGLIN, EntityType.PIGLIN_BRUTE, EntityType.PILLAGER,
+							EntityType.PLAYER, EntityType.POLAR_BEAR, EntityType.RABBIT,
+							EntityType.RAVAGER, EntityType.SHEEP, EntityType.SHULKER,
+							EntityType.SILVERFISH, EntityType.SLIME, EntityType.SNOW_GOLEM,
+							EntityType.SPIDER,
+							EntityType.TRADER_LLAMA, EntityType.VILLAGER, EntityType.VINDICATOR,
+							EntityType.WANDERING_TRADER, EntityType.WITCH, EntityType.WOLF
+					);
+
+			tag(VTags.EntityTypes.VOLCANIC).add(EntityType.STRIDER);
+			tag(VTags.EntityTypes.HELL_MOBS).addTag(VTags.EntityTypes.VOLCANIC)
+					.add(EntityType.MAGMA_CUBE, EntityType.GHAST, EntityType.PIGLIN,
+							EntityType.PIGLIN_BRUTE,
+							EntityType.BLAZE, EntityType.WITHER_SKELETON,
+							EntityType.ZOMBIFIED_PIGLIN, EntityType.HOGLIN
+					);
+
+			tag(VTags.EntityTypes.ENEMIES).addTags(VTags.EntityTypes.BOSSES,
+							VTags.EntityTypes.CREEPERS/*, EntityTypeTags.RAIDERS*/)
+					.add(EntityType.BLAZE, EntityType.CAVE_SPIDER, EntityType.DROWNED,
+							EntityType.ELDER_GUARDIAN, EntityType.ENDERMAN,
+							EntityType.ENDERMITE,
+							EntityType.GHAST, EntityType.GUARDIAN, EntityType.HOGLIN,
+							EntityType.HUSK, EntityType.MAGMA_CUBE, EntityType.PHANTOM,
+							EntityType.PIGLIN,
+							EntityType.PIGLIN_BRUTE, EntityType.SHULKER, EntityType.SILVERFISH,
+							EntityType.SKELETON, EntityType.SLIME, EntityType.SPIDER,
+							EntityType.STRAY,
+							EntityType.VEX, EntityType.WITHER_SKELETON, EntityType.ZOGLIN,
+							EntityType.ZOMBIE, EntityType.ZOMBIE_VILLAGER,
+							EntityType.ZOMBIFIED_PIGLIN
+					);
+			tag(VTags.EntityTypes.CREEPERS).add(EntityType.CREEPER);
+
+			tag(VTags.EntityTypes.UNDEAD).addTags(VTags.EntityTypes.SKELETONS, VTags.EntityTypes.ZOMBIES)
+					.add(EntityType.PHANTOM, EntityType.WITHER);
+			tag(VTags.EntityTypes.SKELETONS).add(EntityType.SKELETON, EntityType.WITHER_SKELETON,
+					EntityType.SKELETON_HORSE);
+			tag(VTags.EntityTypes.ZOMBIES).add(EntityType.DROWNED, EntityType.HUSK, EntityType.ZOGLIN,
+					EntityType.ZOMBIE,
+					EntityType.ZOMBIE_HORSE, EntityType.ZOMBIE_VILLAGER,
+					EntityType.ZOMBIFIED_PIGLIN);
+
+			tag(VTags.EntityTypes.NPC).add(EntityType.PIGLIN, EntityType.VILLAGER, EntityType.WANDERING_TRADER);
+		}
+	}
+
+	private static class VNoiseSettingsTagsProvider extends CustomTagProviders.NoiseSettingsTagProvider {
+		private VNoiseSettingsTagsProvider(FabricDataOutput dataGenerator, CompletableFuture<HolderLookup.Provider> completableFuture) {
+			super(dataGenerator, completableFuture);
+		}
+
+		@Override
+		protected void addTags(HolderLookup.Provider arg) {
+			this.tag(VTags.NoiseSettings.AMPLIFIED).add(NoiseGeneratorSettings.AMPLIFIED);
+			this.tag(VTags.NoiseSettings.CAVES).add(NoiseGeneratorSettings.CAVES);
+			this.tag(VTags.NoiseSettings.END).add(NoiseGeneratorSettings.END);
+			this.tag(VTags.NoiseSettings.FLOATING_ISLANDS).add(NoiseGeneratorSettings.FLOATING_ISLANDS);
+			this.tag(VTags.NoiseSettings.NETHER).add(NoiseGeneratorSettings.NETHER);
+			this.tag(VTags.NoiseSettings.OVERWORLD).add(NoiseGeneratorSettings.OVERWORLD);
+		}
+	}
+
+    private static class VDimensionTypeTagsProvider extends CustomTagProviders.DimensionTypeTagProvider {
+        private VDimensionTypeTagsProvider(FabricDataOutput dataGenerator, CompletableFuture<HolderLookup.Provider> completableFuture) {
+			super(dataGenerator, completableFuture);
+        }
+
+        @Override
+		protected void addTags(HolderLookup.Provider arg) {
+            this.tag(VTags.DimensionTypes.END).add(BuiltinDimensionTypes.END);
+            this.tag(VTags.DimensionTypes.NETHER).add(BuiltinDimensionTypes.NETHER);
+            this.tag(VTags.DimensionTypes.OVERWORLD)
+                .addTag(VTags.DimensionTypes.OVERWORLD_CAVES)
+                .add(BuiltinDimensionTypes.OVERWORLD);
+            this.tag(VTags.DimensionTypes.OVERWORLD_CAVES).add(BuiltinDimensionTypes.OVERWORLD_CAVES);
+        }
+    }
 
 }

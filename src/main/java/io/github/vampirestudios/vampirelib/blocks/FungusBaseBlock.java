@@ -17,8 +17,7 @@
 
 package io.github.vampirestudios.vampirelib.blocks;
 
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.FungusBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -27,8 +26,9 @@ import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.material.MaterialColor;
 
 public class FungusBaseBlock extends FungusBlock {
-	public FungusBaseBlock(ResourceKey<ConfiguredFeature<?, ?>> feature, Block baseBlock) {
+	public FungusBaseBlock(ConfiguredFeature<HugeFungusConfiguration, ?> supplier) {
 		super(BlockBehaviour.Properties.of(Material.PLANT, MaterialColor.COLOR_CYAN).instabreak().noCollission()
-				.sound(SoundType.FUNGUS), feature, baseBlock);
+				.sound(SoundType.FUNGUS), /*() -> Holder.direct(supplier)*/null, Blocks.CRIMSON_NYLIUM);
 	}
+
 }

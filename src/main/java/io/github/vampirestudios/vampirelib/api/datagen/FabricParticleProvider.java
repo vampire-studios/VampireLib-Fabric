@@ -16,12 +16,7 @@
 
 package io.github.vampirestudios.vampirelib.api.datagen;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
 import com.google.common.collect.Sets;
@@ -56,7 +51,7 @@ public abstract class FabricParticleProvider implements DataProvider {
 	/**
 	 * Implement this method to register particle textures.
 	 *
-	 * <p>Call {@link ParticleGenerator#add(ParticleType, ResourceLocation...)} to add a list of texture IDs for a given
+	 * <p>Call {@link ParticleGenerator#add(net.minecraft.core.particles.ParticleType, ResourceLocation...)} to add a list of texture IDs for a given
 	 * {@link ParticleType}.
 	 */
 	protected abstract void generateParticleTextures(ParticleGenerator particleGenerator);

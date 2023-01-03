@@ -18,14 +18,10 @@
 package io.github.vampirestudios.vampirelib.utils.registry;
 
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.RotatedPillarBlock;
-import net.minecraft.world.level.block.SlabBlock;
-import net.minecraft.world.level.block.WallBlock;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 
-import io.github.vampirestudios.vampirelib.blocks.StairsBaseBlock;
+import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 
 public class StoneRegistry {
 
@@ -320,7 +316,7 @@ public class StoneRegistry {
 
 		public Builder stairs() {
 			stoneRegistry.stairs = registryHelper.blocks().registerBlock(
-					new StairsBaseBlock(stoneRegistry.raw),
+					new StairBlock(stoneRegistry.raw.defaultBlockState(), FabricBlockSettings.copyOf(Blocks.STONE_STAIRS)),
 					name.getPath() + "_stairs");
 			return this;
 		}
@@ -380,7 +376,7 @@ public class StoneRegistry {
 
 		public Builder cobblestoneStairs() {
 			stoneRegistry.cobblestoneStairs = registryHelper.blocks().registerBlock(
-					new StairsBaseBlock(stoneRegistry.cobblestone),
+					new StairBlock(stoneRegistry.cobblestone.defaultBlockState(), FabricBlockSettings.copyOf(Blocks.COBBLESTONE_STAIRS)),
 					name.getPath() + "_cobblestone_stairs");
 			return this;
 		}
@@ -433,7 +429,7 @@ public class StoneRegistry {
 
 		public Builder polishedStairs() {
 			stoneRegistry.polishedStairs = registryHelper.blocks().registerBlock(
-					new StairsBaseBlock(stoneRegistry.polished),
+					new StairBlock(stoneRegistry.polished.defaultBlockState(), FabricBlockSettings.copyOf(Blocks.POLISHED_GRANITE_STAIRS)),
 					"polished_" + name.getPath() + "_stairs");
 			return this;
 		}
@@ -481,7 +477,7 @@ public class StoneRegistry {
 
 		public Builder brickStairs() {
 			stoneRegistry.brickStairs = registryHelper.blocks().registerBlock(
-					new StairsBaseBlock(stoneRegistry.bricks),
+					new StairBlock(stoneRegistry.bricks.defaultBlockState(), FabricBlockSettings.copyOf(Blocks.STONE_BRICK_STAIRS)),
 					name.getPath() + "_brick_stairs");
 			return this;
 		}
@@ -529,7 +525,7 @@ public class StoneRegistry {
 
 		public Builder crackedBricksStairs() {
 			stoneRegistry.crackedBricksStairs = registryHelper.blocks().registerBlock(
-					new StairsBaseBlock(stoneRegistry.crackedBricks),
+					new StairBlock(stoneRegistry.crackedBricks.defaultBlockState(), FabricBlockSettings.copyOf(Blocks.CRACKED_STONE_BRICKS)),
 					"cracked_" + name.getPath() + "_bricks_stairs");
 			return this;
 		}
@@ -577,7 +573,7 @@ public class StoneRegistry {
 
 		public Builder mossyBricksStairs() {
 			stoneRegistry.mossyBricksStairs = registryHelper.blocks().registerBlock(
-					new StairsBaseBlock(stoneRegistry.cobblestone),
+					new StairBlock(stoneRegistry.cobblestone.defaultBlockState(), FabricBlockSettings.copyOf(Blocks.MOSSY_STONE_BRICK_STAIRS)),
 					"mossy_" + name.getPath() + "_bricks_stairs");
 			return this;
 		}
@@ -637,7 +633,7 @@ public class StoneRegistry {
 
 		public StoneRegistry.Builder smallBricksStairs() {
 			this.stoneRegistry.smallBricksStairs = registryHelper.blocks().registerBlock(
-					new StairsBaseBlock(this.stoneRegistry.smallBricks),
+					new StairBlock(this.stoneRegistry.smallBricks.defaultBlockState(), FabricBlockSettings.copyOf(Blocks.STONE_BRICK_STAIRS)),
 					"small_" + this.name.getPath() + "_bricks_stairs");
 			return this;
 		}
@@ -685,7 +681,7 @@ public class StoneRegistry {
 
 		public StoneRegistry.Builder tinyBricksStairs() {
 			this.stoneRegistry.tinyBricksStairs = registryHelper.blocks().registerBlock(
-					new StairsBaseBlock(this.stoneRegistry.tinyBricks),
+					new StairBlock(this.stoneRegistry.tinyBricks.defaultBlockState(), FabricBlockSettings.copyOf(Blocks.STONE_BRICK_STAIRS)),
 					"tiny_" + this.name.getPath() + "_bricks_stairs");
 			return this;
 		}
@@ -733,7 +729,7 @@ public class StoneRegistry {
 
 		public StoneRegistry.Builder herringboneBricksStairs() {
 			this.stoneRegistry.herringboneBricksStairs = registryHelper.blocks().registerBlock(
-					new StairsBaseBlock(this.stoneRegistry.herringboneBricks),
+					new StairBlock(this.stoneRegistry.herringboneBricks.defaultBlockState(), FabricBlockSettings.copyOf(Blocks.STONE_BRICK_STAIRS)),
 					this.name.getPath() + "_herringbone_bricks_stairs");
 			return this;
 		}

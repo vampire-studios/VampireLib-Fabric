@@ -26,7 +26,6 @@ import java.util.stream.Stream;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -39,9 +38,13 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.gameevent.GameEvent;
-import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.levelgen.NoiseGeneratorSettings;
+import net.minecraft.world.level.levelgen.synth.NormalNoise;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
@@ -52,42 +55,17 @@ public abstract class CustomTagProviders<T> extends FabricTagProvider<T> {
 	 *
 	 * <p>Common implementations of this class are provided. For example @see BlockTagProvider
 	 *
-	 * @param output        The {@link FabricDataOutput} instance
-	 * @param registriesFuture      The backing registry for the Tag type.
+	 * @param dataGenerator The data generator instance
+	 * @param registryKey   The backing registry for the Tag type.
+	 * @param registriesFuture   The backing registry for the Tag type.
 	 */
-	public CustomTagProviders(FabricDataOutput output, ResourceKey<? extends Registry<T>> registryKey, CompletableFuture<HolderLookup.Provider> registriesFuture) {
-		super(output, registryKey, registriesFuture);
-	}
 
-	/**
-	 * Implement this method and then use {@link FabricTagProvider#tag} to get and register new tag builders.
-	 */
-	protected abstract void addTags(HolderLookup.Provider arg);
-
-	/**
-	 * Override to enable adding objects to the tag builder directly.
-	 */
-	@SuppressWarnings({"unchecked", "rawtypes"})
-	protected ResourceKey<T> reverseLookup(T element) {
-		Registry registry = BuiltInRegistries.REGISTRY.get((ResourceKey) registryKey);
-
-		if (registry != null) {
-			Optional<Holder<T>> key = registry.getResourceKey(element);
-
-			if (key.isPresent()) {
-				return (ResourceKey<T>) key.get();
-			}
-		}
-
-		throw new UnsupportedOperationException("Adding objects is not supported by " + getClass());
-	}
-
-	public CustomFabricTagBuilder getOrCreateTagBuilderCustom(TagKey<T> tag) {
-		return new CustomFabricTagBuilder(super.tag(tag));
+	protected CustomTagProviders(FabricDataOutput dataGenerator, ResourceKey<? extends Registry<T>> registryKey, CompletableFuture<HolderLookup.Provider> registriesFuture) {
+		super(dataGenerator, registryKey, registriesFuture);
 	}
 
 	@Override
-	public CustomFabricTagBuilder tag(@NotNull TagKey<T> tag) {
+	public @NotNull CustomFabricTagBuilder tag(@NotNull TagKey<T> tag) {
 		return new CustomFabricTagBuilder(super.tag(tag));
 	}
 
@@ -95,9 +73,11 @@ public abstract class CustomTagProviders<T> extends FabricTagProvider<T> {
 		public CustomBlockTagProvider(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> registriesFuture) {
 			super(output, Registries.BLOCK, registriesFuture);
 		}
+	}
 
-		public CustomFabricTagBuilder tagCustom(TagKey<Block> tag) {
-			return this.getOrCreateTagBuilderCustom(tag);
+	public abstract static class CustomBiomeTagProvider extends CustomTagProviders<Biome> {
+		protected CustomBiomeTagProvider(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> registriesFuture) {
+			super(output, Registries.BIOME, registriesFuture);
 		}
 	}
 
@@ -113,6 +93,8 @@ public abstract class CustomTagProviders<T> extends FabricTagProvider<T> {
 
 		/**
 		 * Construct an {@link ItemTagProvider} tag provider <b>without</b> an associated {@link BlockTagProvider} tag provider.
+		 *
+		 * @param output a {@link ItemTagProvider} tag provider
 		 */
 		public CustomItemTagProvider(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> completableFuture) {
 			this(output, completableFuture, null);
@@ -133,35 +115,13 @@ public abstract class CustomTagProviders<T> extends FabricTagProvider<T> {
 			TagBuilder itemTagBuilder = this.getOrCreateRawBuilder(itemTag);
 			blockTagBuilder.build().forEach(itemTagBuilder::add);
 		}
-
-		public CustomFabricTagBuilder tagCustom(TagKey<Item> tag) {
-			return this.getOrCreateTagBuilderCustom(tag);
-		}
-	}
-
-	/**
-	 * Extend this class to create {@link Fluid} tags in the "/fluids" tag directory.
-	 */
-	public abstract static class FluidTagProvider extends CustomTagProviders<Fluid> {
-		public FluidTagProvider(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> completableFuture) {
-			super(output, Registries.FLUID, completableFuture);
-		}
-
-		@Override
-		protected ResourceKey<Fluid> reverseLookup(Fluid element) {
-			return element.builtInRegistryHolder().key();
-		}
-
-		public CustomFabricTagBuilder tagCustom(TagKey<Fluid> tag) {
-			return this.getOrCreateTagBuilderCustom(tag);
-		}
 	}
 
 	/**
 	 * Extend this class to create {@link Enchantment} tags in the "/enchantments" tag directory.
 	 */
-	public abstract static class EnchantmentTagProvider extends CustomTagProviders<Enchantment> {
-		public EnchantmentTagProvider(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> completableFuture) {
+	public abstract static class VEnchantmentTagProvider extends CustomTagProviders<Enchantment> {
+		public VEnchantmentTagProvider(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> completableFuture) {
 			super(output, Registries.ENCHANTMENT, completableFuture);
 		}
 
@@ -170,35 +130,19 @@ public abstract class CustomTagProviders<T> extends FabricTagProvider<T> {
 			return BuiltInRegistries.ENCHANTMENT.getResourceKey(element)
 					.orElseThrow(() -> new IllegalArgumentException("Enchantment " + element + " is not registered"));
 		}
-
-		public CustomFabricTagBuilder tagCustom(TagKey<Enchantment> tag) {
-			return this.getOrCreateTagBuilderCustom(tag);
-		}
 	}
 
-	/**
-	 * Extend this class to create {@link EntityType} tags in the "/entity_types" tag directory.
-	 */
-	public abstract static class EntityTypeTagProvider extends CustomTagProviders<EntityType<?>> {
-		public EntityTypeTagProvider(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> completableFuture) {
-			super(output, Registries.ENTITY_TYPE, completableFuture);
-		}
-
-		@Override
-		protected ResourceKey<EntityType<?>> reverseLookup(EntityType<?> element) {
-			return element.builtInRegistryHolder().key();
-		}
-
-		public CustomFabricTagBuilder tagCustom(TagKey<EntityType<?>> tag) {
-			return this.getOrCreateTagBuilderCustom(tag);
+	public abstract static class VEntityTagProvider extends CustomTagProviders<EntityType<?>> {
+		public VEntityTagProvider(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> registriesFuture) {
+			super(output, Registries.ENTITY_TYPE, registriesFuture);
 		}
 	}
 
 	/**
 	 * Extend this class to create {@link GameEvent} tags in the "/game_events" tag directory.
 	 */
-	public abstract static class GameEventTagProvider extends CustomTagProviders<GameEvent> {
-		public GameEventTagProvider(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> completableFuture) {
+	public abstract static class VGameEventTagProvider extends CustomTagProviders<GameEvent> {
+		public VGameEventTagProvider(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> completableFuture) {
 			super(output, Registries.GAME_EVENT, completableFuture);
 		}
 
@@ -206,9 +150,42 @@ public abstract class CustomTagProviders<T> extends FabricTagProvider<T> {
 		protected ResourceKey<GameEvent> reverseLookup(GameEvent element) {
 			return element.builtInRegistryHolder().key();
 		}
+	}
 
-		public CustomFabricTagBuilder tagCustom(TagKey<GameEvent> tag) {
-			return this.getOrCreateTagBuilderCustom(tag);
+	/**
+	 * Extend this class to create {@link EntityType} tags in the "/entity_types" tag directory.
+	 */
+
+	public abstract static class MobEffectTagProvider extends CustomTagProviders<MobEffect> {
+		protected MobEffectTagProvider(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> completableFuture) {
+			super(output, Registries.MOB_EFFECT, completableFuture);
+		}
+	}
+
+	public abstract static class NoiseSettingsTagProvider extends CustomTagProviders<NoiseGeneratorSettings> {
+		protected NoiseSettingsTagProvider(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> completableFuture) {
+			super(output, Registries.NOISE_SETTINGS, completableFuture);
+		}
+	}
+
+	public abstract static class DimensionTypeTagProvider extends CustomTagProviders<DimensionType> {
+		protected DimensionTypeTagProvider(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> completableFuture) {
+			super(output, Registries.DIMENSION_TYPE, completableFuture);
+		}
+	}
+
+	public abstract static class DimensionTagProvider extends CustomTagProviders<Level> {
+		protected DimensionTagProvider(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> completableFuture) {
+			super(output, Registries.DIMENSION, completableFuture);
+		}
+	}
+
+	/**
+	 * Extend this class to create {@link GameEvent} tags in the "/game_events" tag directory.
+	 */
+	public abstract static class NoiseTagProvider extends CustomTagProviders<NormalNoise.NoiseParameters> {
+		protected NoiseTagProvider(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> completableFuture) {
+			super(output, Registries.NOISE, completableFuture);
 		}
 	}
 
@@ -247,28 +224,6 @@ public abstract class CustomTagProviders<T> extends FabricTagProvider<T> {
 		}
 
 		/**
-		 * Add multiple elements to the tag.
-		 *
-		 * @return the {@link FabricTagBuilder} instance
-		 */
-		@SafeVarargs
-		public final CustomFabricTagBuilder add(T... element) {
-			Stream.of(element).map(CustomTagProviders.this::reverseLookup).forEach(this::addAlt);
-			return this;
-		}
-
-		/**
-		 * Add an element to the tag.
-		 *
-		 * @return the {@link FabricTagBuilder} instance
-		 * @see #add(ResourceLocation)
-		 */
-		public CustomFabricTagBuilder addAlt(ResourceKey<T> registryKey) {
-			parent.add(registryKey);
-			return this;
-		}
-
-		/**
 		 * Add a single element to the tag.
 		 *
 		 * @param id id
@@ -277,6 +232,19 @@ public abstract class CustomTagProviders<T> extends FabricTagProvider<T> {
 		 */
 		public CustomFabricTagBuilder add(ResourceLocation id) {
 			builder.addElement(id);
+			return this;
+		}
+
+		/**
+		 * Add a single element to the tag.
+		 *
+		 * @param registryKey registry key
+		 *
+		 * @return the {@link CustomFabricTagBuilder} instance
+		 */
+		@Override
+		public CustomFabricTagBuilder add(ResourceKey<T> registryKey) {
+			parent.add(registryKey);
 			return this;
 		}
 
@@ -325,6 +293,17 @@ public abstract class CustomTagProviders<T> extends FabricTagProvider<T> {
 		 */
 		public CustomFabricTagBuilder forceAddTag(TagKey<T> tag) {
 			builder.addElement(tag.location());
+			return this;
+		}
+
+		/**
+		 * Add multiple elements to this tag.
+		 *
+		 * @return the {@link CustomFabricTagBuilder} instance
+		 */
+		@SafeVarargs
+		public final CustomFabricTagBuilder add(T... elements) {
+			Stream.of(elements).map(CustomTagProviders.this::reverseLookup).forEach(this::add);
 			return this;
 		}
 

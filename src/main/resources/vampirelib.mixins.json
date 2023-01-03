@@ -5,9 +5,6 @@
   "mixins": [
     "BlockStateModelGeneratorMixin",
     "HandledScreenMixin",
-    "ItemModelGeneratorMixin",
-    "ItemStackMixin",
-    "LandPathNodeMakerMixin",
     "MixinItemEntity",
     "MixinLivingEntity",
     "MixinMobSpawnerLogic",
@@ -29,11 +26,7 @@
     "TooltipComponentMixin",
     "client.BlockColorsMixin",
     "client.CameraInvokerMixin",
-    "client.CameraMixin",
-    "client.DebugRendererMixin",
-    "client.MinecraftClientMixin",
-    "client.ShaderInstanceMixin",
-    "client.TextureAtlasMixinOld"
+    "client.ShaderInstanceMixin"
   ],
   "injectors": {
     "defaultRequire": 1

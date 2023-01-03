@@ -25,13 +25,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.CreativeModeTabs;
-import net.minecraft.world.item.DoubleHighBlockItem;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.SpawnEggItem;
-import net.minecraft.world.item.StandingAndWallBlockItem;
+import net.minecraft.world.item.*;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -40,7 +34,6 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
-import net.fabricmc.loader.api.FabricLoader;
 
 public record RegistryHelper(String modId) {
 	public static RegistryHelper createRegistryHelper(String modId) {
@@ -100,6 +93,26 @@ public record RegistryHelper(String modId) {
 			register(BuiltInRegistries.ITEM, name, new BlockItem(block, new Item.Properties()));
 			return block;
 		}
+		
+		public Block registerBlock(Block block, String name, CreativeModeTab... itemGroups) {
+			Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(modId, name), block);
+			Item item = Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(modId, name),
+					new BlockItem(block, new Item.Properties()));
+			for (CreativeModeTab itemGroup : itemGroups) {
+				ItemGroupEvents.modifyEntriesEvent(itemGroup).register(entries -> entries.accept(item));
+			}
+			return block;
+		}
+		
+		public Block registerBlock(Block block, String name, Map<Block, CreativeModeTab>... itemGroups) {
+			Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(modId, name), block);
+			Item item = Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(modId, name),
+					new BlockItem(block, new Item.Properties()));
+			for (Map.Entry<Block, CreativeModeTab> itemGroup : itemGroups) {
+				ItemGroupEvents.modifyEntriesEvent(itemGroup.value()).register(entries -> entries.addAfter(itemGroup.key(), item));
+			}
+			return block;
+		}
 
 		public Block registerBlockWithWallBlock(Block block, Block wallBlock, String name) {
 			register(BuiltInRegistries.BLOCK, name, block);
@@ -150,6 +163,7 @@ public record RegistryHelper(String modId) {
 			} else {
 				return null;
 			}
+			return Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(modId, name), item);
 		}
 
 		public Item registerSpawnEgg(String name, EntityType<? extends Mob> entity, int primaryColor, int secondaryColor) {

@@ -17,14 +17,21 @@
 
 package io.github.vampirestudios.vampirelib.blocks;
 
-import net.minecraft.world.level.block.BushBlock;
-import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.level.material.Material;
+import net.minecraft.core.BlockPos;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.block.DoorBlock;
+import net.minecraft.world.level.block.state.BlockState;
 
-public class BushBaseBlock extends BushBlock {
+public class DoorBaseBlock extends DoorBlock {
 
-	public BushBaseBlock() {
-		super(BlockBehaviour.Properties.of(Material.PLANT));
+	public DoorBaseBlock(Properties properties, SoundEvent closeSound, SoundEvent openSound) {
+		super(properties, closeSound, openSound);
 	}
 
+	@Override
+	public ItemStack getCloneItemStack(BlockGetter blockView_1, BlockPos blockPos_1, BlockState blockState_1) {
+		return new ItemStack(this);
+	}
 }

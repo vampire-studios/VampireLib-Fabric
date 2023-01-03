@@ -30,12 +30,7 @@ import org.slf4j.LoggerFactory;
 import net.minecraft.SharedConstants;
 import net.minecraft.resources.ResourceLocation;
 
-import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import net.fabricmc.api.EnvironmentInterface;
-import net.fabricmc.api.EnvironmentInterfaces;
-import net.fabricmc.api.ModInitializer;
+import net.fabricmc.api.*;
 
 import io.github.vampirestudios.vampirelib.modules.FeatureManager;
 

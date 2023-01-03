@@ -17,20 +17,16 @@
 
 package io.github.vampirestudios.vampirelib.blocks;
 
-import net.minecraft.world.item.CreativeModeTabs;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SaplingBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.grower.AbstractTreeGrower;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.Material;
 
-import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
-
 public class SaplingBaseBlock extends SaplingBlock {
 	public SaplingBaseBlock(AbstractTreeGrower treeGrower) {
 		super(treeGrower, BlockBehaviour.Properties.of(Material.PLANT).noCollission().randomTicks().instabreak()
 				.sound(SoundType.GRASS));
-		ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.NATURAL_BLOCKS).register(entries -> entries.addAfter(Blocks.DARK_OAK_SAPLING, this));
 	}
+
 }

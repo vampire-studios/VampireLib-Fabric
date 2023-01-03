@@ -29,7 +29,6 @@ import net.minecraft.world.level.FoliageColor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
-import net.fabricmc.fabric.api.client.rendering.v1.TooltipComponentCallback;
 import net.fabricmc.fabric.impl.client.rendering.ColorProviderRegistryImpl;
 
 import io.github.vampirestudios.vampirelib.VampireLib;

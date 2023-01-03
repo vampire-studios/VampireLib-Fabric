@@ -1,10 +1,10 @@
 [versions]
     minecraft = '1.19.3'
-    quilt_mappings = '1.19.3+build.1'
-    loader_version='0.14.11'
-    parchment = '2022.08.14'
+    quilt_mappings = '1.19.3+build.7'
+    fabric-loader = "0.14.12"
+    parchment = '2022.12.18'
 
-    fabric = "0.68.1+1.19.3"
+    fabric = "0.70.0+1.19.3"
 
     clothconfig = '9.0.93'
     terraformwoodapi = '5.0.0-beta.1'
@@ -12,7 +12,7 @@
 [libraries]
     minecraft = { module = 'com.mojang:minecraft', version.ref = 'minecraft' }
     quilt_mappings = { module = 'org.quiltmc:quilt-mappings', version.ref = 'quilt_mappings' }
-    fabric_loader = { module = 'net.fabricmc:fabric-loader', version.ref = 'loader_version' }
+    fabric-loader = { module = "net.fabricmc:fabric-loader", version.ref = "fabric-loader"}
 
     fabric_api = { module = "net.fabricmc.fabric-api:fabric-api", version.ref = "fabric" }
     fabric_api_deprecated = { module = "net.fabricmc.fabric-api:fabric-api-deprecated", version.ref = "fabric" }

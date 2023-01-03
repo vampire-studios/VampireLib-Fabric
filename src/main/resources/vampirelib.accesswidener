@@ -145,3 +145,10 @@ accessible field net/minecraft/world/item/ShovelItem FLATTENABLES Ljava/util/Map
 accessible field net/minecraft/world/item/AxeItem STRIPPABLES Ljava/util/Map;
 
 accessible method net/minecraft/sounds/SoundEvent createVariableRangeEvent (Lnet/minecraft/resources/ResourceLocation;)Lnet/minecraft/sounds/SoundEvent;
+extendable method net/minecraft/data/tags/TagsProvider$TagAppender add (Lnet/minecraft/resources/ResourceKey;)Lnet/minecraft/data/tags/TagsProvider$TagAppender;
+accessible method net/minecraft/resources/ResourceLocation isValidPath (Ljava/lang/String;)Z
+
+accessible method net/minecraft/client/resources/ClientPackSource createVanillaPackSource (Ljava/nio/file/Path;)Lnet/minecraft/server/packs/VanillaPackResources;
+accessible method net/minecraft/server/packs/repository/ServerPacksSource createVanillaPackSource ()Lnet/minecraft/server/packs/VanillaPackResources;
+accessible method net/minecraft/core/registries/BuiltInRegistries registerSimple (Lnet/minecraft/resources/ResourceKey;Lcom/mojang/serialization/Lifecycle;Lnet/minecraft/core/registries/BuiltInRegistries$RegistryBootstrap;)Lnet/minecraft/core/Registry;
+accessible class net/minecraft/core/registries/BuiltInRegistries$RegistryBootstrap
