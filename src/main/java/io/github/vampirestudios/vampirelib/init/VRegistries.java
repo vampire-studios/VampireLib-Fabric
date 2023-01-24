@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 OliviaTheVampire
+ * Copyright (c) 2022-2023 OliviaTheVampire
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -18,23 +18,14 @@
 package io.github.vampirestudios.vampirelib.init;
 
 import net.minecraft.core.Registry;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
 
 import io.github.vampirestudios.vampirelib.modules.FeatureManager;
 
 public class VRegistries {
-	public static ResourceKey<Registry<Codec<? extends BlendingFunction>>> BLENDING_FUNCTION_RESOURCE_KEY;
-	public static Registry<Codec<? extends BlendingFunction>> BLENDING_FUNCTION;
-
-	public static void init() {
-		ResourceLocationUtils.setModInstance(VampireLib.INSTANCE);
-		BLENDING_FUNCTION_RESOURCE_KEY = ResourceKey.createRegistryKey(
-				ResourceLocationUtils.modId("blending_function"));
-		BLENDING_FUNCTION = BuiltInRegistries.registerSimple(BLENDING_FUNCTION_RESOURCE_KEY, Lifecycle.stable(),
-				registry -> BlendingFunction.CODEC);
-	}
-
+	public static final Registry<FeatureManager> FEATURE_MANAGERS = FabricRegistryBuilder.createSimple(
+			FeatureManager.class, new ResourceLocation("vampirelib", "feature_managers")
+	).buildAndRegister();
 }

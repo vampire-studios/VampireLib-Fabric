@@ -1,17 +1,18 @@
 /*
- * Copyright (c) 2016, 2017, 2018, 2019 FabricMC
+ * Copyright (c) 2023 OliviaTheVampire
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package io.github.vampirestudios.vampirelib.mixins;
@@ -42,7 +43,7 @@ import net.minecraft.resources.ResourceLocation;
 import io.github.vampirestudios.vampirelib.api.datagen.DisplayBuilder;
 import io.github.vampirestudios.vampirelib.api.datagen.ElementBuilder;
 import io.github.vampirestudios.vampirelib.api.datagen.FabricModel;
-import io.github.vampirestudios.vampirelib.api.datagen.ItemModelBuilder;
+import io.github.vampirestudios.vampirelib.api.datagen.builder.ItemModelBuilder;
 import io.github.vampirestudios.vampirelib.api.datagen.OverrideBuilder;
 
 @Mixin(ModelTemplate.class)
@@ -55,7 +56,7 @@ public class ModelMixin implements FabricModel {
 	private Set<TextureSlot> requiredSlots;
 	@Shadow
 	@Final
-	private Optional<String> variant;
+	private Optional<String> suffix;
 	@Unique
 	private final EnumMap<DisplayBuilder.Position, DisplayBuilder> displays = new EnumMap<>(DisplayBuilder.Position.class);
 	@Unique
@@ -68,76 +69,76 @@ public class ModelMixin implements FabricModel {
 	private boolean ambientOcclusion = true;
 
 	@Override
-	public Optional<ResourceLocation> getModel() {
+	public Optional<ResourceLocation> fabric_getParent() {
 		return model;
 	}
 
 	@Override
-	public Set<TextureSlot> getRequiredSlots() {
+	public Set<TextureSlot> fabric_getRequiredTextures() {
 		return requiredSlots;
 	}
 
 	@Override
-	public Optional<String> getVariant() {
-		return variant;
+	public Optional<String> fabric_getVariant() {
+		return suffix;
 	}
 
 	@Override
-	public ModelTemplate withDisplay(DisplayBuilder.Position position, DisplayBuilder builder) {
+	public ModelTemplate fabric_withDisplay(DisplayBuilder.Position position, DisplayBuilder builder) {
 		this.displays.put(position, builder);
 		return (ModelTemplate) (Object) this;
 	}
 
 	@Override
-	public EnumMap<DisplayBuilder.Position, DisplayBuilder> getDisplayBuilders() {
+	public EnumMap<DisplayBuilder.Position, DisplayBuilder> fabric_getDisplayBuilders() {
 		return displays;
 	}
 
 	@Override
-	public ModelTemplate addElement(ElementBuilder builder) {
+	public ModelTemplate fabric_addElement(ElementBuilder builder) {
 		this.elements.add(builder);
 		return (ModelTemplate) (Object) this;
 	}
 
 	@Override
-	public List<ElementBuilder> getElementBuilders() {
+	public List<ElementBuilder> fabric_getElementBuilders() {
 		return elements;
 	}
 
 	@Override
-	public ModelTemplate addOverride(OverrideBuilder builder) {
+	public ModelTemplate fabric_addOverride(OverrideBuilder builder) {
 		this.overrides.add(builder);
 		return (ModelTemplate) (Object) this;
 	}
 
 	@Override
-	public List<OverrideBuilder> getOverrideBuilders() {
+	public List<OverrideBuilder> fabric_getOverrideBuilders() {
 		return overrides;
 	}
 
 	@Override
-	public ModelTemplate setGuiLight(ItemModelBuilder.GuiLight guiLight) {
+	public ModelTemplate fabric_setGuiLight(ItemModelBuilder.GuiLight guiLight) {
 		this.guiLight = guiLight;
 		return (ModelTemplate) (Object) this;
 	}
 
 	@Override
-	public ItemModelBuilder.GuiLight getGuiLight() {
+	public ItemModelBuilder.GuiLight fabric_getGuiLight() {
 		return guiLight;
 	}
 
 	@Override
-	public ModelTemplate setAmbientOcclusion(boolean ambientOcclusion) {
+	public ModelTemplate fabric_setAmbientOcclusion(boolean ambientOcclusion) {
 		this.ambientOcclusion = ambientOcclusion;
 		return (ModelTemplate) (Object) this;
 	}
 
 	@Override
-	public boolean getAmbientOcclusion() {
+	public boolean fabric_getAmbientOcclusion() {
 		return ambientOcclusion;
 	}
 
-	@Inject(method = "method_25851", at = @At("RETURN"), locals = LocalCapture.CAPTURE_FAILHARD)
+	@Inject(method = "m_ngohvkdq", at = @At("RETURN"), locals = LocalCapture.CAPTURE_FAILHARD)
 	public void addExtraProperties(Map<TextureSlot, ResourceLocation> map, CallbackInfoReturnable<JsonElement> cir, JsonObject jsonObject) {
 		if (!displays.isEmpty()) {
 			JsonObject display = new JsonObject();

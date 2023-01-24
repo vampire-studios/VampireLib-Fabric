@@ -34,6 +34,11 @@
     "java": ">=17"
   },
   "custom": {
+	"loom:injected_interfaces": {
+	  "net/minecraft/class_4910": ["io/github/vampirestudios/vampirelib/api/datagen/FabricBlockStateModelGenerator"],
+	  "net/minecraft/class_4915": ["io/github/vampirestudios/vampirelib/api/datagen/FabricItemModelGenerator"],
+	  "net/minecraft/class_4942": ["io/github/vampirestudios/vampirelib/api/datagen/FabricModel"]
+	},
     "modmenu": {
       "links": {
         "modmenu.discord": "https://discord.gg/63hmSTxyDA"

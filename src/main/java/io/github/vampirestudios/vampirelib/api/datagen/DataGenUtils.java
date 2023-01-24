@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 OliviaTheVampire
+ * Copyright (c) 2022-2023 OliviaTheVampire
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -41,7 +41,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.Property;
 
 import io.github.vampirestudios.vampirelib.api.BasicModClass;
-import io.github.vampirestudios.vampirelib.utils.registry.ResourceLocationUtils;
+import io.github.vampirestudios.vampirelib.utils.ResourceLocationUtils;
 
 public class DataGenUtils {
 

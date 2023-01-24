@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 OliviaTheVampire
+ * Copyright (c) 2022-2023 OliviaTheVampire
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -22,15 +22,10 @@ import java.util.List;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.mojang.serialization.Codec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import net.minecraft.SharedConstants;
-import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionResult;
@@ -39,7 +34,6 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameRules;
-import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
@@ -47,14 +41,16 @@ import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.Material;
 
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
-import net.fabricmc.fabric.api.event.registry.DynamicRegistrySetupCallback;
+import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
+import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
+import net.fabricmc.loader.api.FabricLoader;
 
 import io.github.vampirestudios.vampirelib.api.BasicModClass;
 import io.github.vampirestudios.vampirelib.api.ConvertibleBlockPair;
+import io.github.vampirestudios.vampirelib.api.debug_renderers.DebugFeatureCommands;
 import io.github.vampirestudios.vampirelib.api.debug_renderers.DebugFeatureSync;
 import io.github.vampirestudios.vampirelib.utils.Rands;
-import io.github.vampirestudios.vampirelib.utils.blendfunctions.BlendingFunction;
-import io.github.vampirestudios.vampirelib.utils.registry.BlockChiseler;
+import io.github.vampirestudios.vampirelib.utils.BlockChiseler;
 import io.github.vampirestudios.vampirelib.utils.registry.WoodRegistry;
 
 public class VampireLib extends BasicModClass {
@@ -101,8 +97,13 @@ public class VampireLib extends BasicModClass {
 	public static WoodRegistry TEST_NETHER_WOOD12;
 	public static WoodRegistry TEST_NETHER_WOOD13;
 
-	public static Block BLOCK_WITH_CUSTOM_MODEL;
+	public static Block BLOCK_WITH_CUSTOM_MODEL_1;
+	public static Block BLOCK_WITH_CUSTOM_MODEL_2;
 	public static Block BLOCK_WITH_EMPTY_MODEL;
+
+	public static Item ITEM_WITH_CUSTOM_MODEL_1;
+	public static Item ITEM_WITH_CUSTOM_MODEL_2;
+	public static Item ITEM_WITH_NORMAL_MODEL;
 
 	public VampireLib() {
 		super("vampirelib", "VampireLib", "5.5.0+build.1");
@@ -115,25 +116,26 @@ public class VampireLib extends BasicModClass {
 				Rands.chance(15) ? "Your are" : (Rands.chance(15) ? "You're" : "You are"),
 				modName(), modVersion(), SharedConstants.getCurrentVersion().getName()));
 		BlockChiseler.setup();
-		BlendingFunction.init();
 		DebugFeatureSync.init();
-
-		try {
-			DynamicRegistryRegistry.registerBefore(Registries.BIOME, DynamicData.BEFORE_KEY, DynamicData.CODEC);
-			DynamicRegistryRegistry.registerAfter(Registries.BIOME, DynamicData.AFTER_KEY, DynamicData.CODEC);
-			DynamicRegistryRegistry.register(ResourceKey.createRegistryKey(new ResourceLocation(INSTANCE.modId(), "worldgen/biome")), Codec.BOOL);
-		} catch (IllegalStateException ignored) {
-			INSTANCE.getLogger().info("DynamicRegistryRegistry path clash test passed!");
-		}
-
-		DynamicRegistrySetupCallback.EVENT.register(registryManager -> {
-			registryManager.registerEntryAdded(Registries.BIOME, (rawId, id, object) -> INSTANCE.getLogger().info("Biome added: {}", id));
-			registryManager.registerEntryAdded(Registries.BIOME, (rawId, id, object) -> INSTANCE.getLogger().info("Biome added: {}", id));
-			registryManager.registerEntryAdded(DynamicData.BEFORE_KEY, (rawId, id, object) -> INSTANCE.getLogger().info("Before biome data: {}", id));
-			registryManager.registerEntryAdded(DynamicData.AFTER_KEY, (rawId, id, object) -> INSTANCE.getLogger().info("After biome data: {}", id));
-		});
+		DebugFeatureCommands.init();
 
 		if (TEST_CONTENT_ENABLED) {
+//			try {
+//				DynamicRegistryRegistry.registerBefore(Registries.BIOME, DynamicData.BEFORE_KEY, DynamicData.CODEC);
+//				DynamicRegistryRegistry.registerAfter(Registries.BIOME, DynamicData.AFTER_KEY, DynamicData.CODEC);
+//				DynamicRegistryRegistry.register(ResourceKey.createRegistryKey(new ResourceLocation(INSTANCE.modId(), "worldgen/biome")), Codec.BOOL);
+//			} catch (IllegalStateException ignored) {
+//				INSTANCE.getLogger().info("DynamicRegistryRegistry path clash test passed!");
+//			}
+//
+//			DynamicRegistrySetupCallback.EVENT.register(registryManager -> {
+//				registryManager.registerEntryAdded(Registries.BIOME, (rawId, id, object) -> INSTANCE.getLogger().info("Biome added: {}", id));
+//				registryManager.registerEntryAdded(Registries.BIOME, (rawId, id, object) -> INSTANCE.getLogger().info("Biome added: {}", id));
+//				registryManager.registerEntryAdded(DynamicData.BEFORE_KEY, (rawId, id, object) -> INSTANCE.getLogger().info("Before biome data: {}", id));
+//				registryManager.registerEntryAdded(DynamicData.AFTER_KEY, (rawId, id, object) -> INSTANCE.getLogger().info("After biome data: {}", id));
+//			});
+
+			ResourceManagerHelper.registerBuiltinResourcePack(INSTANCE.identifier("wood_types"), FabricLoader.getInstance().getModContainer(INSTANCE.modId()).get(), ResourcePackActivationType.ALWAYS_ENABLED);
 
 			//Overworld
 			TEST_WOOD = WoodRegistry.of(identifier("test"))
@@ -212,8 +214,8 @@ public class VampireLib extends BasicModClass {
 					.mushroomLike().defaultBlocks().defaultExtras()
 					.nonFlammable().build();
 			TEST_NETHER_WOOD9 = WoodRegistry.of(identifier("test9_nether"))
-					.defaultBlocksColoredLeaves().defaultExtras()
-					.nonFlammable().build();
+					.mushroomLike().defaultBlocksColoredLeaves()
+					.defaultExtras().nonFlammable().build();
 
 			TEST_NETHER_WOOD10 = WoodRegistry.of(identifier("test10_nether"))
 					.mushroomLike().defaultBlocks().defaultExtras()
@@ -228,10 +230,15 @@ public class VampireLib extends BasicModClass {
 			TEST_NETHER_WOOD13 = WoodRegistry.of(identifier("test13_nether"))
 					.mushroomLike().defaultBlocksColoredLeaves().defaultExtras()
 					.nonFlammable().build();
-		}
 
-		BLOCK_WITH_CUSTOM_MODEL = createBlock("block_with_custom_model", false);
-		BLOCK_WITH_EMPTY_MODEL = createBlock("block_with_empty_model", false);
+			BLOCK_WITH_CUSTOM_MODEL_1 = createBlock("block_with_custom_model_1", false);
+			BLOCK_WITH_CUSTOM_MODEL_2 = createBlock("block_with_custom_model_2", false);
+			BLOCK_WITH_EMPTY_MODEL = createBlock("block_with_empty_model", false);
+
+			ITEM_WITH_CUSTOM_MODEL_1 = createItem("item_with_custom_model_1");
+			ITEM_WITH_CUSTOM_MODEL_2 = createItem("item_with_custom_model_2");
+			ITEM_WITH_NORMAL_MODEL = createItem("item_with_normal_model");
+		}
 
 		UseBlockCallback.EVENT.register((player, world, hand, hitResult) -> {
 			if (!world.isClientSide) {
@@ -305,12 +312,17 @@ public class VampireLib extends BasicModClass {
 		return block;
 	}
 
-	private record DynamicData(Holder<Biome> biome) {
-		private static final ResourceKey<Registry<DynamicData>> BEFORE_KEY = ResourceKey.createRegistryKey(new ResourceLocation(INSTANCE.modId(), "fabric-api/before_biome"));
-		private static final ResourceKey<Registry<DynamicData>> AFTER_KEY = ResourceKey.createRegistryKey(new ResourceLocation(INSTANCE.modId(), "fabric-api/after_biome"));
-		private static final Codec<DynamicData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-				Biome.CODEC.fieldOf("biome").forGetter(DynamicData::biome)
-		).apply(instance, DynamicData::new));
+	private static Item createItem(String name) {
+		ResourceLocation identifier = INSTANCE.identifier(name);
+		return Registry.register(BuiltInRegistries.ITEM, identifier, new Item(new Item.Properties()));
 	}
+
+//	private record DynamicData(Holder<Biome> biome) {
+//		private static final ResourceKey<Registry<DynamicData>> BEFORE_KEY = ResourceKey.createRegistryKey(new ResourceLocation(INSTANCE.modId(), "fabric-api/before_biome"));
+//		private static final ResourceKey<Registry<DynamicData>> AFTER_KEY = ResourceKey.createRegistryKey(new ResourceLocation(INSTANCE.modId(), "fabric-api/after_biome"));
+//		private static final Codec<DynamicData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+//				Biome.CODEC.fieldOf("biome").forGetter(DynamicData::biome)
+//		).apply(instance, DynamicData::new));
+//	}
 
 }

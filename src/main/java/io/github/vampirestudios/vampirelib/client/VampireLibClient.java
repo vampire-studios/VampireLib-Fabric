@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 OliviaTheVampire
+ * Copyright (c) 2022-2023 OliviaTheVampire
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -29,6 +29,7 @@ import net.minecraft.world.level.FoliageColor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
+import net.fabricmc.fabric.api.client.rendering.v1.TooltipComponentCallback;
 import net.fabricmc.fabric.impl.client.rendering.ColorProviderRegistryImpl;
 
 import io.github.vampirestudios.vampirelib.VampireLib;
@@ -91,6 +92,7 @@ public class VampireLibClient extends BasicModClass {
 		});
 
 		DebugFeatureSync.clientInit();
+		DebugFeatureClientCommands.init();
 
 		DebugRendererRegistrationCallback.EVENT.register(registrar -> {
 			var debugRenderer = Minecraft.getInstance().debugRenderer;

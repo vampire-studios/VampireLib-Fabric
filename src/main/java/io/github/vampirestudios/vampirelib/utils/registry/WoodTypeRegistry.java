@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 OliviaTheVampire
+ * Copyright (c) 2022-2023 OliviaTheVampire
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -28,6 +28,7 @@ import net.minecraft.world.level.block.Block;
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
 
 import io.github.vampirestudios.vampirelib.VampireLib;
+import io.github.vampirestudios.vampirelib.utils.WoodType;
 
 public abstract class WoodTypeRegistry implements StringRepresentable {
 	public static final Registry<WoodType> WOOD_TYPES = FabricRegistryBuilder.createSimple(WoodType.class,
@@ -49,8 +50,8 @@ public abstract class WoodTypeRegistry implements StringRepresentable {
 		return WOOD_TYPES.getKey(woodType) != null;
 	}
 
-	static WoodType registerVanilla(WoodType woodType) {
-		return Registry.register(WOOD_TYPES, woodType.identifier, woodType);
+	public static WoodType registerVanilla(WoodType woodType) {
+		return Registry.register(WOOD_TYPES, woodType.resourceLocation(), woodType);
 	}
 
 	public static WoodType registerModded(WoodType woodType) {
@@ -60,14 +61,14 @@ public abstract class WoodTypeRegistry implements StringRepresentable {
 	}
 
 	public static WoodType registerModded(WoodRegistry woodRegistry) {
-		WoodType woodType = new WoodType(woodRegistry.name(), woodRegistry.leaves(), woodRegistry.log());
+		WoodType woodType = new WoodType(woodRegistry.name(), woodRegistry.leaves(), woodRegistry.log(), woodRegistry.netherWoodLike);
 		registerVanilla(woodType);
 		listeners.forEach(listener -> listener.onModdedWoodTypeRegistered(woodType));
 		return woodType;
 	}
 
 	public static WoodType registerModded(WoodRegistry woodRegistry, Block leaves) {
-		WoodType woodType = new WoodType(woodRegistry.name(), leaves, woodRegistry.log());
+		WoodType woodType = new WoodType(woodRegistry.name(), leaves, woodRegistry.log(), woodRegistry.netherWoodLike);
 		registerVanilla(woodType);
 		listeners.forEach(listener -> listener.onModdedWoodTypeRegistered(woodType));
 		return woodType;

@@ -1,17 +1,18 @@
 /*
- * Copyright (c) 2016, 2017, 2018, 2019 FabricMC
+ * Copyright (c) 2023 OliviaTheVampire
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package io.github.vampirestudios.vampirelib.mixins;
@@ -28,11 +29,15 @@ import org.spongepowered.asm.mixin.Shadow;
 
 import net.minecraft.data.models.BlockModelGenerators;
 import net.minecraft.data.models.blockstates.BlockStateGenerator;
+import net.minecraft.data.models.blockstates.MultiVariantGenerator;
+import net.minecraft.data.models.blockstates.Variant;
+import net.minecraft.data.models.blockstates.VariantProperties;
 import net.minecraft.data.models.model.ModelLocationUtils;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 
 import io.github.vampirestudios.vampirelib.api.datagen.FabricBlockStateModelGenerator;
+import io.github.vampirestudios.vampirelib.api.datagen.builder.ModelBuilder;
 
 @Mixin(BlockModelGenerators.class)
 public abstract class BlockStateModelGeneratorMixin implements FabricBlockStateModelGenerator {
@@ -44,6 +49,7 @@ public abstract class BlockStateModelGeneratorMixin implements FabricBlockStateM
 	@Final
 	public Consumer<BlockStateGenerator> blockStateOutput;
 
+
 	@Override
 	public void registerEmptyModel(Block block) {
 		registerEmptyModel(block, ModelLocationUtils.getModelLocation(block));
@@ -53,5 +59,11 @@ public abstract class BlockStateModelGeneratorMixin implements FabricBlockStateM
 	public void registerEmptyModel(Block block, ResourceLocation id) {
 		this.modelOutput.accept(id, JsonObject::new);
 		this.blockStateOutput.accept(BlockModelGenerators.createSimpleBlock(block, id));
+	}
+
+	@Override
+	public void buildWithSingletonState(Block block, ModelBuilder<?> builder) {
+		ResourceLocation model = builder.buildModel().create(block, builder.mapTextures(), this.modelOutput);
+		this.blockStateOutput.accept(MultiVariantGenerator.multiVariant(block, Variant.variant().with(VariantProperties.MODEL, model)));
 	}
 }
