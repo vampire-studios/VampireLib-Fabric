@@ -25,7 +25,6 @@ import java.util.Optional;
 import java.util.Set;
 
 import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -43,8 +42,8 @@ import net.minecraft.resources.ResourceLocation;
 import io.github.vampirestudios.vampirelib.api.datagen.DisplayBuilder;
 import io.github.vampirestudios.vampirelib.api.datagen.ElementBuilder;
 import io.github.vampirestudios.vampirelib.api.datagen.FabricModel;
-import io.github.vampirestudios.vampirelib.api.datagen.builder.ItemModelBuilder;
 import io.github.vampirestudios.vampirelib.api.datagen.OverrideBuilder;
+import io.github.vampirestudios.vampirelib.api.datagen.builder.ItemModelBuilder;
 
 @Mixin(ModelTemplate.class)
 public class ModelMixin implements FabricModel {
@@ -138,8 +137,8 @@ public class ModelMixin implements FabricModel {
 		return ambientOcclusion;
 	}
 
-	@Inject(method = "m_ngohvkdq", at = @At("RETURN"), locals = LocalCapture.CAPTURE_FAILHARD)
-	public void addExtraProperties(Map<TextureSlot, ResourceLocation> map, CallbackInfoReturnable<JsonElement> cir, JsonObject jsonObject) {
+	@Inject(method = "createBaseTemplate", at = @At("TAIL"), locals = LocalCapture.CAPTURE_FAILHARD)
+	public void addExtraProperties(ResourceLocation resourceLocation, Map<TextureSlot, ResourceLocation> map, CallbackInfoReturnable<JsonObject> cir, JsonObject jsonObject) {
 		if (!displays.isEmpty()) {
 			JsonObject display = new JsonObject();
 			this.displays.forEach((p, d) -> display.add(p.name().toLowerCase(), d.build()));
