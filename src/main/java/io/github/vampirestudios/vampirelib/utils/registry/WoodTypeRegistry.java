@@ -31,9 +31,8 @@ import io.github.vampirestudios.vampirelib.VampireLib;
 import io.github.vampirestudios.vampirelib.utils.WoodType;
 
 public abstract class WoodTypeRegistry implements StringRepresentable {
-	public static final Registry<WoodType> WOOD_TYPES = FabricRegistryBuilder.createSimple(WoodType.class,
-					VampireLib.INSTANCE.identifier(
-							"wood_type_registry"))
+	public static final Registry<WoodType> WOOD_TYPES = FabricRegistryBuilder
+			.createSimple(WoodType.class, VampireLib.INSTANCE.identifier("wood_type_registry"))
 			.buildAndRegister();
 
 	private static final Queue<ModdedTypeListener> listeners = new ConcurrentLinkedQueue<>();
@@ -61,14 +60,14 @@ public abstract class WoodTypeRegistry implements StringRepresentable {
 	}
 
 	public static WoodType registerModded(WoodRegistry woodRegistry) {
-		WoodType woodType = new WoodType(woodRegistry.name(), woodRegistry.leaves(), woodRegistry.log(), woodRegistry.netherWoodLike);
+		WoodType woodType = new WoodType(woodRegistry.name(), woodRegistry.leaves(), woodRegistry.log(), woodRegistry.isNetherWood());
 		registerVanilla(woodType);
 		listeners.forEach(listener -> listener.onModdedWoodTypeRegistered(woodType));
 		return woodType;
 	}
 
 	public static WoodType registerModded(WoodRegistry woodRegistry, Block leaves) {
-		WoodType woodType = new WoodType(woodRegistry.name(), leaves, woodRegistry.log(), woodRegistry.netherWoodLike);
+		WoodType woodType = new WoodType(woodRegistry.name(), leaves, woodRegistry.log(), woodRegistry.isNetherWood());
 		registerVanilla(woodType);
 		listeners.forEach(listener -> listener.onModdedWoodTypeRegistered(woodType));
 		return woodType;

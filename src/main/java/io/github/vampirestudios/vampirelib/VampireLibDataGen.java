@@ -707,11 +707,11 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
 					.add(Biomes.END_HIGHLANDS, Biomes.END_MIDLANDS, Biomes.SMALL_END_ISLANDS, Biomes.END_BARRENS);
 
 			this.tag(VTags.Biomes.WITHOUT_DEFAULT_MONSTER_SPAWNS).add(Biomes.MUSHROOM_FIELDS, Biomes.DEEP_DARK);
-			TagAppender<Biome> withMonsterSpawns = this.tag(VTags.Biomes.WITH_DEFAULT_MONSTER_SPAWNS);
-			MultiNoiseBiomeSource.Preset.OVERWORLD.possibleBiomes(arg.lookupOrThrow(Registries.BIOME)).forEach((biome) -> {
-				if (biome != Biomes.MUSHROOM_FIELDS && biome != Biomes.DEEP_DARK)
-					withMonsterSpawns.add(biome);
-			});
+//			TagAppender<Biome> withMonsterSpawns = this.tag(VTags.Biomes.WITH_DEFAULT_MONSTER_SPAWNS);
+//			MultiNoiseBiomeSource.Preset.OVERWORLD.possibleBiomes(arg.lookupOrThrow(Registries.BIOME)).forEach((biome) -> {
+//				if (biome != Biomes.MUSHROOM_FIELDS && biome != Biomes.DEEP_DARK)
+//					withMonsterSpawns.add(biome);
+//			});
 		}
 	}
 

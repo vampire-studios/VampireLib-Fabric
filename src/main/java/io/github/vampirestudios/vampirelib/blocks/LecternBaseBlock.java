@@ -19,8 +19,6 @@ package io.github.vampirestudios.vampirelib.blocks;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -33,7 +31,6 @@ import net.minecraft.world.level.block.LecternBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.LecternBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.BlockHitResult;
 
 public class LecternBaseBlock extends LecternBlock {
@@ -57,9 +54,7 @@ public class LecternBaseBlock extends LecternBlock {
 		BlockEntity be = world.getBlockEntity(pos);
 		if (be instanceof LecternBlockEntity lecternBe) {
 			lecternBe.setBook(stack.split(1));
-			resetBookState(world, pos, state, true);
-			world.playSound(null, pos, SoundEvents.BOOK_PUT, SoundSource.BLOCKS, 1.0F, 1.0F);
-			world.gameEvent(playerEntity, GameEvent.BLOCK_CHANGE, pos);
+			resetBookState(playerEntity, world, pos, state, true);
 		}
 	}
 

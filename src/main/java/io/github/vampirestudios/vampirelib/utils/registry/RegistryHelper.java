@@ -94,6 +94,15 @@ public record RegistryHelper(String modId) {
 			return block;
 		}
 
+		public Block registerBlockWood(Block block, String name, CreativeModeTab itemGroup, Block parentBlock) {
+			register(BuiltInRegistries.BLOCK, name, block);
+			Item item = register(BuiltInRegistries.ITEM, name, new BlockItem(block, new Item.Properties()));
+			if (parentBlock != null) {
+				ItemGroupEvents.modifyEntriesEvent(itemGroup).register(entries -> entries.addBefore(parentBlock, item));
+			}
+			return block;
+		}
+
 		public Block registerDoubleBlock(Block block, String name, CreativeModeTab itemGroup) {
 			register(BuiltInRegistries.BLOCK, name, block);
 			Item item = register(BuiltInRegistries.ITEM, name, new DoubleHighBlockItem(block, new Item.Properties()));
@@ -120,6 +129,16 @@ public record RegistryHelper(String modId) {
 					new BlockItem(block, new Item.Properties()));
 			for (CreativeModeTab itemGroup : itemGroups) {
 				ItemGroupEvents.modifyEntriesEvent(itemGroup).register(entries -> entries.addAfter(parentBlock, item));
+			}
+			return block;
+		}
+
+		public Block registerBlockWood(Block block, String name, Block parentBlock, CreativeModeTab... itemGroups) {
+			Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(modId, name), block);
+			Item item = Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(modId, name),
+					new BlockItem(block, new Item.Properties()));
+			for (CreativeModeTab itemGroup : itemGroups) {
+				ItemGroupEvents.modifyEntriesEvent(itemGroup).register(entries -> entries.addBefore(parentBlock, item));
 			}
 			return block;
 		}

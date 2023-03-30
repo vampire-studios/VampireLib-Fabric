@@ -19,8 +19,9 @@ package io.github.vampirestudios.vampirelib.item;
 
 import java.util.List;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import org.joml.Matrix4f;
+
+import com.mojang.blaze3d.vertex.PoseStack;
 
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
@@ -61,13 +62,12 @@ public record BundledTooltipComponentImpl(List<ClientTooltipComponent> list) imp
 	}
 
 	@Override
-	public void renderImage(Font font, int mouseX, int mouseY, PoseStack poseStack, ItemRenderer itemRenderer, int blitOffset) {
-		int y1 = mouseY;
+	public void renderImage(Font textRenderer, int x, int y, PoseStack matrices, ItemRenderer itemRenderer) {
+		int y1 = y;
 
 		for (ClientTooltipComponent component : list) {
-			component.renderImage(font, mouseX, y1, poseStack, itemRenderer, blitOffset);
+			component.renderImage(textRenderer, x, y1, matrices, itemRenderer);
 			y1 += component.getHeight();
 		}
 	}
-
 }
