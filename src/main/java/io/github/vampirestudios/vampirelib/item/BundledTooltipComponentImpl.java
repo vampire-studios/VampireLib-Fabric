@@ -68,5 +68,4 @@ public record BundledTooltipComponentImpl(List<ClientTooltipComponent> list) imp
 			y1 += component.getHeight();
 		}
 	}
-
 }

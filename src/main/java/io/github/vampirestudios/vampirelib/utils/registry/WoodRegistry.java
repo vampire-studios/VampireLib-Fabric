@@ -30,7 +30,10 @@ import io.github.vampirestudios.vampirelib.api.datagen.ElementBuilder;
 import io.github.vampirestudios.vampirelib.api.datagen.FaceBuilder;
 import io.github.vampirestudios.vampirelib.api.datagen.VBlockLootTableProvider;
 import io.github.vampirestudios.vampirelib.api.datagen.builder.BlockModelBuilder;
-import io.github.vampirestudios.vampirelib.blocks.*;
+import io.github.vampirestudios.vampirelib.blocks.CustomLadderBlock;
+import io.github.vampirestudios.vampirelib.blocks.FlowerPotBaseBlock;
+import io.github.vampirestudios.vampirelib.blocks.FungusBaseBlock;
+import io.github.vampirestudios.vampirelib.blocks.SaplingBaseBlock;
 import io.github.vampirestudios.vampirelib.blocks.entity.IBlockEntityType;
 import io.github.vampirestudios.vampirelib.client.VampireLibClient;
 import io.github.vampirestudios.vampirelib.utils.Utils;
@@ -68,6 +71,7 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.grower.AbstractTreeGrower;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.properties.BlockSetType;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.WoodType;
@@ -131,10 +135,7 @@ public class WoodRegistry {
 	private Item chestBoatItem;
 	private ResourceKey<TerraformBoatType> boatType;
 	private boolean flammable = true;
-	public boolean netherWoodLike = false;
-	private boolean bambooLike = false;
-	private boolean azaleaLike = false;
-	private boolean spruceLike = false;
+	public WoodPropertyType woodPropertyType = WoodPropertyType.OVERWORLD;
 
 	public boolean preRegisteredPlanks = false;
 
@@ -371,34 +372,34 @@ public class WoodRegistry {
 			blockTags.tag(BlockTags.LOGS).addTag(logsTag);
 
 		if (planks != null) blockTags.tag(BlockTags.PLANKS).add(planks);
-		if (!availableLeaves.isEmpty() && !netherWoodLike) {
+		if (!availableLeaves.isEmpty() && !isNetherWood()) {
 			availableLeaves.forEach(s -> {
 				Block block = BuiltInRegistries.BLOCK.get(new ResourceLocation(name.getNamespace(), s));
 				blockTags.tag(BlockTags.LEAVES).add(block);
 			});
 		}
-		if (!availableLeaves.isEmpty() && netherWoodLike) {
+		if (!availableLeaves.isEmpty() && isNetherWood()) {
 			availableLeaves.forEach(s -> {
 				Block block = BuiltInRegistries.BLOCK.get(new ResourceLocation(name.getNamespace(), s));
 				blockTags.tag(BlockTags.WART_BLOCKS).add(block);
 			});
 		}
-		if (leaves != null && !netherWoodLike) blockTags.tag(BlockTags.LEAVES).add(leaves);
-		if (leaves != null && netherWoodLike) blockTags.tag(BlockTags.WART_BLOCKS).add(leaves);
-		if (!availableFloweryLeaves.isEmpty() && !netherWoodLike) {
+		if (leaves != null && !isNetherWood()) blockTags.tag(BlockTags.LEAVES).add(leaves);
+		if (leaves != null && isNetherWood()) blockTags.tag(BlockTags.WART_BLOCKS).add(leaves);
+		if (!availableFloweryLeaves.isEmpty() && !isNetherWood()) {
 			availableFloweryLeaves.forEach(s -> {
 				Block block = BuiltInRegistries.BLOCK.get(new ResourceLocation(name.getNamespace(), s));
 				blockTags.tag(BlockTags.LEAVES).add(block);
 			});
 		}
-		if (!availableFloweryLeaves.isEmpty() && netherWoodLike) {
+		if (!availableFloweryLeaves.isEmpty() && isNetherWood()) {
 			availableFloweryLeaves.forEach(s -> {
 				Block block = BuiltInRegistries.BLOCK.get(new ResourceLocation(name.getNamespace(), s));
 				blockTags.tag(BlockTags.WART_BLOCKS).add(block);
 			});
 		}
-		if (floweryLeaves != null && !netherWoodLike) blockTags.tag(BlockTags.LEAVES).add(floweryLeaves);
-		if (floweryLeaves != null && netherWoodLike) blockTags.tag(BlockTags.WART_BLOCKS).add(floweryLeaves);
+		if (floweryLeaves != null && !isNetherWood()) blockTags.tag(BlockTags.LEAVES).add(floweryLeaves);
+		if (floweryLeaves != null && isNetherWood()) blockTags.tag(BlockTags.WART_BLOCKS).add(floweryLeaves);
 		if (ladder != null) blockTags.tag(BlockTags.CLIMBABLE).add(ladder);
 		if (trapdoor != null) blockTags.tag(BlockTags.WOODEN_TRAPDOORS).add(trapdoor);
 		if (button != null) blockTags.tag(BlockTags.WOODEN_BUTTONS).add(button);
@@ -466,21 +467,21 @@ public class WoodRegistry {
 		TextureMapping logMapping = new TextureMapping()
 				.put(TextureSlot.SIDE, new ResourceLocation(name.getNamespace(),
 						String.format("wood_types/%s/%s", name.getPath(),
-								netherWoodLike ? "stem" : "log")))
+								isNetherWood() ? "stem" : "log")))
 				.put(TextureSlot.END, new ResourceLocation(name.getNamespace(),
 						String.format("wood_types/%s/%s_top", name.getPath(),
-								netherWoodLike ? "stem" : "log")));
+								isNetherWood() ? "stem" : "log")));
 		TextureMapping strippedLogMapping = new TextureMapping()
 				.put(TextureSlot.SIDE, new ResourceLocation(name.getNamespace(),
 						String.format("wood_types/%s/stripped_%s", name.getPath(),
-								netherWoodLike ? "stem" : "log")))
+								isNetherWood() ? "stem" : "log")))
 				.put(TextureSlot.END, new ResourceLocation(name.getNamespace(),
 						String.format("wood_types/%s/stripped_%s_top", name.getPath(),
-								netherWoodLike ? "stem" : "log")));
+								isNetherWood() ? "stem" : "log")));
 
 		TextureMapping leavesMapping = TextureMapping.cube(
 				new ResourceLocation(name.getNamespace(), String.format("wood_types/%s/%s", name.getPath(),
-						netherWoodLike ? "wart_block" : "leaves")));
+						isNetherWood() ? "wart_block" : "leaves")));
 
 		TextureMapping floweryLeavesMapping = TextureMapping.cube(
 				new ResourceLocation(name.getNamespace(), String.format("wood_types/%s/%s", name.getPath(),
@@ -488,15 +489,15 @@ public class WoodRegistry {
 
 		TextureMapping saplingMapping = TextureMapping.cross(
 				new ResourceLocation(name.getNamespace(), String.format("wood_types/%s/%s", name.getPath(),
-						netherWoodLike ? "fungi" : "sapling")));
+						isNetherWood() ? "fungi" : "sapling")));
 		TextureMapping saplingPlantMapping = TextureMapping.plant(new ResourceLocation(name.getNamespace(),
 				customPottedTexture ? String.format(
 						"wood_types/%s/potted_%s",
 						name.getPath(),
-						netherWoodLike ? "fungi" : "sapling") :
+						isNetherWood() ? "fungi" : "sapling") :
 						String.format("wood_types/%s/%s",
 								name.getPath(),
-								netherWoodLike ? "fungi" : "sapling")));
+								isNetherWood() ? "fungi" : "sapling")));
 
 		TextureMapping planksMapping = TextureMapping.cube(
 				new ResourceLocation(name.getNamespace(), String.format("wood_types/%s/planks", name.getPath())));
@@ -566,14 +567,14 @@ public class WoodRegistry {
 							new ResourceLocation(name.getNamespace(), String.format("wood_types/%s/%s", name.getPath(), s)));
 					Block block = BuiltInRegistries.BLOCK.get(new ResourceLocation(name.getNamespace(), s));
 					blockStateModelGenerator.createTrivialBlock(block, TexturedModel.createDefault(block1 -> leaves2Mapping,
-							netherWoodLike ? ModelTemplates.CUBE_ALL : ModelTemplates.LEAVES));
+							isNetherWood() ? ModelTemplates.CUBE_ALL : ModelTemplates.LEAVES));
 //				ResourceLocation resourceLocation = ModelLocationUtils.getModelLocation(block);
 //				blockStateModelGenerator.delegateItemModel(block, resourceLocation);
 				});
 			} else {
 				if (leaves != null) {
 					blockStateModelGenerator.createTrivialBlock(leaves, TexturedModel.createDefault(block -> leavesMapping,
-							netherWoodLike ? ModelTemplates.CUBE_ALL : ModelTemplates.LEAVES));
+							isNetherWood() ? ModelTemplates.CUBE_ALL : ModelTemplates.LEAVES));
 					ResourceLocation resourceLocation = ModelLocationUtils.getModelLocation(leaves);
 					blockStateModelGenerator.delegateItemModel(leaves, resourceLocation);
 				}
@@ -585,7 +586,7 @@ public class WoodRegistry {
 						new ResourceLocation(name.getNamespace(), String.format("wood_types/%s/%s", name.getPath(), s)));
 				Block block = BuiltInRegistries.BLOCK.get(new ResourceLocation(name.getNamespace(), s));
 				blockStateModelGenerator.createTrivialBlock(block, TexturedModel.createDefault(block1 -> leaves2Mapping,
-						netherWoodLike ? ModelTemplates.CUBE_ALL : ModelTemplates.LEAVES));
+						isNetherWood() ? ModelTemplates.CUBE_ALL : ModelTemplates.LEAVES));
 				ResourceLocation resourceLocation = ModelLocationUtils.getModelLocation(block);
 				blockStateModelGenerator.delegateItemModel(block, resourceLocation);
 			});
@@ -593,7 +594,7 @@ public class WoodRegistry {
 			if (floweryLeaves != null) {
 				blockStateModelGenerator.createTrivialBlock(leaves,
 						TexturedModel.createDefault(block -> floweryLeavesMapping,
-								netherWoodLike ? ModelTemplates.CUBE_ALL : ModelTemplates.LEAVES));
+								isNetherWood() ? ModelTemplates.CUBE_ALL : ModelTemplates.LEAVES));
 				ResourceLocation resourceLocation = ModelLocationUtils.getModelLocation(leaves);
 				blockStateModelGenerator.delegateItemModel(leaves, resourceLocation);
 			}
@@ -665,7 +666,7 @@ public class WoodRegistry {
 			availableSaplings.forEach(s -> {
 				TextureMapping sapling2Mapping = TextureMapping.cross(
 						new ResourceLocation(name.getNamespace(), String.format("wood_types/%s/%s", name.getPath(),
-								netherWoodLike ? "fungi" : "sapling")));
+								isNetherWood() ? "fungi" : "sapling")));
 				ResourceLocation resourceLocation = BlockModelGenerators.TintState.NOT_TINTED.getCross()
 						.create(sapling,
 								sapling2Mapping,
@@ -675,7 +676,7 @@ public class WoodRegistry {
 						TextureMapping.layer0(new ResourceLocation(
 								name.getNamespace(),
 								String.format("wood_types/%s/%s", name.getPath(),
-										netherWoodLike ? "fungi" : "sapling")
+										isNetherWood() ? "fungi" : "sapling")
 						)), blockStateModelGenerator.modelOutput);
 			});
 		} else {
@@ -689,7 +690,7 @@ public class WoodRegistry {
 						TextureMapping.layer0(new ResourceLocation(
 								name.getNamespace(),
 								String.format("wood_types/%s/%s", name.getPath(),
-										netherWoodLike ? "fungi" : "sapling")
+										isNetherWood() ? "fungi" : "sapling")
 						)), blockStateModelGenerator.modelOutput);
 			}
 		}
@@ -699,11 +700,11 @@ public class WoodRegistry {
 						customPottedTexture ? String.format(
 								"wood_types/%s/potted_%s",
 								name.getPath(),
-								netherWoodLike ? "fungi" : "sapling") :
+								isNetherWood() ? "fungi" : "sapling") :
 								String.format(
 										"wood_types/%s/%s",
 										name.getPath(),
-										netherWoodLike ? "fungi" : "sapling")));
+										isNetherWood() ? "fungi" : "sapling")));
 				ResourceLocation resourceLocation = BlockModelGenerators.TintState.NOT_TINTED.getCrossPot()
 						.create(pottedSapling,
 								sapling2PlantMapping,
@@ -752,7 +753,7 @@ public class WoodRegistry {
 					blockStateModelGenerator.modelOutput);
 			blockStateModelGenerator.blockStateOutput.accept(
 					BlockModelGenerators.createFenceGate(fenceGate, resourceLocation, resourceLocation2, resourceLocation3,
-							resourceLocation4, !bambooLike));
+							resourceLocation4, !isBambooWood()));
 			blockStateModelGenerator.delegateItemModel(fenceGate, resourceLocation2);
 		}
 		if (pressurePlate != null) {
@@ -959,14 +960,14 @@ public class WoodRegistry {
 	public void generateLang(FabricLanguageProvider.TranslationBuilder translationBuilder, Map<String, String> lang) {
 		String translatedName = getTranslation(name.getPath(), lang);
 
-		String logName = netherWoodLike ? getTranslation("stem", lang) : bambooLike ? getTranslation("block", lang) : getTranslation("log", lang);
-		String strippedLogName = netherWoodLike ? getTranslation("stripped_stem", lang) : bambooLike ? getTranslation("stripped_block", lang) : getTranslation("stripped_log", lang);
-		String woodName = netherWoodLike ? getTranslation("hyphae", lang) : getTranslation("wood", lang);
-		String strippedWoodName = netherWoodLike ? getTranslation("stripped_hyphae", lang) : getTranslation("stripped_wood", lang);
-		String saplingName = netherWoodLike ? getTranslation("fungus", lang) : getTranslation("sapling", lang);
-		String pottedSaplingName = netherWoodLike ? getTranslation("potted_fungus", lang) : getTranslation("potted_sapling", lang);
-		String foliageBlockName = netherWoodLike ? getTranslation("wart_block", lang) : getTranslation("leaves", lang);
-		String floweryFoliageBlockName = netherWoodLike ? getTranslation("flowering_wart_block", lang) : getTranslation("flowering_leaves", lang);
+		String logName = isNetherWood() ? getTranslation("stem", lang) : isBambooWood() ? getTranslation("block", lang) : getTranslation("log", lang);
+		String strippedLogName = isNetherWood() ? getTranslation("stripped_stem", lang) : isBambooWood() ? getTranslation("stripped_block", lang) : getTranslation("stripped_log", lang);
+		String woodName = isNetherWood() ? getTranslation("hyphae", lang) : getTranslation("wood", lang);
+		String strippedWoodName = isNetherWood() ? getTranslation("stripped_hyphae", lang) : getTranslation("stripped_wood", lang);
+		String saplingName = isNetherWood() ? getTranslation("fungus", lang) : getTranslation("sapling", lang);
+		String pottedSaplingName = isNetherWood() ? getTranslation("potted_fungus", lang) : getTranslation("potted_sapling", lang);
+		String foliageBlockName = isNetherWood() ? getTranslation("wart_block", lang) : getTranslation("leaves", lang);
+		String floweryFoliageBlockName = isNetherWood() ? getTranslation("flowering_wart_block", lang) : getTranslation("flowering_leaves", lang);
 
 		// Add translations for log, stripped log, wood, and stripped wood
 		if (log != null) translationBuilder.add(log, String.format(logName, translatedName));
@@ -981,7 +982,7 @@ public class WoodRegistry {
 		// Add translations for saplings and potted saplings
 		if (!availableSaplings.isEmpty()) {
 			availableSaplings.forEach(s -> {
-				String registryName = netherWoodLike ? s + "_fungus" : s + "_sapling";
+				String registryName = isNetherWood() ? s + "_fungus" : s + "_sapling";
 				Block block = BuiltInRegistries.BLOCK.get(new ResourceLocation(name.getNamespace(), registryName));
 				translationBuilder.add(block, String.format(saplingName, translatedName));
 			});
@@ -990,7 +991,7 @@ public class WoodRegistry {
 		}
 		if (!availablePottedSaplings.isEmpty()) {
 			availablePottedSaplings.forEach(s -> {
-				String registryName = "potted_" + (netherWoodLike ? s + "_fungus" : s + "_sapling");
+				String registryName = "potted_" + (isNetherWood() ? s + "_fungus" : s + "_sapling");
 				Block block = BuiltInRegistries.BLOCK.get(new ResourceLocation(name.getNamespace(), registryName));
 				translationBuilder.add(block, String.format(pottedSaplingName, translate(s, lang)));
 			});
@@ -1007,7 +1008,7 @@ public class WoodRegistry {
 		// Add translations for leaves and flowering leaves
 		if (!availableLeaves.isEmpty()) {
 			availableLeaves.forEach(s -> {
-				String registryName = netherWoodLike ? s + "_wart_block" : s + "_leaves";
+				String registryName = isNetherWood() ? s + "_wart_block" : s + "_leaves";
 				Block block = BuiltInRegistries.BLOCK.get(new ResourceLocation(name.getNamespace(), registryName));
 				translationBuilder.add(block, String.format(foliageBlockName, translate(s, lang)));
 			});
@@ -1016,7 +1017,7 @@ public class WoodRegistry {
 		}
 		if (!availableFloweryLeaves.isEmpty()) {
 			availableFloweryLeaves.forEach(s -> {
-				String registryName = netherWoodLike ? "flowery_" + s + "_wart_block" : "flowery_" + s + "_leaves";
+				String registryName = isNetherWood() ? "flowery_" + s + "_wart_block" : "flowery_" + s + "_leaves";
 				Block block = BuiltInRegistries.BLOCK.get(new ResourceLocation(name.getNamespace(), registryName));
 				translationBuilder.add(block, String.format(floweryFoliageBlockName, translate(s, lang)));
 			});
@@ -1064,12 +1065,12 @@ public class WoodRegistry {
 		if (strippedWood != null) lootTablesProvider.dropSelf(strippedWood);
 		if (planks != null) lootTablesProvider.dropSelf(planks);
 		if (mosaic != null) lootTablesProvider.dropSelf(mosaic);
-		if (!availableLeaves.isEmpty() && !netherWoodLike) {
+		if (!availableLeaves.isEmpty() && !isNetherWood()) {
 			availableLeaves.forEach(s -> {
-				String registryName = netherWoodLike ? s + "_wart_block" : s + "_leaves";
+				String registryName = isNetherWood() ? s + "_wart_block" : s + "_leaves";
 				Block block = BuiltInRegistries.BLOCK.get(new ResourceLocation(name.getNamespace(), registryName));
 
-				String saplingName = netherWoodLike ? s + "_fungus" : s + "_sapling";
+				String saplingName = isNetherWood() ? s + "_fungus" : s + "_sapling";
 				if (!availableSaplings.isEmpty() && availableSaplings.contains(saplingName)) {
 					Block sapling = BuiltInRegistries.BLOCK.get(
 							new ResourceLocation(name.getNamespace(), saplingName));
@@ -1085,7 +1086,7 @@ public class WoodRegistry {
 				}
 			});
 		} else {
-			if (leaves != null && !netherWoodLike) {
+			if (leaves != null && !isNetherWood()) {
 				if (sapling != null) lootTablesProvider.add(leaves,
 						block1 -> lootTablesProvider.createLeavesDrops(block1, sapling,
 								0.05F, 0.0625F,
@@ -1093,21 +1094,19 @@ public class WoodRegistry {
 				else lootTablesProvider.dropSelf(leaves);
 			}
 		}
-		if (!availableLeaves.isEmpty() && netherWoodLike) {
+		if (!availableLeaves.isEmpty()) {
 			availableLeaves.forEach(s -> {
-				String registryName = netherWoodLike ? s + "_wart_block" : s + "_leaves";
+				String registryName = isNetherWood() ? s + "_wart_block" : s + "_leaves";
 				Block block = BuiltInRegistries.BLOCK.get(new ResourceLocation(name.getNamespace(), registryName));
 				lootTablesProvider.dropSelf(block);
 			});
-		} else {
-			if (leaves != null && netherWoodLike) lootTablesProvider.dropSelf(leaves);
 		}
-		if (!availableFloweryLeaves.isEmpty() && !netherWoodLike) {
+		if (!availableFloweryLeaves.isEmpty()) {
 			availableFloweryLeaves.forEach(s -> {
-				String registryName = netherWoodLike ? "flowery_" + s + "_wart_block" : "flowery_" + s + "_leaves";
+				String registryName = isNetherWood() ? "flowery_" + s + "_wart_block" : "flowery_" + s + "_leaves";
 				Block block = BuiltInRegistries.BLOCK.get(new ResourceLocation(name.getNamespace(), registryName));
 
-				String saplingName = netherWoodLike ? s + "_fungus" : s + "_sapling";
+				String saplingName = isNetherWood() ? s + "_fungus" : s + "_sapling";
 				if (!availableSaplings.isEmpty() && availableSaplings.contains(saplingName)) {
 					Block sapling = BuiltInRegistries.BLOCK.get(new ResourceLocation(name.getNamespace(), saplingName));
 					lootTablesProvider.add(block, block1 -> lootTablesProvider.createLeavesDrops(block1, sapling, 0.05F, 0.0625F,
@@ -1121,23 +1120,13 @@ public class WoodRegistry {
 					else lootTablesProvider.dropSelf(block);
 				}
 			});
-		} else {
-			if (floweryLeaves != null && !netherWoodLike) {
-				if (sapling != null) lootTablesProvider.add(floweryLeaves,
-						block1 -> lootTablesProvider.createLeavesDrops(block1, sapling,
-								0.05F, 0.0625F,
-								0.083333336F, 0.1F));
-				else lootTablesProvider.dropSelf(floweryLeaves);
-			}
 		}
-		if (!availableFloweryLeaves.isEmpty() && netherWoodLike) {
+		if (!availableFloweryLeaves.isEmpty()) {
 			availableFloweryLeaves.forEach(s -> {
-				String registryName = netherWoodLike ? "flowery_" + s + "_wart_block" : "flowery_" + s + "_leaves";
+				String registryName = isNetherWood() ? "flowery_" + s + "_wart_block" : "flowery_" + s + "_leaves";
 				Block block = BuiltInRegistries.BLOCK.get(new ResourceLocation(name.getNamespace(), registryName));
 				lootTablesProvider.dropSelf(block);
 			});
-		} else {
-			if (floweryLeaves != null && netherWoodLike) lootTablesProvider.dropSelf(floweryLeaves);
 		}
 		if (ladder != null) lootTablesProvider.dropSelf(ladder);
 		if (trapdoor != null) lootTablesProvider.dropSelf(trapdoor);
@@ -1146,7 +1135,7 @@ public class WoodRegistry {
 		if (sapling != null) lootTablesProvider.dropSelf(sapling);
 		if (!availableSaplings.isEmpty()) {
 			availableSaplings.forEach(s -> {
-				String saplingName = netherWoodLike ? s + "_fungus" : s + "_sapling";
+				String saplingName = isNetherWood() ? s + "_fungus" : s + "_sapling";
 				Block block = BuiltInRegistries.BLOCK.get(new ResourceLocation(name.getNamespace(), saplingName));
 				lootTablesProvider.dropSelf(block);
 			});
@@ -1168,7 +1157,7 @@ public class WoodRegistry {
 
 	public void generateRecipes(Consumer<FinishedRecipe> exporter) {
 		if (planks != null && logsItemTag != null)
-			RecipeProvider.planksFromLogs(exporter, planks, logsItemTag, bambooLike ? 2 : 4);
+			RecipeProvider.planksFromLogs(exporter, planks, logsItemTag, isBambooWood() ? 2 : 4);
 		if (mosaic != null && slab != null)
 			RecipeProvider.mosaicBuilder(exporter, RecipeCategory.DECORATIONS, mosaic, slab);
 		if (wood != null && log != null) RecipeProvider.woodFromLogs(exporter, wood, log);
@@ -1209,6 +1198,18 @@ public class WoodRegistry {
 					.unlockedBy("has_book", has(Items.BOOK))
 					.save(exporter);
 
+	}
+
+	protected boolean isNetherWood() {
+		return woodPropertyType == WoodPropertyType.NETHER;
+	}
+
+	protected boolean isBambooWood() {
+		return woodPropertyType == WoodPropertyType.BAMBOO;
+	}
+
+	protected boolean isCherryWood() {
+		return woodPropertyType == WoodPropertyType.CHERRY;
 	}
 
 	public static class Builder {
@@ -1302,23 +1303,26 @@ public class WoodRegistry {
 		}
 
 		public Builder log() {
-			String logName = woodRegistry.netherWoodLike ? name.getPath() + "_stem" : woodRegistry.bambooLike ? this.name.getPath() + "_block" : this.name.getPath() + "_log";
-			Block block = woodRegistry.netherWoodLike ? Blocks.WARPED_STEM : woodRegistry.bambooLike ? Blocks.BAMBOO_BLOCK : Blocks.MANGROVE_LOG;
-			Block creativeTabBlock = woodRegistry.netherWoodLike ? Blocks.WARPED_BUTTON : woodRegistry.bambooLike ? Blocks.BAMBOO_BUTTON : Blocks.MANGROVE_BUTTON;
+			String logName = woodRegistry.isNetherWood() ? name.getPath() + "_stem" : woodRegistry.isBambooWood() ? this.name.getPath() + "_block"
+					: this.name.getPath() + "_log";
+			Block block = woodRegistry.isNetherWood() ? Blocks.WARPED_STEM : woodRegistry.isBambooWood() ? Blocks.BAMBOO_BLOCK :
+					woodRegistry.isCherryWood() ? Blocks.CHERRY_LOG : Blocks.DARK_OAK_LOG;
+			Block creativeTabBlock = woodRegistry.isNetherWood() ? Blocks.STONE : woodRegistry.isBambooWood() ? Blocks.CRIMSON_STEM : Blocks.BAMBOO_BLOCK;
 			BlockBehaviour.Properties blockSettings = FabricBlockSettings.copyOf(block);
-			woodRegistry.log = registryHelper.blocks().registerBlock(
-					new RotatedPillarBlock(blockSettings),
-					logName, creativeTabBlock,
-					CreativeModeTabs.BUILDING_BLOCKS
+			woodRegistry.log = registryHelper.blocks().registerBlockWood(
+					new RotatedPillarBlock(blockSettings), logName,
+					creativeTabBlock, CreativeModeTabs.BUILDING_BLOCKS
 			);
-			ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.NATURAL_BLOCKS).register(entries -> entries.addAfter(block, woodRegistry.log));
-			woodType = woodRegistry.netherWoodLike ? WoodType.CRIMSON : woodRegistry.bambooLike ? WoodType.BAMBOO : WoodType.ACACIA;
+			Block finalBlock = woodRegistry.isNetherWood() ? Blocks.OAK_LEAVES : Blocks.MUSHROOM_STEM;
+			ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.NATURAL_BLOCKS).register(entries -> entries.addBefore(finalBlock, woodRegistry.log));
+			woodType = woodRegistry.isNetherWood() ? WoodType.CRIMSON : woodRegistry.isBambooWood() ? WoodType.BAMBOO
+					: woodRegistry.isCherryWood() ? WoodType.CHERRY : WoodType.ACACIA;
 			return this;
 		}
 
 		public Builder wood() {
-			String woodName = woodRegistry.netherWoodLike ? name.getPath() + "_hyphae" : name.getPath() + "_wood";
-			Block block = woodRegistry.netherWoodLike ? Blocks.WARPED_HYPHAE : Blocks.DARK_OAK_WOOD;
+			String woodName = woodRegistry.isNetherWood() ? name.getPath() + "_hyphae" : name.getPath() + "_wood";
+			Block block = woodRegistry.isNetherWood() ? Blocks.WARPED_HYPHAE : woodRegistry.isCherryWood() ? Blocks.CHERRY_WOOD : Blocks.DARK_OAK_WOOD;
 			BlockBehaviour.Properties blockSettings = FabricBlockSettings.copyOf(block);
 			woodRegistry.wood = registryHelper.blocks().registerBlock(
 					new RotatedPillarBlock(blockSettings),
@@ -1329,8 +1333,10 @@ public class WoodRegistry {
 		}
 
 		public Builder strippedLog() {
-			String logName = woodRegistry.netherWoodLike ? name.getPath() + "_stem" : woodRegistry.bambooLike ? this.name.getPath() + "_block" : this.name.getPath() + "_log";
-			Block block = woodRegistry.netherWoodLike ? Blocks.STRIPPED_WARPED_STEM : woodRegistry.bambooLike ? Blocks.STRIPPED_BAMBOO_BLOCK : Blocks.STRIPPED_MANGROVE_LOG;
+			String logName = woodRegistry.isNetherWood() ? name.getPath() + "_stem" : woodRegistry.isBambooWood() ? this.name.getPath() + "_block"
+					: this.name.getPath() + "_log";
+			Block block = woodRegistry.isNetherWood() ? Blocks.STRIPPED_WARPED_STEM : woodRegistry.isBambooWood() ? Blocks.STRIPPED_BAMBOO_BLOCK
+					: Blocks.STRIPPED_DARK_OAK_LOG;
 			BlockBehaviour.Properties blockSettings = FabricBlockSettings.copyOf(block);
 			woodRegistry.strippedLog = registryHelper.blocks().registerBlock(
 					new RotatedPillarBlock(blockSettings),
@@ -1341,8 +1347,9 @@ public class WoodRegistry {
 		}
 
 		public Builder strippedWood() {
-			String woodName = woodRegistry.netherWoodLike ? name.getPath() + "_hyphae" : name.getPath() + "_wood";
-			Block block = woodRegistry.netherWoodLike ? Blocks.STRIPPED_WARPED_HYPHAE : Blocks.STRIPPED_DARK_OAK_WOOD;
+			String woodName = woodRegistry.isNetherWood() ? name.getPath() + "_hyphae" : name.getPath() + "_wood";
+			Block block = woodRegistry.isNetherWood() ? Blocks.STRIPPED_WARPED_HYPHAE : woodRegistry.isCherryWood() ? Blocks.STRIPPED_CHERRY_WOOD
+					: Blocks.STRIPPED_DARK_OAK_WOOD;
 			BlockBehaviour.Properties blockSettings = FabricBlockSettings.copyOf(block);
 			woodRegistry.strippedWood = registryHelper.blocks().registerBlock(
 					new RotatedPillarBlock(blockSettings),
@@ -1353,24 +1360,17 @@ public class WoodRegistry {
 		}
 
 		public Builder stairs() {
-			woodRegistry.stairs = registryHelper.blocks().registerBlock(
-					new StairBlock(
-							woodRegistry.planks.defaultBlockState(),
-							FabricBlockSettings.copy(woodRegistry.planks)
-					), name.getPath() + "_stairs",
-					CreativeModeTabs.BUILDING_BLOCKS, woodRegistry.planks != null ? woodRegistry.planks : woodRegistry.strippedWood
-			);
+			woodRegistry.stairs = registryHelper.blocks().registerBlock(new StairBlock(woodRegistry.planks.defaultBlockState(),
+				FabricBlockSettings.copy(woodRegistry.planks)
+			), name.getPath() + "_stairs", CreativeModeTabs.BUILDING_BLOCKS, woodRegistry.planks != null
+					? woodRegistry.planks : woodRegistry.strippedWood);
 			return this;
 		}
 
 		public Builder mosaicStairs() {
-			woodRegistry.mosaicStairs = registryHelper.blocks().registerBlock(
-					new StairBlock(
-							woodRegistry.mosaic.defaultBlockState(),
-							FabricBlockSettings.copy(woodRegistry.mosaic)
-					), name.getPath() + "_mosaic_stairs",
-					CreativeModeTabs.BUILDING_BLOCKS, woodRegistry.stairs
-			);
+			woodRegistry.stairs = registryHelper.blocks().registerBlock(new StairBlock(woodRegistry.mosaic.defaultBlockState(),
+					FabricBlockSettings.copy(woodRegistry.mosaic)
+			), name.getPath() + "_mosaic_stairs", CreativeModeTabs.BUILDING_BLOCKS, woodRegistry.stairs);
 			return this;
 		}
 
@@ -1393,7 +1393,7 @@ public class WoodRegistry {
 		}
 
 		public Builder planks() {
-			Block block = woodRegistry.netherWoodLike ? Blocks.WARPED_PLANKS : woodRegistry.bambooLike ? Blocks.BAMBOO_PLANKS : Blocks.MANGROVE_PLANKS;
+			Block block = woodRegistry.isNetherWood() ? Blocks.WARPED_PLANKS : woodRegistry.isBambooWood() ? Blocks.BAMBOO_PLANKS : Blocks.MANGROVE_PLANKS;
 			woodRegistry.planks = registryHelper.blocks().registerBlock(
 					new Block(FabricBlockSettings.copyOf(block)),
 					name.getPath() + "_planks",
@@ -1403,7 +1403,7 @@ public class WoodRegistry {
 		}
 
 		public Builder mosaic() {
-			Block block = woodRegistry.netherWoodLike ? Blocks.WARPED_PLANKS : woodRegistry.bambooLike ? Blocks.BAMBOO_PLANKS : Blocks.MANGROVE_PLANKS;
+			Block block = woodRegistry.isNetherWood() ? Blocks.WARPED_PLANKS : woodRegistry.isBambooWood() ? Blocks.BAMBOO_PLANKS : Blocks.MANGROVE_PLANKS;
 			woodRegistry.mosaic = registryHelper.blocks().registerBlock(
 					new Block(FabricBlockSettings.copyOf(block)),
 					name.getPath() + "_mosaic",
@@ -1413,11 +1413,11 @@ public class WoodRegistry {
 		}
 
 		public Builder leaves() {
-			String leavesName = woodRegistry.netherWoodLike ? "_wart_block" : "_leaves";
-			Block block = woodRegistry.netherWoodLike ? Blocks.WARPED_WART_BLOCK : Blocks.FLOWERING_AZALEA_LEAVES;
+			String leavesName = woodRegistry.isNetherWood() ? "_wart_block" : "_leaves";
+			Block block = woodRegistry.isNetherWood() ? Blocks.WARPED_WART_BLOCK : Blocks.FLOWERING_AZALEA_LEAVES;
 			BlockBehaviour.Properties properties = FabricBlockSettings.copyOf(block);
 			woodRegistry.leaves = registryHelper.blocks().registerBlock(
-					woodRegistry.netherWoodLike ? new Block(properties) : new LeavesBlock(properties),
+					woodRegistry.isNetherWood() ? new Block(properties) : new LeavesBlock(properties),
 					name.getPath() + leavesName,
 					CreativeModeTabs.NATURAL_BLOCKS, block
 			);
@@ -1425,11 +1425,11 @@ public class WoodRegistry {
 		}
 
 		public Builder leaves(String nameIn) {
-			String leavesName = woodRegistry.netherWoodLike ? "_wart_block" : "_leaves";
-			Block block = woodRegistry.netherWoodLike ? Blocks.WARPED_WART_BLOCK : Blocks.FLOWERING_AZALEA_LEAVES;
+			String leavesName = woodRegistry.isNetherWood() ? "_wart_block" : "_leaves";
+			Block block = woodRegistry.isNetherWood() ? Blocks.WARPED_WART_BLOCK : Blocks.FLOWERING_AZALEA_LEAVES;
 			BlockBehaviour.Properties properties = FabricBlockSettings.copyOf(block);
 			woodRegistry.leaves = registryHelper.blocks().registerBlock(
-					woodRegistry.netherWoodLike ? new Block(properties) : new LeavesBlock(properties),
+					woodRegistry.isNetherWood() ? new Block(properties) : new LeavesBlock(properties),
 					nameIn + leavesName,
 					CreativeModeTabs.NATURAL_BLOCKS, block
 			);
@@ -1437,12 +1437,12 @@ public class WoodRegistry {
 		}
 
 		public Builder leaves(String... nameIn) {
-			String leavesName = woodRegistry.netherWoodLike ? "_wart_block" : "_leaves";
-			Block block = woodRegistry.netherWoodLike ? Blocks.WARPED_WART_BLOCK : Blocks.FLOWERING_AZALEA_LEAVES;
+			String leavesName = woodRegistry.isNetherWood() ? "_wart_block" : "_leaves";
+			Block block = woodRegistry.isNetherWood() ? Blocks.WARPED_WART_BLOCK : Blocks.FLOWERING_AZALEA_LEAVES;
 			BlockBehaviour.Properties properties = FabricBlockSettings.copyOf(block);
 			for (String name : nameIn) {
 				woodRegistry.leaves = registryHelper.blocks().registerBlock(
-						woodRegistry.netherWoodLike ? new Block(properties) : new LeavesBlock(properties),
+						woodRegistry.isNetherWood() ? new Block(properties) : new LeavesBlock(properties),
 						name + leavesName,
 						CreativeModeTabs.NATURAL_BLOCKS, block
 				);
@@ -1452,11 +1452,11 @@ public class WoodRegistry {
 		}
 
 		public Builder coloredLeaves() {
-			String leavesName = woodRegistry.netherWoodLike ? "_wart_block" : "_leaves";
-			Block block = woodRegistry.netherWoodLike ? Blocks.WARPED_WART_BLOCK : Blocks.FLOWERING_AZALEA_LEAVES;
+			String leavesName = woodRegistry.isNetherWood() ? "_wart_block" : "_leaves";
+			Block block = woodRegistry.isNetherWood() ? Blocks.WARPED_WART_BLOCK : Blocks.FLOWERING_AZALEA_LEAVES;
 			BlockBehaviour.Properties properties = FabricBlockSettings.copyOf(block);
 			woodRegistry.leaves = registryHelper.blocks().registerBlock(
-					woodRegistry.netherWoodLike ? new Block(properties) : new LeavesBlock(properties),
+					woodRegistry.isNetherWood() ? new Block(properties) : new LeavesBlock(properties),
 					name.getPath() + leavesName,
 					CreativeModeTabs.NATURAL_BLOCKS, block
 			);
@@ -1465,11 +1465,11 @@ public class WoodRegistry {
 		}
 
 		public Builder coloredLeaves(int color) {
-			String leavesName = woodRegistry.netherWoodLike ? "_wart_block" : "_leaves";
-			Block block = woodRegistry.netherWoodLike ? Blocks.WARPED_WART_BLOCK : Blocks.FLOWERING_AZALEA_LEAVES;
+			String leavesName = woodRegistry.isNetherWood() ? "_wart_block" : "_leaves";
+			Block block = woodRegistry.isNetherWood() ? Blocks.WARPED_WART_BLOCK : Blocks.FLOWERING_AZALEA_LEAVES;
 			BlockBehaviour.Properties properties = FabricBlockSettings.copyOf(block);
 			woodRegistry.leaves = registryHelper.blocks().registerBlock(
-					woodRegistry.netherWoodLike ? new Block(properties) : new LeavesBlock(properties),
+					woodRegistry.isNetherWood() ? new Block(properties) : new LeavesBlock(properties),
 					name.getPath() + leavesName,
 					CreativeModeTabs.NATURAL_BLOCKS, block
 			);
@@ -1478,11 +1478,11 @@ public class WoodRegistry {
 		}
 
 		public Builder coloredLeaves(String nameIn) {
-			String leavesName = woodRegistry.netherWoodLike ? "_wart_block" : "_leaves";
-			Block block = woodRegistry.netherWoodLike ? Blocks.WARPED_WART_BLOCK : Blocks.FLOWERING_AZALEA_LEAVES;
+			String leavesName = woodRegistry.isNetherWood() ? "_wart_block" : "_leaves";
+			Block block = woodRegistry.isNetherWood() ? Blocks.WARPED_WART_BLOCK : Blocks.FLOWERING_AZALEA_LEAVES;
 			BlockBehaviour.Properties properties = FabricBlockSettings.copyOf(block);
 			woodRegistry.leaves = registryHelper.blocks().registerBlock(
-					woodRegistry.netherWoodLike ? new Block(properties) : new LeavesBlock(properties),
+					woodRegistry.isNetherWood() ? new Block(properties) : new LeavesBlock(properties),
 					nameIn + leavesName,
 					CreativeModeTabs.NATURAL_BLOCKS, block
 			);
@@ -1493,12 +1493,12 @@ public class WoodRegistry {
 		}
 
 		public Builder coloredLeaves(String... nameIn) {
-			String leavesName = woodRegistry.netherWoodLike ? "_wart_block" : "_leaves";
-			Block block = woodRegistry.netherWoodLike ? Blocks.WARPED_WART_BLOCK : Blocks.FLOWERING_AZALEA_LEAVES;
+			String leavesName = woodRegistry.isNetherWood() ? "_wart_block" : "_leaves";
+			Block block = woodRegistry.isNetherWood() ? Blocks.WARPED_WART_BLOCK : Blocks.FLOWERING_AZALEA_LEAVES;
 			BlockBehaviour.Properties properties = FabricBlockSettings.copyOf(block);
 			for (String name : nameIn) {
 				woodRegistry.leaves = registryHelper.blocks().registerBlock(
-						woodRegistry.netherWoodLike ? new Block(properties) : new LeavesBlock(properties),
+						woodRegistry.isNetherWood() ? new Block(properties) : new LeavesBlock(properties),
 						name + leavesName,
 						CreativeModeTabs.NATURAL_BLOCKS, block
 				);
@@ -1509,11 +1509,11 @@ public class WoodRegistry {
 		}
 
 		public Builder coloredLeaves(String nameIn, int color) {
-			String leavesName = woodRegistry.netherWoodLike ? "_wart_block" : "_leaves";
-			Block block = woodRegistry.netherWoodLike ? Blocks.WARPED_WART_BLOCK : Blocks.FLOWERING_AZALEA_LEAVES;
+			String leavesName = woodRegistry.isNetherWood() ? "_wart_block" : "_leaves";
+			Block block = woodRegistry.isNetherWood() ? Blocks.WARPED_WART_BLOCK : Blocks.FLOWERING_AZALEA_LEAVES;
 			BlockBehaviour.Properties properties = FabricBlockSettings.copyOf(block);
 			woodRegistry.leaves = registryHelper.blocks().registerBlock(
-					woodRegistry.netherWoodLike ? new Block(properties) : new LeavesBlock(properties),
+					woodRegistry.isNetherWood() ? new Block(properties) : new LeavesBlock(properties),
 					nameIn + leavesName,
 					CreativeModeTabs.NATURAL_BLOCKS, block
 			);
@@ -1522,12 +1522,12 @@ public class WoodRegistry {
 		}
 
 		public Builder coloredLeaves(int color, String... nameIn) {
-			String leavesName = woodRegistry.netherWoodLike ? "_wart_block" : "_leaves";
-			Block block = woodRegistry.netherWoodLike ? Blocks.WARPED_WART_BLOCK : Blocks.FLOWERING_AZALEA_LEAVES;
+			String leavesName = woodRegistry.isNetherWood() ? "_wart_block" : "_leaves";
+			Block block = woodRegistry.isNetherWood() ? Blocks.WARPED_WART_BLOCK : Blocks.FLOWERING_AZALEA_LEAVES;
 			BlockBehaviour.Properties properties = FabricBlockSettings.copyOf(block);
 			for (String name : nameIn) {
 				woodRegistry.leaves = registryHelper.blocks().registerBlock(
-						woodRegistry.netherWoodLike ? new Block(properties) : new LeavesBlock(properties),
+						woodRegistry.isNetherWood() ? new Block(properties) : new LeavesBlock(properties),
 						name + leavesName,
 						CreativeModeTabs.NATURAL_BLOCKS, block
 				);
@@ -1539,13 +1539,13 @@ public class WoodRegistry {
 		}
 
 		public Builder coloredLeaves(ColoredBlock... coloredLeavesBlocks) {
-			String leavesName = woodRegistry.netherWoodLike ? "_wart_block" : "_leaves";
-			Block block = woodRegistry.netherWoodLike ? Blocks.WARPED_WART_BLOCK : Blocks.FLOWERING_AZALEA_LEAVES;
-			CreativeModeTab creativeModeTab = woodRegistry.netherWoodLike ? CreativeModeTabs.BUILDING_BLOCKS : CreativeModeTabs.NATURAL_BLOCKS;
+			String leavesName = woodRegistry.isNetherWood() ? "_wart_block" : "_leaves";
+			Block block = woodRegistry.isNetherWood() ? Blocks.WARPED_WART_BLOCK : Blocks.FLOWERING_AZALEA_LEAVES;
+			CreativeModeTab creativeModeTab = woodRegistry.isNetherWood() ? CreativeModeTabs.BUILDING_BLOCKS : CreativeModeTabs.NATURAL_BLOCKS;
 			BlockBehaviour.Properties properties = FabricBlockSettings.copyOf(block);
 			for (ColoredBlock coloredLeavesBlock : coloredLeavesBlocks) {
 				woodRegistry.leaves = registryHelper.blocks().registerBlock(
-						woodRegistry.netherWoodLike ? new Block(properties) : new LeavesBlock(properties),
+						woodRegistry.isNetherWood() ? new Block(properties) : new LeavesBlock(properties),
 						coloredLeavesBlock.name + leavesName,
 						creativeModeTab, block
 				);
@@ -1557,7 +1557,7 @@ public class WoodRegistry {
 		}
 
 		public Builder sapling() {
-			if (!woodRegistry.netherWoodLike) woodRegistry.sapling = registryHelper.blocks().registerBlock(
+			if (!woodRegistry.isNetherWood()) woodRegistry.sapling = registryHelper.blocks().registerBlock(
 					new SaplingBaseBlock(woodRegistry.saplingGenerator),
 					name.getPath() + "_sapling",
 					CreativeModeTabs.NATURAL_BLOCKS, Blocks.MANGROVE_PROPAGULE
@@ -1571,7 +1571,7 @@ public class WoodRegistry {
 		}
 
 		public Builder pottedSapling() {
-			String name = "potted_" + this.name.getPath() + (!woodRegistry.netherWoodLike ?
+			String name = "potted_" + this.name.getPath() + (!woodRegistry.isNetherWood() ?
 					"_sapling" : "_fungus");
 			woodRegistry.pottedSapling = registryHelper.blocks().registerBlockWithoutItem(
 					name,
@@ -1581,7 +1581,7 @@ public class WoodRegistry {
 		}
 
 		public Builder sapling(String nameIn) {
-			if (!woodRegistry.netherWoodLike) {
+			if (!woodRegistry.isNetherWood()) {
 				woodRegistry.sapling = registryHelper.blocks().registerBlock(
 						new SaplingBaseBlock(woodRegistry.saplingGenerator),
 						nameIn + "_sapling",
@@ -1599,7 +1599,7 @@ public class WoodRegistry {
 		}
 
 		public Builder pottedSapling(String nameIn) {
-			String name = "potted_" + nameIn + (!woodRegistry.netherWoodLike ?
+			String name = "potted_" + nameIn + (!woodRegistry.isNetherWood() ?
 					"_sapling" : "_fungus");
 			woodRegistry.pottedSapling = registryHelper.blocks().registerBlockWithoutItem(
 					name,
@@ -1610,7 +1610,7 @@ public class WoodRegistry {
 
 		public Builder saplings(String... names) {
 			for (String saplingName : names) {
-				if (!woodRegistry.netherWoodLike) {
+				if (!woodRegistry.isNetherWood()) {
 					woodRegistry.sapling = registryHelper.blocks().registerBlock(
 							new SaplingBaseBlock(woodRegistry.saplingGenerator),
 							saplingName + "_sapling",
@@ -1630,7 +1630,7 @@ public class WoodRegistry {
 
 		public Builder pottedSapling(String... names) {
 			for (String saplingName : names) {
-				String name = "potted_" + saplingName + (!woodRegistry.netherWoodLike ?
+				String name = "potted_" + saplingName + (!woodRegistry.isNetherWood() ?
 						"_sapling" : "_fungus");
 				woodRegistry.pottedSapling = registryHelper.blocks().registerBlockWithoutItem(
 						name,
@@ -1640,7 +1640,7 @@ public class WoodRegistry {
 		}
 
 		public Builder fence() {
-			Block block = woodRegistry.netherWoodLike ? Blocks.WARPED_FENCE : woodRegistry.bambooLike ? Blocks.BAMBOO_FENCE : Blocks.DARK_OAK_FENCE;
+			Block block = woodRegistry.isNetherWood() ? Blocks.WARPED_FENCE : woodRegistry.isBambooWood() ? Blocks.BAMBOO_FENCE : Blocks.DARK_OAK_FENCE;
 			woodRegistry.fence = registryHelper.blocks().registerBlock(
 					new FenceBlock(BlockBehaviour.Properties.copy(block)),
 					name.getPath() + "_fence",
@@ -1651,7 +1651,7 @@ public class WoodRegistry {
 		}
 
 		public Builder fenceGate() {
-			Block block = woodRegistry.netherWoodLike ? Blocks.WARPED_FENCE_GATE : woodRegistry.bambooLike ? Blocks.BAMBOO_FENCE_GATE : Blocks.DARK_OAK_FENCE_GATE;
+			Block block = woodRegistry.isNetherWood() ? Blocks.WARPED_FENCE_GATE : woodRegistry.isBambooWood() ? Blocks.BAMBOO_FENCE_GATE : Blocks.DARK_OAK_FENCE_GATE;
 			woodRegistry.fenceGate = registryHelper.blocks().registerBlock(
 					new FenceGateBlock(BlockBehaviour.Properties.copy(block), woodType),
 					name.getPath() + "_fence_gate",
@@ -1680,9 +1680,9 @@ public class WoodRegistry {
 		}
 
 		public Builder door() {
-			Block block = woodRegistry.netherWoodLike ? Blocks.WARPED_DOOR : woodRegistry.bambooLike ? Blocks.BAMBOO_DOOR : Blocks.DARK_OAK_DOOR;
+			Block block = woodRegistry.isNetherWood() ? Blocks.WARPED_DOOR : woodRegistry.isBambooWood() ? Blocks.BAMBOO_DOOR : Blocks.DARK_OAK_DOOR;
 			woodRegistry.door = registryHelper.blocks().registerDoubleBlock(
-					new DoorBaseBlock(BlockBehaviour.Properties.copy(block), woodType.setType()),
+					new DoorBlock(BlockBehaviour.Properties.copy(block), woodType.setType()),
 					name.getPath() + "_door",
 					CreativeModeTabs.BUILDING_BLOCKS, woodRegistry.fenceGate
 			);
@@ -1690,7 +1690,7 @@ public class WoodRegistry {
 		}
 
 		public Builder trapdoor() {
-			Block block = woodRegistry.netherWoodLike ? Blocks.WARPED_TRAPDOOR : woodRegistry.bambooLike ? Blocks.BAMBOO_TRAPDOOR : Blocks.MANGROVE_TRAPDOOR;
+			Block block = woodRegistry.isNetherWood() ? Blocks.WARPED_TRAPDOOR : woodRegistry.isBambooWood() ? Blocks.BAMBOO_TRAPDOOR : Blocks.MANGROVE_TRAPDOOR;
 			woodRegistry.trapdoor = registryHelper.blocks().registerBlock(
 					new TrapDoorBlock(BlockBehaviour.Properties.copy(block), woodType.setType()),
 					name.getPath() + "_trapdoor",
@@ -1700,7 +1700,7 @@ public class WoodRegistry {
 		}
 
 		public Builder pressurePlate(PressurePlateBlock.Sensitivity type) {
-			Block block = woodRegistry.netherWoodLike ? Blocks.WARPED_PRESSURE_PLATE : woodRegistry.bambooLike ? Blocks.BAMBOO_PRESSURE_PLATE : Blocks.DARK_OAK_PRESSURE_PLATE;
+			Block block = woodRegistry.isNetherWood() ? Blocks.WARPED_PRESSURE_PLATE : woodRegistry.isBambooWood() ? Blocks.BAMBOO_PRESSURE_PLATE : Blocks.DARK_OAK_PRESSURE_PLATE;
 			woodRegistry.pressurePlate = registryHelper.blocks().registerBlock(
 					new PressurePlateBlock(type, BlockBehaviour.Properties.copy(block), woodType.setType()),
 					name.getPath() + "_pressure_plate",
@@ -1710,17 +1710,15 @@ public class WoodRegistry {
 		}
 
 		public Builder button() {
-			SoundType soundGroup = woodRegistry.netherWoodLike ? SoundType.NETHER_WOOD : woodRegistry.bambooLike
-					? SoundType.BAMBOO_WOOD : SoundType.WOOD;
 			woodRegistry.button = registryHelper.blocks().registerBlock(
-					woodenButton(soundGroup, woodType), name.getPath() + "_button",
+					woodenButton(woodType.setType()), name.getPath() + "_button",
 					CreativeModeTabs.BUILDING_BLOCKS, woodRegistry.pressurePlate
 			);
 			return this;
 		}
 
-		private static ButtonBlock woodenButton(SoundType soundGroup, WoodType woodType) {
-			return new ButtonBlock(BlockBehaviour.Properties.of(Material.DEPRECATED).noCollission().strength(0.5F).sound(soundGroup), woodType.setType(), 30, true);
+		private static ButtonBlock woodenButton(BlockSetType blockSetType) {
+			return new ButtonBlock(BlockBehaviour.Properties.of(Material.DEPRECATED).noCollission().strength(0.5F), blockSetType, 30, true);
 		}
 
 		public Builder ladder() {
@@ -1743,11 +1741,10 @@ public class WoodRegistry {
 		}
 
 		public Builder sign() {
-			Item baseHangingSignItem = this.woodRegistry.netherWoodLike ? Items.WARPED_HANGING_SIGN :
-					this.woodRegistry.bambooLike ? Items.BAMBOO_HANGING_SIGN : Items.MANGROVE_HANGING_SIGN;
-
-			Block baseSignBlock = this.woodRegistry.netherWoodLike ? Blocks.WARPED_SIGN :
-					this.woodRegistry.bambooLike ? Blocks.BAMBOO_SIGN : Blocks.MANGROVE_SIGN;
+			Item baseHangingSignItem = this.woodRegistry.isNetherWood() ? Items.WARPED_HANGING_SIGN :
+					this.woodRegistry.isBambooWood() ? Items.BAMBOO_HANGING_SIGN : Items.MANGROVE_HANGING_SIGN;
+			Block baseSignBlock = this.woodRegistry.isNetherWood() ? Blocks.WARPED_SIGN :
+					this.woodRegistry.isBambooWood() ? Blocks.BAMBOO_SIGN : Blocks.MANGROVE_SIGN;
 			ResourceLocation signTexture = new ResourceLocation(this.name.getNamespace(),
 					"wood_types/" + this.name.getPath() + "/sign");
 			this.woodRegistry.sign = this.registryHelper.blocks().registerBlockWithoutItem(
@@ -1771,8 +1768,8 @@ public class WoodRegistry {
 		}
 
 		public Builder hangingSign() {
-			Block baseHangingSignBlock = this.woodRegistry.netherWoodLike ? Blocks.WARPED_HANGING_SIGN :
-					this.woodRegistry.bambooLike ? Blocks.BAMBOO_HANGING_SIGN : Blocks.MANGROVE_HANGING_SIGN;
+			Block baseHangingSignBlock = this.woodRegistry.isNetherWood() ? Blocks.WARPED_HANGING_SIGN :
+					this.woodRegistry.isBambooWood() ? Blocks.BAMBOO_HANGING_SIGN : Blocks.MANGROVE_HANGING_SIGN;
 			ResourceLocation hangingSignTexture = new ResourceLocation(this.name.getNamespace(),
 					"wood_types/" + this.name.getPath() + "/hanging_sign");
 			ResourceLocation hangingSignGuiTexture = new ResourceLocation(this.name.getNamespace(),
@@ -1798,7 +1795,7 @@ public class WoodRegistry {
 		}
 
 		public Builder boat() {
-			String name = woodRegistry.bambooLike ? "_raft" : "_boat";
+			String name = woodRegistry.isBambooWood() ? "_raft" : "_boat";
 			woodRegistry.boatType = TerraformBoatTypeRegistry.createKey(Utils.appendToPath(this.name, name));
 
 			woodRegistry.boatItem = TerraformBoatItemHelper.registerBoatItem(Utils.appendToPath(this.name, name),
@@ -1809,13 +1806,13 @@ public class WoodRegistry {
 					.item(woodRegistry.boatItem)
 					.chestItem(woodRegistry.chestBoatItem)
 					.planks(woodRegistry.planks.asItem());
-			if (this.woodRegistry.bambooLike) builder.raft();
+			if (this.woodRegistry.isBambooWood()) builder.raft();
 			Registry.register(TerraformBoatTypeRegistry.INSTANCE, Utils.appendToPath(this.name, name), builder.build());
 			if (FabricLoader.getInstance().getEnvironmentType().equals(EnvType.CLIENT)) {
-				TerraformBoatClientHelper.registerModelLayers(Utils.appendToPath(this.name, name), woodRegistry.bambooLike);
+				TerraformBoatClientHelper.registerModelLayers(Utils.appendToPath(this.name, name), woodRegistry.isBambooWood());
 			}
-			Item baseBoatItem = this.woodRegistry.netherWoodLike ? Items.BAMBOO_CHEST_RAFT :
-					this.woodRegistry.bambooLike ? Items.BAMBOO_CHEST_RAFT : Items.MANGROVE_CHEST_BOAT;
+			Item baseBoatItem = this.woodRegistry.isNetherWood() ? Items.BAMBOO_CHEST_RAFT :
+					this.woodRegistry.isBambooWood() ? Items.BAMBOO_CHEST_RAFT : Items.MANGROVE_CHEST_BOAT;
 			ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.TOOLS_AND_UTILITIES).register(entries -> {
 				entries.addAfter(baseBoatItem, woodRegistry.boatItem);
 				entries.addAfter(woodRegistry.boatItem, woodRegistry.chestBoatItem);
@@ -1828,23 +1825,14 @@ public class WoodRegistry {
 			return this;
 		}
 
-		public Builder mushroomLike() {
-			woodRegistry.netherWoodLike = true;
-			return this;
-		}
-
-		public Builder azaleaLike() {
-			woodRegistry.azaleaLike = true;
-			return this;
-		}
-
-		public Builder spruceLike() {
-			woodRegistry.spruceLike = true;
-			return this;
-		}
-
-		public Builder bambooLike() {
-			woodRegistry.bambooLike = true;
+		public Builder woodPropertyType(WoodPropertyType woodPropertyType) {
+			woodRegistry.woodPropertyType = woodPropertyType;
+			if (woodType == null) switch (woodPropertyType) {
+				case OVERWORLD, AZALEA -> woodType = WoodType.OAK;
+				case NETHER -> woodType = WoodType.CRIMSON;
+				case CHERRY -> woodType = WoodType.CHERRY;
+				case BAMBOO -> woodType = WoodType.BAMBOO;
+			}
 			return this;
 		}
 
@@ -1852,37 +1840,50 @@ public class WoodRegistry {
 			return this.log().wood().strippedLog().strippedWood();
 		}
 
-		public Builder defaultBlocks() {
-			return this.defaultLogsAndWoods().planks().leaves()
-					.sapling().pottedSapling().stairs().slab()
+		public Builder defaultBlocks(WoodPropertyType woodPropertyType) {
+			return this.woodPropertyType(woodPropertyType).defaultLogsAndWoods()
+					.planks().leaves().sapling().pottedSapling().stairs().slab()
 					.fence().fenceGate().door().trapdoor()
 					.pressurePlate(PressurePlateBlock.Sensitivity.EVERYTHING)
 					.button().sign().hangingSign().boat();
 		}
 
+
+
+		public Builder defaultBlocks() {
+			return this.defaultBlocks(WoodPropertyType.OVERWORLD);
+		}
+
 		public Builder defaultExtras() {
-			return this.bookshelf().chiseledBookshelf()
-					.beehive().ladder();
+			return this.bookshelf().chiseledBookshelf().beehive().ladder();
+		}
+
+		public Builder defaultBlocksColoredLeaves(WoodPropertyType woodPropertyType) {
+			return this.woodPropertyType(woodPropertyType).defaultLogsAndWoods()
+					.planks().coloredLeaves().sapling().pottedSapling().stairs()
+					.slab().fence().fenceGate().door().trapdoor()
+					.pressurePlate(PressurePlateBlock.Sensitivity.EVERYTHING)
+					.button().sign().hangingSign().boat();
 		}
 
 		public Builder defaultBlocksColoredLeaves() {
-			return this.defaultLogsAndWoods().planks().coloredLeaves()
-					.sapling().pottedSapling().stairs().slab()
+			return this.defaultBlocksColoredLeaves(WoodPropertyType.OVERWORLD);
+		}
+
+		public Builder defaultBlocksColoredLeaves(WoodPropertyType woodPropertyType, int color) {
+			return this.woodPropertyType(woodPropertyType).defaultLogsAndWoods().planks()
+					.coloredLeaves(color).sapling().pottedSapling().stairs().slab()
 					.fence().fenceGate().door().trapdoor()
 					.pressurePlate(PressurePlateBlock.Sensitivity.EVERYTHING)
 					.button().sign().hangingSign().boat();
 		}
 
 		public Builder defaultBlocksColoredLeaves(int color) {
-			return this.defaultLogsAndWoods().planks().coloredLeaves(color)
-					.sapling().pottedSapling().stairs().slab()
-					.fence().fenceGate().door().trapdoor()
-					.pressurePlate(PressurePlateBlock.Sensitivity.EVERYTHING)
-					.button().sign().hangingSign().boat();
+			return this.defaultBlocksColoredLeaves(WoodPropertyType.OVERWORLD, color);
 		}
 
 		public WoodRegistry build() {
-			if (woodRegistry.leaves != null && !woodRegistry.netherWoodLike)
+			if (woodRegistry.leaves != null && !woodRegistry.isNetherWood())
 				ComposterBlock.COMPOSTABLES.put(woodRegistry.leaves, 0.3F);
 			if (woodRegistry.flammable) {
 				// flammable blocks
@@ -1948,6 +1949,14 @@ public class WoodRegistry {
 
 			return woodRegistry;
 		}
+	}
+
+	public enum WoodPropertyType {
+		OVERWORLD,
+		NETHER,
+		CHERRY,
+		BAMBOO,
+		AZALEA
 	}
 
 	public record ColoredBlock(String name, int color) {
