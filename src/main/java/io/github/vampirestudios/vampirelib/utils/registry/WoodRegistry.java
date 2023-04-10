@@ -1848,8 +1848,6 @@ public class WoodRegistry {
 					.button().sign().hangingSign().boat();
 		}
 
-
-
 		public Builder defaultBlocks() {
 			return this.defaultBlocks(WoodPropertyType.OVERWORLD);
 		}

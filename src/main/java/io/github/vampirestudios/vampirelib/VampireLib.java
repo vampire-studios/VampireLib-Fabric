@@ -26,6 +26,7 @@ import io.github.vampirestudios.vampirelib.api.debug_renderers.DebugFeatureSync;
 import io.github.vampirestudios.vampirelib.utils.BlockChiseler;
 import io.github.vampirestudios.vampirelib.utils.Rands;
 import io.github.vampirestudios.vampirelib.utils.registry.WoodRegistry;
+import io.github.vampirestudios.vampirelib.utils.registry.WoodRegistry.WoodPropertyType;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
@@ -47,19 +48,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.Material;
 
-import net.fabricmc.fabric.api.event.player.UseBlockCallback;
-import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
-import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
-import net.fabricmc.loader.api.FabricLoader;
-
-import io.github.vampirestudios.vampirelib.api.BasicModClass;
-import io.github.vampirestudios.vampirelib.api.ConvertibleBlockPair;
-import io.github.vampirestudios.vampirelib.api.debug_renderers.DebugFeatureCommands;
-import io.github.vampirestudios.vampirelib.api.debug_renderers.DebugFeatureSync;
-import io.github.vampirestudios.vampirelib.utils.Rands;
-import io.github.vampirestudios.vampirelib.utils.BlockChiseler;
-import io.github.vampirestudios.vampirelib.utils.registry.WoodRegistry;
-import io.github.vampirestudios.vampirelib.utils.registry.WoodRegistry.WoodPropertyType;
+import java.util.ArrayList;
+import java.util.List;
 
 public class VampireLib extends BasicModClass {
 	public static final VampireLib INSTANCE = new VampireLib();
@@ -119,7 +109,7 @@ public class VampireLib extends BasicModClass {
 	private static final Greetings GREETING_B = new Greetings("Howdy!", 2);
 
 	public VampireLib() {
-		super("vampirelib", "VampireLib", "5.5.0+build.1");
+		super("vampirelib", "VampireLib", "6.4.0+build.1-23w14a");
 	}
 
 	@Override

@@ -147,7 +147,7 @@ modrinth {
 	versionNumber = project.version
 	versionType = this.getVersionType()
 	uploadFile = tasks.remapJar
-	gameVersions = ["1.19.4-rc3"/*, "1.19.4"*/]
+	gameVersions = ["23w14a"]
 	loaders = ["fabric"]
 	dependencies {
 		required.project("fabric-api")

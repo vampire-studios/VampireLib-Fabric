@@ -60,14 +60,14 @@ public abstract class WoodMaterialRegistry implements StringRepresentable {
 	}
 
 	public static WoodMaterial registerModded(WoodRegistry woodRegistry, WoodType woodType) {
-		WoodMaterial woodMaterial = new WoodMaterial(woodRegistry.name(), woodType, woodRegistry.leaves(), woodRegistry.log(), woodRegistry.netherWoodLike);
+		WoodMaterial woodMaterial = new WoodMaterial(woodRegistry.name(), woodType, woodRegistry.leaves(), woodRegistry.log(), woodRegistry.isNetherWood());
 		registerVanilla(woodMaterial);
 		listeners.forEach(listener -> listener.onModdedWoodTypeRegistered(woodMaterial));
 		return woodMaterial;
 	}
 
 	public static WoodMaterial registerModded(WoodRegistry woodRegistry, Block leaves, WoodType woodType) {
-		WoodMaterial woodMaterial = new WoodMaterial(woodRegistry.name(), woodType, leaves, woodRegistry.log(), woodRegistry.netherWoodLike);
+		WoodMaterial woodMaterial = new WoodMaterial(woodRegistry.name(), woodType, leaves, woodRegistry.log(), woodRegistry.isNetherWood());
 		registerVanilla(woodMaterial);
 		listeners.forEach(listener -> listener.onModdedWoodTypeRegistered(woodMaterial));
 		return woodMaterial;
