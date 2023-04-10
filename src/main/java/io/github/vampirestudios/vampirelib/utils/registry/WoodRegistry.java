@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022-2023 OliviaTheVampire
+ * Copyright (c) 2023 OliviaTheVampire
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -17,19 +17,6 @@
 
 package io.github.vampirestudios.vampirelib.utils.registry;
 
-import static net.minecraft.data.models.BlockModelGenerators.createDoor;
-import static net.minecraft.data.models.BlockModelGenerators.createEmptyOrFullDispatch;
-import static net.minecraft.data.models.BlockModelGenerators.createHorizontalFacingDispatch;
-import static net.minecraft.data.models.BlockModelGenerators.createSimpleBlock;
-import static net.minecraft.data.models.BlockModelGenerators.createTrapdoor;
-import static net.minecraft.data.recipes.RecipeProvider.has;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.function.Consumer;
-
 import com.terraformersmc.terraform.boat.api.TerraformBoatType;
 import com.terraformersmc.terraform.boat.api.TerraformBoatTypeRegistry;
 import com.terraformersmc.terraform.boat.api.client.TerraformBoatClientHelper;
@@ -38,68 +25,16 @@ import com.terraformersmc.terraform.sign.block.TerraformHangingSignBlock;
 import com.terraformersmc.terraform.sign.block.TerraformSignBlock;
 import com.terraformersmc.terraform.sign.block.TerraformWallHangingSignBlock;
 import com.terraformersmc.terraform.sign.block.TerraformWallSignBlock;
-import org.joml.Vector3d;
-
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.core.Direction;
-import net.minecraft.core.Registry;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.data.models.BlockModelGenerators;
-import net.minecraft.data.models.blockstates.Condition;
-import net.minecraft.data.models.blockstates.MultiPartGenerator;
-import net.minecraft.data.models.blockstates.MultiVariantGenerator;
-import net.minecraft.data.models.blockstates.Variant;
-import net.minecraft.data.models.blockstates.VariantProperties;
-import net.minecraft.data.models.model.ModelLocationUtils;
-import net.minecraft.data.models.model.ModelTemplate;
-import net.minecraft.data.models.model.ModelTemplates;
-import net.minecraft.data.models.model.TextureMapping;
-import net.minecraft.data.models.model.TextureSlot;
-import net.minecraft.data.models.model.TexturedModel;
-import net.minecraft.data.recipes.FinishedRecipe;
-import net.minecraft.data.recipes.RecipeCategory;
-import net.minecraft.data.recipes.RecipeProvider;
-import net.minecraft.data.recipes.ShapedRecipeBuilder;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.ItemTags;
-import net.minecraft.tags.TagKey;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.CreativeModeTabs;
-import net.minecraft.world.item.HangingSignItem;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.SignItem;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.level.block.BeehiveBlock;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.ButtonBlock;
-import net.minecraft.world.level.block.ChiseledBookShelfBlock;
-import net.minecraft.world.level.block.ComposterBlock;
-import net.minecraft.world.level.block.DoorBlock;
-import net.minecraft.world.level.block.FenceBlock;
-import net.minecraft.world.level.block.FenceGateBlock;
-import net.minecraft.world.level.block.LeavesBlock;
-import net.minecraft.world.level.block.PressurePlateBlock;
-import net.minecraft.world.level.block.RotatedPillarBlock;
-import net.minecraft.world.level.block.SlabBlock;
-import net.minecraft.world.level.block.SoundType;
-import net.minecraft.world.level.block.StairBlock;
-import net.minecraft.world.level.block.TrapDoorBlock;
-import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.grower.AbstractTreeGrower;
-import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
-import net.minecraft.world.level.material.Material;
-import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
-
+import io.github.vampirestudios.vampirelib.api.datagen.CustomTagProviders;
+import io.github.vampirestudios.vampirelib.api.datagen.ElementBuilder;
+import io.github.vampirestudios.vampirelib.api.datagen.FaceBuilder;
+import io.github.vampirestudios.vampirelib.api.datagen.VBlockLootTableProvider;
+import io.github.vampirestudios.vampirelib.api.datagen.builder.BlockModelBuilder;
+import io.github.vampirestudios.vampirelib.blocks.*;
+import io.github.vampirestudios.vampirelib.blocks.entity.IBlockEntityType;
+import io.github.vampirestudios.vampirelib.client.VampireLibClient;
+import io.github.vampirestudios.vampirelib.utils.Utils;
+import io.github.vampirestudios.vampirelib.utils.WoodMaterial;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
@@ -110,26 +45,52 @@ import net.fabricmc.fabric.api.registry.FlammableBlockRegistry;
 import net.fabricmc.fabric.api.registry.FuelRegistry;
 import net.fabricmc.fabric.api.registry.StrippableBlockRegistry;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.core.Direction;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.data.models.BlockModelGenerators;
+import net.minecraft.data.models.blockstates.*;
+import net.minecraft.data.models.model.*;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeCategory;
+import net.minecraft.data.recipes.RecipeProvider;
+import net.minecraft.data.recipes.ShapedRecipeBuilder;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.*;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.grower.AbstractTreeGrower;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.WoodType;
+import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
+import org.joml.Vector3d;
 
-import io.github.vampirestudios.vampirelib.api.datagen.CustomTagProviders;
-import io.github.vampirestudios.vampirelib.api.datagen.ElementBuilder;
-import io.github.vampirestudios.vampirelib.api.datagen.FaceBuilder;
-import io.github.vampirestudios.vampirelib.api.datagen.VBlockLootTableProvider;
-import io.github.vampirestudios.vampirelib.api.datagen.builder.BlockModelBuilder;
-import io.github.vampirestudios.vampirelib.blocks.CustomLadderBlock;
-import io.github.vampirestudios.vampirelib.blocks.FlowerPotBaseBlock;
-import io.github.vampirestudios.vampirelib.blocks.FungusBaseBlock;
-import io.github.vampirestudios.vampirelib.blocks.SaplingBaseBlock;
-import io.github.vampirestudios.vampirelib.blocks.entity.IBlockEntityType;
-import io.github.vampirestudios.vampirelib.client.VampireLibClient;
-import io.github.vampirestudios.vampirelib.utils.Utils;
-import io.github.vampirestudios.vampirelib.utils.WoodType;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Consumer;
+
+import static net.minecraft.data.models.BlockModelGenerators.*;
+import static net.minecraft.data.recipes.RecipeProvider.has;
 
 public class WoodRegistry {
-	private final ResourceLocation name;
-	private final AbstractTreeGrower saplingGenerator;
-	private final ResourceKey<ConfiguredFeature<?, ?>> fungusGenerator;
-	private final Block baseFungusBlock;
+	private ResourceLocation name;
+	private AbstractTreeGrower saplingGenerator;
+	private ResourceKey<ConfiguredFeature<?, ?>> fungusGenerator;
+	private Block baseFungusBlock;
+
 	private final List<String> availableLeaves = new ArrayList<>();
 	private final List<String> availableFloweryLeaves = new ArrayList<>();
 	private final List<String> availableSaplings = new ArrayList<>();
@@ -181,6 +142,8 @@ public class WoodRegistry {
 
 	public boolean preRegisteredLeaves = false;
 
+	public WoodRegistry() {}
+
 	private WoodRegistry(ResourceLocation name) {
 		this(name, null, null);
 	}
@@ -194,40 +157,60 @@ public class WoodRegistry {
 	}
 
 	private WoodRegistry(ResourceLocation name, AbstractTreeGrower saplingGenerator, ResourceKey<ConfiguredFeature<?, ?>> fungusGenerator, Block baseFungusBlock) {
-		this.name = name;
-		this.saplingGenerator = saplingGenerator;
-		this.fungusGenerator = fungusGenerator;
-		this.baseFungusBlock = baseFungusBlock;
+		setName(name);
+		setSaplingGenerator(saplingGenerator);
+		setFungusGenerator(fungusGenerator);
+		setBaseFungusBlock(baseFungusBlock);
 		this.logsTag = TagKey.create(Registries.BLOCK, Utils.appendToPath(name, "_logs"));
 		this.logsItemTag = TagKey.create(Registries.ITEM, Utils.appendToPath(name, "_logs"));
 	}
 
+	private void setSaplingGenerator(AbstractTreeGrower abstractTreeGrower) {
+		this.saplingGenerator = abstractTreeGrower;
+	}
+
+	private void setName(ResourceLocation name) {
+		this.name = name;
+	}
+
+	private void setFungusGenerator(ResourceKey<ConfiguredFeature<?, ?>> fungusGenerator) {
+		this.fungusGenerator = fungusGenerator;
+	}
+
+	private void setBaseFungusBlock(Block baseFungusBlock) {
+		this.baseFungusBlock = baseFungusBlock;
+	}
+
+	public static Builder create() {
+		return new WoodRegistry.Builder();
+	}
+
 	public static WoodRegistry.Builder of(ResourceLocation name) {
-		return new WoodRegistry.Builder().of(name);
+		return create().of(name);
 	}
 
 	public static WoodRegistry.Builder of(ResourceLocation name, Block planks) {
-		return new WoodRegistry.Builder().of(name, planks);
+		return create().of(name, planks);
 	}
 
 	public static WoodRegistry.Builder of(ResourceLocation name, AbstractTreeGrower saplingGenerator) {
-		return new WoodRegistry.Builder().of(name, saplingGenerator);
+		return create().of(name, saplingGenerator);
 	}
 
 	public static WoodRegistry.Builder of(ResourceLocation name, ResourceKey<ConfiguredFeature<?, ?>> fungusGenerator, Block baseFungusBlock) {
-		return new WoodRegistry.Builder().of(name, fungusGenerator, baseFungusBlock);
+		return create().of(name, fungusGenerator, baseFungusBlock);
 	}
 
-	public static WoodRegistry.Builder of(WoodType woodType) {
-		return new WoodRegistry.Builder().of(woodType);
+	public static WoodRegistry.Builder of(WoodMaterial woodMaterial) {
+		return create().of(woodMaterial);
 	}
 
-	public static WoodRegistry.Builder of(WoodType woodType, AbstractTreeGrower saplingGenerator) {
-		return new WoodRegistry.Builder().of(woodType, saplingGenerator);
+	public static WoodRegistry.Builder of(WoodMaterial woodMaterial, AbstractTreeGrower saplingGenerator) {
+		return create().of(woodMaterial, saplingGenerator);
 	}
 
-	public static WoodRegistry.Builder of(WoodType woodType, ResourceKey<ConfiguredFeature<?, ?>> fungusGenerator, Block baseFungusBlock) {
-		return new WoodRegistry.Builder().of(woodType, fungusGenerator, baseFungusBlock);
+	public static WoodRegistry.Builder of(WoodMaterial woodMaterial, ResourceKey<ConfiguredFeature<?, ?>> fungusGenerator, Block baseFungusBlock) {
+		return create().of(woodMaterial, fungusGenerator, baseFungusBlock);
 	}
 
 	public ResourceLocation name() {
@@ -1232,97 +1215,90 @@ public class WoodRegistry {
 		public ResourceLocation name;
 		private WoodRegistry woodRegistry;
 		private RegistryHelper registryHelper;
+		private WoodType woodType;
+
+		public Builder setSaplingGenerator(AbstractTreeGrower abstractTreeGrower) {
+			woodRegistry.setSaplingGenerator(abstractTreeGrower);
+			return this;
+		}
+
+		public Builder setName(ResourceLocation name) {
+			woodRegistry.setName(name);
+			this.name = name;
+			return this;
+		}
+
+		public Builder setFungusGenerator(ResourceKey<ConfiguredFeature<?, ?>> fungusGenerator) {
+			woodRegistry.setFungusGenerator(fungusGenerator);
+			return this;
+		}
+
+		public Builder setBaseFungusBlock(Block block) {
+			woodRegistry.setBaseFungusBlock(block);
+			return this;
+		}
+
+		public Builder setPlanks(Block planks) {
+			woodRegistry.planks = planks;
+			woodRegistry.preRegisteredPlanks = true;
+			return this;
+		}
+
+		public Builder setLog(Block log) {
+			woodRegistry.log = log;
+			woodRegistry.preRegisteredLog = true;
+			return this;
+		}
+
+		public Builder setLeaves(Block leaves) {
+			woodRegistry.leaves = leaves;
+			woodRegistry.preRegisteredLeaves = true;
+			return this;
+		}
+
+		public Builder setWoodType(WoodType woodType) {
+			this.woodType = woodType;
+			return this;
+		}
 
 		public Builder of(ResourceLocation name) {
-			this.name = name;
 			woodRegistry = new WoodRegistry(name);
-			registryHelper = RegistryHelper.createRegistryHelper(name.getNamespace());
+			this.name = name;
+			registryHelper = RegistryHelper.createRegistryHelper(this.name.getNamespace());
 			return this;
 		}
 
 		public Builder of(ResourceLocation name, AbstractTreeGrower saplingGenerator) {
-			this.name = name;
-			woodRegistry = new WoodRegistry(name, saplingGenerator);
-			registryHelper = RegistryHelper.createRegistryHelper(name.getNamespace());
-			return this;
+			return of(name).setSaplingGenerator(saplingGenerator);
 		}
 
 		public Builder of(ResourceLocation name, ResourceKey<ConfiguredFeature<?, ?>> fungusGenerator, Block baseFungusBlock) {
-			this.name = name;
-			woodRegistry = new WoodRegistry(name, fungusGenerator, baseFungusBlock);
-			registryHelper = RegistryHelper.createRegistryHelper(name.getNamespace());
-			return this;
+			return of(name).setFungusGenerator(fungusGenerator).setBaseFungusBlock(baseFungusBlock);
 		}
 
 		public Builder of(ResourceLocation name, Block planks) {
-			this.name = name;
-			woodRegistry = new WoodRegistry(name);
-			woodRegistry.planks = planks;
-			woodRegistry.preRegisteredPlanks = true;
-			registryHelper = RegistryHelper.createRegistryHelper(name.getNamespace());
-
-			return this;
+			return of(name).setPlanks(planks);
 		}
 
-		public Builder of(WoodType woodType) {
-			this.name = woodType.resourceLocation();
-			woodRegistry = new WoodRegistry(name);
-			woodRegistry.log = woodType.log();
-			woodRegistry.leaves = woodType.leaves();
-			woodRegistry.preRegisteredLog = true;
-			woodRegistry.preRegisteredLeaves = true;
-			registryHelper = RegistryHelper.createRegistryHelper(name.getNamespace());
-			return this;
+		public Builder of(WoodMaterial woodMaterial) {
+			return of(name).setWoodType(woodMaterial.woodType()).setLog(woodMaterial.log())
+					.setLeaves(woodMaterial.leaves());
 		}
 
-		public Builder of(WoodType woodType, AbstractTreeGrower saplingGenerator) {
-			this.name = woodType.resourceLocation();
-			woodRegistry = new WoodRegistry(name, saplingGenerator);
-			woodRegistry.log = woodType.log();
-			woodRegistry.leaves = woodType.leaves();
-			woodRegistry.preRegisteredLog = true;
-			woodRegistry.preRegisteredLeaves = true;
-			registryHelper = RegistryHelper.createRegistryHelper(name.getNamespace());
-			return this;
+		public Builder of(WoodMaterial woodMaterial, AbstractTreeGrower saplingGenerator) {
+			return of(woodMaterial).setSaplingGenerator(saplingGenerator);
 		}
 
-		public Builder of(WoodType woodType, ResourceKey<ConfiguredFeature<?, ?>> fungusGenerator, Block baseFungusBlock) {
-			this.name = woodType.resourceLocation();
-			woodRegistry = new WoodRegistry(name, fungusGenerator, baseFungusBlock);
-			woodRegistry.log = woodType.log();
-			woodRegistry.leaves = woodType.leaves();
-			woodRegistry.preRegisteredLog = true;
-			woodRegistry.preRegisteredLeaves = true;
-			registryHelper = RegistryHelper.createRegistryHelper(name.getNamespace());
-			return this;
+		public Builder of(WoodMaterial woodMaterial, ResourceKey<ConfiguredFeature<?, ?>> fungusGenerator, Block baseFungusBlock) {
+			return of(woodMaterial).setFungusGenerator(fungusGenerator).setBaseFungusBlock(baseFungusBlock);
 		}
 
-		public Builder of(WoodType woodType, Block planks, AbstractTreeGrower saplingGenerator) {
-			this.name = woodType.resourceLocation();
-			woodRegistry = new WoodRegistry(name, saplingGenerator);
-			woodRegistry.planks = planks;
-			woodRegistry.log = woodType.log();
-			woodRegistry.leaves = woodType.leaves();
-			woodRegistry.preRegisteredPlanks = true;
-			woodRegistry.preRegisteredLog = true;
-			woodRegistry.preRegisteredLeaves = true;
-			registryHelper = RegistryHelper.createRegistryHelper(name.getNamespace());
-
-			return this;
+		public Builder of(WoodMaterial woodMaterial, Block planks, AbstractTreeGrower saplingGenerator) {
+			return of(woodMaterial, saplingGenerator).setPlanks(planks);
 		}
 
-		public Builder of(WoodType woodType, Block planks, ResourceKey<ConfiguredFeature<?, ?>> fungusGenerator, Block baseFungusBlock) {
-			this.name = woodType.resourceLocation();
-			woodRegistry = new WoodRegistry(name, fungusGenerator, baseFungusBlock);
-			woodRegistry.planks = planks;
-			woodRegistry.log = woodType.log();
-			woodRegistry.leaves = woodType.leaves();
-			woodRegistry.preRegisteredPlanks = true;
-			woodRegistry.preRegisteredLog = true;
-			woodRegistry.preRegisteredLeaves = true;
-			registryHelper = RegistryHelper.createRegistryHelper(name.getNamespace());
-
-			return this;
+		public Builder of(WoodMaterial woodMaterial, Block planks, ResourceKey<ConfiguredFeature<?, ?>> fungusGenerator, Block baseFungusBlock) {
+			return of(woodMaterial, fungusGenerator, baseFungusBlock).setPlanks(planks);
 		}
 
 		public Builder log() {
@@ -1336,6 +1312,7 @@ public class WoodRegistry {
 					CreativeModeTabs.BUILDING_BLOCKS
 			);
 			ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.NATURAL_BLOCKS).register(entries -> entries.addAfter(block, woodRegistry.log));
+			woodType = woodRegistry.netherWoodLike ? WoodType.CRIMSON : woodRegistry.bambooLike ? WoodType.BAMBOO : WoodType.ACACIA;
 			return this;
 		}
 
@@ -1667,17 +1644,16 @@ public class WoodRegistry {
 			woodRegistry.fence = registryHelper.blocks().registerBlock(
 					new FenceBlock(BlockBehaviour.Properties.copy(block)),
 					name.getPath() + "_fence",
-					CreativeModeTabs.BUILDING_BLOCKS, woodRegistry.mosaicSlab != null ? woodRegistry.mosaicSlab : woodRegistry.slab
+					CreativeModeTabs.BUILDING_BLOCKS, woodRegistry.mosaicSlab != null
+							? woodRegistry.mosaicSlab : woodRegistry.slab
 			);
 			return this;
 		}
 
 		public Builder fenceGate() {
 			Block block = woodRegistry.netherWoodLike ? Blocks.WARPED_FENCE_GATE : woodRegistry.bambooLike ? Blocks.BAMBOO_FENCE_GATE : Blocks.DARK_OAK_FENCE_GATE;
-			SoundEvent openSound = woodRegistry.netherWoodLike ? SoundEvents.NETHER_WOOD_FENCE_GATE_OPEN : woodRegistry.bambooLike ? SoundEvents.BAMBOO_WOOD_FENCE_GATE_OPEN : SoundEvents.FENCE_GATE_OPEN;
-			SoundEvent closeSound = woodRegistry.netherWoodLike ? SoundEvents.NETHER_WOOD_FENCE_GATE_CLOSE : woodRegistry.bambooLike ? SoundEvents.BAMBOO_WOOD_FENCE_GATE_CLOSE : SoundEvents.FENCE_GATE_CLOSE;
 			woodRegistry.fenceGate = registryHelper.blocks().registerBlock(
-					new FenceGateBlock(BlockBehaviour.Properties.copy(block), openSound, closeSound),
+					new FenceGateBlock(BlockBehaviour.Properties.copy(block), woodType),
 					name.getPath() + "_fence_gate",
 					CreativeModeTabs.BUILDING_BLOCKS, woodRegistry.fence
 			);
@@ -1705,10 +1681,8 @@ public class WoodRegistry {
 
 		public Builder door() {
 			Block block = woodRegistry.netherWoodLike ? Blocks.WARPED_DOOR : woodRegistry.bambooLike ? Blocks.BAMBOO_DOOR : Blocks.DARK_OAK_DOOR;
-			SoundEvent openSound = woodRegistry.netherWoodLike ? SoundEvents.NETHER_WOOD_DOOR_OPEN : woodRegistry.bambooLike ? SoundEvents.BAMBOO_WOOD_DOOR_OPEN : SoundEvents.WOODEN_DOOR_OPEN;
-			SoundEvent closeSound = woodRegistry.netherWoodLike ? SoundEvents.NETHER_WOOD_DOOR_CLOSE : woodRegistry.bambooLike ? SoundEvents.BAMBOO_WOOD_DOOR_CLOSE : SoundEvents.WOODEN_DOOR_CLOSE;
 			woodRegistry.door = registryHelper.blocks().registerDoubleBlock(
-					new DoorBlock(BlockBehaviour.Properties.copy(block), openSound, closeSound),
+					new DoorBaseBlock(BlockBehaviour.Properties.copy(block), woodType.setType()),
 					name.getPath() + "_door",
 					CreativeModeTabs.BUILDING_BLOCKS, woodRegistry.fenceGate
 			);
@@ -1717,10 +1691,8 @@ public class WoodRegistry {
 
 		public Builder trapdoor() {
 			Block block = woodRegistry.netherWoodLike ? Blocks.WARPED_TRAPDOOR : woodRegistry.bambooLike ? Blocks.BAMBOO_TRAPDOOR : Blocks.MANGROVE_TRAPDOOR;
-			SoundEvent openSound = woodRegistry.netherWoodLike ? SoundEvents.NETHER_WOOD_TRAPDOOR_OPEN : woodRegistry.bambooLike ? SoundEvents.BAMBOO_WOOD_TRAPDOOR_OPEN : SoundEvents.WOODEN_TRAPDOOR_OPEN;
-			SoundEvent closeSound = woodRegistry.netherWoodLike ? SoundEvents.NETHER_WOOD_TRAPDOOR_CLOSE : woodRegistry.bambooLike ? SoundEvents.BAMBOO_WOOD_TRAPDOOR_CLOSE : SoundEvents.WOODEN_TRAPDOOR_CLOSE;
 			woodRegistry.trapdoor = registryHelper.blocks().registerBlock(
-					new TrapDoorBlock(BlockBehaviour.Properties.copy(block), openSound, closeSound),
+					new TrapDoorBlock(BlockBehaviour.Properties.copy(block), woodType.setType()),
 					name.getPath() + "_trapdoor",
 					CreativeModeTabs.BUILDING_BLOCKS, woodRegistry.door
 			);
@@ -1729,10 +1701,8 @@ public class WoodRegistry {
 
 		public Builder pressurePlate(PressurePlateBlock.Sensitivity type) {
 			Block block = woodRegistry.netherWoodLike ? Blocks.WARPED_PRESSURE_PLATE : woodRegistry.bambooLike ? Blocks.BAMBOO_PRESSURE_PLATE : Blocks.DARK_OAK_PRESSURE_PLATE;
-			SoundEvent depressSound = woodRegistry.netherWoodLike ? SoundEvents.NETHER_WOOD_PRESSURE_PLATE_CLICK_OFF : woodRegistry.bambooLike ? SoundEvents.BAMBOO_WOOD_PRESSURE_PLATE_CLICK_OFF : SoundEvents.WOODEN_PRESSURE_PLATE_CLICK_OFF;
-			SoundEvent pressSound = woodRegistry.netherWoodLike ? SoundEvents.NETHER_WOOD_PRESSURE_PLATE_CLICK_ON : woodRegistry.bambooLike ? SoundEvents.BAMBOO_WOOD_PRESSURE_PLATE_CLICK_ON : SoundEvents.WOODEN_PRESSURE_PLATE_CLICK_ON;
 			woodRegistry.pressurePlate = registryHelper.blocks().registerBlock(
-					new PressurePlateBlock(type, BlockBehaviour.Properties.copy(block), depressSound, pressSound),
+					new PressurePlateBlock(type, BlockBehaviour.Properties.copy(block), woodType.setType()),
 					name.getPath() + "_pressure_plate",
 					CreativeModeTabs.BUILDING_BLOCKS, woodRegistry.trapdoor
 			);
@@ -1740,22 +1710,17 @@ public class WoodRegistry {
 		}
 
 		public Builder button() {
-			SoundEvent buttonClickOffSound = woodRegistry.netherWoodLike ? SoundEvents.NETHER_WOOD_BUTTON_CLICK_OFF : woodRegistry.bambooLike
-					? SoundEvents.BAMBOO_WOOD_BUTTON_CLICK_OFF : SoundEvents.WOODEN_BUTTON_CLICK_OFF;
-			SoundEvent buttonClickOnSound = woodRegistry.netherWoodLike ? SoundEvents.NETHER_WOOD_BUTTON_CLICK_ON : woodRegistry.bambooLike
-					? SoundEvents.BAMBOO_WOOD_BUTTON_CLICK_ON : SoundEvents.WOODEN_BUTTON_CLICK_ON;
 			SoundType soundGroup = woodRegistry.netherWoodLike ? SoundType.NETHER_WOOD : woodRegistry.bambooLike
 					? SoundType.BAMBOO_WOOD : SoundType.WOOD;
 			woodRegistry.button = registryHelper.blocks().registerBlock(
-					woodenButton(soundGroup, buttonClickOffSound, buttonClickOnSound),
-					name.getPath() + "_button",
+					woodenButton(soundGroup, woodType), name.getPath() + "_button",
 					CreativeModeTabs.BUILDING_BLOCKS, woodRegistry.pressurePlate
 			);
 			return this;
 		}
 
-		private static ButtonBlock woodenButton(SoundType soundGroup, SoundEvent offSound, SoundEvent onSound) {
-			return new ButtonBlock(BlockBehaviour.Properties.of(Material.DECORATION).noCollission().strength(0.5F).sound(soundGroup), 30, true, offSound, onSound);
+		private static ButtonBlock woodenButton(SoundType soundGroup, WoodType woodType) {
+			return new ButtonBlock(BlockBehaviour.Properties.of(Material.DEPRECATED).noCollission().strength(0.5F).sound(soundGroup), woodType.setType(), 30, true);
 		}
 
 		public Builder ladder() {

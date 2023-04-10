@@ -15,23 +15,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package io.github.vampirestudios.vampirelib.blocks;
+package io.github.vampirestudios.vampirelib.api.oreVeins;
 
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.block.DoorBlock;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.BlockSetType;
+import net.minecraft.world.level.levelgen.OreVeinifier;
 
-public class DoorBaseBlock extends DoorBlock {
+import java.util.LinkedHashMap;
+import java.util.Map;
 
-	public DoorBaseBlock(Properties properties, BlockSetType blockSetType) {
-		super(properties, blockSetType);
+public class VOreVeinTypes {
+	private static final Map<String, OreVeinifier.VeinType> NEW_VEIN_TYPES = new LinkedHashMap<>();
+
+	public static void addVeinType(String id, OreVeinifier.VeinType veinType) {
+		NEW_VEIN_TYPES.put(id, veinType);
 	}
 
-	@Override
-	public ItemStack getCloneItemStack(BlockGetter blockView_1, BlockPos blockPos_1, BlockState blockState_1) {
-		return new ItemStack(this);
+	public static OreVeinifier.VeinType getVeinType(String modId, String name) {
+		return NEW_VEIN_TYPES.get(modId.toUpperCase() + name.toUpperCase());
 	}
 }

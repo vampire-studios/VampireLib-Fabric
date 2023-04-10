@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022-2023 OliviaTheVampire
+ * Copyright (c) 2023 OliviaTheVampire
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -17,15 +17,14 @@
 
 package io.github.vampirestudios.vampirelib.item;
 
-import java.util.List;
-
 import com.mojang.blaze3d.vertex.PoseStack;
-import org.joml.Matrix4f;
-
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.ItemRenderer;
+import org.joml.Matrix4f;
+
+import java.util.List;
 
 public record BundledTooltipComponentImpl(List<ClientTooltipComponent> list) implements ClientTooltipComponent {
 	@Override
@@ -61,11 +60,11 @@ public record BundledTooltipComponentImpl(List<ClientTooltipComponent> list) imp
 	}
 
 	@Override
-	public void renderImage(Font font, int mouseX, int mouseY, PoseStack poseStack, ItemRenderer itemRenderer, int blitOffset) {
+	public void renderImage(Font font, int mouseX, int mouseY, PoseStack poseStack, ItemRenderer itemRenderer) {
 		int y1 = mouseY;
 
 		for (ClientTooltipComponent component : list) {
-			component.renderImage(font, mouseX, y1, poseStack, itemRenderer, blitOffset);
+			component.renderImage(font, mouseX, y1, poseStack, itemRenderer);
 			y1 += component.getHeight();
 		}
 	}

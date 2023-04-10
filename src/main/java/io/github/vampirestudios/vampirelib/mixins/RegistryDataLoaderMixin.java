@@ -15,23 +15,25 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package io.github.vampirestudios.vampirelib.blocks;
+package io.github.vampirestudios.vampirelib.mixins;
 
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.block.DoorBlock;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.BlockSetType;
+import net.minecraft.resources.RegistryDataLoader;
+import org.spongepowered.asm.mixin.Final;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Mutable;
+import org.spongepowered.asm.mixin.Shadow;
 
-public class DoorBaseBlock extends DoorBlock {
+import java.util.ArrayList;
+import java.util.List;
 
-	public DoorBaseBlock(Properties properties, BlockSetType blockSetType) {
-		super(properties, blockSetType);
-	}
+@Mixin(RegistryDataLoader.class)
+public class RegistryDataLoaderMixin {
+    @Shadow
+    @Final
+    @Mutable
+    public static List<RegistryDataLoader.RegistryData<?>> WORLDGEN_REGISTRIES;
 
-	@Override
-	public ItemStack getCloneItemStack(BlockGetter blockView_1, BlockPos blockPos_1, BlockState blockState_1) {
-		return new ItemStack(this);
-	}
+    static {
+        WORLDGEN_REGISTRIES = new ArrayList<>(WORLDGEN_REGISTRIES);
+    }
 }

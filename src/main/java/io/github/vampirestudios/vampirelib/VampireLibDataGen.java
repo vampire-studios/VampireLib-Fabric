@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022-2023 OliviaTheVampire
+ * Copyright (c) 2023 OliviaTheVampire
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -17,25 +17,21 @@
 
 package io.github.vampirestudios.vampirelib;
 
-import static io.github.vampirestudios.vampirelib.VampireLib.TEST_CONTENT_ENABLED;
-
-import java.io.File;
-import java.io.Reader;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.CompletableFuture;
-import java.util.function.Consumer;
-
+import io.github.vampirestudios.vampirelib.api.datagen.*;
+import io.github.vampirestudios.vampirelib.api.datagen.builder.BlockModelBuilder;
+import io.github.vampirestudios.vampirelib.init.VTags;
+import io.github.vampirestudios.vampirelib.utils.registry.WoodRegistry;
 import net.fabric.api.tag.convention.v1.ConventionalBiomeTags;
 import net.fabric.api.tag.convention.v1.ConventionalBlockTags;
 import net.fabric.api.tag.convention.v1.ConventionalItemTags;
-import org.joml.Vector3d;
-
+import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
+import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
+import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricModelProvider;
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.models.BlockModelGenerators;
 import net.minecraft.data.models.ItemModelGenerators;
@@ -48,28 +44,22 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Biomes;
-import net.minecraft.world.level.biome.MultiNoiseBiomeSource;
+import net.minecraft.world.level.biome.MultiNoiseBiomeSourceParameterList;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.dimension.BuiltinDimensionTypes;
 import net.minecraft.world.level.levelgen.NoiseGeneratorSettings;
+import org.joml.Vector3d;
 
-import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
-import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricModelProvider;
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
+import java.io.File;
+import java.io.Reader;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.function.Consumer;
 
-import io.github.vampirestudios.vampirelib.api.datagen.CustomTagProviders;
-import io.github.vampirestudios.vampirelib.api.datagen.DisplayBuilder;
-import io.github.vampirestudios.vampirelib.api.datagen.ElementBuilder;
-import io.github.vampirestudios.vampirelib.api.datagen.FabricSoundProvider;
-import io.github.vampirestudios.vampirelib.api.datagen.FaceBuilder;
-import io.github.vampirestudios.vampirelib.api.datagen.RotationBuilder;
-import io.github.vampirestudios.vampirelib.api.datagen.VBlockLootTableProvider;
-import io.github.vampirestudios.vampirelib.api.datagen.builder.BlockModelBuilder;
-import io.github.vampirestudios.vampirelib.init.VTags;
-import io.github.vampirestudios.vampirelib.utils.registry.WoodRegistry;
+import static io.github.vampirestudios.vampirelib.VampireLib.TEST_CONTENT_ENABLED;
 
 public class VampireLibDataGen implements DataGeneratorEntrypoint {
 	@Override
@@ -708,7 +698,7 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
 
 			this.tag(VTags.Biomes.WITHOUT_DEFAULT_MONSTER_SPAWNS).add(Biomes.MUSHROOM_FIELDS, Biomes.DEEP_DARK);
 			TagAppender<Biome> withMonsterSpawns = this.tag(VTags.Biomes.WITH_DEFAULT_MONSTER_SPAWNS);
-			MultiNoiseBiomeSource.Preset.OVERWORLD.possibleBiomes(arg.lookupOrThrow(Registries.BIOME)).forEach((biome) -> {
+			MultiNoiseBiomeSourceParameterList.Preset.OVERWORLD.usedBiomes().forEach((biome) -> {
 				if (biome != Biomes.MUSHROOM_FIELDS && biome != Biomes.DEEP_DARK)
 					withMonsterSpawns.add(biome);
 			});

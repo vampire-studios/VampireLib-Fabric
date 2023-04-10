@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022-2023 OliviaTheVampire
+ * Copyright (c) 2023 OliviaTheVampire
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -17,15 +17,17 @@
 
 package io.github.vampirestudios.vampirelib.init;
 
+import io.github.vampirestudios.vampirelib.api.oreVeins.VOreVeinType;
+import io.github.vampirestudios.vampirelib.modules.FeatureManager;
+import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
-
-import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
-
-import io.github.vampirestudios.vampirelib.modules.FeatureManager;
 
 public class VRegistries {
 	public static final Registry<FeatureManager> FEATURE_MANAGERS = FabricRegistryBuilder.createSimple(
 			FeatureManager.class, new ResourceLocation("vampirelib", "feature_managers")
+	).buildAndRegister();
+	public static final Registry<VOreVeinType> ORE_VEIN_TYPES = FabricRegistryBuilder.createSimple(
+			VOreVeinType.class, new ResourceLocation("vampirelib", "ore_vein_types")
 	).buildAndRegister();
 }

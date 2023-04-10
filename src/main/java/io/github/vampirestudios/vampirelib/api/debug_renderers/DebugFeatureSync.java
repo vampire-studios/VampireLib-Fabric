@@ -17,22 +17,20 @@
 
 package io.github.vampirestudios.vampirelib.api.debug_renderers;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerPlayer;
-
+import io.github.vampirestudios.vampirelib.VampireLib;
+import io.github.vampirestudios.vampirelib.api.FriendlyByteBufs;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 
-import io.github.vampirestudios.vampirelib.VampireLib;
-import io.github.vampirestudios.vampirelib.api.FriendlyByteBufs;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public final class DebugFeatureSync {
 	public static final ResourceLocation SYNC_MESSAGE_ID = VampireLib.INSTANCE.identifier("feature_sync");
@@ -99,7 +97,10 @@ public final class DebugFeatureSync {
 	public static void clientInit() {
 		ClientPlayNetworking.registerGlobalReceiver(SYNC_MESSAGE_ID, (client, handler, buf, responseSender) -> {
 			var statuses = readStatuses(buf);
-			client.execute(() -> DebugFeaturesImpl.setEnabledOnServer(statuses));
+			client.execute(() -> {
+				DebugFeaturesImpl.setEnabledOnServer(statuses);
+				DebugFeatureSync.syncFeaturesToServer();
+			});
 		});
 	}
 }

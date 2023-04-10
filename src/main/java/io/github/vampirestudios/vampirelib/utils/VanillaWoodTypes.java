@@ -19,38 +19,40 @@ package io.github.vampirestudios.vampirelib.utils;
 
 import net.minecraft.world.level.block.Blocks;
 
-import io.github.vampirestudios.vampirelib.utils.registry.WoodTypeRegistry;
+import io.github.vampirestudios.vampirelib.utils.registry.WoodMaterialRegistry;
+import net.minecraft.world.level.block.state.properties.WoodType;
 
 public class VanillaWoodTypes {
-	public static final WoodType SPRUCE = WoodTypeRegistry.registerVanilla(new WoodType("spruce", Blocks.SPRUCE_LEAVES, Blocks.SPRUCE_LOG));
-	public static final WoodType OAK = WoodTypeRegistry.registerVanilla(new WoodType("oak", Blocks.OAK_LEAVES, Blocks.OAK_LOG));
-	public static final WoodType BIRCH = WoodTypeRegistry.registerVanilla(new WoodType("birch", Blocks.BIRCH_LEAVES, Blocks.BIRCH_LOG));
-	public static final WoodType JUNGLE = WoodTypeRegistry.registerVanilla(new WoodType("jungle", Blocks.JUNGLE_LEAVES, Blocks.JUNGLE_LOG));
-	public static final WoodType ACACIA = WoodTypeRegistry.registerVanilla(new WoodType("acacia", Blocks.ACACIA_LEAVES, Blocks.ACACIA_LOG));
-	public static final WoodType DARK_OAK = WoodTypeRegistry.registerVanilla(new WoodType("dark_oak", Blocks.DARK_OAK_LEAVES, Blocks.DARK_OAK_LOG));
-	public static final WoodType MANGROVE = WoodTypeRegistry.registerVanilla(new WoodType("mangrove", Blocks.MANGROVE_LEAVES, Blocks.MANGROVE_LOG));
-	public static final WoodType BAMBOO = WoodTypeRegistry.registerVanilla(new WoodType("bamboo", null, Blocks.BAMBOO_BLOCK));
+	public static final WoodMaterial SPRUCE = WoodMaterialRegistry.registerVanilla(new WoodMaterial("spruce", WoodType.SPRUCE, Blocks.SPRUCE_LEAVES, Blocks.SPRUCE_LOG));
+	public static final WoodMaterial OAK = WoodMaterialRegistry.registerVanilla(new WoodMaterial("oak", WoodType.OAK, Blocks.OAK_LEAVES, Blocks.OAK_LOG));
+	public static final WoodMaterial BIRCH = WoodMaterialRegistry.registerVanilla(new WoodMaterial("birch", WoodType.BIRCH, Blocks.BIRCH_LEAVES, Blocks.BIRCH_LOG));
+	public static final WoodMaterial JUNGLE = WoodMaterialRegistry.registerVanilla(new WoodMaterial("jungle", WoodType.JUNGLE, Blocks.JUNGLE_LEAVES, Blocks.JUNGLE_LOG));
+	public static final WoodMaterial ACACIA = WoodMaterialRegistry.registerVanilla(new WoodMaterial("acacia", WoodType.ACACIA, Blocks.ACACIA_LEAVES, Blocks.ACACIA_LOG));
+	public static final WoodMaterial DARK_OAK = WoodMaterialRegistry.registerVanilla(new WoodMaterial("dark_oak", WoodType.DARK_OAK, Blocks.DARK_OAK_LEAVES, Blocks.DARK_OAK_LOG));
+	public static final WoodMaterial MANGROVE = WoodMaterialRegistry.registerVanilla(new WoodMaterial("mangrove", WoodType.MANGROVE, Blocks.MANGROVE_LEAVES, Blocks.MANGROVE_LOG));
+	public static final WoodMaterial CHERRY = WoodMaterialRegistry.registerVanilla(new WoodMaterial("cherry", WoodType.CHERRY, Blocks.CHERRY_LEAVES, Blocks.CHERRY_LOG));
+	public static final WoodMaterial BAMBOO = WoodMaterialRegistry.registerVanilla(new WoodMaterial("bamboo", WoodType.BAMBOO, null, Blocks.BAMBOO_BLOCK));
 
-	public static final WoodType CRIMSON = WoodTypeRegistry.registerVanilla(new WoodType("crimson", Blocks.NETHER_WART_BLOCK, Blocks.CRIMSON_STEM, true));
-	public static final WoodType WARPED = WoodTypeRegistry.registerVanilla(new WoodType("warped", Blocks.WARPED_WART_BLOCK, Blocks.WARPED_STEM, true));
+	public static final WoodMaterial CRIMSON = WoodMaterialRegistry.registerVanilla(new WoodMaterial("crimson", WoodType.CRIMSON, Blocks.NETHER_WART_BLOCK, Blocks.CRIMSON_STEM, true));
+	public static final WoodMaterial WARPED = WoodMaterialRegistry.registerVanilla(new WoodMaterial("warped", WoodType.WARPED, Blocks.WARPED_WART_BLOCK, Blocks.WARPED_STEM, true));
 
-	public static final WoodType[] OVERWORLD_NON_OAK = new WoodType[] {
-			SPRUCE, BIRCH, JUNGLE, ACACIA, DARK_OAK, MANGROVE, BAMBOO
+	public static final WoodMaterial[] OVERWORLD_NON_OAK = new WoodMaterial[] {
+			SPRUCE, BIRCH, JUNGLE, ACACIA, DARK_OAK, MANGROVE, BAMBOO, CHERRY
 	};
 
-	public static final WoodType[] OVERWORLD = new WoodType[] {
-			OAK, SPRUCE, BIRCH, JUNGLE, ACACIA, DARK_OAK, MANGROVE, BAMBOO
+	public static final WoodMaterial[] OVERWORLD = new WoodMaterial[] {
+			OAK, SPRUCE, BIRCH, JUNGLE, ACACIA, DARK_OAK, MANGROVE, BAMBOO, CHERRY
 	};
 
-	public static final WoodType[] NETHER = new WoodType[] {
+	public static final WoodMaterial[] NETHER = new WoodMaterial[] {
 			CRIMSON, WARPED
 	};
 
-	public static final WoodType[] ALL = new WoodType[] {
-			OAK, SPRUCE, BIRCH, JUNGLE, ACACIA, DARK_OAK, CRIMSON, WARPED, MANGROVE, BAMBOO
+	public static final WoodMaterial[] ALL = new WoodMaterial[] {
+			OAK, SPRUCE, BIRCH, JUNGLE, ACACIA, DARK_OAK, CRIMSON, WARPED, MANGROVE, BAMBOO, CHERRY
 	};
 
-	public static final WoodType[] NON_OAK = new WoodType[] {
-			SPRUCE, BIRCH, JUNGLE, ACACIA, DARK_OAK, CRIMSON, WARPED, MANGROVE, BAMBOO
+	public static final WoodMaterial[] NON_OAK = new WoodMaterial[] {
+			SPRUCE, BIRCH, JUNGLE, ACACIA, DARK_OAK, CRIMSON, WARPED, MANGROVE, BAMBOO, CHERRY
 	};
 }

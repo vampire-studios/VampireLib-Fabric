@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022-2023 OliviaTheVampire
+ * Copyright (c) 2023 OliviaTheVampire
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -17,17 +17,14 @@
 
 package io.github.vampirestudios.vampirelib.modules.utils;
 
-import static io.github.vampirestudios.vampirelib.modules.FeatureManager.CLIENT_FEATURES;
-import static io.github.vampirestudios.vampirelib.modules.FeatureManager.COMMON_FEATURES;
-import static io.github.vampirestudios.vampirelib.modules.FeatureManager.SERVER_FEATURES;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import io.github.vampirestudios.vampirelib.modules.FeatureManager;
 import io.github.vampirestudios.vampirelib.modules.api.ClientFeature;
 import io.github.vampirestudios.vampirelib.modules.api.CommonFeature;
 import io.github.vampirestudios.vampirelib.modules.api.ServerFeature;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import static io.github.vampirestudios.vampirelib.modules.FeatureManager.*;
 
 public class ConsoleUtils {
 

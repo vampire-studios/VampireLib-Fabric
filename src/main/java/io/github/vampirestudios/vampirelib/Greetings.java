@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022-2023 OliviaTheVampire
+ * Copyright (c) 2023 OliviaTheVampire
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -15,21 +15,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package io.github.vampirestudios.vampirelib.utils;
+package io.github.vampirestudios.vampirelib;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.block.Block;
 
-public record WoodType(ResourceLocation resourceLocation, Block leaves, Block log, boolean nether) {
-	public WoodType(String name, Block leaves, Block log, boolean nether) {
-		this(ResourceLocation.tryParse(name), leaves, log, nether);
-	}
+public record Greetings(String text, int weight) {
+	public static final Codec<Greetings> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+			Codec.STRING.fieldOf("text").forGetter(Greetings::text),
+			Codec.INT.fieldOf("weight").forGetter(Greetings::weight)
+	).apply(instance, Greetings::new));
 
-	public WoodType(ResourceLocation resourceLocation, Block leaves, Block log) {
-		this(resourceLocation, leaves, log, false);
-	}
-
-	public WoodType(String name, Block leaves, Block log) {
-		this(ResourceLocation.tryParse(name), leaves, log, false);
-	}
+	public static final ResourceKey<Registry<Greetings>> REGISTRY_KEY = ResourceKey.createRegistryKey(
+			new ResourceLocation("vampirelib", "greetings")
+	);
 }

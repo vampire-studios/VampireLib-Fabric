@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022-2023 OliviaTheVampire
+ * Copyright (c) 2023 OliviaTheVampire
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -17,12 +17,19 @@
 
 package io.github.vampirestudios.vampirelib;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-
+import io.github.vampirestudios.vampirelib.api.BasicModClass;
+import io.github.vampirestudios.vampirelib.api.ConvertibleBlockPair;
+import io.github.vampirestudios.vampirelib.api.debug_renderers.DebugFeatureCommands;
+import io.github.vampirestudios.vampirelib.api.debug_renderers.DebugFeatureSync;
+import io.github.vampirestudios.vampirelib.utils.BlockChiseler;
+import io.github.vampirestudios.vampirelib.utils.Rands;
+import io.github.vampirestudios.vampirelib.utils.registry.WoodRegistry;
+import net.fabricmc.fabric.api.event.player.UseBlockCallback;
+import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
+import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.SharedConstants;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -40,18 +47,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.Material;
 
-import net.fabricmc.fabric.api.event.player.UseBlockCallback;
-import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
-import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
-import net.fabricmc.loader.api.FabricLoader;
-
-import io.github.vampirestudios.vampirelib.api.BasicModClass;
-import io.github.vampirestudios.vampirelib.api.ConvertibleBlockPair;
-import io.github.vampirestudios.vampirelib.api.debug_renderers.DebugFeatureCommands;
-import io.github.vampirestudios.vampirelib.api.debug_renderers.DebugFeatureSync;
-import io.github.vampirestudios.vampirelib.utils.Rands;
-import io.github.vampirestudios.vampirelib.utils.BlockChiseler;
-import io.github.vampirestudios.vampirelib.utils.registry.WoodRegistry;
+import java.util.ArrayList;
+import java.util.List;
 
 public class VampireLib extends BasicModClass {
 	public static final VampireLib INSTANCE = new VampireLib();
@@ -105,6 +102,11 @@ public class VampireLib extends BasicModClass {
 	public static Item ITEM_WITH_CUSTOM_MODEL_2;
 	public static Item ITEM_WITH_NORMAL_MODEL;
 
+	private static final ResourceLocation GREETING_A_ID = INSTANCE.identifier("greeting_a");
+	private static final Greetings GREETING_A = new Greetings("Welcome to Quilt!", 5);
+	private static final ResourceLocation GREETING_B_ID = INSTANCE.identifier("greeting_b");
+	private static final Greetings GREETING_B = new Greetings("Howdy!", 2);
+
 	public VampireLib() {
 		super("vampirelib", "VampireLib", "5.5.0+build.1");
 	}
@@ -120,21 +122,6 @@ public class VampireLib extends BasicModClass {
 		DebugFeatureCommands.init();
 
 		if (TEST_CONTENT_ENABLED) {
-//			try {
-//				DynamicRegistryRegistry.registerBefore(Registries.BIOME, DynamicData.BEFORE_KEY, DynamicData.CODEC);
-//				DynamicRegistryRegistry.registerAfter(Registries.BIOME, DynamicData.AFTER_KEY, DynamicData.CODEC);
-//				DynamicRegistryRegistry.register(ResourceKey.createRegistryKey(new ResourceLocation(INSTANCE.modId(), "worldgen/biome")), Codec.BOOL);
-//			} catch (IllegalStateException ignored) {
-//				INSTANCE.getLogger().info("DynamicRegistryRegistry path clash test passed!");
-//			}
-//
-//			DynamicRegistrySetupCallback.EVENT.register(registryManager -> {
-//				registryManager.registerEntryAdded(Registries.BIOME, (rawId, id, object) -> INSTANCE.getLogger().info("Biome added: {}", id));
-//				registryManager.registerEntryAdded(Registries.BIOME, (rawId, id, object) -> INSTANCE.getLogger().info("Biome added: {}", id));
-//				registryManager.registerEntryAdded(DynamicData.BEFORE_KEY, (rawId, id, object) -> INSTANCE.getLogger().info("Before biome data: {}", id));
-//				registryManager.registerEntryAdded(DynamicData.AFTER_KEY, (rawId, id, object) -> INSTANCE.getLogger().info("After biome data: {}", id));
-//			});
-
 			ResourceManagerHelper.registerBuiltinResourcePack(INSTANCE.identifier("wood_types"), FabricLoader.getInstance().getModContainer(INSTANCE.modId()).get(), ResourcePackActivationType.ALWAYS_ENABLED);
 
 			//Overworld

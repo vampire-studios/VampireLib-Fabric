@@ -15,23 +15,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package io.github.vampirestudios.vampirelib.blocks;
+package io.github.vampirestudios.vampirelib.api.oreVeins;
 
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.block.DoorBlock;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.BlockSetType;
 
-public class DoorBaseBlock extends DoorBlock {
-
-	public DoorBaseBlock(Properties properties, BlockSetType blockSetType) {
-		super(properties, blockSetType);
-	}
-
-	@Override
-	public ItemStack getCloneItemStack(BlockGetter blockView_1, BlockPos blockPos_1, BlockState blockState_1) {
-		return new ItemStack(this);
-	}
+public record VOreVeinType(ResourceLocation key, BlockState ore, BlockState rawOreBlock, BlockState filler, int minY, int maxY) {
 }

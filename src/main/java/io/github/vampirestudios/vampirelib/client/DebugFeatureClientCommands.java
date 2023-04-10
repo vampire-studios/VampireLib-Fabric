@@ -42,7 +42,7 @@ import io.github.vampirestudios.vampirelib.api.debug_renderers.DebugFeaturesImpl
 final class DebugFeatureClientCommands {
 	static void init() {
 		ClientCommandRegistrationCallback.EVENT.register((dispatcher, buildContext) -> dispatcher.register(
-				ClientCommandManager.literal("quilt_debug").then(
+				ClientCommandManager.literal("quilt_debug_client").then(
 						ClientCommandManager.argument("feature", ResourceLocationArgument.id())
 								.suggests((c, b) -> SharedSuggestionProvider.suggestResource(DebugFeaturesImpl.getFeatures().stream().filter(DebugFeature::needsServer).map(DebugFeature::id), b)).then(
 										ClientCommandManager.literal("enable").executes(setEnabled(true))
