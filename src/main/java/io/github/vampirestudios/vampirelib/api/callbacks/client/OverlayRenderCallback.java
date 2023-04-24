@@ -21,7 +21,7 @@ import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 
-import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.resources.ResourceLocation;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -44,7 +44,7 @@ public interface OverlayRenderCallback {
 			});
 
 	private static void resetTexture() { // in case overlays change it, which is very likely.
-		RenderSystem.setShaderTexture(0, GuiComponent.GUI_ICONS_LOCATION);
+		RenderSystem.setShaderTexture(0, new ResourceLocation("textures/gui/icons.png"));
 	}
 
 	boolean onOverlayRender(PoseStack stack, float partialTicks, Window window, Types type);

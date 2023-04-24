@@ -17,20 +17,12 @@
 
 package io.github.vampirestudios.vampirelib;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import io.github.vampirestudios.vampirelib.api.BasicModClass;
-import io.github.vampirestudios.vampirelib.api.ConvertibleBlockPair;
-import io.github.vampirestudios.vampirelib.api.debug_renderers.DebugFeatureCommands;
-import io.github.vampirestudios.vampirelib.api.debug_renderers.DebugFeatureSync;
-import io.github.vampirestudios.vampirelib.utils.BlockChiseler;
-import io.github.vampirestudios.vampirelib.utils.Rands;
-import io.github.vampirestudios.vampirelib.utils.registry.WoodRegistry;
-import io.github.vampirestudios.vampirelib.utils.registry.WoodRegistry.WoodPropertyType;
-import net.fabricmc.fabric.api.event.player.UseBlockCallback;
-import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
-import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
-import net.fabricmc.loader.api.FabricLoader;
+
 import net.minecraft.SharedConstants;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -48,8 +40,19 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.Material;
 
-import java.util.ArrayList;
-import java.util.List;
+import net.fabricmc.fabric.api.event.player.UseBlockCallback;
+import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
+import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
+import net.fabricmc.loader.api.FabricLoader;
+
+import io.github.vampirestudios.vampirelib.api.BasicModClass;
+import io.github.vampirestudios.vampirelib.api.ConvertibleBlockPair;
+import io.github.vampirestudios.vampirelib.api.debug_renderers.DebugFeatureCommands;
+import io.github.vampirestudios.vampirelib.api.debug_renderers.DebugFeatureSync;
+import io.github.vampirestudios.vampirelib.utils.BlockChiseler;
+import io.github.vampirestudios.vampirelib.utils.Rands;
+import io.github.vampirestudios.vampirelib.utils.registry.WoodRegistry;
+import io.github.vampirestudios.vampirelib.utils.registry.WoodRegistry.WoodPropertyType;
 
 public class VampireLib extends BasicModClass {
 	public static final VampireLib INSTANCE = new VampireLib();
@@ -250,7 +253,7 @@ public class VampireLib extends BasicModClass {
 	}
 
 	private static Block createBlock(String name, boolean hasItem) {
-		Block block = Registry.register(BuiltInRegistries.BLOCK, INSTANCE.identifier(name), new Block(BlockBehaviour.Properties.of(Material.STONE)));
+		Block block = Registry.register(BuiltInRegistries.BLOCK, INSTANCE.identifier(name), new Block(BlockBehaviour.Properties.of(Material.DEPRECATED)));
 
 		if (hasItem) {
 			Registry.register(BuiltInRegistries.ITEM, INSTANCE.identifier(name), new BlockItem(block, new Item.Properties()));
