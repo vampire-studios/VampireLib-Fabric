@@ -17,20 +17,22 @@
 
 package io.github.vampirestudios.vampirelib.api.debug_renderers;
 
-import io.github.vampirestudios.vampirelib.VampireLib;
-import io.github.vampirestudios.vampirelib.api.FriendlyByteBufs;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerPlayer;
-
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
+
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+
+import io.github.vampirestudios.vampirelib.VampireLib;
+import io.github.vampirestudios.vampirelib.api.FriendlyByteBufs;
 
 public final class DebugFeatureSync {
 	public static final ResourceLocation SYNC_MESSAGE_ID = VampireLib.INSTANCE.identifier("feature_sync");
