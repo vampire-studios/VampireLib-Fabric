@@ -38,7 +38,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
-import net.minecraft.world.level.material.Material;
 
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
@@ -47,8 +46,6 @@ import net.fabricmc.loader.api.FabricLoader;
 
 import io.github.vampirestudios.vampirelib.api.BasicModClass;
 import io.github.vampirestudios.vampirelib.api.ConvertibleBlockPair;
-import io.github.vampirestudios.vampirelib.api.debug_renderers.DebugFeatureCommands;
-import io.github.vampirestudios.vampirelib.api.debug_renderers.DebugFeatureSync;
 import io.github.vampirestudios.vampirelib.utils.BlockChiseler;
 import io.github.vampirestudios.vampirelib.utils.Rands;
 import io.github.vampirestudios.vampirelib.utils.registry.WoodRegistry;
@@ -122,8 +119,8 @@ public class VampireLib extends BasicModClass {
 				Rands.chance(15) ? "Your are" : (Rands.chance(15) ? "You're" : "You are"),
 				modName(), modVersion(), SharedConstants.getCurrentVersion().getName()));
 		BlockChiseler.setup();
-		DebugFeatureSync.init();
-		DebugFeatureCommands.init();
+//		DebugFeatureSync.init();
+//		DebugFeatureCommands.init();
 
 		if (TEST_CONTENT_ENABLED) {
 			ResourceManagerHelper.registerBuiltinResourcePack(INSTANCE.identifier("wood_types"), FabricLoader.getInstance().getModContainer(INSTANCE.modId()).get(), ResourcePackActivationType.ALWAYS_ENABLED);
@@ -253,7 +250,7 @@ public class VampireLib extends BasicModClass {
 	}
 
 	private static Block createBlock(String name, boolean hasItem) {
-		Block block = Registry.register(BuiltInRegistries.BLOCK, INSTANCE.identifier(name), new Block(BlockBehaviour.Properties.of(Material.DEPRECATED)));
+		Block block = Registry.register(BuiltInRegistries.BLOCK, INSTANCE.identifier(name), new Block(BlockBehaviour.Properties.of()));
 
 		if (hasItem) {
 			Registry.register(BuiltInRegistries.ITEM, INSTANCE.identifier(name), new BlockItem(block, new Item.Properties()));
@@ -266,13 +263,5 @@ public class VampireLib extends BasicModClass {
 		ResourceLocation identifier = INSTANCE.identifier(name);
 		return Registry.register(BuiltInRegistries.ITEM, identifier, new Item(new Item.Properties()));
 	}
-
-//	private record DynamicData(Holder<Biome> biome) {
-//		private static final ResourceKey<Registry<DynamicData>> BEFORE_KEY = ResourceKey.createRegistryKey(new ResourceLocation(INSTANCE.modId(), "fabric-api/before_biome"));
-//		private static final ResourceKey<Registry<DynamicData>> AFTER_KEY = ResourceKey.createRegistryKey(new ResourceLocation(INSTANCE.modId(), "fabric-api/after_biome"));
-//		private static final Codec<DynamicData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-//				Biome.CODEC.fieldOf("biome").forGetter(DynamicData::biome)
-//		).apply(instance, DynamicData::new));
-//	}
 
 }

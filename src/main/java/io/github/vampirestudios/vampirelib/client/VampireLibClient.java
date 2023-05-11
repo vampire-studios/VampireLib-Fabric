@@ -36,7 +36,6 @@ import io.github.vampirestudios.vampirelib.VampireLib;
 import io.github.vampirestudios.vampirelib.api.BasicModClass;
 import io.github.vampirestudios.vampirelib.api.callbacks.DebugRendererRegistrationCallback;
 import io.github.vampirestudios.vampirelib.api.callbacks.ItemTooltipDataCallback;
-import io.github.vampirestudios.vampirelib.api.debug_renderers.DebugFeatureSync;
 import io.github.vampirestudios.vampirelib.api.debug_renderers.VanillaDebugFeatures;
 import io.github.vampirestudios.vampirelib.item.BundledTooltipComponentImpl;
 import io.github.vampirestudios.vampirelib.item.BundledTooltipData;
@@ -91,8 +90,8 @@ public class VampireLibClient extends BasicModClass {
 			}
 		});
 
-		DebugFeatureSync.clientInit();
-		DebugFeatureClientCommands.init();
+//		DebugFeatureSync.clientInit();
+//		DebugFeatureClientCommands.init();
 
 		DebugRendererRegistrationCallback.EVENT.register(registrar -> {
 			var debugRenderer = Minecraft.getInstance().debugRenderer;

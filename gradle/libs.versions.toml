@@ -1,13 +1,13 @@
 [versions]
-    minecraft = "23w16a"
+    minecraft = "23w17a"
     quilt_mappings = "23w16a+build.1"
+    fabric_mappings = "23w17a+build.10"
     fabric-loader = "0.14.19"
     parchment = "2023.03.12"
 
-    fabric = "0.79.0+1.20"
+    fabric = "0.80.0+1.20"
 
-    clothconfig = "10.0.96"
-    terraformwoodapi = '7.0.0-alpha.3'
+    terraformwoodapi = '7.0.0-alpha.5'
 
 [libraries]
     minecraft = { module = 'com.mojang:minecraft', version.ref = 'minecraft' }
@@ -16,7 +16,6 @@
     fabric_api = { module = "net.fabricmc.fabric-api:fabric-api", version.ref = "fabric" }
     fabric_api_deprecated = { module = "net.fabricmc.fabric-api:fabric-api-deprecated", version.ref = "fabric" }
 
-    clothconfig = { module = 'me.shedaniel.cloth:cloth-config-fabric', version.ref = 'clothconfig' }
     terraformwoodapi = { module = 'com.terraformersmc.terraform-api:terraform-wood-api-v1', version.ref = 'terraformwoodapi' }
 
 [bundles]

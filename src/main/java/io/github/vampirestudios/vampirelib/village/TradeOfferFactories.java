@@ -104,7 +104,7 @@ public class TradeOfferFactories {
 
 
 		public MerchantOffer getOffer(Entity entity_1, @NotNull RandomSource random_1) {
-			if (!(entity_1.level instanceof ServerLevel serverWorld_1)) {
+			if (!(entity_1.level() instanceof ServerLevel serverWorld_1)) {
 				return null;
 			} else {
 				BlockPos blockPos_1 = serverWorld_1.findNearestMapStructure(this.structure,
@@ -461,12 +461,12 @@ public class TradeOfferFactories {
 
 		@Override
 		public boolean hg$isApplicable(AbstractVillager entity, RandomSource random) {
-			if (entity.level.getBiome(entity.blockPosition()).unwrapKey().isPresent()) {
+			if (entity.level().getBiome(entity.blockPosition()).unwrapKey().isPresent()) {
 				System.out.println(
-						VillagerTypeRegistry.getVillagerTypeForBiome(entity.level.getBiome(entity.blockPosition()))
+						VillagerTypeRegistry.getVillagerTypeForBiome(entity.level().getBiome(entity.blockPosition()))
 								.toString());
 				return itemMap.containsKey(
-						VillagerTypeRegistry.getVillagerTypeForBiome(entity.level.getBiome(entity.blockPosition())));
+						VillagerTypeRegistry.getVillagerTypeForBiome(entity.level().getBiome(entity.blockPosition())));
 			} else {
 				return itemMap.containsKey(VillagerType.PLAINS);
 			}

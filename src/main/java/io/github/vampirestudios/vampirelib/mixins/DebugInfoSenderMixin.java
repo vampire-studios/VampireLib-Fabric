@@ -135,7 +135,7 @@ public abstract class DebugInfoSenderMixin {
 	 */
 	@Overwrite
 	public static void sendEntityBrain(LivingEntity living) {
-		if (living.level.isClientSide()) {
+		if (living.level().isClientSide()) {
 			return;
 		}
 
@@ -145,7 +145,7 @@ public abstract class DebugInfoSenderMixin {
 		buf.writeDouble(living.getZ());
 		buf.writeUUID(living.getUUID());
 		buf.writeInt(living.getId());
-		buf.writeUtf(getShortDescription((ServerLevel) living.level, living));
+		buf.writeUtf(getShortDescription((ServerLevel) living.level(), living));
 		buf.writeUtf(living instanceof VillagerDataHolder villager ? villager.getVillagerData().getProfession().name() : "none");
 		buf.writeInt(living instanceof Villager villager ? villager.getVillagerXp() : 0);
 		buf.writeFloat(living.getHealth());

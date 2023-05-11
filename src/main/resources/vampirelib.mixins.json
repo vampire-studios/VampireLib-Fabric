@@ -15,7 +15,7 @@
 		"MixinServerPlayerEntity",
 		"MixinSpawnHelper",
 		"ModelMixin",
-		"PlayerManagerMixin",
+//		"PlayerManagerMixin",
 		"RegistriesMixin",
 		"RegistryDataLoaderMixin",
 		"RegistryLoaderAccessor",

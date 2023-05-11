@@ -17,19 +17,21 @@
 
 package io.github.vampirestudios.vampirelib;
 
-import io.github.vampirestudios.vampirelib.api.datagen.*;
-import io.github.vampirestudios.vampirelib.api.datagen.builder.BlockModelBuilder;
-import io.github.vampirestudios.vampirelib.init.VTags;
-import io.github.vampirestudios.vampirelib.utils.registry.WoodRegistry;
-import net.fabric.api.tag.convention.v1.ConventionalBiomeTags;
+import static io.github.vampirestudios.vampirelib.VampireLib.TEST_CONTENT_ENABLED;
+
+import java.io.File;
+import java.io.Reader;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.function.Consumer;
+
 import net.fabric.api.tag.convention.v1.ConventionalBlockTags;
 import net.fabric.api.tag.convention.v1.ConventionalItemTags;
-import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
-import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricModelProvider;
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
+import org.joml.Vector3d;
+
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.DataProvider;
@@ -48,18 +50,24 @@ import net.minecraft.world.level.biome.MultiNoiseBiomeSourceParameterList;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.dimension.BuiltinDimensionTypes;
 import net.minecraft.world.level.levelgen.NoiseGeneratorSettings;
-import org.joml.Vector3d;
 
-import java.io.File;
-import java.io.Reader;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.CompletableFuture;
-import java.util.function.Consumer;
+import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
+import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
+import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricModelProvider;
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
 
-import static io.github.vampirestudios.vampirelib.VampireLib.TEST_CONTENT_ENABLED;
+import io.github.vampirestudios.vampirelib.api.datagen.CustomTagProviders;
+import io.github.vampirestudios.vampirelib.api.datagen.DisplayBuilder;
+import io.github.vampirestudios.vampirelib.api.datagen.ElementBuilder;
+import io.github.vampirestudios.vampirelib.api.datagen.FabricSoundProvider;
+import io.github.vampirestudios.vampirelib.api.datagen.FaceBuilder;
+import io.github.vampirestudios.vampirelib.api.datagen.RotationBuilder;
+import io.github.vampirestudios.vampirelib.api.datagen.VBlockLootTableProvider;
+import io.github.vampirestudios.vampirelib.api.datagen.builder.BlockModelBuilder;
+import io.github.vampirestudios.vampirelib.init.VTags;
+import io.github.vampirestudios.vampirelib.utils.registry.WoodRegistry;
 
 public class VampireLibDataGen implements DataGeneratorEntrypoint {
 	@Override
@@ -681,15 +689,6 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
 //                .addOptionalTag(ConventionalBiomeTags.IN_THE_END.location())
 					.add(Biomes.THE_END, Biomes.SMALL_END_ISLANDS, Biomes.END_BARRENS, Biomes.END_MIDLANDS, Biomes.END_HIGHLANDS);
 //            tag(BiomeTags.IS_END).addTag(VTags.Biomes.END);
-
-			tag(net.fabricmc.fabric.api.tag.convention.v1.ConventionalBiomeTags.ICY)
-					.add(Biomes.FROZEN_PEAKS)
-					.add(Biomes.ICE_SPIKES);
-
-			tag(ConventionalBiomeTags.AQUATIC_ICY)
-					.add(Biomes.FROZEN_RIVER)
-					.add(Biomes.DEEP_FROZEN_OCEAN)
-					.add(Biomes.FROZEN_OCEAN);
 
 			this.tag(VTags.Biomes.IS_GRASSLAND).add(Biomes.PLAINS, Biomes.SUNFLOWER_PLAINS);
 			this.tag(VTags.Biomes.IS_ICY).add(Biomes.SNOWY_PLAINS, Biomes.ICE_SPIKES);

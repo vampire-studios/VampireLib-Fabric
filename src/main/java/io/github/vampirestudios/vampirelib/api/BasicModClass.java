@@ -21,16 +21,18 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-import me.shedaniel.autoconfig.AutoConfig;
-import me.shedaniel.autoconfig.ConfigHolder;
-import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import net.minecraft.SharedConstants;
 import net.minecraft.resources.ResourceLocation;
 
-import net.fabricmc.api.*;
+import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.fabricmc.api.EnvironmentInterface;
+import net.fabricmc.api.EnvironmentInterfaces;
+import net.fabricmc.api.ModInitializer;
 
 import io.github.vampirestudios.vampirelib.modules.FeatureManager;
 
@@ -46,7 +48,6 @@ public abstract class BasicModClass implements ModInitializer, ClientModInitiali
 	private final String modVersion;
 	private final Logger logger;
 	private boolean printVersionMessage = true;
-	private ConfigHolder<? extends CustomConfig> config;
 
 	/**
 	 * Creates a copy of the ${@link BasicModClass} given and defines if it's client-side or not.
@@ -123,23 +124,6 @@ public abstract class BasicModClass implements ModInitializer, ClientModInitiali
 			FEATURE_MANAGERS.put(id, manager);
 			return manager;
 		}
-	}
-
-	/**
-	 * Creates a new config for this mod with the specified config class.
-	 *
-	 * @param config the class of the config that will be used
-	 */
-	public void createConfig(Class<? extends CustomConfig> config) {
-		AutoConfig.register(config, GsonConfigSerializer::new);
-		this.config = AutoConfig.getConfigHolder(config);
-	}
-
-	/**
-	 * @return an instance of this mod's config.
-	 */
-	public ConfigHolder<? extends CustomConfig> getConfig() {
-		return this.config;
 	}
 
 	/**

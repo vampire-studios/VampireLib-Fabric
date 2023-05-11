@@ -96,7 +96,6 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.WoodType;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 
 import net.fabricmc.api.EnvType;
@@ -1753,7 +1752,7 @@ public class WoodRegistry {
 		}
 
 		private static ButtonBlock woodenButton(BlockSetType blockSetType) {
-			return new ButtonBlock(BlockBehaviour.Properties.of(Material.DEPRECATED).noCollission().strength(0.5F), blockSetType, 30, true);
+			return new ButtonBlock(BlockBehaviour.Properties.of().noCollission().strength(0.5F), blockSetType, 30, true);
 		}
 
 		public Builder ladder() {

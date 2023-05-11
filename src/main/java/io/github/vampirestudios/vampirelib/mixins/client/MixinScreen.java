@@ -19,7 +19,6 @@ package io.github.vampirestudios.vampirelib.mixins.client;
 
 import java.util.List;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -29,15 +28,17 @@ import org.spongepowered.asm.mixin.injection.ModifyConstant;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
+import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipPositioner;
 import net.minecraft.world.InteractionResult;
 
 import io.github.vampirestudios.vampirelib.api.callbacks.client.RenderTooltipCallback;
 import io.github.vampirestudios.vampirelib.api.callbacks.client.TooltipEventColorContextImpl;
 import io.github.vampirestudios.vampirelib.api.callbacks.client.TooltipEventPositionContextImpl;
 
-@Mixin(value = Screen.class, priority = 1100)
+@Mixin(value = GuiGraphics.class, priority = 1100)
 public abstract class MixinScreen {
 	@Unique
 	private static final ThreadLocal<TooltipEventPositionContextImpl> vl_tooltipPositionContext = ThreadLocal.withInitial(
@@ -47,18 +48,18 @@ public abstract class MixinScreen {
 			TooltipEventColorContextImpl::new);
 
 	@Inject(method = "renderTooltipInternal", at = @At("HEAD"), cancellable = true)
-	private void vl_renderTooltip(PoseStack poseStack, List<? extends ClientTooltipComponent> list, int x, int y, CallbackInfo ci) {
+	private void vl_renderTooltip(Font font, List<ClientTooltipComponent> list, int x, int y, ClientTooltipPositioner clientTooltipPositioner, CallbackInfo ci) {
 		if (!list.isEmpty()) {
 			var colorContext = vl_tooltipColorContext.get();
 			colorContext.reset();
 			var positionContext = vl_tooltipPositionContext.get();
 			positionContext.reset(x, y);
-			InteractionResult result = RenderTooltipCallback.RENDER_PRE.invoker().renderTooltip(poseStack, list, x, y);
+			InteractionResult result = RenderTooltipCallback.RENDER_PRE.invoker().renderTooltip(((GuiGraphics)(Object)this), font, list, x, y);
 			if (result == InteractionResult.FAIL) {
 				ci.cancel();
 			} else {
-				RenderTooltipCallback.RENDER_MODIFY_COLOR.invoker().renderTooltip(poseStack, x, y, colorContext);
-				RenderTooltipCallback.RENDER_MODIFY_POSITION.invoker().renderTooltip(poseStack, positionContext);
+				RenderTooltipCallback.RENDER_MODIFY_COLOR.invoker().renderTooltip(((GuiGraphics)(Object)this), font, x, y, colorContext);
+				RenderTooltipCallback.RENDER_MODIFY_POSITION.invoker().renderTooltip(((GuiGraphics)(Object)this), font, positionContext);
 			}
 		}
 	}

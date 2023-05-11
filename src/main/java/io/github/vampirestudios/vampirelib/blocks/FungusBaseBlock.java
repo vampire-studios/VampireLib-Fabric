@@ -23,12 +23,11 @@ import net.minecraft.world.level.block.FungusBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
-import net.minecraft.world.level.material.Material;
-import net.minecraft.world.level.material.MaterialColor;
+import net.minecraft.world.level.material.MapColor;
 
 public class FungusBaseBlock extends FungusBlock {
 	public FungusBaseBlock(ResourceKey<ConfiguredFeature<?, ?>> supplier, Block baseBlock) {
-		super(BlockBehaviour.Properties.of(Material.PLANT, MaterialColor.COLOR_CYAN).instabreak().noCollission()
+		super(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_CYAN).instabreak().noCollission()
 				.sound(SoundType.FUNGUS), supplier, baseBlock);
 	}
 

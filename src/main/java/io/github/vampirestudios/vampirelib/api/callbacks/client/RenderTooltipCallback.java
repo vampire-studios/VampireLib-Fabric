@@ -19,8 +19,8 @@ package io.github.vampirestudios.vampirelib.api.callbacks.client;
 
 import java.util.List;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionResult;
@@ -44,12 +44,12 @@ public interface RenderTooltipCallback {
 			});
 
 	/**
-	 * @see Render#renderTooltip(PoseStack, List, int, int)
+	 * @see Render#renderTooltip(GuiGraphics, Font, List, int, int)
 	 */
 	Event<Render> RENDER_PRE = EventFactory.createArrayBacked(Render.class, listeners ->
-			(matrices, text, x, y) -> {
+			(matrices, font, text, x, y) -> {
 				for (Render event : listeners) {
-					InteractionResult result = event.renderTooltip(matrices, text, x, y);
+					InteractionResult result = event.renderTooltip(matrices, font, text, x, y);
 					if (result != InteractionResult.PASS) return result;
 				}
 
@@ -57,22 +57,22 @@ public interface RenderTooltipCallback {
 			});
 
 	/**
-	 * @see RenderModifyPosition#renderTooltip(PoseStack, PositionContext)
+	 * @see RenderModifyPosition#renderTooltip(GuiGraphics, Font, PositionContext)
 	 */
 	Event<RenderModifyPosition> RENDER_MODIFY_POSITION = EventFactory.createArrayBacked(RenderModifyPosition.class,
-			listeners -> (matrices, context) -> {
+			listeners -> (matrices, font, context) -> {
 				for (RenderModifyPosition event : listeners) {
-					event.renderTooltip(matrices, context);
+					event.renderTooltip(matrices, font, context);
 				}
 			});
 
 	/**
-	 * @see RenderModifyColor#renderTooltip(PoseStack, int, int, ColorContext)
+	 * @see RenderModifyColor#renderTooltip(GuiGraphics, Font, int, int, ColorContext)
 	 */
 	Event<RenderModifyColor> RENDER_MODIFY_COLOR = EventFactory.createArrayBacked(RenderModifyColor.class, listeners ->
-			(matrices, x, y, context) -> {
+			(matrices, font, x, y, context) -> {
 				for (RenderModifyColor event : listeners) {
-					event.renderTooltip(matrices, x, y, context);
+					event.renderTooltip(matrices, font, x, y, context);
 				}
 			});
 
@@ -95,15 +95,15 @@ public interface RenderTooltipCallback {
 		/**
 		 * Invoked before the tooltip for a tooltip is rendered.
 		 *
-		 * @param matrices The pose stack.
-		 * @param texts    The mutable list of components that are rendered.
-		 * @param x        The x-coordinate of the tooltip.
-		 * @param y        The y-coordinate of the tooltip.
+		 * @param font 	The pose stack.
+		 * @param list	The mutable list of components that are rendered.
+		 * @param x		The x-coordinate of the tooltip.
+		 * @param y		The y-coordinate of the tooltip.
 		 *
 		 * @return A {@link InteractionResult} determining the outcome of the event,
 		 * the execution of the vanilla tooltip rendering may be cancelled by the result.
 		 */
-		InteractionResult renderTooltip(PoseStack matrices, List<? extends ClientTooltipComponent> texts, int x, int y);
+		InteractionResult renderTooltip(GuiGraphics matrices, Font font, List<ClientTooltipComponent> list, int x, int y);
 	}
 
 	@Environment(EnvType.CLIENT)
@@ -114,7 +114,7 @@ public interface RenderTooltipCallback {
 		 * @param matrices The pose stack.
 		 * @param context  The current position context.
 		 */
-		void renderTooltip(PoseStack matrices, PositionContext context);
+		void renderTooltip(GuiGraphics matrices, Font font, PositionContext context);
 	}
 
 	@Environment(EnvType.CLIENT)
@@ -127,7 +127,7 @@ public interface RenderTooltipCallback {
 		 * @param y        The y-coordinate of the tooltip.
 		 * @param context  The current color context.
 		 */
-		void renderTooltip(PoseStack matrices, int x, int y, ColorContext context);
+		void renderTooltip(GuiGraphics matrices, Font font, int x, int y, ColorContext context);
 	}
 
 	@Environment(EnvType.CLIENT)

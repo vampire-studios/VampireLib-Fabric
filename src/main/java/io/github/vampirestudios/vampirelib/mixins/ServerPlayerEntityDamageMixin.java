@@ -33,7 +33,7 @@ public class ServerPlayerEntityDamageMixin {
 	private void onDamage(DamageSource source, float amount, CallbackInfoReturnable<Boolean> ci) {
 		ServerPlayer player = (ServerPlayer) (Object) this;
 
-		if (player.level.isClientSide) return;
+		if (player.level().isClientSide) return;
 
 		boolean cancel = PlayerDamageListener.EVENT.invoker().onDamage(player, source, amount);
 		if (cancel) ci.cancel();

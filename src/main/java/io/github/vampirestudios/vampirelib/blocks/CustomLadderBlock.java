@@ -21,11 +21,10 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.LadderBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.level.material.Material;
 
 public class CustomLadderBlock extends LadderBlock {
 	public CustomLadderBlock() {
-		super(BlockBehaviour.Properties.of(Material.DEPRECATED).strength(0.4F).sound(SoundType.LADDER));
+		super(BlockBehaviour.Properties.of().strength(0.4F).sound(SoundType.LADDER));
 		registerDefaultState(this.defaultBlockState().setValue(FACING, Direction.NORTH).setValue(WATERLOGGED, false));
 	}
 

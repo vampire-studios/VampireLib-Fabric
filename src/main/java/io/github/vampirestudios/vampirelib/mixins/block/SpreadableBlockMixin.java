@@ -35,7 +35,7 @@ import net.minecraft.world.level.block.SnowyDirtBlock;
 import net.minecraft.world.level.block.SpreadingSnowyDirtBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.lighting.LayerLightEngine;
+import net.minecraft.world.level.lighting.LightEngine;
 
 import io.github.vampirestudios.vampirelib.api.blockspreading.BlockSpreadingType;
 import io.github.vampirestudios.vampirelib.api.blockspreading.SpreadBehaviors;
@@ -57,7 +57,7 @@ public abstract class SpreadableBlockMixin extends SnowyDirtBlock implements Spr
 		} else if (blockState.getFluidState().getAmount() == 8) {
 			return false;
 		} else {
-			int i = LayerLightEngine.getLightBlockInto(levelReader, state, pos, blockState, blockPos, Direction.UP,
+			int i = LightEngine.getLightBlockInto(levelReader, state, pos, blockState, blockPos, Direction.UP,
 					blockState.getLightBlock(levelReader, blockPos));
 			return i < levelReader.getMaxLightLevel();
 		}

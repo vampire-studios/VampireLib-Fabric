@@ -17,13 +17,13 @@
 
 package io.github.vampirestudios.vampirelib.mixins;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 
 import io.github.vampirestudios.vampirelib.api.callbacks.RenderGuiCallback;
@@ -37,12 +37,12 @@ public class HandledScreenMixin {
 			method = "render",
 			at = @At(
 					value = "INVOKE",
-					target = "Lnet/minecraft/client/gui/screens/inventory/AbstractContainerScreen;renderLabels(Lcom/mojang/blaze3d/vertex/PoseStack;II)V"
+					target = "Lnet/minecraft/client/gui/screens/inventory/AbstractContainerScreen;renderLabels(Lnet/minecraft/client/gui/GuiGraphics;II)V"
 			)
 	)
-	private void hookRender(PoseStack matrices, int mouseX, int mouseY, float delta, CallbackInfo ci) {
+	private void hookRender(GuiGraphics guiGraphics, int mouseX, int mouseY, float delta, CallbackInfo ci) {
 		Minecraft client = Minecraft.getInstance();
-		RenderGuiCallback.EVENT.invoker().interact(client, matrices, mouseX, mouseY, delta);
+		RenderGuiCallback.EVENT.invoker().interact(client, guiGraphics, mouseX, mouseY, delta);
 	}
 
 }
