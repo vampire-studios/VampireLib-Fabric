@@ -56,7 +56,6 @@ import io.github.vampirestudios.vampirelib.api.datagen.DisplayBuilder;
 import io.github.vampirestudios.vampirelib.api.datagen.ElementBuilder;
 import io.github.vampirestudios.vampirelib.api.datagen.FaceBuilder;
 import io.github.vampirestudios.vampirelib.api.datagen.RotationBuilder;
-import io.github.vampirestudios.vampirelib.api.datagen.VBlockLootTableProvider;
 import io.github.vampirestudios.vampirelib.api.datagen.builder.BlockModelBuilder;
 import io.github.vampirestudios.vampirelib.utils.registry.WoodRegistry;
 
@@ -403,9 +402,8 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
 			woodRegistry.generateLoot(this);
 		}
 
-		@Override
 		public void accept(BiConsumer<ResourceLocation, LootTable.Builder> resourceLocationBuilderBiConsumer) {
-
+			generate(resourceLocationBuilderBiConsumer);
 		}
 	}
 

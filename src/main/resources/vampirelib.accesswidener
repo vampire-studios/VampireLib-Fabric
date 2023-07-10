@@ -88,15 +88,6 @@ transitive-accessible field net/minecraft/client/model/geom/ModelPart children L
 transitive-accessible field net/minecraft/client/model/geom/EntityModelSet roots Ljava/util/Map;
 transitive-accessible field net/minecraft/client/model/geom/builders/MeshDefinition root Lnet/minecraft/client/model/geom/builders/PartDefinition;
 
-transitive-accessible method net/minecraft/client/model/geom/builders/CubeDefinition <init> (Ljava/lang/String;FFFFFFFFLnet/minecraft/client/model/geom/builders/CubeDeformation;ZFF)V
-transitive-accessible field net/minecraft/client/model/geom/builders/CubeDefinition origin Lorg/joml/Vector3f;
-transitive-accessible field net/minecraft/client/model/geom/builders/CubeDefinition dimensions Lorg/joml/Vector3f;
-transitive-accessible field net/minecraft/client/model/geom/builders/CubeDefinition grow Lnet/minecraft/client/model/geom/builders/CubeDeformation;
-transitive-accessible field net/minecraft/client/model/geom/builders/CubeDefinition mirror Z
-transitive-accessible field net/minecraft/client/model/geom/builders/CubeDefinition texCoord Lnet/minecraft/client/model/geom/builders/UVPair;
-transitive-accessible field net/minecraft/client/model/geom/builders/CubeDefinition texScale Lnet/minecraft/client/model/geom/builders/UVPair;
-transitive-accessible field net/minecraft/client/model/geom/builders/CubeDefinition comment Ljava/lang/String;
-
 transitive-accessible field net/minecraft/client/model/geom/builders/CubeDeformation growX F
 transitive-accessible field net/minecraft/client/model/geom/builders/CubeDeformation growY F
 transitive-accessible field net/minecraft/client/model/geom/builders/CubeDeformation growZ F
@@ -154,6 +145,3 @@ accessible method net/minecraft/core/registries/BuiltInRegistries registerSimple
 accessible class net/minecraft/core/registries/BuiltInRegistries$RegistryBootstrap
 
 accessible field net/minecraft/data/loot/BlockLootSubProvider map Ljava/util/Map;
-
-accessible method net/minecraft/world/level/block/state/properties/WoodType <init> (Ljava/lang/String;)V
-accessible method net/minecraft/world/level/block/state/properties/WoodType register (Lnet/minecraft/world/level/block/state/properties/WoodType;)Lnet/minecraft/world/level/block/state/properties/WoodType;
