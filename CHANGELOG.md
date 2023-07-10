@@ -23,3 +23,7 @@
 ### 6.3.0+build.2-1.19.4
 
 - Fixed test wood types being enabled by default
+
+### 6.3.0+build.3-1.19.4
+
+- Ported stuff from 1.20 version

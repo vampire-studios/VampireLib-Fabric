@@ -24,8 +24,7 @@ indent_style = space
 indent_size = 2
 
 [.editorconfig]
-indent_style = space
-indent_size = 4
+indent_style = tab
 
 [*.xml]
 indent_style = tab

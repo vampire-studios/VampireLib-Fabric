@@ -30,7 +30,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameRules;
@@ -47,10 +46,8 @@ import net.fabricmc.loader.api.FabricLoader;
 
 import io.github.vampirestudios.vampirelib.api.BasicModClass;
 import io.github.vampirestudios.vampirelib.api.ConvertibleBlockPair;
-import io.github.vampirestudios.vampirelib.api.debug_renderers.DebugFeatureCommands;
-import io.github.vampirestudios.vampirelib.api.debug_renderers.DebugFeatureSync;
-import io.github.vampirestudios.vampirelib.utils.Rands;
 import io.github.vampirestudios.vampirelib.utils.BlockChiseler;
+import io.github.vampirestudios.vampirelib.utils.Rands;
 import io.github.vampirestudios.vampirelib.utils.registry.WoodRegistry;
 import io.github.vampirestudios.vampirelib.utils.registry.WoodRegistry.WoodPropertyType;
 
@@ -107,7 +104,7 @@ public class VampireLib extends BasicModClass {
 	public static Item ITEM_WITH_NORMAL_MODEL;
 
 	public VampireLib() {
-		super("vampirelib", "VampireLib", "5.5.0+build.1");
+		super("vampirelib", "VampireLib", "6.4.0+build.3-1.19.4");
 	}
 
 	@Override
@@ -117,25 +114,8 @@ public class VampireLib extends BasicModClass {
 				Rands.chance(15) ? "Your are" : (Rands.chance(15) ? "You're" : "You are"),
 				modName(), modVersion(), SharedConstants.getCurrentVersion().getName()));
 		BlockChiseler.setup();
-		DebugFeatureSync.init();
-		DebugFeatureCommands.init();
 
 		if (TEST_CONTENT_ENABLED) {
-//			try {
-//				DynamicRegistryRegistry.registerBefore(Registries.BIOME, DynamicData.BEFORE_KEY, DynamicData.CODEC);
-//				DynamicRegistryRegistry.registerAfter(Registries.BIOME, DynamicData.AFTER_KEY, DynamicData.CODEC);
-//				DynamicRegistryRegistry.register(ResourceKey.createRegistryKey(new ResourceLocation(INSTANCE.modId(), "worldgen/biome")), Codec.BOOL);
-//			} catch (IllegalStateException ignored) {
-//				INSTANCE.getLogger().info("DynamicRegistryRegistry path clash test passed!");
-//			}
-//
-//			DynamicRegistrySetupCallback.EVENT.register(registryManager -> {
-//				registryManager.registerEntryAdded(Registries.BIOME, (rawId, id, object) -> INSTANCE.getLogger().info("Biome added: {}", id));
-//				registryManager.registerEntryAdded(Registries.BIOME, (rawId, id, object) -> INSTANCE.getLogger().info("Biome added: {}", id));
-//				registryManager.registerEntryAdded(DynamicData.BEFORE_KEY, (rawId, id, object) -> INSTANCE.getLogger().info("Before biome data: {}", id));
-//				registryManager.registerEntryAdded(DynamicData.AFTER_KEY, (rawId, id, object) -> INSTANCE.getLogger().info("After biome data: {}", id));
-//			});
-
 			ResourceManagerHelper.registerBuiltinResourcePack(INSTANCE.identifier("wood_types"), FabricLoader.getInstance().getModContainer(INSTANCE.modId()).get(), ResourcePackActivationType.ALWAYS_ENABLED);
 
 			//Overworld
@@ -181,19 +161,19 @@ public class VampireLib extends BasicModClass {
 
 			TEST_NETHER_WOOD8 = WoodRegistry.of(identifier("test8_nether")).defaultBlocks(WoodPropertyType.NETHER).defaultExtras().nonFlammable().build();
 			TEST_NETHER_WOOD9 = WoodRegistry.of(identifier("test9_nether")).defaultBlocksColoredLeaves(WoodPropertyType.NETHER).defaultExtras()
-					.nonFlammable().build();
+				.nonFlammable().build();
 
 			TEST_NETHER_WOOD10 = WoodRegistry.of(identifier("test10_nether")).defaultBlocks(WoodPropertyType.NETHER).defaultExtras().nonFlammable().build();
 			TEST_NETHER_WOOD11 = WoodRegistry.of(identifier("test11_nether")).defaultBlocksColoredLeaves(WoodPropertyType.NETHER).defaultExtras()
-					.nonFlammable().build();
+				.nonFlammable().build();
 
 			TEST_NETHER_WOOD12 = WoodRegistry.of(identifier("test12_nether")).defaultBlocks(WoodPropertyType.NETHER).defaultExtras().nonFlammable().build();
 			TEST_NETHER_WOOD13 = WoodRegistry.of(identifier("test13_nether")).defaultBlocksColoredLeaves(WoodPropertyType.NETHER).defaultExtras()
-					.nonFlammable().build();
+				.nonFlammable().build();
 
-			BLOCK_WITH_CUSTOM_MODEL_1 = createBlock("block_with_custom_model_1", false);
-			BLOCK_WITH_CUSTOM_MODEL_2 = createBlock("block_with_custom_model_2", false);
-			BLOCK_WITH_EMPTY_MODEL = createBlock("block_with_empty_model", false);
+			BLOCK_WITH_CUSTOM_MODEL_1 = createBlock("block_with_custom_model_1");
+			BLOCK_WITH_CUSTOM_MODEL_2 = createBlock("block_with_custom_model_2");
+			BLOCK_WITH_EMPTY_MODEL = createBlock("block_with_empty_model");
 
 			ITEM_WITH_CUSTOM_MODEL_1 = createItem("item_with_custom_model_1");
 			ITEM_WITH_CUSTOM_MODEL_2 = createItem("item_with_custom_model_2");
@@ -262,14 +242,8 @@ public class VampireLib extends BasicModClass {
 		});
 	}
 
-	private static Block createBlock(String name, boolean hasItem) {
-		Block block = Registry.register(BuiltInRegistries.BLOCK, INSTANCE.identifier(name), new Block(BlockBehaviour.Properties.of(Material.STONE)));
-
-		if (hasItem) {
-			Registry.register(BuiltInRegistries.ITEM, INSTANCE.identifier(name), new BlockItem(block, new Item.Properties()));
-		}
-
-		return block;
+	private static Block createBlock(String name) {
+		return Registry.register(BuiltInRegistries.BLOCK, INSTANCE.identifier(name), new Block(BlockBehaviour.Properties.of(Material.STONE)));
 	}
 
 	private static Item createItem(String name) {
