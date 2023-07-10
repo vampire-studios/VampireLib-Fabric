@@ -21,18 +21,19 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.BiConsumer;
 
 import com.google.common.collect.Sets;
 
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.data.CachedOutput;
 import net.minecraft.data.loot.BlockLootSubProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import net.minecraft.world.level.storage.loot.LootTable;
-import net.minecraft.world.level.storage.loot.parameters.LootContextParamSet;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
@@ -40,7 +41,7 @@ import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLootTableProvider;
 
 /**
- * Extend this class and implement {@link VBlockLootTableProvider#generate}.
+ * Extend this class and implement {@link net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootTableProvider#generate}.
  *
  * <p>Register an instance of the class with {@link FabricDataGenerator.Pack#addProvider} in a {@link net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint}.
  */
@@ -69,17 +70,7 @@ public abstract class VBlockLootTableProvider extends BlockLootSubProvider imple
 	}
 
 	@Override
-	public LootContextParamSet getLootContextType() {
-		return LootContextParamSets.BLOCK;
-	}
-
-	@Override
-	public FabricDataOutput getFabricDataOutput() {
-		return output;
-	}
-
-	@Override
-	public void accept(BiConsumer<ResourceLocation, LootTable.Builder> biConsumer) {
+	public void generate(BiConsumer<ResourceLocation, LootTable.Builder> biConsumer) {
 		generate();
 
 		for (Map.Entry<ResourceLocation, LootTable.Builder> entry : map.entrySet()) {
@@ -113,6 +104,11 @@ public abstract class VBlockLootTableProvider extends BlockLootSubProvider imple
 				throw new IllegalStateException("Missing loot table(s) for %s".formatted(missing));
 			}
 		}
+	}
+
+	@Override
+	public CompletableFuture<?> run(CachedOutput writer) {
+		return VLootTableProviderImpl.run(writer, this, LootContextParamSets.BLOCK, output);
 	}
 
 	@Override

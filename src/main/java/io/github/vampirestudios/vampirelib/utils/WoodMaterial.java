@@ -30,6 +30,10 @@ public record WoodMaterial(ResourceLocation resourceLocation, WoodType woodType,
 		this(resourceLocation, woodType, leaves, log, false);
 	}
 
+	public WoodMaterial(ResourceLocation resourceLocation, Block leaves, Block log) {
+		this(resourceLocation, null, leaves, log, false);
+	}
+
 	public WoodMaterial(String name, WoodType woodType, Block leaves, Block log) {
 		this(ResourceLocation.tryParse(name), woodType, leaves, log, false);
 	}

@@ -1,56 +1,62 @@
 {
-  "schemaVersion": 1,
-  "id": "vampirelib",
-  "version": "${version}",
-  "name": "VampireLib",
-  "description": "VampireLib is a library mod for all minecraft mods made by Vampire Studios",
-  "authors": [
-    "Vampire Studios"
-  ],
-  "contact": {
-    "homepage": "https://github.com/vampire-studios/VampireLib-Fabric",
-    "sources": "https://github.com/vampire-studios/VampireLib-Fabric",
-    "issues": "https://github.com/vampire-studios/VampireLib-Fabric/issues"
-  },
-  "license": "MIT",
-  "icon": "assets/vampirelib/icon.png",
-  "environment": "*",
-  "entrypoints": {
-    "main": [
-      "io.github.vampirestudios.vampirelib.VampireLib"
-    ],
-    "client": [
-      "io.github.vampirestudios.vampirelib.client.VampireLibClient"
-    ],
-    "fabric-datagen": [
-      "io.github.vampirestudios.vampirelib.VampireLibDataGen"
-    ]
-  },
-  "mixins": [
-    "vampirelib.mixins.json"
-  ],
-  "accessWidener": "vampirelib.accesswidener",
-  "depends": {
-    "java": ">=17"
-  },
-  "custom": {
-	"loom:injected_interfaces": {
-	  "net/minecraft/class_4910": ["io/github/vampirestudios/vampirelib/api/datagen/FabricBlockStateModelGenerator"],
-	  "net/minecraft/class_4915": ["io/github/vampirestudios/vampirelib/api/datagen/FabricItemModelGenerator"],
-	  "net/minecraft/class_4942": ["io/github/vampirestudios/vampirelib/api/datagen/FabricModel"]
+	"schemaVersion": 1,
+	"id": "vampirelib",
+	"version": "${version}",
+	"name": "VampireLib",
+	"description": "VampireLib is a library mod for all minecraft mods made by Vampire Studios",
+	"authors": [
+		"Vampire Studios"
+	],
+	"contact": {
+		"homepage": "https://github.com/vampire-studios/VampireLib-Fabric",
+		"sources": "https://github.com/vampire-studios/VampireLib-Fabric",
+		"issues": "https://github.com/vampire-studios/VampireLib-Fabric/issues"
 	},
-    "modmenu": {
-      "links": {
-        "modmenu.discord": "https://discord.gg/63hmSTxyDA"
-      },
-      "badges": [
-        "library"
-      ],
-      "parent": {
-        "id": "vampire-studios-mods",
-        "name": "Vampire Studios' Mods",
-        "description": "All the mods from Vampire Studios"
-      }
-    }
-  }
+	"license": "MIT",
+	"icon": "assets/vampirelib/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"io.github.vampirestudios.vampirelib.VampireLib"
+		],
+		"client": [
+			"io.github.vampirestudios.vampirelib.client.VampireLibClient"
+		],
+		"fabric-datagen": [
+			"io.github.vampirestudios.vampirelib.VampireLibDataGen"
+		]
+	},
+	"mixins": [
+		"vampirelib.mixins.json"
+	],
+	"accessWidener": "vampirelib.accesswidener",
+	"depends": {
+		"java": ">=17"
+	},
+	"custom": {
+		"loom:injected_interfaces": {
+			"net/minecraft/class_4910": [
+				"io/github/vampirestudios/vampirelib/api/datagen/FabricBlockStateModelGenerator"
+			],
+			"net/minecraft/class_4915": [
+				"io/github/vampirestudios/vampirelib/api/datagen/FabricItemModelGenerator"
+			],
+			"net/minecraft/class_4942": [
+				"io/github/vampirestudios/vampirelib/api/datagen/FabricModel"
+			]
+		},
+		"modmenu": {
+			"links": {
+				"modmenu.discord": "https://discord.gg/63hmSTxyDA"
+			},
+			"badges": [
+				"library"
+			],
+			"parent": {
+				"id": "vampire-studios-mods",
+				"name": "Vampire Studios' Mods",
+				"description": "All the mods from Vampire Studios"
+			}
+		}
+	}
 }

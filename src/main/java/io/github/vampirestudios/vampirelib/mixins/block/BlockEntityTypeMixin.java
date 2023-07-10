@@ -17,11 +17,9 @@
 
 package io.github.vampirestudios.vampirelib.mixins.block;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Set;
 
-import com.google.common.collect.ImmutableSet;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Mutable;
@@ -30,10 +28,11 @@ import org.spongepowered.asm.mixin.Shadow;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 
+import io.github.vampirestudios.vampirelib.blocks.entity.BlockEntityTypeSupportHelper;
 import io.github.vampirestudios.vampirelib.blocks.entity.IBlockEntityType;
 
 @Mixin(BlockEntityType.class)
-public class BlockEntityTypeMixin implements IBlockEntityType {
+public class BlockEntityTypeMixin implements IBlockEntityType, BlockEntityTypeSupportHelper {
 	@Shadow
 	@Final
 	@Mutable
@@ -41,9 +40,14 @@ public class BlockEntityTypeMixin implements IBlockEntityType {
 
 	@Override
 	public void vlAddBlocks(Block... newBlocks) {
-		ArrayList<Block> tempList = new ArrayList<>(newBlocks.length + validBlocks.size());
-		tempList.addAll(Arrays.asList(newBlocks));
-		tempList.addAll(validBlocks);
-		validBlocks = ImmutableSet.copyOf(tempList);
+		this.validBlocks = new HashSet<>(this.validBlocks);
+		this.validBlocks.addAll(Set.of(newBlocks));
+	}
+
+	@Override
+	public BlockEntityTypeSupportHelper addSupportedBlocks(Block... blocks) {
+		this.validBlocks = new HashSet<>(this.validBlocks);
+		this.validBlocks.addAll(Set.of(blocks));
+		return this;
 	}
 }

@@ -30,7 +30,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.flag.FeatureFlag;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameRules;
@@ -39,10 +39,9 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
-import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
-import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
-import net.fabricmc.loader.api.FabricLoader;
 
 import io.github.vampirestudios.vampirelib.api.BasicModClass;
 import io.github.vampirestudios.vampirelib.api.ConvertibleBlockPair;
@@ -51,6 +50,7 @@ import io.github.vampirestudios.vampirelib.utils.Rands;
 import io.github.vampirestudios.vampirelib.utils.registry.WoodRegistry;
 import io.github.vampirestudios.vampirelib.utils.registry.WoodRegistry.WoodPropertyType;
 
+@Environment(EnvType.CLIENT)
 public class VampireLib extends BasicModClass {
 	public static final VampireLib INSTANCE = new VampireLib();
 
@@ -103,13 +103,10 @@ public class VampireLib extends BasicModClass {
 	public static Item ITEM_WITH_CUSTOM_MODEL_2;
 	public static Item ITEM_WITH_NORMAL_MODEL;
 
-	private static final ResourceLocation GREETING_A_ID = INSTANCE.identifier("greeting_a");
-	private static final Greetings GREETING_A = new Greetings("Welcome to Quilt!", 5);
-	private static final ResourceLocation GREETING_B_ID = INSTANCE.identifier("greeting_b");
-	private static final Greetings GREETING_B = new Greetings("Howdy!", 2);
+	public static FeatureFlag TEST;
 
 	public VampireLib() {
-		super("vampirelib", "VampireLib", "6.4.0+build.1-23w14a");
+		super("vampirelib", "VampireLib", "7.0.2+build.1-1.20.1");
 	}
 
 	@Override
@@ -119,12 +116,8 @@ public class VampireLib extends BasicModClass {
 				Rands.chance(15) ? "Your are" : (Rands.chance(15) ? "You're" : "You are"),
 				modName(), modVersion(), SharedConstants.getCurrentVersion().getName()));
 		BlockChiseler.setup();
-//		DebugFeatureSync.init();
-//		DebugFeatureCommands.init();
 
 		if (TEST_CONTENT_ENABLED) {
-			ResourceManagerHelper.registerBuiltinResourcePack(INSTANCE.identifier("wood_types"), FabricLoader.getInstance().getModContainer(INSTANCE.modId()).get(), ResourcePackActivationType.ALWAYS_ENABLED);
-
 			//Overworld
 			TEST_WOOD = WoodRegistry.of(identifier("test")).defaultBlocks().build();
 			TEST_WOOD1 = WoodRegistry.of(identifier("test1")).defaultBlocksColoredLeaves().build();
@@ -178,9 +171,9 @@ public class VampireLib extends BasicModClass {
 			TEST_NETHER_WOOD13 = WoodRegistry.of(identifier("test13_nether")).defaultBlocksColoredLeaves(WoodPropertyType.NETHER).defaultExtras()
 					.nonFlammable().build();
 
-			BLOCK_WITH_CUSTOM_MODEL_1 = createBlock("block_with_custom_model_1", false);
-			BLOCK_WITH_CUSTOM_MODEL_2 = createBlock("block_with_custom_model_2", false);
-			BLOCK_WITH_EMPTY_MODEL = createBlock("block_with_empty_model", false);
+			BLOCK_WITH_CUSTOM_MODEL_1 = createBlock("block_with_custom_model_1");
+			BLOCK_WITH_CUSTOM_MODEL_2 = createBlock("block_with_custom_model_2");
+			BLOCK_WITH_EMPTY_MODEL = createBlock("block_with_empty_model");
 
 			ITEM_WITH_CUSTOM_MODEL_1 = createItem("item_with_custom_model_1");
 			ITEM_WITH_CUSTOM_MODEL_2 = createItem("item_with_custom_model_2");
@@ -249,14 +242,8 @@ public class VampireLib extends BasicModClass {
 		});
 	}
 
-	private static Block createBlock(String name, boolean hasItem) {
-		Block block = Registry.register(BuiltInRegistries.BLOCK, INSTANCE.identifier(name), new Block(BlockBehaviour.Properties.of()));
-
-		if (hasItem) {
-			Registry.register(BuiltInRegistries.ITEM, INSTANCE.identifier(name), new BlockItem(block, new Item.Properties()));
-		}
-
-		return block;
+	private static Block createBlock(String name) {
+		return Registry.register(BuiltInRegistries.BLOCK, INSTANCE.identifier(name), new Block(BlockBehaviour.Properties.of().requiredFeatures(TEST)));
 	}
 
 	private static Item createItem(String name) {

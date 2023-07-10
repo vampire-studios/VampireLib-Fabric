@@ -6,8 +6,6 @@ Features this libmod allows for:
 
 - Custom Villager professions (with custom workstations and trades) and villager
 biome types
-- A lot of base classes
-  - Some GUI utils classes
 - Registry Helper class to make it easier to register things
 - Wood Registry for registering wood types, with possibility to choose which
 blocks, or if you want the full wood set. Also allows you to add upon already
@@ -17,15 +15,9 @@ ones.
 - More Datagen classes
 - Convertible Blocks system, with customizable items for converting and
 reverting, even custom sounds and item drops.
-- WIP Block Spreading API
-- Item Group Sorting, allows you to put your items together with specific
-vanilla items instead of at the bottom at the tab.
-- More Events
-- Ported Forge tags to Quilt
 - Module System, allows you to divide your mod up in modules where you can use
 config options to choose which is enabled and disabled.
 - Lots of base classes for blocks.
-- Support for emissive textures.
 
 ![](https://bisecthosting.com/images/CF/VampLib/BH_VL_Faq.png "")
 
@@ -33,7 +25,7 @@ config options to choose which is enabled and disabled.
 No, since I will not work on forge
 
 ## Can I use this in my project?
-You can include this as a library but you're not not allowed to distribute any of the code and say it's yours
+You can include this as a library, but you're not allowed to distribute any of the code and say it's yours
 
 ![Community](https://bisecthosting.com/images/CF/VampLib/BH_VL_Community.png "Community")
 ![Discord](https://img.shields.io/discord/901129108275216392?logo=Discord&amp;style=for-the-badge)

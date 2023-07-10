@@ -23,3 +23,9 @@
 ### 6.3.0+build.2-1.19.4
 
 - Fixed test wood types being enabled by default
+
+### 7.0.2+build.1-1.20.1
+
+- Updated to 1.20.1
+- Lots of improvements to datagen stuff and wood related code
+- Removed lots of code that is no longer needed
