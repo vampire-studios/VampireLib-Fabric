@@ -19,17 +19,22 @@ package io.github.vampirestudios.vampirelib.utils;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.properties.WoodType;
 
-public record WoodType(ResourceLocation resourceLocation, Block leaves, Block log, boolean nether) {
-	public WoodType(String name, Block leaves, Block log, boolean nether) {
-		this(ResourceLocation.tryParse(name), leaves, log, nether);
+public record WoodMaterial(ResourceLocation resourceLocation, WoodType woodType, Block leaves, Block log, boolean nether) {
+	public WoodMaterial(String name, WoodType woodType, Block leaves, Block log, boolean nether) {
+		this(ResourceLocation.tryParse(name), woodType, leaves, log, nether);
 	}
 
-	public WoodType(ResourceLocation resourceLocation, Block leaves, Block log) {
-		this(resourceLocation, leaves, log, false);
+	public WoodMaterial(ResourceLocation resourceLocation, WoodType woodType, Block leaves, Block log) {
+		this(resourceLocation, woodType, leaves, log, false);
 	}
 
-	public WoodType(String name, Block leaves, Block log) {
-		this(ResourceLocation.tryParse(name), leaves, log, false);
+	public WoodMaterial(ResourceLocation resourceLocation, Block leaves, Block log) {
+		this(resourceLocation, null, leaves, log, false);
+	}
+
+	public WoodMaterial(String name, WoodType woodType, Block leaves, Block log) {
+		this(ResourceLocation.tryParse(name), woodType, leaves, log, false);
 	}
 }

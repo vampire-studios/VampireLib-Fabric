@@ -24,20 +24,15 @@ import net.minecraft.SharedConstants;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.client.renderer.BiomeColors;
-import net.minecraft.world.item.BundleItem;
 import net.minecraft.world.level.FoliageColor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
+import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.TooltipComponentCallback;
-import net.fabricmc.fabric.impl.client.rendering.ColorProviderRegistryImpl;
 
 import io.github.vampirestudios.vampirelib.VampireLib;
 import io.github.vampirestudios.vampirelib.api.BasicModClass;
-import io.github.vampirestudios.vampirelib.api.callbacks.DebugRendererRegistrationCallback;
-import io.github.vampirestudios.vampirelib.api.callbacks.ItemTooltipDataCallback;
-import io.github.vampirestudios.vampirelib.api.debug_renderers.DebugFeatureSync;
-import io.github.vampirestudios.vampirelib.api.debug_renderers.VanillaDebugFeatures;
 import io.github.vampirestudios.vampirelib.item.BundledTooltipComponentImpl;
 import io.github.vampirestudios.vampirelib.item.BundledTooltipData;
 import io.github.vampirestudios.vampirelib.utils.Rands;
@@ -65,52 +60,21 @@ public class VampireLibClient extends BasicModClass {
 		});
 		COLORED_LEAVES.forEach(coloredLeaves -> {
 			if (coloredLeaves.usesBiomeColor) {
-				ColorProviderRegistryImpl.BLOCK.register((block, world, pos, layer) -> world != null && pos != null ?
+				ColorProviderRegistry.BLOCK.register((block, world, pos, layer) -> world != null && pos != null ?
 								BiomeColors.getAverageFoliageColor(
 										world,
 										pos) : FoliageColor.getDefaultColor(),
 						coloredLeaves.leavesBlock);
-				ColorProviderRegistryImpl.ITEM.register((item, layer) -> {
+				ColorProviderRegistry.ITEM.register((item, layer) -> {
 					BlockState blockState = coloredLeaves.leavesBlock.defaultBlockState();
 					return Minecraft.getInstance().getBlockColors().getColor(blockState, null, null, layer);
 				}, coloredLeaves.leavesBlock);
 			} else if (coloredLeaves.customColor) {
-				ColorProviderRegistryImpl.BLOCK.register((block, world, pos, layer) -> coloredLeaves.color,
+				ColorProviderRegistry.BLOCK.register((block, world, pos, layer) -> coloredLeaves.color,
 						coloredLeaves.leavesBlock);
-				ColorProviderRegistryImpl.ITEM.register((item, layer) -> coloredLeaves.color,
+				ColorProviderRegistry.ITEM.register((item, layer) -> coloredLeaves.color,
 						coloredLeaves.leavesBlock);
 			}
-		});
-
-
-
-		ItemTooltipDataCallback.EVENT.register((stack, list) -> {
-			// Re adds tooltip data's of bundles so items are rendered twice.
-			if (stack.getItem() instanceof BundleItem bundle) {
-				bundle.getTooltipImage(stack).ifPresent(list::add);
-			}
-		});
-
-		DebugFeatureSync.clientInit();
-		DebugFeatureClientCommands.init();
-
-		DebugRendererRegistrationCallback.EVENT.register(registrar -> {
-			var debugRenderer = Minecraft.getInstance().debugRenderer;
-			registrar.register(VanillaDebugFeatures.PATHFINDING, debugRenderer.pathfindingRenderer);
-			registrar.register(VanillaDebugFeatures.WATER, debugRenderer.waterDebugRenderer);
-			registrar.register(VanillaDebugFeatures.HEIGHTMAP, debugRenderer.heightMapRenderer);
-			registrar.register(VanillaDebugFeatures.NEIGHBORS_UPDATE, debugRenderer.neighborsUpdateRenderer);
-			registrar.register(VanillaDebugFeatures.STRUCTURE, debugRenderer.structureRenderer);
-			registrar.register(VanillaDebugFeatures.LIGHT, debugRenderer.lightDebugRenderer);
-			registrar.register(VanillaDebugFeatures.WORLD_GEN_ATTEMPT, debugRenderer.worldGenAttemptRenderer);
-			registrar.register(VanillaDebugFeatures.SOLID_FACE, debugRenderer.solidFaceRenderer);
-			registrar.register(VanillaDebugFeatures.CHUNK, debugRenderer.chunkRenderer);
-			registrar.register(VanillaDebugFeatures.BRAIN, debugRenderer.brainDebugRenderer);
-			registrar.register(VanillaDebugFeatures.VILLAGE_SECTIONS, debugRenderer.villageSectionsDebugRenderer);
-			registrar.register(VanillaDebugFeatures.BEE, debugRenderer.beeDebugRenderer);
-			registrar.register(VanillaDebugFeatures.RAID, debugRenderer.raidDebugRenderer);
-			registrar.register(VanillaDebugFeatures.GOAL_SELECTOR, debugRenderer.goalSelectorRenderer);
-			registrar.register(VanillaDebugFeatures.GAME_EVENT, debugRenderer.gameEventListenerRenderer);
 		});
 	}
 

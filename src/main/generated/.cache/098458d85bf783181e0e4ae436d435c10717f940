@@ -1,11 +1,1 @@
-// 1.19.3	2023-01-22T15:28:09.5750839	VampireLib/Tags for minecraft:block
-85b5b493053b76a55019a838799bdff0d27e298a data\c\tags\blocks\red_sandstone_slabs.json
-71fe3297c1ba45c687247f540a8a1eac69010c69 data\c\tags\blocks\sandstone_stairs.json
-8801d3445f682ff04b7eafa7853ee8714586fc93 data\c\tags\blocks\red_sandstone_stairs.json
-f9ebd908604f9fd7aeca829d91e3d87e7509fad8 data\c\tags\blocks\normal_sandstone_stairs.json
-10e8d465515a3d3440c939f2af1f8fcad1ecf9e4 data\c\tags\blocks\sandstone_blocks.json
-fbde4ac7a3b4b22d8dac04dfe932b638e9f045b3 data\c\tags\blocks\villager_job_sites.json
-71fe3297c1ba45c687247f540a8a1eac69010c69 data\c\tags\blocks\sandstone_slabs.json
-c949ef89ebded7a5427dd02abef7e21c013e96f2 data\c\tags\blocks\normal_sandstone_blocks.json
-47160d810985883ca568ea0a93b3acdc758f888e data\c\tags\blocks\normal_sandstone_slabs.json
-2dc5ef82ee2cf82423857085788859f9935ed30c data\c\tags\blocks\red_sandstone_blocks.json
+// 1.19.4	2023-07-10T19:30:44.0146082	VampireLib/Tags for minecraft:block

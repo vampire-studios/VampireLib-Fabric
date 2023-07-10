@@ -193,6 +193,12 @@ public record RegistryHelper(String modId) {
 			return registeredItem;
 		}
 
+		public Item registerItemWood(String name, Item item, CreativeModeTab creativeModeTab, Item vanillaItem) {
+			Item registeredItem = register(BuiltInRegistries.ITEM, name, item);
+			ItemGroupEvents.modifyEntriesEvent(creativeModeTab).register(entries -> entries.addBefore(vanillaItem, registeredItem));
+			return registeredItem;
+		}
+
 		public Item registerSpawnEgg(String name, EntityType<? extends Mob> entity, int primaryColor, int secondaryColor) {
 			Item item = registerItem(name + "_spawn_egg",
 					new SpawnEggItem(entity, primaryColor, secondaryColor, new Item.Properties()));

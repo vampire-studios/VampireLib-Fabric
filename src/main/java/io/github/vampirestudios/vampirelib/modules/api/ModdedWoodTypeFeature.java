@@ -19,13 +19,13 @@ package io.github.vampirestudios.vampirelib.modules.api;
 
 import net.minecraft.resources.ResourceLocation;
 
-import io.github.vampirestudios.vampirelib.utils.registry.WoodTypeRegistry;
+import io.github.vampirestudios.vampirelib.utils.registry.WoodMaterialRegistry;
 
-public abstract class ModdedWoodTypeFeature extends CommonFeature implements WoodTypeRegistry.ModdedTypeListener {
+public abstract class ModdedWoodTypeFeature extends CommonFeature implements WoodMaterialRegistry.ModdedTypeListener {
 
 	public ModdedWoodTypeFeature(ResourceLocation path, String name) {
 		super(path, name);
-		WoodTypeRegistry.registerModdedTypeListener(this);
+		WoodMaterialRegistry.registerModdedTypeListener(this);
 	}
 
 }

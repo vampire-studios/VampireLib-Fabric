@@ -4,37 +4,17 @@
   "compatibilityLevel": "JAVA_16",
   "mixins": [
 	"BlockStateModelGeneratorMixin",
-	"DebugInfoSenderMixin",
-	"HandledScreenMixin",
 	"ItemModelGeneratorMixin",
-	"ItemStackMixin",
-	"MixinItemEntity",
-	"MixinLivingEntity",
 	"MixinMobSpawnerLogic",
-	"MixinServerPlayerEntity",
 	"MixinSpawnHelper",
 	"ModelMixin",
-	"PlayerManagerMixin",
-	"RegistryLoaderAccessor",
-	"RegistryLoaderMixin",
-	"ServerPlayerEntityDamageMixin",
 	"block.BlockEntityTypeMixin",
-	"block.GrassBlockMixin",
-	"block.MyceliumBlockMixin",
-	"block.SpreadableBlockMixin",
 	"block.StructureBlockBlockEntityMixin",
 	"block.UpdateStructureBlockC2SPacketMixin",
 	"entity.VillagerEntityMixin",
 	"item.MixinBookOnLectern"
   ],
-  "client": [
-	"TooltipComponentMixin",
-	"client.BlockColorsMixin",
-	"client.CameraInvokerMixin",
-	"client.DebugRendererMixin",
-	"client.MinecraftClientMixin",
-	"client.ShaderInstanceMixin"
-  ],
+  "client": [],
   "injectors": {
 	"defaultRequire": 1
   }
