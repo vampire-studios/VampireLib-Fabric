@@ -26,7 +26,6 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
-import java.util.function.Consumer;
 
 import org.joml.Vector3d;
 
@@ -36,7 +35,7 @@ import net.minecraft.data.DataProvider;
 import net.minecraft.data.models.BlockModelGenerators;
 import net.minecraft.data.models.ItemModelGenerators;
 import net.minecraft.data.models.blockstates.VariantProperties;
-import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Items;
 
@@ -221,7 +220,7 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
 		}
 
 		@Override
-		public void buildRecipes(Consumer<FinishedRecipe> exporter) {
+		public void buildRecipes(RecipeOutput exporter) {
 			generateWoodTypeRecipes(exporter, VampireLib.TEST_WOOD);
 			generateWoodTypeRecipes(exporter, VampireLib.TEST_WOOD1);
 			generateWoodTypeRecipes(exporter, VampireLib.TEST_WOOD2);
@@ -256,7 +255,7 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
 			generateWoodTypeRecipes(exporter, VampireLib.TEST_NETHER_WOOD13);
 		}
 
-		private void generateWoodTypeRecipes(Consumer<FinishedRecipe> exporter, WoodRegistry woodRegistry) {
+		private void generateWoodTypeRecipes(RecipeOutput exporter, WoodRegistry woodRegistry) {
 			woodRegistry.generateRecipes(exporter);
 		}
 	}

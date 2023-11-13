@@ -29,7 +29,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.npc.VillagerDataHolder;
@@ -43,6 +42,7 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.SuspiciousEffectHolder;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.saveddata.maps.MapDecoration;
 import net.minecraft.world.level.saveddata.maps.MapItemSavedData;
@@ -275,14 +275,12 @@ public class TradeOfferFactories {
 	}
 
 	public static class SellSuspiciousStewFactory implements VillagerTrades.ItemListing {
-		final MobEffect effect;
-		final int duration;
+		final List<SuspiciousEffectHolder.EffectEntry> effects;
 		final int experience;
 		private final float multiplier;
 
-		public SellSuspiciousStewFactory(MobEffect statusEffect_1, int int_1, int int_2) {
-			this.effect = statusEffect_1;
-			this.duration = int_1;
+		public SellSuspiciousStewFactory(List<SuspiciousEffectHolder.EffectEntry> statusEffect_1, int int_2) {
+			this.effects = statusEffect_1;
 			this.experience = int_2;
 			this.multiplier = 0.05F;
 		}
@@ -290,7 +288,7 @@ public class TradeOfferFactories {
 
 		public MerchantOffer getOffer(Entity entity_1, RandomSource random_1) {
 			ItemStack itemStack_1 = new ItemStack(Items.SUSPICIOUS_STEW, 1);
-			SuspiciousStewItem.saveMobEffect(itemStack_1, this.effect, this.duration);
+			SuspiciousStewItem.saveMobEffects(itemStack_1, this.effects);
 			return new MerchantOffer(new ItemStack(Items.EMERALD, 1), itemStack_1, 6, this.experience, this.multiplier);
 		}
 	}

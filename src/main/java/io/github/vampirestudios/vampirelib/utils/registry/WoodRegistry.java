@@ -28,7 +28,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Consumer;
 
 import com.terraformersmc.terraform.boat.api.TerraformBoatType;
 import com.terraformersmc.terraform.boat.api.TerraformBoatTypeRegistry;
@@ -57,8 +56,8 @@ import net.minecraft.data.models.model.ModelTemplates;
 import net.minecraft.data.models.model.TextureMapping;
 import net.minecraft.data.models.model.TextureSlot;
 import net.minecraft.data.models.model.TexturedModel;
-import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeCategory;
+import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.resources.ResourceKey;
@@ -88,7 +87,7 @@ import net.minecraft.world.level.block.SlabBlock;
 import net.minecraft.world.level.block.StairBlock;
 import net.minecraft.world.level.block.TrapDoorBlock;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.grower.AbstractTreeGrower;
+import net.minecraft.world.level.block.grower.TreeGrower;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.properties.BlockSetType;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -124,7 +123,7 @@ import io.github.vampirestudios.vampirelib.utils.WoodMaterial;
 
 public class WoodRegistry {
 	private ResourceLocation name;
-	private AbstractTreeGrower saplingGenerator;
+	private TreeGrower saplingGenerator;
 	private ResourceKey<ConfiguredFeature<?, ?>> fungusGenerator;
 	private Block baseFungusBlock;
 
@@ -182,7 +181,7 @@ public class WoodRegistry {
 		this(name, null, null);
 	}
 
-	private WoodRegistry(ResourceLocation name, AbstractTreeGrower saplingGenerator) {
+	private WoodRegistry(ResourceLocation name, TreeGrower saplingGenerator) {
 		this(name, saplingGenerator, null, null);
 	}
 
@@ -190,7 +189,7 @@ public class WoodRegistry {
 		this(name, null, fungusGenerator, baseFungusBlock);
 	}
 
-	private WoodRegistry(ResourceLocation name, AbstractTreeGrower saplingGenerator, ResourceKey<ConfiguredFeature<?, ?>> fungusGenerator, Block baseFungusBlock) {
+	private WoodRegistry(ResourceLocation name, TreeGrower saplingGenerator, ResourceKey<ConfiguredFeature<?, ?>> fungusGenerator, Block baseFungusBlock) {
 		setName(name);
 		setSaplingGenerator(saplingGenerator);
 		setFungusGenerator(fungusGenerator);
@@ -199,7 +198,7 @@ public class WoodRegistry {
 		this.logsItemTag = TagKey.create(Registries.ITEM, Utils.appendToPath(name, "_logs"));
 	}
 
-	private void setSaplingGenerator(AbstractTreeGrower abstractTreeGrower) {
+	private void setSaplingGenerator(TreeGrower abstractTreeGrower) {
 		this.saplingGenerator = abstractTreeGrower;
 	}
 
@@ -227,7 +226,7 @@ public class WoodRegistry {
 		return create().of(name, planks);
 	}
 
-	public static WoodRegistry.Builder of(ResourceLocation name, AbstractTreeGrower saplingGenerator) {
+	public static WoodRegistry.Builder of(ResourceLocation name, TreeGrower saplingGenerator) {
 		return create().of(name, saplingGenerator);
 	}
 
@@ -239,7 +238,7 @@ public class WoodRegistry {
 		return create().of(woodMaterial);
 	}
 
-	public static WoodRegistry.Builder of(WoodMaterial woodMaterial, AbstractTreeGrower saplingGenerator) {
+	public static WoodRegistry.Builder of(WoodMaterial woodMaterial, TreeGrower saplingGenerator) {
 		return create().of(woodMaterial, saplingGenerator);
 	}
 
@@ -363,7 +362,7 @@ public class WoodRegistry {
 		return hangingWallSign;
 	}
 
-	public AbstractTreeGrower saplingGenerator() {
+	public TreeGrower saplingGenerator() {
 		return saplingGenerator;
 	}
 
@@ -1188,7 +1187,7 @@ public class WoodRegistry {
 		if (chiseledBookshelf != null) lootTablesProvider.dropWhenSilkTouch(chiseledBookshelf);
 	}
 
-	public void generateRecipes(Consumer<FinishedRecipe> exporter) {
+	public void generateRecipes(RecipeOutput exporter) {
 		if (planks != null && logsItemTag != null)
 			RecipeProvider.planksFromLogs(exporter, planks, logsItemTag, isBambooWood() ? 2 : 4);
 		if (mosaic != null && slab != null)
@@ -1251,7 +1250,7 @@ public class WoodRegistry {
 		private RegistryHelper registryHelper;
 		private WoodType woodType;
 
-		public Builder setSaplingGenerator(AbstractTreeGrower abstractTreeGrower) {
+		public Builder setSaplingGenerator(TreeGrower abstractTreeGrower) {
 			woodRegistry.setSaplingGenerator(abstractTreeGrower);
 			return this;
 		}
@@ -1302,7 +1301,7 @@ public class WoodRegistry {
 			return this;
 		}
 
-		public Builder of(ResourceLocation name, AbstractTreeGrower saplingGenerator) {
+		public Builder of(ResourceLocation name, TreeGrower saplingGenerator) {
 			return of(name).setSaplingGenerator(saplingGenerator);
 		}
 
@@ -1319,7 +1318,7 @@ public class WoodRegistry {
 					.setLeaves(woodMaterial.leaves());
 		}
 
-		public Builder of(WoodMaterial woodMaterial, AbstractTreeGrower saplingGenerator) {
+		public Builder of(WoodMaterial woodMaterial, TreeGrower saplingGenerator) {
 			return of(woodMaterial).setSaplingGenerator(saplingGenerator);
 		}
 
@@ -1327,7 +1326,7 @@ public class WoodRegistry {
 			return of(woodMaterial).setFungusGenerator(fungusGenerator).setBaseFungusBlock(baseFungusBlock);
 		}
 
-		public Builder of(WoodMaterial woodMaterial, Block planks, AbstractTreeGrower saplingGenerator) {
+		public Builder of(WoodMaterial woodMaterial, Block planks, TreeGrower saplingGenerator) {
 			return of(woodMaterial, saplingGenerator).setPlanks(planks);
 		}
 
@@ -1696,7 +1695,7 @@ public class WoodRegistry {
 		public Builder fenceGate() {
 			Block block = woodRegistry.isNetherWood() ? Blocks.WARPED_FENCE_GATE : woodRegistry.isBambooWood() ? Blocks.BAMBOO_FENCE_GATE : Blocks.DARK_OAK_FENCE_GATE;
 			woodRegistry.fenceGate = registryHelper.blocks().registerBlock(
-					new FenceGateBlock(BlockBehaviour.Properties.copy(block), woodType),
+					new FenceGateBlock(woodType, BlockBehaviour.Properties.copy(block)),
 					name.getPath() + "_fence_gate",
 					CreativeModeTabs.BUILDING_BLOCKS, woodRegistry.fence
 			);
@@ -1725,7 +1724,7 @@ public class WoodRegistry {
 		public Builder door() {
 			Block block = woodRegistry.isNetherWood() ? Blocks.WARPED_DOOR : woodRegistry.isBambooWood() ? Blocks.BAMBOO_DOOR : Blocks.DARK_OAK_DOOR;
 			woodRegistry.door = registryHelper.blocks().registerDoubleBlock(
-					new DoorBlock(BlockBehaviour.Properties.copy(block), woodType.setType()),
+					new DoorBlock(woodType.setType(), BlockBehaviour.Properties.copy(block)),
 					name.getPath() + "_door",
 					CreativeModeTabs.BUILDING_BLOCKS, woodRegistry.fenceGate
 			);
@@ -1735,17 +1734,17 @@ public class WoodRegistry {
 		public Builder trapdoor() {
 			Block block = woodRegistry.isNetherWood() ? Blocks.WARPED_TRAPDOOR : woodRegistry.isBambooWood() ? Blocks.BAMBOO_TRAPDOOR : Blocks.MANGROVE_TRAPDOOR;
 			woodRegistry.trapdoor = registryHelper.blocks().registerBlock(
-					new TrapDoorBlock(BlockBehaviour.Properties.copy(block), woodType.setType()),
+					new TrapDoorBlock(woodType.setType(), BlockBehaviour.Properties.copy(block)),
 					name.getPath() + "_trapdoor",
 					CreativeModeTabs.BUILDING_BLOCKS, woodRegistry.door
 			);
 			return this;
 		}
 
-		public Builder pressurePlate(PressurePlateBlock.Sensitivity type) {
+		public Builder pressurePlate() {
 			Block block = woodRegistry.isNetherWood() ? Blocks.WARPED_PRESSURE_PLATE : woodRegistry.isBambooWood() ? Blocks.BAMBOO_PRESSURE_PLATE : Blocks.DARK_OAK_PRESSURE_PLATE;
 			woodRegistry.pressurePlate = registryHelper.blocks().registerBlock(
-					new PressurePlateBlock(type, BlockBehaviour.Properties.copy(block), woodType.setType()),
+					new PressurePlateBlock(woodType.setType(), BlockBehaviour.Properties.copy(block)),
 					name.getPath() + "_pressure_plate",
 					CreativeModeTabs.BUILDING_BLOCKS, woodRegistry.trapdoor
 			);
@@ -1761,7 +1760,7 @@ public class WoodRegistry {
 		}
 
 		private static ButtonBlock woodenButton(BlockSetType blockSetType) {
-			return new ButtonBlock(BlockBehaviour.Properties.of().noCollission().strength(0.5F), blockSetType, 30, true);
+			return new ButtonBlock(blockSetType, 30, BlockBehaviour.Properties.of().noCollission().strength(0.5F));
 		}
 
 		public Builder ladder() {
@@ -1888,7 +1887,7 @@ public class WoodRegistry {
 			return this.woodPropertyType(woodPropertyType).defaultLogsAndWoods()
 					.planks().leaves().sapling().pottedSapling().stairs().slab()
 					.fence().fenceGate().door().trapdoor()
-					.pressurePlate(PressurePlateBlock.Sensitivity.EVERYTHING)
+					.pressurePlate()
 					.button().sign().hangingSign().boat();
 		}
 
@@ -1904,7 +1903,7 @@ public class WoodRegistry {
 			return this.woodPropertyType(woodPropertyType).defaultLogsAndWoods()
 					.planks().coloredLeaves().sapling().pottedSapling().stairs()
 					.slab().fence().fenceGate().door().trapdoor()
-					.pressurePlate(PressurePlateBlock.Sensitivity.EVERYTHING)
+					.pressurePlate()
 					.button().sign().hangingSign().boat();
 		}
 
@@ -1916,7 +1915,7 @@ public class WoodRegistry {
 			return this.woodPropertyType(woodPropertyType).defaultLogsAndWoods().planks()
 					.coloredLeaves(color).sapling().pottedSapling().stairs().slab()
 					.fence().fenceGate().door().trapdoor()
-					.pressurePlate(PressurePlateBlock.Sensitivity.EVERYTHING)
+					.pressurePlate()
 					.button().sign().hangingSign().boat();
 		}
 

@@ -27,8 +27,8 @@ import net.minecraft.world.level.material.MapColor;
 
 public class FungusBaseBlock extends FungusBlock {
 	public FungusBaseBlock(ResourceKey<ConfiguredFeature<?, ?>> supplier, Block baseBlock) {
-		super(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_CYAN).instabreak().noCollission()
-				.sound(SoundType.FUNGUS), supplier, baseBlock);
+		super(supplier, baseBlock, BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_CYAN).instabreak().noCollission()
+				.sound(SoundType.FUNGUS));
 	}
 
 }
