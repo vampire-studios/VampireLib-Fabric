@@ -25,7 +25,7 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 public class FlowerPotBaseBlock extends FlowerPotBlock {
 
 	public FlowerPotBaseBlock(Block block) {
-		super(block, BlockBehaviour.Properties.copy(Blocks.POTTED_ACACIA_SAPLING));
+		super(block, BlockBehaviour.Properties.ofFullCopy(Blocks.POTTED_ACACIA_SAPLING));
 	}
 
 }

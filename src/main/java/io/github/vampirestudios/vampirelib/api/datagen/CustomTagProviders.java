@@ -139,20 +139,6 @@ public abstract class CustomTagProviders<T> extends FabricTagProvider<T> {
 	}
 
 	/**
-	 * Extend this class to create {@link GameEvent} tags in the "/game_events" tag directory.
-	 */
-	public abstract static class VGameEventTagProvider extends CustomTagProviders<GameEvent> {
-		public VGameEventTagProvider(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> completableFuture) {
-			super(output, Registries.GAME_EVENT, completableFuture);
-		}
-
-		@Override
-		protected ResourceKey<GameEvent> reverseLookup(GameEvent element) {
-			return element.builtInRegistryHolder().key();
-		}
-	}
-
-	/**
 	 * Extend this class to create {@link EntityType} tags in the "/entity_types" tag directory.
 	 */
 

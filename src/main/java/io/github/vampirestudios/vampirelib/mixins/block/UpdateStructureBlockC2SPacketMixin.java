@@ -28,7 +28,7 @@ public abstract class UpdateStructureBlockC2SPacketMixin {
 
 	@ModifyConstant(method = "<init>(Lnet/minecraft/network/FriendlyByteBuf;)V", constant = @Constant(intValue = 48))
 	public int readNbt(int old) {
-		return 2048;
+		return 4096;
 	}
 
 }

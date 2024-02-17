@@ -25,17 +25,22 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 import com.google.common.collect.Maps;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.mojang.serialization.JsonOps;
 
+import net.minecraft.Util;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
+import net.minecraft.resources.RegistryOps;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.storage.loot.LootDataType;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSet;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricLootTableProvider;
 import net.fabricmc.fabric.api.datagen.v1.provider.SimpleFabricLootTableProvider;
 import net.fabricmc.fabric.api.resource.conditions.v1.ConditionJsonProvider;
 import net.fabricmc.fabric.impl.datagen.FabricDataGenHelper;
@@ -45,10 +50,11 @@ public final class VLootTableProviderImpl {
 	 * Shared run logic for {@link VBlockLootTableProvider} and {@link SimpleFabricLootTableProvider}.
 	 */
 	public static CompletableFuture<?> run(
-			CachedOutput writer,
-			VBlockLootTableProvider provider,
-			LootContextParamSet lootContextType,
-			FabricDataOutput fabricDataOutput) {
+		CachedOutput writer,
+		FabricLootTableProvider provider,
+		LootContextParamSet lootContextType,
+		FabricDataOutput fabricDataOutput,
+		CompletableFuture<HolderLookup.Provider> registryLookup) {
 		HashMap<ResourceLocation, LootTable> builders = Maps.newHashMap();
 		HashMap<ResourceLocation, ConditionJsonProvider[]> conditionMap = new HashMap<>();
 
@@ -61,16 +67,18 @@ public final class VLootTableProviderImpl {
 			}
 		});
 
-		final List<CompletableFuture<?>> futures = new ArrayList<>();
+		return registryLookup.thenCompose(lookup -> {
+			RegistryOps<JsonElement> ops = RegistryOps.create(JsonOps.INSTANCE, lookup);
+			final List<CompletableFuture<?>> futures = new ArrayList<>();
 
-		for (Map.Entry<ResourceLocation, LootTable> entry : builders.entrySet()) {
-			JsonObject tableJson = (JsonObject) LootDataType.TABLE.parser().toJsonTree(entry.getValue());
-			ConditionJsonProvider.write(tableJson, conditionMap.remove(entry.getKey()));
+			for (Map.Entry<ResourceLocation, LootTable> entry : builders.entrySet()) {
+				JsonObject tableJson = (JsonObject) Util.getOrThrow(LootTable.CODEC.encodeStart(ops, entry.getValue()), IllegalStateException::new);
+				ConditionJsonProvider.write(tableJson, conditionMap.remove(entry.getKey()));
+				futures.add(DataProvider.saveStable(writer, tableJson, getOutputPath(fabricDataOutput, entry.getKey())));
+			}
 
-			futures.add(DataProvider.saveStable(writer, tableJson, getOutputPath(fabricDataOutput, entry.getKey())));
-		}
-
-		return CompletableFuture.allOf(futures.toArray(CompletableFuture[]::new));
+			return CompletableFuture.allOf(futures.toArray(CompletableFuture[]::new));
+		});
 	}
 
 	private static Path getOutputPath(FabricDataOutput dataOutput, ResourceLocation lootTableId) {

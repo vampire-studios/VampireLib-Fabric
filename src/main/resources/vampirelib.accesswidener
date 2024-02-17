@@ -145,7 +145,6 @@ accessible method net/minecraft/resources/ResourceLocation isValidPath (Ljava/la
 
 accessible method net/minecraft/client/resources/ClientPackSource createVanillaPackSource (Ljava/nio/file/Path;)Lnet/minecraft/server/packs/VanillaPackResources;
 accessible method net/minecraft/server/packs/repository/ServerPacksSource createVanillaPackSource ()Lnet/minecraft/server/packs/VanillaPackResources;
-accessible method net/minecraft/core/registries/BuiltInRegistries registerSimple (Lnet/minecraft/resources/ResourceKey;Lcom/mojang/serialization/Lifecycle;Lnet/minecraft/core/registries/BuiltInRegistries$RegistryBootstrap;)Lnet/minecraft/core/Registry;
 accessible class net/minecraft/core/registries/BuiltInRegistries$RegistryBootstrap
 
 accessible field net/minecraft/data/loot/BlockLootSubProvider map Ljava/util/Map;

@@ -26,6 +26,7 @@ import java.util.function.BiConsumer;
 
 import com.google.common.collect.Sets;
 
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.loot.BlockLootSubProvider;
@@ -39,6 +40,7 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLootTableProvider;
+import net.fabricmc.fabric.impl.datagen.loot.FabricLootTableProviderImpl;
 
 /**
  * Extend this class and implement {@link net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootTableProvider#generate}.
@@ -48,10 +50,12 @@ import net.fabricmc.fabric.api.datagen.v1.provider.FabricLootTableProvider;
 public abstract class VBlockLootTableProvider extends BlockLootSubProvider implements FabricLootTableProvider {
 	private final FabricDataOutput output;
 	private final Set<ResourceLocation> excludedFromStrictValidation = new HashSet<>();
+	private final CompletableFuture<HolderLookup.Provider> registryLookup;
 
-	protected VBlockLootTableProvider(FabricDataOutput dataOutput) {
+	protected VBlockLootTableProvider(FabricDataOutput dataOutput, CompletableFuture<HolderLookup.Provider> registryLookup) {
 		super(Collections.emptySet(), FeatureFlags.REGISTRY.allFlags());
 		this.output = dataOutput;
+		this.registryLookup = registryLookup;
 	}
 
 	/**
@@ -108,7 +112,7 @@ public abstract class VBlockLootTableProvider extends BlockLootSubProvider imple
 
 	@Override
 	public CompletableFuture<?> run(CachedOutput writer) {
-		return VLootTableProviderImpl.run(writer, this, LootContextParamSets.BLOCK, output);
+		return FabricLootTableProviderImpl.run(writer, this, LootContextParamSets.BLOCK, output, registryLookup);
 	}
 
 	@Override

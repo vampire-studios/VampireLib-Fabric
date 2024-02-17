@@ -24,21 +24,13 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import net.minecraft.SharedConstants;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.components.toasts.SystemToast;
-import net.minecraft.core.Registry;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.flag.FeatureFlag;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameRules;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 
@@ -97,14 +89,6 @@ public class VampireLib extends BasicModClass {
 	public static WoodRegistry TEST_NETHER_WOOD11;
 	public static WoodRegistry TEST_NETHER_WOOD12;
 	public static WoodRegistry TEST_NETHER_WOOD13;
-
-	public static Block BLOCK_WITH_CUSTOM_MODEL_1;
-	public static Block BLOCK_WITH_CUSTOM_MODEL_2;
-	public static Block BLOCK_WITH_EMPTY_MODEL;
-
-	public static Item ITEM_WITH_CUSTOM_MODEL_1;
-	public static Item ITEM_WITH_CUSTOM_MODEL_2;
-	public static Item ITEM_WITH_NORMAL_MODEL;
 
 	public static FeatureFlag TEST;
 
@@ -173,14 +157,6 @@ public class VampireLib extends BasicModClass {
 			TEST_NETHER_WOOD12 = WoodRegistry.of(identifier("test12_nether")).defaultBlocks(WoodPropertyType.NETHER).defaultExtras().nonFlammable().build();
 			TEST_NETHER_WOOD13 = WoodRegistry.of(identifier("test13_nether")).defaultBlocksColoredLeaves(WoodPropertyType.NETHER).defaultExtras()
 					.nonFlammable().build();
-
-			BLOCK_WITH_CUSTOM_MODEL_1 = createBlock("block_with_custom_model_1");
-			BLOCK_WITH_CUSTOM_MODEL_2 = createBlock("block_with_custom_model_2");
-			BLOCK_WITH_EMPTY_MODEL = createBlock("block_with_empty_model");
-
-			ITEM_WITH_CUSTOM_MODEL_1 = createItem("item_with_custom_model_1");
-			ITEM_WITH_CUSTOM_MODEL_2 = createItem("item_with_custom_model_2");
-			ITEM_WITH_NORMAL_MODEL = createItem("item_with_normal_model");
 		}
 
 		UseBlockCallback.EVENT.register((player, world, hand, hitResult) -> {
@@ -209,7 +185,7 @@ public class VampireLib extends BasicModClass {
 
 							world.setBlock(hitResult.getBlockPos(), convertibleBlock.getConverted()
 									.withPropertiesOf(blockState), 11);
-							itemStack.hurtAndBreak(1, player, playerEntity -> playerEntity.broadcastBreakEvent(hand));
+							itemStack.hurtAndBreak(1, player, LivingEntity.getSlotForHand(hand));
 							world.gameEvent(GameEvent.BLOCK_CHANGE, hitResult.getBlockPos(),
 									GameEvent.Context.of(player, blockState));
 							return InteractionResult.SUCCESS;
@@ -234,7 +210,7 @@ public class VampireLib extends BasicModClass {
 
 						world.setBlock(hitResult.getBlockPos(), convertibleBlock.getOriginal()
 								.withPropertiesOf(blockState), 11);
-						itemStack.hurtAndBreak(1, player, playerEntity -> playerEntity.broadcastBreakEvent(hand));
+						itemStack.hurtAndBreak(1, player, LivingEntity.getSlotForHand(hand));
 						world.gameEvent(GameEvent.BLOCK_CHANGE, hitResult.getBlockPos(),
 								GameEvent.Context.of(player, blockState));
 						return InteractionResult.SUCCESS;
@@ -243,18 +219,6 @@ public class VampireLib extends BasicModClass {
 			}
 			return InteractionResult.PASS;
 		});
-
-		Minecraft.getInstance().getToasts().addToast(new SystemToast(SystemToast.SystemToastIds.TUTORIAL_HINT,
-			Component.literal("Testing"), Component.literal("Test description")));
-	}
-
-	private static Block createBlock(String name) {
-		return Registry.register(BuiltInRegistries.BLOCK, INSTANCE.identifier(name), new Block(BlockBehaviour.Properties.of().requiredFeatures(TEST)));
-	}
-
-	private static Item createItem(String name) {
-		ResourceLocation identifier = INSTANCE.identifier(name);
-		return Registry.register(BuiltInRegistries.ITEM, identifier, new Item(new Item.Properties()));
 	}
 
 }

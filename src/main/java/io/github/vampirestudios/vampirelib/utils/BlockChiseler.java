@@ -33,6 +33,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -114,7 +115,7 @@ public class BlockChiseler {
 			level.playSound(null, hitResult.getBlockPos(), SoundEvents.PUMPKIN_CARVE, SoundSource.BLOCKS, 1.0F, 1.0F);
 			level.setBlockAndUpdate(hitResult.getBlockPos(), copyTo(hitBlockState, newBlock.defaultBlockState()));
 			if (heldStack.getItem().canBeDepleted())
-				heldStack.hurtAndBreak(1, player, playerEntity -> player.broadcastBreakEvent(hand));
+				heldStack.hurtAndBreak(1, player, LivingEntity.getSlotForHand(hand));
 		}
 		return InteractionResult.SUCCESS;
 	}

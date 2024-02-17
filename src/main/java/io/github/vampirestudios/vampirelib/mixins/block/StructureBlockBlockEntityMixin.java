@@ -36,12 +36,12 @@ public abstract class StructureBlockBlockEntityMixin extends BlockEntity {
 
 	@ModifyConstant(method = "load", constant = @Constant(intValue = 48))
 	public int readNbt(int old) {
-		return 2048;
+		return 4096;
 	}
 
 	@ModifyConstant(method = "detectSize", constant = @Constant(intValue = 80))
 	public int detectStructureSize(int old) {
-		return 2048;
+		return 4096;
 	}
 
 }

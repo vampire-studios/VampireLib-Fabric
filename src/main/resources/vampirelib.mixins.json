@@ -4,7 +4,6 @@
 	"compatibilityLevel": "JAVA_16",
 	"mixins": [
 		"BlockStateModelGeneratorMixin",
-		"DynamicRegistrySyncMixin",
 		"ItemModelGeneratorMixin",
 		"MixinMobSpawnerLogic",
 		"MixinSpawnHelper",
@@ -13,8 +12,7 @@
 		"block.BlockEntityTypeMixin",
 		"block.StructureBlockBlockEntityMixin",
 		"block.UpdateStructureBlockC2SPacketMixin",
-		"entity.VillagerEntityMixin",
-		"item.MixinBookOnLectern"
+		"entity.VillagerEntityMixin"
 	],
 	"client": [],
 	"injectors": {

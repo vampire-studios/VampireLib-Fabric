@@ -19,14 +19,18 @@ package io.github.vampirestudios.vampirelib.village;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import com.google.common.collect.Lists;
 import org.jetbrains.annotations.NotNull;
 
+import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
@@ -170,78 +174,81 @@ public class TradeOfferFactories {
 	}
 
 	static class SellDyedArmorFactory implements VillagerTrades.ItemListing {
-		private final Item sell;
-		private final int price;
+		private final Item item;
+		private final int value;
 		private final int maxUses;
-		private final int experience;
+		private final int villagerXp;
 
-		public SellDyedArmorFactory(Item item_1, int int_1) {
-			this(item_1, int_1, 6, 1);
+		public SellDyedArmorFactory(Item item, int value) {
+			this(item, value, 12, 1);
 		}
 
-		public SellDyedArmorFactory(Item item_1, int int_1, int int_2, int int_3) {
-			this.sell = item_1;
-			this.price = int_1;
-			this.maxUses = int_2;
-			this.experience = int_3;
+		public SellDyedArmorFactory(Item item, int value, int maxUses, int villagerXp) {
+			this.item = item;
+			this.value = value;
+			this.maxUses = maxUses;
+			this.villagerXp = villagerXp;
 		}
 
-		private static DyeItem getDye(RandomSource random_1) {
-			return DyeItem.byColor(DyeColor.byId(random_1.nextInt(16)));
-		}
-
-		public MerchantOffer getOffer(Entity entity_1, RandomSource random_1) {
-			ItemStack itemStack_1 = new ItemStack(Items.EMERALD, this.price);
-			ItemStack itemStack_2 = new ItemStack(this.sell);
-			if (this.sell instanceof DyeableArmorItem) {
-				List<DyeItem> list_1 = Lists.newArrayList();
-				list_1.add(getDye(random_1));
-				if (random_1.nextFloat() > 0.7F) {
-					list_1.add(getDye(random_1));
+		public MerchantOffer getOffer(Entity entity_1, RandomSource random) {
+			ItemStack itemStack = new ItemStack(Items.EMERALD, this.value);
+			ItemStack itemStack2 = new ItemStack(this.item);
+			if (itemStack2.is(ItemTags.DYEABLE)) {
+				List<DyeItem> list = Lists.newArrayList();
+				list.add(getRandomDye(random));
+				if (random.nextFloat() > 0.7F) {
+					list.add(getRandomDye(random));
 				}
 
-				if (random_1.nextFloat() > 0.8F) {
-					list_1.add(getDye(random_1));
+				if (random.nextFloat() > 0.8F) {
+					list.add(getRandomDye(random));
 				}
 
-				itemStack_2 = DyeableLeatherItem.dyeArmor(itemStack_2, list_1);
+				itemStack2 = DyeableLeatherItem.dyeArmor(itemStack2, list);
 			}
 
-			return new MerchantOffer(itemStack_1, itemStack_2, this.maxUses, this.experience, 0.2F);
+			return new MerchantOffer(itemStack, itemStack2, this.maxUses, this.villagerXp, 0.2F);
+		}
+
+		private static DyeItem getRandomDye(RandomSource random) {
+			return DyeItem.byColor(DyeColor.byId(random.nextInt(16)));
 		}
 	}
 
 	public static class SellPotionHoldingItemFactory implements VillagerTrades.ItemListing {
-		private final ItemStack sell;
-		private final int sellCount;
-		private final int price;
+		/**
+		 * An ItemStack that can have potion effects written to it.
+		 */
+		private final ItemStack toItem;
+		private final int toCount;
+		private final int emeraldCost;
 		private final int maxUses;
-		private final int experience;
-		private final Item secondBuy;
-		private final int secondCount;
+		private final int villagerXp;
+		private final Item fromItem;
+		private final int fromCount;
 		private final float priceMultiplier;
 
-		public SellPotionHoldingItemFactory(Item item_1, int int_1, Item item_2, int int_2, int int_3, int int_4, int int_5) {
-			this.sell = new ItemStack(item_2);
-			this.price = int_3;
-			this.maxUses = int_4;
-			this.experience = int_5;
-			this.secondBuy = item_1;
-			this.secondCount = int_1;
-			this.sellCount = int_2;
+		public SellPotionHoldingItemFactory(Item fromItem, int fromCount, Item toItem, int toCount, int emeraldCost, int maxUses, int villagerXp) {
+			this.toItem = new ItemStack(toItem);
+			this.emeraldCost = emeraldCost;
+			this.maxUses = maxUses;
+			this.villagerXp = villagerXp;
+			this.fromItem = fromItem;
+			this.fromCount = fromCount;
+			this.toCount = toCount;
 			this.priceMultiplier = 0.05F;
 		}
 
-		public MerchantOffer getOffer(Entity entity_1, RandomSource random_1) {
-			ItemStack itemStack_1 = new ItemStack(Items.EMERALD, this.price);
-			List<Potion> list_1 = BuiltInRegistries.POTION.stream().filter((potion_1x) ->
-							!potion_1x.getEffects().isEmpty() &&
-									PotionBrewing.isBrewablePotion(potion_1x))
-					.toList();
-			Potion potion_1 = list_1.get(random_1.nextInt(list_1.size()));
-			ItemStack itemStack_2 = PotionUtils.setPotion(new ItemStack(this.sell.getItem(), this.sellCount), potion_1);
-			return new MerchantOffer(itemStack_1, new ItemStack(this.secondBuy, this.secondCount), itemStack_2,
-					this.maxUses, this.experience, this.priceMultiplier);
+		@Override
+		public MerchantOffer getOffer(Entity trader, RandomSource random) {
+			ItemStack itemStack = new ItemStack(Items.EMERALD, this.emeraldCost);
+			List<Holder<Potion>> list = BuiltInRegistries.POTION
+				.holders()
+				.filter(reference -> !reference.value().getEffects().isEmpty() && PotionBrewing.isBrewablePotion(reference))
+				.collect(Collectors.toList());
+			Holder<Potion> holder = Util.getRandom(list, random);
+			ItemStack itemStack2 = PotionUtils.setPotion(new ItemStack(this.toItem.getItem(), this.toCount), holder);
+			return new MerchantOffer(itemStack, new ItemStack(this.fromItem, this.fromCount), itemStack2, this.maxUses, this.villagerXp, this.priceMultiplier);
 		}
 	}
 
