@@ -46,18 +46,10 @@ repositories {
 	mavenCentral()
 	mavenLocal()
 	maven { url = "https://maven.fabricmc.net" }
-	maven { url = "https://maven.quiltmc.org/repository/release/" }
-	maven { url = "https://maven.quiltmc.org/repository/snapshot/" }
-	maven { url = "https://maven.shedaniel.me/" }
-	maven { url = "https://storage.googleapis.com/devan-maven/" }
 	maven { url = "https://maven.quiltmc.org/repository/release" }
 	maven { url = "https://maven.quiltmc.org/repository/snapshot" }
 	maven { url = "https://maven.parchmentmc.net/" }
 	maven { url = "https://maven.terraformersmc.com/" }
-	maven { url = "https://maven.siphalor.de" }
-	maven { url = "https://mvn.devos.one/releases/" }
-	maven { url = "https://mvn.devos.one/snapshots/" }
-	maven { url = "https://jitpack.io" }
 }
 
 dependencies {
