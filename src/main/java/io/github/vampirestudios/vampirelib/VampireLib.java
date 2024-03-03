@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 OliviaTheVampire
+ * Copyright (c) 2024 OliviaTheVampire
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -103,6 +103,8 @@ public class VampireLib extends BasicModClass {
 				Rands.chance(15) ? "Your are" : (Rands.chance(15) ? "You're" : "You are"),
 				modName(), modVersion(), SharedConstants.getCurrentVersion().getName()));
 		BlockChiseler.setup();
+
+
 
 		if (TEST_CONTENT_ENABLED) {
 			//Overworld
