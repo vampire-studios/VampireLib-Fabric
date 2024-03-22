@@ -13,7 +13,8 @@
  *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+ *//*
+
 
 package io.github.vampirestudios.vampirelib.api.datagen;
 
@@ -30,6 +31,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.loot.BlockLootSubProvider;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.level.block.Block;
@@ -42,11 +44,13 @@ import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLootTableProvider;
 import net.fabricmc.fabric.impl.datagen.loot.FabricLootTableProviderImpl;
 
+*/
 /**
  * Extend this class and implement {@link net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootTableProvider#generate}.
  *
  * <p>Register an instance of the class with {@link FabricDataGenerator.Pack#addProvider} in a {@link net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint}.
- */
+ *//*
+
 public abstract class VBlockLootTableProvider extends BlockLootSubProvider implements FabricLootTableProvider {
 	private final FabricDataOutput output;
 	private final Set<ResourceLocation> excludedFromStrictValidation = new HashSet<>();
@@ -58,27 +62,31 @@ public abstract class VBlockLootTableProvider extends BlockLootSubProvider imple
 		this.registryLookup = registryLookup;
 	}
 
-	/**
+	*/
+/**
 	 * Implement this method to add block drops.
 	 *
 	 * <p>Use the range of {@link BlockLootSubProvider#dropSelf} methods to generate block drops.
-	 */
+	 *//*
+
 	@Override
 	public abstract void generate();
 
-	/**
+	*/
+/**
 	 * Disable strict validation for the passed block.
-	 */
+	 *//*
+
 	public void excludeFromStrictValidation(Block block) {
 		excludedFromStrictValidation.add(BuiltInRegistries.BLOCK.getKey(block));
 	}
 
 	@Override
-	public void generate(BiConsumer<ResourceLocation, LootTable.Builder> biConsumer) {
+	public void generate(BiConsumer<ResourceKey<LootTable>, LootTable.Builder> biConsumer) {
 		generate();
 
-		for (Map.Entry<ResourceLocation, LootTable.Builder> entry : map.entrySet()) {
-			ResourceLocation identifier = entry.getKey();
+		for (Map.Entry<ResourceKey<LootTable>, LootTable.Builder> entry : map.entrySet()) {
+			ResourceKey<LootTable> identifier = entry.getKey();
 
 			if (identifier.equals(BuiltInLootTables.EMPTY)) {
 				continue;
@@ -92,9 +100,9 @@ public abstract class VBlockLootTableProvider extends BlockLootSubProvider imple
 
 			for (ResourceLocation blockId : BuiltInRegistries.BLOCK.keySet()) {
 				if (blockId.getNamespace().equals(output.getModId())) {
-					ResourceLocation blockLootTableId = BuiltInRegistries.BLOCK.get(blockId).getLootTable();
+					ResourceKey<LootTable> blockLootTableId = BuiltInRegistries.BLOCK.get(blockId).getLootTable();
 
-					if (blockLootTableId.getNamespace().equals(output.getModId())) {
+					if (blockLootTableId.location().getNamespace().equals(output.getModId())) {
 						if (!map.containsKey(blockLootTableId)) {
 							missing.add(blockId);
 						}
@@ -120,3 +128,4 @@ public abstract class VBlockLootTableProvider extends BlockLootSubProvider imple
 		return "Block Loot Tables";
 	}
 }
+*/

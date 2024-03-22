@@ -28,7 +28,6 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 import net.minecraft.core.HolderLookup;
-import net.minecraft.data.DataProvider;
 import net.minecraft.data.models.BlockModelGenerators;
 import net.minecraft.data.models.ItemModelGenerators;
 import net.minecraft.data.recipes.RecipeOutput;
@@ -53,15 +52,15 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
 		if (TEST_CONTENT_ENABLED) {
 			FabricDataGenerator.Pack pack1 = dataGenerator.createBuiltinResourcePack(VampireLib.INSTANCE.identifier("wood_types"));
 			pack1.addProvider(WoodTypeBlockStateDefinitionProvider::new);
-			pack1.addProvider((FabricDataGenerator.Pack.Factory<DataProvider>) output -> new WoodTypeTranslationProvider(output, "en_us"));
-			pack1.addProvider((FabricDataGenerator.Pack.Factory<DataProvider>) output -> new WoodTypeTranslationProvider(output, "fr_fr"));
-			pack1.addProvider((FabricDataGenerator.Pack.Factory<DataProvider>) output -> new WoodTypeTranslationProvider(output, "no_no"));
-			pack1.addProvider((FabricDataGenerator.Pack.Factory<DataProvider>) output -> new WoodTypeTranslationProvider(output, "da_dk"));
-			pack1.addProvider((FabricDataGenerator.Pack.Factory<DataProvider>) output -> new WoodTypeTranslationProvider(output, "de_de"));
-			pack1.addProvider((FabricDataGenerator.Pack.Factory<DataProvider>) output -> new WoodTypeTranslationProvider(output, "fi_fi"));
-			pack1.addProvider((FabricDataGenerator.Pack.Factory<DataProvider>) output -> new WoodTypeTranslationProvider(output, "enws"));
-			pack1.addProvider((FabricDataGenerator.Pack.Factory<DataProvider>) output -> new WoodTypeTranslationProvider(output, "lol_us"));
-			pack1.addProvider((FabricDataGenerator.Pack.Factory<DataProvider>) output -> new WoodTypeTranslationProvider(output, "nl_nl"));
+//			pack1.addProvider((FabricDataGenerator.Pack.Factory<DataProvider>) output -> new WoodTypeTranslationProvider(output, "en_us"));
+//			pack1.addProvider((FabricDataGenerator.Pack.Factory<DataProvider>) output -> new WoodTypeTranslationProvider(output, "fr_fr"));
+//			pack1.addProvider((FabricDataGenerator.Pack.Factory<DataProvider>) output -> new WoodTypeTranslationProvider(output, "no_no"));
+//			pack1.addProvider((FabricDataGenerator.Pack.Factory<DataProvider>) output -> new WoodTypeTranslationProvider(output, "da_dk"));
+//			pack1.addProvider((FabricDataGenerator.Pack.Factory<DataProvider>) output -> new WoodTypeTranslationProvider(output, "de_de"));
+//			pack1.addProvider((FabricDataGenerator.Pack.Factory<DataProvider>) output -> new WoodTypeTranslationProvider(output, "fi_fi"));
+//			pack1.addProvider((FabricDataGenerator.Pack.Factory<DataProvider>) output -> new WoodTypeTranslationProvider(output, "enws"));
+//			pack1.addProvider((FabricDataGenerator.Pack.Factory<DataProvider>) output -> new WoodTypeTranslationProvider(output, "lol_us"));
+//			pack1.addProvider((FabricDataGenerator.Pack.Factory<DataProvider>) output -> new WoodTypeTranslationProvider(output, "nl_nl"));
 			pack1.addProvider(WoodTypeRecipeProvider::new);
 			WoodTypeBlockTagProvider blockTagsProvider = pack1.addProvider(WoodTypeBlockTagProvider::new);
 			pack1.addProvider((output, registriesFuture) -> new WoodTypeItemTagProvider(output, blockTagsProvider, registriesFuture));
@@ -126,8 +125,8 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
 	private static class WoodTypeTranslationProvider extends FabricLanguageProvider {
 		private Map<String, String> lang;
 
-		private WoodTypeTranslationProvider(FabricDataOutput dataGenerator, String langCode) {
-			super(dataGenerator, langCode);
+		private WoodTypeTranslationProvider(FabricDataOutput dataGenerator, String langCode, CompletableFuture<HolderLookup.Provider> registryLookup) {
+			super(dataGenerator, langCode, registryLookup);
 			File file = new File("translations/" + langCode + ".json");
 			try (Reader reader = Files.newBufferedReader(Paths.get(file.toURI()))) {
 				lang = VampireLib.GSON.<Map<String, String>>fromJson(reader, Map.class);
@@ -137,7 +136,7 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
 		}
 
 		@Override
-		public void generateTranslations(TranslationBuilder translationBuilder) {
+		public void generateTranslations(HolderLookup.Provider registryLookup, TranslationBuilder translationBuilder) {
 			addWoodTypeLang(VampireLib.TEST_WOOD, translationBuilder);
 			addWoodTypeLang(VampireLib.TEST_WOOD1, translationBuilder);
 			addWoodTypeLang(VampireLib.TEST_WOOD2, translationBuilder);

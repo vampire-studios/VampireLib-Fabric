@@ -13,7 +13,8 @@
  *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+ *//*
+
 
 package io.github.vampirestudios.vampirelib.village;
 
@@ -26,10 +27,12 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.trading.MerchantOffer;
 
+*/
 /**
  * A default, exposed implementation of ITrade.  All of the other implementations of ITrade (in VillagerTrades) are not public.
  * This class contains everything needed to make a MerchantOffer, the actual "trade" object shown in trading guis.
- */
+ *//*
+
 public class BasicTrade implements VillagerTrades.ItemListing {
 
 	protected final ItemStack price;
@@ -66,4 +69,4 @@ public class BasicTrade implements VillagerTrades.ItemListing {
 		return new MerchantOffer(price, price2, forSale, maxTrades, xp, priceMult);
 	}
 
-}
+}*/

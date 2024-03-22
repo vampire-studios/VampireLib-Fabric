@@ -24,13 +24,16 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import net.minecraft.SharedConstants;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.flag.FeatureFlag;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.GameRules;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 
@@ -40,6 +43,7 @@ import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 
 import io.github.vampirestudios.vampirelib.api.BasicModClass;
 import io.github.vampirestudios.vampirelib.api.ConvertibleBlockPair;
+import io.github.vampirestudios.vampirelib.api.ConvertibleBlocksRegistry;
 import io.github.vampirestudios.vampirelib.utils.BlockChiseler;
 import io.github.vampirestudios.vampirelib.utils.Rands;
 import io.github.vampirestudios.vampirelib.utils.registry.WoodRegistry;
@@ -104,7 +108,21 @@ public class VampireLib extends BasicModClass {
 				modName(), modVersion(), SharedConstants.getCurrentVersion().getName()));
 		BlockChiseler.setup();
 
+		ConvertibleBlocksRegistry.registerConvertibleBlockPair(new ConvertibleBlockPair(
+			Blocks.AIR,
+			Blocks.STONE,
+			ConvertibleBlockPair.ConversionItem.of(Items.DIAMOND_SWORD),
+			SoundEvents.STONE_PLACE,
+			Items.WIND_CHARGE
+		));
 
+		ConvertibleBlocksRegistry.registerConvertibleBlockPair(new ConvertibleBlockPair(
+			Blocks.STONE,
+			Blocks.STONE_BRICKS,
+			ConvertibleBlockPair.ConversionItem.of(Items.DIAMOND_SWORD),
+			SoundEvents.STONE_PLACE,
+			Items.STONE_BUTTON
+		));
 
 		if (TEST_CONTENT_ENABLED) {
 			//Overworld

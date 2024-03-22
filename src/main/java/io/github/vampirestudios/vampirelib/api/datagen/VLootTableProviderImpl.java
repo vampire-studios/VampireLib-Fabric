@@ -13,7 +13,8 @@
  *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+ *//*
+
 
 package io.github.vampirestudios.vampirelib.api.datagen;
 
@@ -46,9 +47,11 @@ import net.fabricmc.fabric.api.resource.conditions.v1.ConditionJsonProvider;
 import net.fabricmc.fabric.impl.datagen.FabricDataGenHelper;
 
 public final class VLootTableProviderImpl {
-	/**
+	*/
+/**
 	 * Shared run logic for {@link VBlockLootTableProvider} and {@link SimpleFabricLootTableProvider}.
-	 */
+	 *//*
+
 	public static CompletableFuture<?> run(
 		CachedOutput writer,
 		FabricLootTableProvider provider,
@@ -58,14 +61,14 @@ public final class VLootTableProviderImpl {
 		HashMap<ResourceLocation, LootTable> builders = Maps.newHashMap();
 		HashMap<ResourceLocation, ConditionJsonProvider[]> conditionMap = new HashMap<>();
 
-		provider.generate((identifier, builder) -> {
-			ConditionJsonProvider[] conditions = FabricDataGenHelper.consumeConditions(builder);
-			conditionMap.put(identifier, conditions);
-
-			if (builders.put(identifier, builder.setParamSet(lootContextType).build()) != null) {
-				throw new IllegalStateException("Duplicate loot table " + identifier);
-			}
-		});
+//		provider.generate((identifier, builder) -> {
+//			ConditionJsonProvider[] conditions = FabricDataGenHelper.consumeConditions(builder);
+//			conditionMap.put(identifier, conditions);
+//
+//			if (builders.put(identifier, builder.setParamSet(lootContextType).build()) != null) {
+//				throw new IllegalStateException("Duplicate loot table " + identifier);
+//			}
+//		});
 
 		return registryLookup.thenCompose(lookup -> {
 			RegistryOps<JsonElement> ops = RegistryOps.create(JsonOps.INSTANCE, lookup);
@@ -88,3 +91,4 @@ public final class VLootTableProviderImpl {
 	private VLootTableProviderImpl() {
 	}
 }
+*/

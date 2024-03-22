@@ -13,7 +13,8 @@
  *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+ *//*
+
 
 package io.github.vampirestudios.vampirelib.village;
 
@@ -129,7 +130,8 @@ public class TradeOfferFactories {
 		}
 	}
 
-    /*public static class EnchantBookFactory implements TradeOffers.Factory {
+    */
+/*public static class EnchantBookFactory implements TradeOffers.Factory {
         private final int experience;
 
         public EnchantBookFactory(int int_1) {
@@ -151,7 +153,8 @@ public class TradeOfferFactories {
 
             return new TradeOffer(new ItemStack(Items.EMERALD, int_2), new ItemStack(Items.BOOK), itemStack_1, 6, this.experience, 0.2F);
         }
-    }*/
+    }*//*
+
 
 	public static class TwoItemsForOneItemFactory implements VillagerTrades.ItemListing {
 		private final ItemStack buyItem, buyItem2, sellItem;
@@ -216,9 +219,11 @@ public class TradeOfferFactories {
 	}
 
 	public static class SellPotionHoldingItemFactory implements VillagerTrades.ItemListing {
-		/**
+		*/
+/**
 		 * An ItemStack that can have potion effects written to it.
-		 */
+		 *//*
+
 		private final ItemStack toItem;
 		private final int toCount;
 		private final int emeraldCost;
@@ -328,7 +333,8 @@ public class TradeOfferFactories {
 			this(sell, price, count, maxUses, experience, 0.05F);
 		}
 
-		/**
+		*/
+/**
 		 * The player buys the spesific stack with the defined price of emeralds
 		 *
 		 * @param sell       The stack the player sells
@@ -337,7 +343,8 @@ public class TradeOfferFactories {
 		 * @param maxUses    The number of amount you can trade the spesific stack
 		 * @param experience The amount of experience you get from the trade
 		 * @param multiplier Influences by the reputation system, the multiplier says how much up or down the price goes
-		 **/
+		 **//*
+
 		public SellItemFactory2(ItemStack sell, int price, int count, int maxUses, int experience, float multiplier) {
 			this.sell = sell;
 			this.price = price;
@@ -416,14 +423,16 @@ public class TradeOfferFactories {
 		private final float multiplier;
 
 
-		/**
+		*/
+/**
 		 * The player sells the spesific stack for the defined price to get emeralds
 		 *
 		 * @param sell       The stack the player sells
 		 * @param price      The amount of emeralds the stack costs
 		 * @param maxUses    The number of amount you can trade the spesific stack
 		 * @param experience The amount of experience you get from the trade
-		 **/
+		 **//*
+
 		public SellItemFactory(ItemLike sell, int price, int maxUses, int experience) {
 			this.item = sell.asItem();
 			this.price = price;
@@ -479,3 +488,4 @@ public class TradeOfferFactories {
 	}
 
 }
+*/

@@ -27,6 +27,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedDeque;
 
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -63,6 +64,24 @@ public class BlockChiseler {
 
 	public static void create(ResourceLocation identifier, Item item, Collection<Block> chiselBlocks) {
 		ChiselEntry chiselEntry = new ChiselEntry(chiselBlocks);
+		chiselRegistry.put(identifier, chiselEntry);
+		if (itemsToEntries.containsKey(item)) {
+			itemsToEntries.get(item).add(chiselEntry);
+		} else {
+			itemsToEntries.put(item, new HashSet<>(Collections.singleton(chiselEntry)));
+		}
+	}
+
+	public static void create(ResourceLocation identifier, TagKey<Item> toolTag, ChiselEntry chiselEntry) {
+		chiselRegistry.put(identifier, chiselEntry);
+		if (toolTagsToEntries.containsKey(toolTag)) {
+			toolTagsToEntries.get(toolTag).add(chiselEntry);
+		} else {
+			toolTagsToEntries.put(toolTag, new HashSet<>(Collections.singleton(chiselEntry)));
+		}
+	}
+
+	public static void create(ResourceLocation identifier, Item item, ChiselEntry chiselEntry) {
 		chiselRegistry.put(identifier, chiselEntry);
 		if (itemsToEntries.containsKey(item)) {
 			itemsToEntries.get(item).add(chiselEntry);
@@ -114,7 +133,7 @@ public class BlockChiseler {
 
 			level.playSound(null, hitResult.getBlockPos(), SoundEvents.PUMPKIN_CARVE, SoundSource.BLOCKS, 1.0F, 1.0F);
 			level.setBlockAndUpdate(hitResult.getBlockPos(), copyTo(hitBlockState, newBlock.defaultBlockState()));
-			if (heldStack.getItem().canBeDepleted())
+			if (heldStack.has(DataComponents.MAX_DAMAGE))
 				heldStack.hurtAndBreak(1, player, LivingEntity.getSlotForHand(hand));
 		}
 		return InteractionResult.SUCCESS;
@@ -132,7 +151,7 @@ public class BlockChiseler {
 		return to;
 	}
 
-	static class ChiselEntry {
+	public static class ChiselEntry {
 		Deque<Block> chiselDeque;
 
 		ChiselEntry(Collection<Block> blocks) {
