@@ -1,20 +1,3 @@
-/*
- * Copyright (c) 2024 OliviaTheVampire
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
 package io.github.vampirestudios.vampirelib.api.datagen;
 
 import java.util.EnumSet;
@@ -26,8 +9,9 @@ import java.util.Set;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import org.joml.Vector3f;
+import org.joml.Vector3fc;
 
-import net.minecraft.Util;
+import net.minecraft.util.Util;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.CubeDefinition;
 import net.minecraft.client.model.geom.builders.CubeDeformation;
@@ -64,7 +48,7 @@ public final class ModelCodecs {
 			dil -> new Vector3f(dil.growX, dil.growY, dil.growZ)
 	);
 
-	private static CubeDefinition createCubeDefinition(Optional<String> name, Vector3f offset, Vector3f dimensions, CubeDeformation cubeDeformation, boolean mirror, UVPair uv, UVPair uvSize, Optional<List<Direction>> faces) {
+	private static CubeDefinition createCubeDefinition(Optional<String> name, Vector3fc offset, Vector3fc dimensions, CubeDeformation cubeDeformation, boolean mirror, UVPair uv, UVPair uvSize, Optional<List<Direction>> faces) {
 		return new CubeDefinition(
 				name.orElse(null),
 				uv.u(), uv.v(),
@@ -91,7 +75,7 @@ public final class ModelCodecs {
 	private static final UVPair DEFAULT_UV_SCALE = new UVPair(1.0f, 1.0f);
 
 	public static final Codec<UVPair> UV_PAIR = Codec.FLOAT.listOf().comapFlatMap(list -> Util.fixedSize(list, 2).map(listx ->
-		new UVPair(listx.get(0), listx.get(1))
+		new UVPair(listx.getFirst(), listx.get(1))
 	), uvPair -> List.of(uvPair.u(), uvPair.v()));
 
 	public static final Codec<CubeDefinition> CUBE_DEFINITION = RecordCodecBuilder.create(instance ->

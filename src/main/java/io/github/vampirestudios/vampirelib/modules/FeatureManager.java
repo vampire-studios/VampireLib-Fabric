@@ -1,28 +1,11 @@
-/*
- * Copyright (c) 2024 OliviaTheVampire
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
 package io.github.vampirestudios.vampirelib.modules;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 import net.minecraft.core.Registry;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -31,143 +14,247 @@ import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
 import io.github.vampirestudios.vampirelib.init.VRegistries;
 import io.github.vampirestudios.vampirelib.modules.api.ClientFeature;
 import io.github.vampirestudios.vampirelib.modules.api.CommonFeature;
+import io.github.vampirestudios.vampirelib.modules.api.Feature;
 import io.github.vampirestudios.vampirelib.modules.api.ServerFeature;
 import io.github.vampirestudios.vampirelib.modules.utils.ConsoleUtils;
 
 public final class FeatureManager {
-	public static final Registry<CommonFeature> COMMON_FEATURES = FabricRegistryBuilder.createSimple(
-			CommonFeature.class, ResourceLocation.parse("vampirelib:common_features")).buildAndRegister();
-	public static final Registry<ClientFeature> CLIENT_FEATURES = FabricRegistryBuilder.createSimple(
-			ClientFeature.class, ResourceLocation.parse("vampirelib:client_features")).buildAndRegister();
-	public static final Registry<ServerFeature> SERVER_FEATURES = FabricRegistryBuilder.createSimple(
-			ServerFeature.class, ResourceLocation.parse("vampirelib:server_features")).buildAndRegister();
-	private final List<CommonFeature> commonFeatures = new ArrayList<>();
-	private final List<ClientFeature> clientFeatures = new ArrayList<>();
-	private final List<ServerFeature> serverFeatures = new ArrayList<>();
 
-	private FeatureManager() {
+	public static final Registry<CommonFeature> COMMON_FEATURES = FabricRegistryBuilder.create(
+		CommonFeature.class,
+		Identifier.parse("vampirelib:common_features")
+	).buildAndRegister();
+
+	public static final Registry<ClientFeature> CLIENT_FEATURES = FabricRegistryBuilder.create(
+		ClientFeature.class,
+		Identifier.parse("vampirelib:client_features")
+	).buildAndRegister();
+
+	public static final Registry<ServerFeature> SERVER_FEATURES = FabricRegistryBuilder.create(
+		ServerFeature.class,
+		Identifier.parse("vampirelib:server_features")
+	).buildAndRegister();
+
+	private final Identifier modIdentifier;
+
+	private final Set<Identifier> initializedCommonFeatures = new HashSet<>();
+	private final Set<Identifier> initializedClientFeatures = new HashSet<>();
+	private final Set<Identifier> initializedServerFeatures = new HashSet<>();
+
+	private FeatureManager(Identifier modIdentifier) {
+		this.modIdentifier = modIdentifier;
 	}
 
-	public static FeatureManager createFeatureManager(ResourceLocation modIdentifier) {
-		return Registry.register(VRegistries.FEATURE_MANAGERS, modIdentifier, new FeatureManager());
+	public static FeatureManager createFeatureManager(Identifier modIdentifier) {
+		Objects.requireNonNull(modIdentifier, "modIdentifier");
+
+		FeatureManager manager = new FeatureManager(modIdentifier);
+		return Registry.register(VRegistries.FEATURE_MANAGERS, modIdentifier, manager);
 	}
 
-	public static FeatureManager getFeatureManager(ResourceLocation modIdentifier) {
-		return VRegistries.FEATURE_MANAGERS.getValue(modIdentifier);
-	}
+	public static FeatureManager getFeatureManager(Identifier modIdentifier) {
+		FeatureManager manager = VRegistries.FEATURE_MANAGERS.getValue(modIdentifier);
 
-	public void registerCommonFeature(CommonFeature module) {
-		if (COMMON_FEATURES.getOptional(module.getRegistryName()).isEmpty()) {
-			Registry.register(COMMON_FEATURES, module.getRegistryName(), module);
+		if (manager == null) {
+			throw new IllegalArgumentException("No feature manager registered for " + modIdentifier);
 		}
+
+		return manager;
 	}
 
-	public void registerClientFeature(ClientFeature module) {
-		if (CLIENT_FEATURES.getOptional(module.getRegistryName()).isEmpty()) {
-			Registry.register(CLIENT_FEATURES, module.getRegistryName(), module);
-		}
+	public Identifier getModIdentifier() {
+		return this.modIdentifier;
 	}
 
-	public void registerServerFeature(ServerFeature module) {
-		if (SERVER_FEATURES.getOptional(module.getRegistryName()).isEmpty()) {
-			Registry.register(SERVER_FEATURES, module.getRegistryName(), module);
-		}
+	public String getNamespace() {
+		return this.modIdentifier.getNamespace();
+	}
+
+	public void registerCommonFeature(CommonFeature feature) {
+		registerFeature(COMMON_FEATURES, feature);
+	}
+
+	@Environment(EnvType.CLIENT)
+	public void registerClientFeature(ClientFeature feature) {
+		registerFeature(CLIENT_FEATURES, feature);
+	}
+
+	public void registerServerFeature(ServerFeature feature) {
+		registerFeature(SERVER_FEATURES, feature);
 	}
 
 	public void initCommonFeature(CommonFeature feature) {
-		feature.initCommon();
-		this.commonFeatures.add(feature);
+		if (!belongsToManager(feature)) {
+			throw createWrongNamespaceException(feature);
+		}
+
+		Identifier id = feature.getRegistryName();
+
+		if (this.initializedCommonFeatures.add(id)) {
+			feature.initCommon();
+		}
 	}
 
 	public void initCommonFeature(CommonFeature... features) {
 		for (CommonFeature feature : features) {
-			feature.initCommon();
-			this.commonFeatures.add(feature);
+			initCommonFeature(feature);
 		}
 	}
 
-	public void initCommon(String modId) {
-		COMMON_FEATURES.forEach(feature -> {
-			if (!this.commonFeatures.contains(feature))
-				if (feature.getRegistryName().getNamespace().equals(modId)) feature.initCommon();
-		});
+	public void initCommon() {
+		for (CommonFeature feature : COMMON_FEATURES) {
+			if (belongsToManager(feature)) {
+				initCommonFeature(feature);
+			}
+		}
+
 		ConsoleUtils.logCommonFeatures();
 	}
 
-	public void initClientFeature(ClientFeature clientFeature) {
-		clientFeature.initClient();
-		this.clientFeatures.add(clientFeature);
-	}
+	@Environment(EnvType.CLIENT)
+	public void initClientFeature(ClientFeature feature) {
+		if (!belongsToManager(feature)) {
+			throw createWrongNamespaceException(feature);
+		}
 
-	public void initClientFeature(ClientFeature... features) {
-		for (ClientFeature feature : features) {
+		Identifier id = feature.getRegistryName();
+
+		if (this.initializedClientFeatures.add(id)) {
 			feature.initClient();
-			this.clientFeatures.add(feature);
 		}
 	}
 
 	@Environment(EnvType.CLIENT)
-	public void initClient(String modId) {
-		CLIENT_FEATURES.forEach(feature -> {
-			if (!this.clientFeatures.contains(feature)) {
-				if (feature.getRegistryName().getNamespace().equals(modId)) feature.initClient();
+	public void initClientFeature(ClientFeature... features) {
+		for (ClientFeature feature : features) {
+			initClientFeature(feature);
+		}
+	}
+
+	@Environment(EnvType.CLIENT)
+	public void initClient() {
+		for (ClientFeature feature : CLIENT_FEATURES) {
+			if (belongsToManager(feature)) {
+				initClientFeature(feature);
 			}
-		});
+		}
 
 		ConsoleUtils.logClientFeatures();
 	}
 
-	public void initServerFeature(ServerFeature serverFeature) {
-		serverFeature.initServer();
-		this.serverFeatures.add(serverFeature);
+	public void initServerFeature(ServerFeature feature) {
+		if (!belongsToManager(feature)) {
+			throw createWrongNamespaceException(feature);
+		}
+
+		Identifier id = feature.getRegistryName();
+
+		if (this.initializedServerFeatures.add(id)) {
+			feature.initServer();
+		}
 	}
 
 	public void initServerFeature(ServerFeature... features) {
 		for (ServerFeature feature : features) {
-			feature.initServer();
-			this.serverFeatures.add(feature);
+			initServerFeature(feature);
 		}
 	}
 
-	@Environment(EnvType.SERVER)
-	public void initServer(String modId) {
-		SERVER_FEATURES.forEach(feature -> {
-			if (!this.serverFeatures.contains(feature)) {
-				if (feature.getRegistryName().getNamespace().equals(modId)) feature.initServer();
+	public void initServer() {
+		for (ServerFeature feature : SERVER_FEATURES) {
+			if (belongsToManager(feature)) {
+				initServerFeature(feature);
 			}
-		});
+		}
 
 		ConsoleUtils.logServerFeatures();
 	}
 
-	public boolean doesCommonFeatureExist(CommonFeature module) {
-		return COMMON_FEATURES.containsKey(module.getRegistryName());
+	public boolean doesCommonFeatureExist(Identifier id) {
+		return COMMON_FEATURES.containsKey(id);
 	}
 
-	public boolean doesClientFeatureExist(ClientFeature module) {
-		return CLIENT_FEATURES.containsKey(module.getRegistryName());
+	public boolean doesClientFeatureExist(Identifier id) {
+		return CLIENT_FEATURES.containsKey(id);
 	}
 
-	public boolean doesServerFeatureExist(ServerFeature module) {
-		return SERVER_FEATURES.containsKey(module.getRegistryName());
+	public boolean doesServerFeatureExist(Identifier id) {
+		return SERVER_FEATURES.containsKey(id);
 	}
 
-	public boolean isFeatureEnabled(ResourceLocation name) {
-		if (COMMON_FEATURES.containsKey(name)) {
-			CommonFeature module = COMMON_FEATURES.getValue(name);
-			return Objects.requireNonNull(module).isEnabled();
+	public boolean doesCommonFeatureExist(CommonFeature feature) {
+		return doesCommonFeatureExist(feature.getRegistryName());
+	}
+
+	public boolean doesClientFeatureExist(ClientFeature feature) {
+		return doesClientFeatureExist(feature.getRegistryName());
+	}
+
+	public boolean doesServerFeatureExist(ServerFeature feature) {
+		return doesServerFeatureExist(feature.getRegistryName());
+	}
+
+	public boolean isCommonFeatureEnabled(Identifier id) {
+		CommonFeature feature = COMMON_FEATURES.getValue(id);
+		return feature != null && feature.isEnabled();
+	}
+
+	public boolean isClientFeatureEnabled(Identifier id) {
+		ClientFeature feature = CLIENT_FEATURES.getValue(id);
+		return feature != null && feature.isEnabled();
+	}
+
+	public boolean isServerFeatureEnabled(Identifier id) {
+		ServerFeature feature = SERVER_FEATURES.getValue(id);
+		return feature != null && feature.isEnabled();
+	}
+
+	public boolean isFeatureEnabled(Identifier id) {
+		Feature feature = COMMON_FEATURES.getValue(id);
+
+		if (feature == null) {
+			feature = CLIENT_FEATURES.getValue(id);
 		}
 
-		if (CLIENT_FEATURES.containsKey(name)) {
-			ClientFeature module = CLIENT_FEATURES.getValue(name);
-			return Objects.requireNonNull(module).isEnabled();
+		if (feature == null) {
+			feature = SERVER_FEATURES.getValue(id);
 		}
 
-		if (SERVER_FEATURES.containsKey(name)) {
-			ServerFeature module = SERVER_FEATURES.getValue(name);
-			return Objects.requireNonNull(module).isEnabled();
+		return feature != null && feature.isEnabled();
+	}
+
+	private <T extends Feature> void registerFeature(Registry<T> registry, T feature) {
+		Objects.requireNonNull(feature, "feature");
+
+		if (!belongsToManager(feature)) {
+			throw createWrongNamespaceException(feature);
 		}
 
-		return false;
+		Identifier id = feature.getRegistryName();
+		T existing = registry.getValue(id);
+
+		if (existing != null) {
+			if (existing == feature) {
+				return;
+			}
+
+			throw new IllegalStateException(
+				"Feature " + id + " is already registered with a different instance"
+			);
+		}
+
+		Registry.register(registry, id, feature);
+	}
+
+	private boolean belongsToManager(Feature feature) {
+		return feature.getRegistryName().getNamespace().equals(this.getNamespace());
+	}
+
+	private IllegalArgumentException createWrongNamespaceException(Feature feature) {
+		return new IllegalArgumentException(
+			"Feature " + feature.getRegistryName()
+				+ " does not belong to feature manager "
+				+ this.modIdentifier
+		);
 	}
 }

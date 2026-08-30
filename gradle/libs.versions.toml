@@ -1,12 +1,10 @@
 [versions]
-    minecraft = '24w45a'
-    quilt_mappings = "1.21+build.17"
-    fabric-loader = "0.16.9"
-    parchment = "2024.07.28"
+    minecraft = '26.3-snapshot-10'
+    fabric-loader = "0.19.5"
 
-    fabric = "0.107.3+1.21.4"
+    fabric = "0.158.3+26.3"
 
-    terraformwoodapi = '12.0.0-alpha.1'
+    terraformwoodapi = '17.0.1'
 
 [libraries]
     minecraft = { module = 'com.mojang:minecraft', version.ref = 'minecraft' }

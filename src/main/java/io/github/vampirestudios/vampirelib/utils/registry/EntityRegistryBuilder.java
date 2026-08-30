@@ -1,42 +1,26 @@
-/*
- * Copyright (c) 2024 OliviaTheVampire
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
 package io.github.vampirestudios.vampirelib.utils.registry;
+
+import java.util.Objects;
 
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobCategory;
 
-import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
+import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityType;
 
-public class EntityRegistryBuilder<E extends Entity> {
+public final class EntityRegistryBuilder<E extends Entity> {
 
-	private static ResourceLocation name;
+	private final Identifier name;
 
 	private EntityType.EntityFactory<E> entityFactory;
-
-	private MobCategory category;
+	private MobCategory category = MobCategory.MISC;
 
 	private int trackingDistance;
 	private int updateIntervalTicks;
@@ -49,33 +33,49 @@ public class EntityRegistryBuilder<E extends Entity> {
 
 	private EntityDimensions dimensions;
 
-	public static <E extends Entity> EntityRegistryBuilder<E> createBuilder(ResourceLocation nameIn) {
-		name = nameIn;
-		return new EntityRegistryBuilder<>();
+	private EntityRegistryBuilder(Identifier name) {
+		this.name = Objects.requireNonNull(name, "name");
+	}
+
+	public static <E extends Entity> EntityRegistryBuilder<E> createBuilder(Identifier name) {
+		return new EntityRegistryBuilder<>(name);
 	}
 
 	public EntityRegistryBuilder<E> entity(EntityType.EntityFactory<E> entityFactory) {
-		this.entityFactory = entityFactory;
+		this.entityFactory = Objects.requireNonNull(entityFactory, "entityFactory");
 		return this;
 	}
 
-	@Deprecated
 	public EntityRegistryBuilder<E> category(MobCategory category) {
-		this.category = category;
+		this.category = Objects.requireNonNull(category, "category");
 		return this;
 	}
 
+	/**
+	 * @deprecated Use {@link #category(MobCategory)}.
+	 */
+	@Deprecated
 	public EntityRegistryBuilder<E> group(MobCategory category) {
-		this.category = category;
-		return this;
+		return category(category);
 	}
 
+	/**
+	 * Sets the entity tracking distance in blocks.
+	 */
 	public EntityRegistryBuilder<E> trackingDistance(int trackingDistance) {
+		if (trackingDistance < 1) {
+			throw new IllegalArgumentException("Tracking distance must be greater than 0");
+		}
+
 		this.trackingDistance = trackingDistance;
 		return this;
 	}
 
 	public EntityRegistryBuilder<E> updateIntervalTicks(int updateIntervalTicks) {
+		if (updateIntervalTicks < 1) {
+			throw new IllegalArgumentException("Update interval must be greater than 0");
+		}
+
 		this.updateIntervalTicks = updateIntervalTicks;
 		return this;
 	}
@@ -85,17 +85,24 @@ public class EntityRegistryBuilder<E extends Entity> {
 		return this;
 	}
 
+	/**
+	 * @deprecated Configure tracking options individually instead.
+	 */
 	@Deprecated
-	public EntityRegistryBuilder<E> tracker(int trackingDistance, int updateIntervalTicks, boolean alwaysUpdateVelocity) {
-		this.trackingDistance = trackingDistance;
-		this.updateIntervalTicks = updateIntervalTicks;
-		this.alwaysUpdateVelocity = alwaysUpdateVelocity;
-		return this;
+	public EntityRegistryBuilder<E> tracker(
+		int trackingDistance,
+		int updateIntervalTicks,
+		boolean alwaysUpdateVelocity
+	) {
+		return trackingDistance(trackingDistance)
+			.updateIntervalTicks(updateIntervalTicks)
+			.alwaysUpdateVelocity(alwaysUpdateVelocity);
 	}
 
 	public EntityRegistryBuilder<E> egg(int primaryColor, int secondaryColor) {
 		this.primaryColor = primaryColor;
 		this.secondaryColor = secondaryColor;
+		this.hasEgg = true;
 		return this;
 	}
 
@@ -109,36 +116,72 @@ public class EntityRegistryBuilder<E extends Entity> {
 		return this;
 	}
 
-	public EntityRegistryBuilder<E> dimensions(EntityDimensions size) {
-		this.dimensions = size;
+	public EntityRegistryBuilder<E> dimensions(EntityDimensions dimensions) {
+		this.dimensions = Objects.requireNonNull(dimensions, "dimensions");
+		return this;
+	}
+
+	public EntityRegistryBuilder<E> dimensions(float width, float height) {
+		this.dimensions = EntityDimensions.scalable(width, height);
 		return this;
 	}
 
 	public EntityType<E> build() {
-		FabricEntityTypeBuilder<E> entityBuilder = FabricEntityTypeBuilder.create(this.category, this.entityFactory)
-				.dimensions(this.dimensions);
+		Objects.requireNonNull(entityFactory, "Entity factory must be configured before building");
+		Objects.requireNonNull(dimensions, "Entity dimensions must be configured before building");
+
+		ResourceKey<EntityType<?>> key = ResourceKey.create(Registries.ENTITY_TYPE, name);
+
+		EntityType.Builder<E> entityBuilder = EntityType.Builder.of(entityFactory, category)
+			.sized(dimensions.width(), dimensions.height())
+			.eyeHeight(dimensions.eyeHeight());
+
 		if (fireImmune) {
 			entityBuilder.fireImmune();
 		}
-		if (this.trackingDistance != 0) {
-			entityBuilder.trackRangeBlocks(this.trackingDistance);
-		}
-		if (this.updateIntervalTicks != 0) {
-			entityBuilder.trackedUpdateRate(this.updateIntervalTicks);
-		}
-		if (this.updateIntervalTicks != 0) {
-			entityBuilder.forceTrackedVelocityUpdates(this.alwaysUpdateVelocity);
+
+		if (trackingDistance > 0) {
+			entityBuilder.clientTrackingRange(blocksToChunks(trackingDistance));
 		}
 
-		EntityType<E> entityType = Registry.register(BuiltInRegistries.ENTITY_TYPE, name, entityBuilder.build(ResourceKey.create(Registries.ENTITY_TYPE, name)));
+		if (updateIntervalTicks > 0) {
+			entityBuilder.updateInterval(updateIntervalTicks);
+		}
+
+		if (alwaysUpdateVelocity) {
+			fabricBuilder(entityBuilder).alwaysUpdateVelocity(true);
+		}
+
+		EntityType<E> entityType = Registry.register(
+			BuiltInRegistries.ENTITY_TYPE,
+			name,
+			entityBuilder.build(key)
+		);
 
 		if (hasEgg) {
-			RegistryHelper.createRegistryHelper(name.getNamespace()).items()
-					.registerSpawnEgg(name.getPath(), (EntityType<? extends Mob>) entityType, primaryColor,
-							secondaryColor);
+			registerSpawnEgg(entityType);
 		}
 
 		return entityType;
+	}
+
+	@SuppressWarnings("unchecked")
+	private static <E extends Entity> FabricEntityType.Builder<E> fabricBuilder(EntityType.Builder<E> builder) {
+		return builder;
+	}
+
+	@SuppressWarnings("unchecked")
+	private void registerSpawnEgg(EntityType<E> entityType) {
+		RegistryHelper.createRegistryHelper(name.getNamespace()).items().registerSpawnEgg(
+			name.getPath(),
+			(EntityType<? extends Mob>) entityType,
+			primaryColor,
+			secondaryColor
+		);
+	}
+
+	private static int blocksToChunks(int blocks) {
+		return (blocks + 15) / 16;
 	}
 
 }

@@ -1,20 +1,3 @@
-/*
- * Copyright (c) 2024 OliviaTheVampire
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
 package io.github.vampirestudios.vampirelib.api.datagen;
 
 import java.util.ArrayList;
@@ -26,21 +9,20 @@ import java.util.function.BiConsumer;
 import net.minecraft.client.renderer.texture.atlas.SpriteSource;
 import net.minecraft.client.renderer.texture.atlas.SpriteSources;
 import net.minecraft.data.PackOutput;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public abstract class SpriteSourceProvider extends JsonCodecProvider<List<SpriteSource>> {
-	protected static final ResourceLocation BLOCKS_ATLAS = ResourceLocation.withDefaultNamespace("blocks");
-	protected static final ResourceLocation BANNER_PATTERNS_ATLAS = ResourceLocation.withDefaultNamespace("banner_patterns");
-	protected static final ResourceLocation BEDS_ATLAS = ResourceLocation.withDefaultNamespace("beds");
-	protected static final ResourceLocation CHESTS_ATLAS = ResourceLocation.withDefaultNamespace("chests");
-	protected static final ResourceLocation SHIELD_PATTERNS_ATLAS = ResourceLocation.withDefaultNamespace("shield_patterns");
-	protected static final ResourceLocation SHULKER_BOXES_ATLAS = ResourceLocation.withDefaultNamespace("shulker_boxes");
-	protected static final ResourceLocation SIGNS_ATLAS = ResourceLocation.withDefaultNamespace("signs");
-	protected static final ResourceLocation MOB_EFFECTS_ATLAS = ResourceLocation.withDefaultNamespace("mob_effects");
-	protected static final ResourceLocation PAINTINGS_ATLAS = ResourceLocation.withDefaultNamespace("paintings");
-	protected static final ResourceLocation PARTICLES_ATLAS = ResourceLocation.withDefaultNamespace("particles");
+	protected static final Identifier BLOCKS_ATLAS = Identifier.withDefaultNamespace("blocks");
+	protected static final Identifier ITEMS_ATLAS = Identifier.withDefaultNamespace("items");
+	protected static final Identifier BANNER_PATTERNS_ATLAS = Identifier.withDefaultNamespace("banner_patterns");
+	protected static final Identifier CHESTS_ATLAS = Identifier.withDefaultNamespace("chests");
+	protected static final Identifier SHIELD_PATTERNS_ATLAS = Identifier.withDefaultNamespace("shield_patterns");
+	protected static final Identifier SHULKER_BOXES_ATLAS = Identifier.withDefaultNamespace("shulker_boxes");
+	protected static final Identifier MOB_EFFECTS_ATLAS = Identifier.withDefaultNamespace("mob_effects");
+	protected static final Identifier PAINTINGS_ATLAS = Identifier.withDefaultNamespace("paintings");
+	protected static final Identifier PARTICLES_ATLAS = Identifier.withDefaultNamespace("particles");
 
-	private final Map<ResourceLocation, SourceList> atlases = new HashMap<>();
+	private final Map<Identifier, SourceList> atlases = new HashMap<>();
 
 	public SpriteSourceProvider(PackOutput output) {
 		super(output, PackOutput.Target.RESOURCE_PACK, "atlases", SpriteSources.FILE_CODEC);
@@ -52,7 +34,7 @@ public abstract class SpriteSourceProvider extends JsonCodecProvider<List<Sprite
 	}
 
 	@Override
-	protected void configure(BiConsumer<ResourceLocation, List<SpriteSource>> provider) {
+	protected void configure(BiConsumer<Identifier, List<SpriteSource>> provider) {
 		addSources();
 		atlases.forEach((atlas, srcList) -> provider.accept(atlas, srcList.sources));
 	}
@@ -66,7 +48,7 @@ public abstract class SpriteSourceProvider extends JsonCodecProvider<List<Sprite
 	 *              and the vanilla atlases
 	 * @return an existing {@code SourceList} for the given atlas or a new one if not present yet
 	 */
-	protected final SourceList atlas(ResourceLocation atlas) {
+	protected final SourceList atlas(Identifier atlas) {
 		return atlases.computeIfAbsent(atlas, $ -> new SourceList());
 	}
 

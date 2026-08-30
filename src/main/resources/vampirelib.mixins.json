@@ -3,16 +3,10 @@
 	"package": "io.github.vampirestudios.vampirelib.mixins",
 	"compatibilityLevel": "JAVA_16",
 	"mixins": [
-		"BlockStateModelGeneratorMixin",
-		"ItemModelGeneratorMixin",
 		"MixinMobSpawnerLogic",
 		"MixinSpawnHelper",
-		"ModelMixin",
-		"TextureMapAccessor",
-		"block.BlockEntityTypeMixin",
 		"block.StructureBlockBlockEntityMixin",
-		"block.UpdateStructureBlockC2SPacketMixin",
-		"entity.VillagerEntityMixin"
+		"block.UpdateStructureBlockC2SPacketMixin"
 	],
 	"client": [],
 	"injectors": {

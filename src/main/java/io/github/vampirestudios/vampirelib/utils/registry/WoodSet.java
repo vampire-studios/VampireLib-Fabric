@@ -15,7 +15,7 @@ import com.mojang.datafixers.util.Pair;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -159,10 +159,10 @@ public class WoodSet {
 				BlockBehaviour.Properties properties = templates.get(type).getProperties();
 				propertiesModifier.accept(properties);
 				propertiesModifiers.getOrDefault(type, t -> {}).accept(properties);
-				Block block1 = type.make(properties.setId(ResourceKey.create(Registries.BLOCK, ResourceLocation.parse(id))), woodType, woodSet.getBlockSafe(WoodBlockType.PLANKS));
+				Block block1 = type.make(properties.setId(ResourceKey.create(Registries.BLOCK, Identifier.parse(id))), woodType, woodSet.getBlockSafe(WoodBlockType.PLANKS));
                 Block block = registryHelper.blocks().registerBlockWithoutItem(id, block1);
                 if (!noItem.contains(type)) {
-                    items.put(type, registryHelper.items().registerItem(id, new BlockItem(block, new Item.Properties().setId(ResourceKey.create(Registries.ITEM, ResourceLocation.parse(id))))));
+                    items.put(type, registryHelper.items().registerItem(id, new BlockItem(block, new Item.Properties().setId(ResourceKey.create(Registries.ITEM, Identifier.parse(id))))));
                 }
                 blocks.put(type, block);
             });

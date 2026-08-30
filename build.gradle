@@ -1,9 +1,7 @@
 plugins {
+	id 'net.fabricmc.fabric-loom' version "1.17.20"
 	id 'maven-publish'
-	id "com.modrinth.minotaur" version "2.+"
-	id "org.jetbrains.gradle.plugin.idea-ext" version "1.1.3"
-	id 'org.quiltmc.gradle.licenser' version '1.+'
-	id 'fabric-loom' version '1.7-SNAPSHOT'
+	id "me.modmuss50.mod-publish-plugin" version "2.2.0"
 }
 
 version = "$mod_version+build.$build_number-$project.minecraft_version"
@@ -57,44 +55,40 @@ repositories {
 	}
 }
 
+configurations.configureEach {
+	resolutionStrategy {
+		force("net.fabricmc.fabric-api:fabric-api:0.158.3+26.3")
+		force("net.fabricmc:fabric-loader:0.19.5")
+	}
+}
+
+
 dependencies {
 	minecraft libs.minecraft
-	mappings loom.layered {
-//		it.mappings("org.quiltmc:quilt-mappings:${libs.versions.quilt.mappings.get()}:intermediary-v2")
-//		it.parchment("org.parchmentmc.data:parchment-1.21:${libs.versions.parchment.get()}@zip")
-		it.officialMojangMappings()
-	}
 
-	modImplementation libs.fabric.loader
+	implementation libs.fabric.loader
 
-	modImplementation libs.fabric.api
+	implementation libs.fabric.api
 
-	modImplementation libs.terraformwoodapi
-	include libs.terraformwoodapi
+//	implementation libs.terraformwoodapi
+//	include libs.terraformwoodapi
 }
 
 processResources {
-	inputs.property "version", version
+	inputs.property "version", project.version
 
-	filesMatching('fabric.mod.json') {
-		expand "version": version
+	filesMatching("fabric.mod.json") {
+		expand "version": project.version
 	}
 }
 
 java {
 	withSourcesJar()
-	withJavadocJar()
-	toolchain.getLanguageVersion().set(JavaLanguageVersion.of(21))
+	toolchain.languageVersion = JavaLanguageVersion.of(25)
 }
 
 tasks.withType(JavaCompile).configureEach {
-	it.options.getRelease().set(21)
-	it.options.encoding = 'UTF-8'
-	it.options.compilerArgs += "--enable-preview"
-}
-
-compileJava {
-	options.compilerArgs += '--enable-preview'
+	it.options.release = 25
 }
 
 jar {
@@ -125,49 +119,19 @@ publishing {
 	}
 }
 
-license {
-	rule file('codeformat/HEADER')
-	rule file("codeformat/FABRIC_MODIFIED_HEADER")
-	rule file("codeformat/QUILT_MODIFIED_HEADER")
-	include '**/*.java'
-}
-
-modrinth {
-	token = modrinthToken
-	projectId = "vampirelib"
-	versionName = "VampireLib v${mod_version}+build.${build_number} ($project.minecraft_version)"
-	versionNumber = project.version
-	versionType = this.getVersionType()
-	uploadFile = tasks.remapJar
-	gameVersions = ["1.21"]
-	loaders = ["fabric"]
-	dependencies {
-		required.project("fabric-api")
-	}
-	// Changelog fetching
-	def changelogContent = fetchChangelog()
-
-	if (changelogContent) {
-		changelog = changelogContent
-	} else {
-		afterEvaluate {
-			tasks.modrinth.setEnabled(false)
+publishMods {
+	file = jar.archiveFile
+	changelog = fetchChangelog()
+	type = STABLE
+	modLoaders.add("fabric")
+	modrinth {
+		projectId = "USLVyT7V"
+		accessToken = mr_token
+		minecraftVersionRange {
+			start = "26.3"
+			end = "latest"
+			includeSnapshots = false
 		}
-	}
-}
-
-boolean isMCVersionNonRelease() {
-	return project.minecraft_version.matches('^\\d\\dw\\d\\d[a-z]$')
-			|| project.minecraft_version.matches('\\d+\\.\\d+-(pre|rc)(\\d+)')
-}
-
-String getVersionType() {
-	if (isMCVersionNonRelease() || version.contains("-alpha")) {
-		return "alpha"
-	} else if (version.contains("-beta")) {
-		return "beta"
-	} else {
-		return "release"
 	}
 }
 

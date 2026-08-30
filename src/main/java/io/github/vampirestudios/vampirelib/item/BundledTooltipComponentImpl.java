@@ -1,30 +1,10 @@
-/*
- * Copyright (c) 2024 OliviaTheVampire
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
 package io.github.vampirestudios.vampirelib.item;
 
 import java.util.List;
 
-import org.joml.Matrix4f;
-
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
-import net.minecraft.client.renderer.MultiBufferSource;
 
 public record BundledTooltipComponentImpl(List<ClientTooltipComponent> list) implements ClientTooltipComponent {
 	@Override
@@ -50,22 +30,22 @@ public record BundledTooltipComponentImpl(List<ClientTooltipComponent> list) imp
 	}
 
 	@Override
-	public void renderText(Font textRenderer, int x, int y, Matrix4f matrix4f, MultiBufferSource.BufferSource bufferSource) {
+	public void extractText(GuiGraphicsExtractor graphics, Font font, int x, int y) {
 		int y1 = y;
 
 		for (ClientTooltipComponent component : list) {
-			component.renderText(textRenderer, x, y1, matrix4f, bufferSource);
-			y1 += component.getHeight(textRenderer);
+			component.extractText(graphics, font, x, y1);
+			y1 += component.getHeight(font);
 		}
 	}
 
 	@Override
-	public void renderImage(Font textRenderer, int x, int y, int width, int height, GuiGraphics guiGraphics) {
+	public void extractImage(Font font, int x, int y, int w, int h, GuiGraphicsExtractor graphics) {
 		int y1 = y;
 
 		for (ClientTooltipComponent component : list) {
-			component.renderImage(textRenderer, x, y1, width, height, guiGraphics);
-			y1 += component.getHeight(textRenderer);
+			component.extractImage(font, x, y, w, h, graphics);
+			y1 += component.getHeight(font);
 		}
 	}
 }

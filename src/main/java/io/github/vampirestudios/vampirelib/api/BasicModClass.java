@@ -1,20 +1,3 @@
-/*
- * Copyright (c) 2024 OliviaTheVampire
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
 package io.github.vampirestudios.vampirelib.api;
 
 import java.util.HashMap;
@@ -25,7 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import net.minecraft.SharedConstants;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
@@ -35,13 +18,13 @@ import net.fabricmc.api.EnvironmentInterfaces;
 import net.fabricmc.api.ModInitializer;
 
 import io.github.vampirestudios.vampirelib.modules.FeatureManager;
-import io.github.vampirestudios.vampirelib.utils.ResourceLocationUtils;
+import io.github.vampirestudios.vampirelib.utils.IdentifierUtils;
 
 @EnvironmentInterfaces(
 		@EnvironmentInterface(value = EnvType.CLIENT, itf = ClientModInitializer.class)
 )
 public abstract class BasicModClass implements ModInitializer, ClientModInitializer {
-	private static final Map<ResourceLocation, FeatureManager> FEATURE_MANAGERS = new HashMap<>();
+	private static final Map<Identifier, FeatureManager> FEATURE_MANAGERS = new HashMap<>();
 
 	public static FeatureManager featureManager;
 	private final String modId;
@@ -108,7 +91,7 @@ public abstract class BasicModClass implements ModInitializer, ClientModInitiali
 		if (!client) {
 			featureManager = registerFeatureManager();
 		}
-		ResourceLocationUtils.setModInstance(this);
+		IdentifierUtils.setModInstance(this);
 	}
 
 	/**
@@ -118,7 +101,7 @@ public abstract class BasicModClass implements ModInitializer, ClientModInitiali
 	 * @return a ${@link FeatureManager} with the mod id of this mod
 	 */
 	private FeatureManager registerFeatureManager() {
-		ResourceLocation id = ResourceLocation.fromNamespaceAndPath(modId, "feature_manager");
+		Identifier id = Identifier.fromNamespaceAndPath(modId, "feature_manager");
 		if (FEATURE_MANAGERS.containsKey(id)) {
 			return FEATURE_MANAGERS.get(id);
 		} else {
@@ -129,26 +112,26 @@ public abstract class BasicModClass implements ModInitializer, ClientModInitiali
 	}
 
 	/**
-	 * Creates an ${@link ResourceLocation} with the specified and path and the mod id of the mod.
+	 * Creates an ${@link Identifier} with the specified and path and the mod id of the mod.
 	 *
 	 * @param path the path for this resource location
 	 *
-	 * @return a new ${@link ResourceLocation} with the specified and path and the mod id of the mod
+	 * @return a new ${@link Identifier} with the specified and path and the mod id of the mod
 	 */
-	public ResourceLocation identifier(String path) {
-		return ResourceLocationUtils.modId(path);
+	public Identifier identifier(String path) {
+		return IdentifierUtils.modId(path);
 	}
 
 	/**
-	 * Creates an ${@link ResourceLocation} with the specified namespace and path.
+	 * Creates an ${@link Identifier} with the specified namespace and path.
 	 *
 	 * @param namespace the namespace for this resource location
 	 * @param path      the path for this resource location
 	 *
-	 * @return a new ${@link ResourceLocation} with the specified namespace and path
+	 * @return a new ${@link Identifier} with the specified namespace and path
 	 */
-	public ResourceLocation identifier(String namespace, String path) {
-		return ResourceLocation.fromNamespaceAndPath(namespace, path);
+	public Identifier identifier(String namespace, String path) {
+		return Identifier.fromNamespaceAndPath(namespace, path);
 	}
 
 	/**
@@ -175,7 +158,7 @@ public abstract class BasicModClass implements ModInitializer, ClientModInitiali
 	 * Initializes the common.
 	 */
 	public void commonPostRegisterFeatures() {
-		featureManager.initCommon(this.modId());
+		featureManager.initCommon();
 	}
 
 	/**
@@ -183,7 +166,7 @@ public abstract class BasicModClass implements ModInitializer, ClientModInitiali
 	 */
 	@Environment(EnvType.CLIENT)
 	public void clientPostRegisterFeatures() {
-		featureManager.initClient(this.modId());
+		featureManager.initClient();
 	}
 
 	/**
@@ -191,7 +174,7 @@ public abstract class BasicModClass implements ModInitializer, ClientModInitiali
 	 */
 	@Environment(EnvType.SERVER)
 	public void serverPostRegisterFeatures() {
-		featureManager.initServer(this.modId());
+		featureManager.initServer();
 	}
 
 	public FeatureManager featureManager() {
@@ -237,7 +220,7 @@ public abstract class BasicModClass implements ModInitializer, ClientModInitiali
 	public void onInitialize() {
 		if (this.printVersionMessage) {
 			this.getLogger().info("You're now running {} v{} for {}", this.modName(), this.modVersion(),
-					SharedConstants.getCurrentVersion().getName());
+					SharedConstants.getCurrentVersion().name());
 		}
 	}
 
@@ -246,7 +229,7 @@ public abstract class BasicModClass implements ModInitializer, ClientModInitiali
 	public void onInitializeClient() {
 		if (this.printVersionMessage) {
 			this.getLogger().info("You're now running {} v{} on Client-Side for {}", this.modName(), this.modVersion(),
-					SharedConstants.getCurrentVersion().getName());
+					SharedConstants.getCurrentVersion().name());
 		}
 	}
 }

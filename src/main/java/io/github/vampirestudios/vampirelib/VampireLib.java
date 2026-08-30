@@ -1,20 +1,3 @@
-/*
- * Copyright (c) 2024 OliviaTheVampire
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
 package io.github.vampirestudios.vampirelib;
 
 import java.util.ArrayList;
@@ -30,15 +13,14 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.flag.FeatureFlag;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.level.gamerules.GameRules;
 import net.minecraft.world.level.material.MapColor;
 
 import net.fabricmc.api.EnvType;
@@ -52,6 +34,7 @@ import io.github.vampirestudios.vampirelib.utils.BlockChiseler;
 import io.github.vampirestudios.vampirelib.utils.Rands;
 import io.github.vampirestudios.vampirelib.utils.registry.WoodBlockType;
 import io.github.vampirestudios.vampirelib.utils.registry.WoodRegistry;
+import io.github.vampirestudios.vampirelib.utils.registry.WoodRegistry.WoodPropertyType;
 import io.github.vampirestudios.vampirelib.utils.registry.WoodSet;
 
 @Environment(EnvType.CLIENT)
@@ -102,7 +85,7 @@ public class VampireLib extends BasicModClass {
 	public static FeatureFlag TEST;
 
 	public VampireLib() {
-		super("vampirelib", "VampireLib", "7.0.4+build.1-1.20.6");
+		super("vampirelib", "VampireLib", "7.2.0+build.1-1.21.5");
 	}
 
 	@Override
@@ -133,9 +116,8 @@ public class VampireLib extends BasicModClass {
 			Pair.of("This message should not appear. If it does, it means you are", "")
 		);
 		Pair<String, String> selection = Rands.list(thing1);
-		getLogger().info(String.format("%s running %s v%s for %s %s", selection.getFirst(), modName(), modVersion(),
-			SharedConstants.getCurrentVersion().getName(), selection.getSecond()
-		));
+		getLogger().info("{} running {} v{} for {} {}", selection.getFirst(), modName(), modVersion(),
+			SharedConstants.getCurrentVersion().name(), selection.getSecond());
 
 		BlockChiseler.setup();
 
@@ -155,6 +137,8 @@ public class VampireLib extends BasicModClass {
 			Items.STONE_BUTTON
 		));
 
+//		VFeatures.init();
+
 		if (TEST_CONTENT_ENABLED) {
 
 			WoodSet TEST_NETHER_WOOD_1 = WoodSet.netherBuilder("test_nether_wood_1", TestWoodTypes.TEST_NETHER_WOOD_1)
@@ -167,61 +151,61 @@ public class VampireLib extends BasicModClass {
 				.build();
 
 			//Overworld
-//			TEST_WOOD = WoodRegistry.of(identifier("test")).defaultBlocks().build();
-//			TEST_WOOD1 = WoodRegistry.of(identifier("test1")).defaultBlocksColoredLeaves().build();
-//
-//			TEST_WOOD2 = WoodRegistry.of(identifier("test2")).defaultBlocks().defaultExtras().build();
-//			TEST_WOOD3 = WoodRegistry.of(identifier("test3")).defaultBlocksColoredLeaves().defaultExtras().build();
-//
-//			TEST_WOOD4 = WoodRegistry.of(identifier("test4")).defaultBlocks().defaultExtras().build();
-//			TEST_WOOD5 = WoodRegistry.of(identifier("test5")).defaultBlocksColoredLeaves().defaultExtras().build();
-//
-//			TEST_WOOD6 = WoodRegistry.of(identifier("test6")).defaultBlocks().defaultExtras().build();
-//			TEST_WOOD7 = WoodRegistry.of(identifier("test7")).defaultBlocksColoredLeaves().defaultExtras().build();
-//
-//			TEST_WOOD8 = WoodRegistry.of(identifier("test8")).defaultBlocks().defaultExtras().build();
-//			TEST_WOOD9 = WoodRegistry.of(identifier("test9")).defaultBlocksColoredLeaves().defaultExtras().build();
-//
-//			TEST_WOOD10 = WoodRegistry.of(identifier("test10")).defaultBlocks().defaultExtras().build();
-//			TEST_WOOD11 = WoodRegistry.of(identifier("test11")).defaultBlocksColoredLeaves().defaultExtras().build();
-//
-//			TEST_WOOD12 = WoodRegistry.of(identifier("test12")).defaultBlocks().defaultExtras().build();
-//			TEST_WOOD13 = WoodRegistry.of(identifier("test13")).defaultBlocksColoredLeaves().defaultExtras().build();
-//
-//			TEST_WOOD14 = WoodRegistry.of(identifier("test14")).woodPropertyType(WoodPropertyType.OVERWORLD).leaves().sapling().build();
-//
-//			TEST_WOOD15 = WoodRegistry.of(identifier("test15")).woodPropertyType(WoodPropertyType.OVERWORLD).leaves().build();
-//
-//			TEST_WOOD16 = WoodRegistry.of(identifier("test16")).woodPropertyType(WoodPropertyType.OVERWORLD).sapling().build();
-//
-//			//Nether
-//			TEST_NETHER_WOOD = WoodRegistry.of(identifier("test_nether")).defaultBlocks(WoodPropertyType.NETHER).build();
-//			TEST_NETHER_WOOD1 = WoodRegistry.of(identifier("test1_nether")).defaultBlocksColoredLeaves(WoodPropertyType.NETHER).build();
-//
-//			TEST_NETHER_WOOD2 = WoodRegistry.of(identifier("test2_nether")).defaultBlocks(WoodPropertyType.NETHER).defaultExtras().build();
-//			TEST_NETHER_WOOD3 = WoodRegistry.of(identifier("test3_nether")).defaultBlocksColoredLeaves(WoodPropertyType.NETHER).defaultExtras().build();
-//
-//			TEST_NETHER_WOOD4 = WoodRegistry.of(identifier("test4_nether")).defaultBlocks(WoodPropertyType.NETHER).defaultExtras().build();
-//			TEST_NETHER_WOOD5 = WoodRegistry.of(identifier("test5_nether")).defaultBlocksColoredLeaves(WoodPropertyType.NETHER).defaultExtras().build();
-//
-//			TEST_NETHER_WOOD6 = WoodRegistry.of(identifier("test6_nether")).defaultBlocks(WoodPropertyType.NETHER).defaultExtras().nonFlammable().build();
-//			TEST_NETHER_WOOD7 = WoodRegistry.of(identifier("test7_nether")).defaultBlocksColoredLeaves(WoodPropertyType.NETHER).defaultExtras().build();
-//
-//			TEST_NETHER_WOOD8 = WoodRegistry.of(identifier("test8_nether")).defaultBlocks(WoodPropertyType.NETHER).defaultExtras().nonFlammable().build();
-//			TEST_NETHER_WOOD9 = WoodRegistry.of(identifier("test9_nether")).defaultBlocksColoredLeaves(WoodPropertyType.NETHER).defaultExtras()
-//					.nonFlammable().build();
-//
-//			TEST_NETHER_WOOD10 = WoodRegistry.of(identifier("test10_nether")).defaultBlocks(WoodPropertyType.NETHER).defaultExtras().nonFlammable().build();
-//			TEST_NETHER_WOOD11 = WoodRegistry.of(identifier("test11_nether")).defaultBlocksColoredLeaves(WoodPropertyType.NETHER).defaultExtras()
-//					.nonFlammable().build();
-//
-//			TEST_NETHER_WOOD12 = WoodRegistry.of(identifier("test12_nether")).defaultBlocks(WoodPropertyType.NETHER).defaultExtras().nonFlammable().build();
-//			TEST_NETHER_WOOD13 = WoodRegistry.of(identifier("test13_nether")).defaultBlocksColoredLeaves(WoodPropertyType.NETHER).defaultExtras()
-//					.nonFlammable().build();
+			TEST_WOOD = WoodRegistry.of(identifier("test")).defaultBlocks().build();
+			TEST_WOOD1 = WoodRegistry.of(identifier("test1")).defaultBlocksColoredLeaves().build();
+
+			TEST_WOOD2 = WoodRegistry.of(identifier("test2")).defaultBlocks().defaultExtras().build();
+			TEST_WOOD3 = WoodRegistry.of(identifier("test3")).defaultBlocksColoredLeaves().defaultExtras().build();
+
+			TEST_WOOD4 = WoodRegistry.of(identifier("test4")).defaultBlocks().defaultExtras().build();
+			TEST_WOOD5 = WoodRegistry.of(identifier("test5")).defaultBlocksColoredLeaves().defaultExtras().build();
+
+			TEST_WOOD6 = WoodRegistry.of(identifier("test6")).defaultBlocks().defaultExtras().build();
+			TEST_WOOD7 = WoodRegistry.of(identifier("test7")).defaultBlocksColoredLeaves().defaultExtras().build();
+
+			TEST_WOOD8 = WoodRegistry.of(identifier("test8")).defaultBlocks().defaultExtras().build();
+			TEST_WOOD9 = WoodRegistry.of(identifier("test9")).defaultBlocksColoredLeaves().defaultExtras().build();
+
+			TEST_WOOD10 = WoodRegistry.of(identifier("test10")).defaultBlocks().defaultExtras().build();
+			TEST_WOOD11 = WoodRegistry.of(identifier("test11")).defaultBlocksColoredLeaves().defaultExtras().build();
+
+			TEST_WOOD12 = WoodRegistry.of(identifier("test12")).defaultBlocks().defaultExtras().build();
+			TEST_WOOD13 = WoodRegistry.of(identifier("test13")).defaultBlocksColoredLeaves().defaultExtras().build();
+
+			TEST_WOOD14 = WoodRegistry.of(identifier("test14")).woodPropertyType(WoodPropertyType.OVERWORLD).leaves().sapling().build();
+
+			TEST_WOOD15 = WoodRegistry.of(identifier("test15")).woodPropertyType(WoodPropertyType.OVERWORLD).leaves().build();
+
+			TEST_WOOD16 = WoodRegistry.of(identifier("test16")).woodPropertyType(WoodPropertyType.OVERWORLD).sapling().build();
+
+			//Nether
+			TEST_NETHER_WOOD = WoodRegistry.of(identifier("test_nether")).defaultBlocks(WoodPropertyType.NETHER).build();
+			TEST_NETHER_WOOD1 = WoodRegistry.of(identifier("test1_nether")).defaultBlocksColoredLeaves(WoodPropertyType.NETHER).build();
+
+			TEST_NETHER_WOOD2 = WoodRegistry.of(identifier("test2_nether")).defaultBlocks(WoodPropertyType.NETHER).defaultExtras().build();
+			TEST_NETHER_WOOD3 = WoodRegistry.of(identifier("test3_nether")).defaultBlocksColoredLeaves(WoodPropertyType.NETHER).defaultExtras().build();
+
+			TEST_NETHER_WOOD4 = WoodRegistry.of(identifier("test4_nether")).defaultBlocks(WoodPropertyType.NETHER).defaultExtras().build();
+			TEST_NETHER_WOOD5 = WoodRegistry.of(identifier("test5_nether")).defaultBlocksColoredLeaves(WoodPropertyType.NETHER).defaultExtras().build();
+
+			TEST_NETHER_WOOD6 = WoodRegistry.of(identifier("test6_nether")).defaultBlocks(WoodPropertyType.NETHER).defaultExtras().nonFlammable().build();
+			TEST_NETHER_WOOD7 = WoodRegistry.of(identifier("test7_nether")).defaultBlocksColoredLeaves(WoodPropertyType.NETHER).defaultExtras().build();
+
+			TEST_NETHER_WOOD8 = WoodRegistry.of(identifier("test8_nether")).defaultBlocks(WoodPropertyType.NETHER).defaultExtras().nonFlammable().build();
+			TEST_NETHER_WOOD9 = WoodRegistry.of(identifier("test9_nether")).defaultBlocksColoredLeaves(WoodPropertyType.NETHER).defaultExtras()
+					.nonFlammable().build();
+
+			TEST_NETHER_WOOD10 = WoodRegistry.of(identifier("test10_nether")).defaultBlocks(WoodPropertyType.NETHER).defaultExtras().nonFlammable().build();
+			TEST_NETHER_WOOD11 = WoodRegistry.of(identifier("test11_nether")).defaultBlocksColoredLeaves(WoodPropertyType.NETHER).defaultExtras()
+					.nonFlammable().build();
+
+			TEST_NETHER_WOOD12 = WoodRegistry.of(identifier("test12_nether")).defaultBlocks(WoodPropertyType.NETHER).defaultExtras().nonFlammable().build();
+			TEST_NETHER_WOOD13 = WoodRegistry.of(identifier("test13_nether")).defaultBlocksColoredLeaves(WoodPropertyType.NETHER).defaultExtras()
+					.nonFlammable().build();
 		}
 
 		UseBlockCallback.EVENT.register((player, world, hand, hitResult) -> {
-			if (!world.isClientSide) {
+			if (!world.isClientSide()) {
 				for (ConvertibleBlockPair convertibleBlock : CONVERTIBLE_BLOCKS) {
 					ItemStack itemStack = player.getItemInHand(hand);
 					BlockState blockState = world.getBlockState(hitResult.getBlockPos());
@@ -234,7 +218,7 @@ public class VampireLib extends BasicModClass {
 							if (convertibleBlock.getDroppedItem() != null) {
 								ItemStack newStack = new ItemStack(convertibleBlock.getDroppedItem());
 								if (!newStack.isEmpty() && world instanceof ServerLevel serverLevel &&
-										serverLevel.getGameRules().getBoolean(GameRules.RULE_DOBLOCKDROPS)) {
+										serverLevel.getGameRules().get(GameRules.BLOCK_DROPS)) {
 									ItemEntity itemEntity = new ItemEntity(world, hitResult.getBlockPos().getX() + 0.5,
 											hitResult.getBlockPos().getY() + 0.5,
 											hitResult.getBlockPos().getZ() + 0.5,
@@ -246,7 +230,7 @@ public class VampireLib extends BasicModClass {
 
 							world.setBlock(hitResult.getBlockPos(), convertibleBlock.getConverted()
 									.withPropertiesOf(blockState), 11);
-							itemStack.hurtAndBreak(1, player, LivingEntity.getSlotForHand(hand));
+							itemStack.hurtAndBreak(1, player, hand.asEquipmentSlot());
 							world.gameEvent(GameEvent.BLOCK_CHANGE, hitResult.getBlockPos(),
 									GameEvent.Context.of(player, blockState));
 							return InteractionResult.SUCCESS;
@@ -261,7 +245,7 @@ public class VampireLib extends BasicModClass {
 						if (convertibleBlock.getDroppedItem() != null) {
 							ItemStack newStack = new ItemStack(convertibleBlock.getDroppedItem());
 							if (!newStack.isEmpty() && world instanceof ServerLevel serverLevel &&
-								serverLevel.getGameRules().getBoolean(GameRules.RULE_DOBLOCKDROPS)) {
+								serverLevel.getGameRules().get(GameRules.BLOCK_DROPS)) {
 								ItemEntity itemEntity = new ItemEntity(world, hitResult.getBlockPos().getX() + 0.5,
 										hitResult.getBlockPos().getY() + 0.5,
 										hitResult.getBlockPos().getZ() + 0.5, newStack);
@@ -272,7 +256,7 @@ public class VampireLib extends BasicModClass {
 
 						world.setBlock(hitResult.getBlockPos(), convertibleBlock.getOriginal()
 								.withPropertiesOf(blockState), 11);
-						itemStack.hurtAndBreak(1, player, LivingEntity.getSlotForHand(hand));
+						itemStack.hurtAndBreak(1, player, hand.asEquipmentSlot());
 						world.gameEvent(GameEvent.BLOCK_CHANGE, hitResult.getBlockPos(),
 								GameEvent.Context.of(player, blockState));
 						return InteractionResult.SUCCESS;

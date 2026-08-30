@@ -1,20 +1,3 @@
-/*
- * Copyright (c) 2024 OliviaTheVampire
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
 package io.github.vampirestudios.vampirelib.client;
 
 import java.util.ArrayList;
@@ -29,9 +12,9 @@ import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import org.joml.Vector3f;
+import org.joml.Vector3fc;
 
-import net.minecraft.ResourceLocationException;
+import net.minecraft.IdentifierException;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.CubeDefinition;
@@ -42,7 +25,7 @@ import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.client.model.geom.builders.UVPair;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.ExtraCodecs;
 
 public class EntityModelCodecHolder {
@@ -142,8 +125,8 @@ public class EntityModelCodecHolder {
             return getLayerLocationParseError(layerLocation, "missing model (part before hashtag)");
 
         try {
-            return DataResult.success(new ModelLayerLocation(ResourceLocation.parse(model), layer));
-        } catch (ResourceLocationException e) {
+            return DataResult.success(new ModelLayerLocation(Identifier.parse(model), layer));
+        } catch (IdentifierException e) {
             return getLayerLocationParseError(layerLocation, e.getMessage());
         }
     }
@@ -156,7 +139,7 @@ public class EntityModelCodecHolder {
         return cubeDef.growX == cubeDef.growY && cubeDef.growX == cubeDef.growZ;
     }
 
-    static CubeDefinition createCubeDefinition(Optional<String> comment, Vector3f origin, Vector3f dimensions, CubeDeformation grow, boolean mirror, UVPair texCoord,
+    static CubeDefinition createCubeDefinition(Optional<String> comment, Vector3fc origin, Vector3fc dimensions, CubeDeformation grow, boolean mirror, UVPair texCoord,
                                                float texScaleX, float texScaleY, Set<Direction> directionSet) {
         return new CubeDefinition(comment.orElse(null), texCoord.u(), texCoord.v(), origin.x(), origin.y(), origin.z(), dimensions.x(), dimensions.y(), dimensions.z(), grow, mirror,
                 texScaleX, texScaleY, directionSet);

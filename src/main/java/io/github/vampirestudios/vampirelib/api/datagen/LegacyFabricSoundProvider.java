@@ -1,20 +1,3 @@
-/*
- * Copyright (c) 2024 OliviaTheVampire
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
 package io.github.vampirestudios.vampirelib.api.datagen;
 
 import java.nio.file.Path;
@@ -32,10 +15,10 @@ import org.slf4j.LoggerFactory;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
+import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 
 /**
  * Register an instance of the class with {@link FabricDataGenerator.Pack#addProvider} in a {@link net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint}.
@@ -43,10 +26,10 @@ import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 public abstract class LegacyFabricSoundProvider implements DataProvider {
 	private static final Logger LOGGER = LoggerFactory.getLogger(LegacyFabricSoundProvider.class);
 
-	protected final FabricDataOutput dataOutput;
+	protected final FabricPackOutput dataOutput;
 	protected final String modId;
 
-	protected LegacyFabricSoundProvider(FabricDataOutput dataOutput) {
+	protected LegacyFabricSoundProvider(FabricPackOutput dataOutput) {
 		this.dataOutput = dataOutput;
 		this.modId = dataOutput.getModId();
 	}
@@ -79,7 +62,7 @@ public abstract class LegacyFabricSoundProvider implements DataProvider {
 	private Path getLangFilePath() {
 		return dataOutput
 				.createPathProvider(PackOutput.Target.RESOURCE_PACK, "")
-				.json(ResourceLocation.fromNamespaceAndPath(dataOutput.getModId(), "sounds.json"));
+				.json(Identifier.fromNamespaceAndPath(dataOutput.getModId(), "sounds.json"));
 	}
 
 	@Override

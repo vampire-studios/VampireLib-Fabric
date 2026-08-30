@@ -1,23 +1,6 @@
-/*
- * Copyright (c) 2024 OliviaTheVampire
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
 package io.github.vampirestudios.vampirelib.utils.registry;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.RotatedPillarBlock;
@@ -28,7 +11,7 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 
 public class StoneRegistry {
 
-	public ResourceLocation name;
+	public Identifier name;
 
 	private Block raw;
 	private Block slab;
@@ -88,11 +71,11 @@ public class StoneRegistry {
 	private Block smallTilesStairs;
 	private Block smallTilesWall;
 
-	public StoneRegistry(ResourceLocation name) {
+	public StoneRegistry(Identifier name) {
 		this.name = name;
 	}
 
-	public static StoneRegistry.Builder of(ResourceLocation name) {
+	public static StoneRegistry.Builder of(Identifier name) {
 		return new Builder().of(name);
 	}
 
@@ -282,11 +265,11 @@ public class StoneRegistry {
 
 	public static class Builder {
 
-		public ResourceLocation name;
+		public Identifier name;
 		private StoneRegistry stoneRegistry;
 		private RegistryHelper registryHelper;
 
-		public Builder of(ResourceLocation name) {
+		public Builder of(Identifier name) {
 			this.name = name;
 			stoneRegistry = new StoneRegistry(name);
 			registryHelper = RegistryHelper.createRegistryHelper(name.getNamespace());

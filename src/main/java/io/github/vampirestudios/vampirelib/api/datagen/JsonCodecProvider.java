@@ -1,20 +1,3 @@
-/*
- * Copyright (c) 2024 OliviaTheVampire
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
 package io.github.vampirestudios.vampirelib.api.datagen;
 
 import java.nio.file.Path;
@@ -31,7 +14,7 @@ import com.mojang.serialization.JsonOps;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public abstract class JsonCodecProvider<T> implements DataProvider {
 	private final PackOutput.PathProvider pathResolver;
@@ -44,8 +27,8 @@ public abstract class JsonCodecProvider<T> implements DataProvider {
 
 	@Override
 	public CompletableFuture<?> run(final CachedOutput cache) {
-		Map<ResourceLocation, JsonElement> entries = new HashMap<>();
-		BiConsumer<ResourceLocation, T> provider = (id, value) -> {
+		Map<Identifier, JsonElement> entries = new HashMap<>();
+		BiConsumer<Identifier, T> provider = (id, value) -> {
 			JsonElement json = this.convert(id, value);
 			JsonElement existingJson = entries.put(id, json);
 
@@ -61,16 +44,16 @@ public abstract class JsonCodecProvider<T> implements DataProvider {
 	/**
 	 * Implement this method to register entries to generate.
 	 *
-	 * @param provider A consumer that accepts an {@link ResourceLocation} and a value to register.
+	 * @param provider A consumer that accepts an {@link Identifier} and a value to register.
 	 */
-	protected abstract void configure(BiConsumer<ResourceLocation, T> provider);
+	protected abstract void configure(BiConsumer<Identifier, T> provider);
 
-	private JsonElement convert(ResourceLocation id, T value) {
+	private JsonElement convert(Identifier id, T value) {
 		DataResult<JsonElement> dataResult = this.codec.encodeStart(JsonOps.INSTANCE, value);
 		return dataResult.getOrThrow(s -> new IllegalArgumentException("Invalid entry %s: %s".formatted(id, s)));
 	}
 
-	private CompletableFuture<?> write(CachedOutput writer, Map<ResourceLocation, JsonElement> entries) {
+	private CompletableFuture<?> write(CachedOutput writer, Map<Identifier, JsonElement> entries) {
 		return CompletableFuture.allOf(entries.entrySet().stream().map(entry -> {
 			Path path = this.pathResolver.json(entry.getKey());
 			return DataProvider.saveStable(writer, entry.getValue(), path);

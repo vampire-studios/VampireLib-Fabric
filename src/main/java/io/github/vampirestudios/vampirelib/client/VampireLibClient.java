@@ -1,20 +1,3 @@
-/*
- * Copyright (c) 2024 OliviaTheVampire
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
 package io.github.vampirestudios.vampirelib.client;
 
 import java.util.ArrayList;
@@ -25,11 +8,12 @@ import com.mojang.datafixers.util.Pair;
 import net.minecraft.SharedConstants;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.client.renderer.BiomeColors;
+import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.level.FoliageColor;
 import net.minecraft.world.level.block.Block;
 
-import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
-import net.fabricmc.fabric.api.client.rendering.v1.TooltipComponentCallback;
+import net.fabricmc.fabric.api.client.rendering.v1.BlockColorRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.ClientTooltipComponentCallback;
 
 import io.github.vampirestudios.vampirelib.VampireLib;
 import io.github.vampirestudios.vampirelib.api.BasicModClass;
@@ -74,31 +58,24 @@ public class VampireLibClient extends BasicModClass {
 		);
 		Pair<String, String> selection = Rands.list(thing1);
 		getLogger().info(String.format("%s running %s v%s on client-side for %s %s", selection.getFirst(), modName(), modVersion(),
-			SharedConstants.getCurrentVersion().getName(), selection.getSecond()
+			SharedConstants.getCurrentVersion().name(), selection.getSecond()
 		));
 
-		TooltipComponentCallback.EVENT.register(maybe -> {
-			if (maybe instanceof BundledTooltipData data) {
-				return new BundledTooltipComponentImpl(data.list().stream().map(ClientTooltipComponent::create).toList());
+		ClientTooltipComponentCallback.EVENT.register(maybe -> {
+			if (maybe instanceof BundledTooltipData(List<TooltipComponent> list)) {
+				return new BundledTooltipComponentImpl(list.stream().map(ClientTooltipComponent::create).toList());
 			}
 			return null;
 		});
 		COLORED_LEAVES.forEach(coloredLeaves -> {
 			if (coloredLeaves.usesBiomeColor) {
-				ColorProviderRegistry.BLOCK.register((block, world, pos, layer) -> world != null && pos != null ?
-								BiomeColors.getAverageFoliageColor(
-										world,
-										pos) : FoliageColor.get(pos.getX(), pos.getY()),
-						coloredLeaves.leavesBlock);
-//				ColorProviderRegistry.ITEM.register((item, layer) -> {
-//					BlockState blockState = coloredLeaves.leavesBlock.defaultBlockState();
-//					return Minecraft.getInstance().getBlockColors().getColor(blockState, null, null, layer);
-//				}, coloredLeaves.leavesBlock);
+				BlockColorRegistry.register((state, level, pos, tintValues) -> {
+					if (level != null && pos != null)
+						tintValues.add(BiomeColors.getAverageFoliageColor(level, pos));
+					else tintValues.add(FoliageColor.get(pos.getX(), pos.getY()));
+				}, coloredLeaves.leavesBlock);
 			} else if (coloredLeaves.customColor) {
-				ColorProviderRegistry.BLOCK.register((block, world, pos, layer) -> coloredLeaves.color,
-						coloredLeaves.leavesBlock);
-//				ColorProviderRegistry.ITEM.register((item, layer) -> coloredLeaves.color,
-//						coloredLeaves.leavesBlock);
+				BlockColorRegistry.register((_, _, _, tintValues) -> tintValues.add(coloredLeaves.color), coloredLeaves.leavesBlock);
 			}
 		});
 	}

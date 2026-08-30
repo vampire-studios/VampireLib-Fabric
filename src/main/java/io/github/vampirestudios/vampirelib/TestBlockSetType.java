@@ -1,6 +1,6 @@
 package io.github.vampirestudios.vampirelib;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.level.block.SoundType;
@@ -24,7 +24,7 @@ public class TestBlockSetType {
 
     private static BlockSetType registerBlockSetType(String name, SoundType soundType, SoundEvent doorClose, SoundEvent doorOpen, SoundEvent trapdoorClose, SoundEvent trapdoorOpen, SoundEvent pressurePlateClickOff, SoundEvent pressurePlateClickOn, SoundEvent buttonClickOff, SoundEvent buttonClickOn) {
         return BlockSetTypeBuilder.copyOf(BlockSetType.CRIMSON)
-			.soundGroup(soundType)
+			.soundType(soundType)
 			.doorCloseSound(doorClose)
 			.doorOpenSound(doorOpen)
 			.trapdoorCloseSound(trapdoorClose)
@@ -33,6 +33,6 @@ public class TestBlockSetType {
 			.pressurePlateClickOnSound(pressurePlateClickOn)
 			.buttonClickOffSound(buttonClickOff)
 			.buttonClickOnSound(buttonClickOn)
-			.register(ResourceLocation.fromNamespaceAndPath(VampireLib.INSTANCE.modId(), name));
+			.register(Identifier.fromNamespaceAndPath(VampireLib.INSTANCE.modId(), name));
     }
 }

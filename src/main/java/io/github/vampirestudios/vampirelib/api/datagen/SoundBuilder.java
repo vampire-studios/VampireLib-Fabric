@@ -1,33 +1,16 @@
-/*
- * Copyright (c) 2024 OliviaTheVampire
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
 package io.github.vampirestudios.vampirelib.api.datagen;
 
 import com.google.common.base.Preconditions;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 /**
  * Utility class for building a sound entry with a given set of properties, without necessarily passing them all as parameters.
  */
 public class SoundBuilder {
-	private final ResourceLocation name;
+	private final Identifier name;
 	private final boolean event;
 
 	private float volume = 1;
@@ -37,12 +20,12 @@ public class SoundBuilder {
 	private int attenuationDistance = 16;
 	private boolean preload = false;
 
-	private SoundBuilder(ResourceLocation name, boolean event) {
+	private SoundBuilder(Identifier name, boolean event) {
 		this.name = name;
 		this.event = event;
 	}
 
-	public ResourceLocation getName() {
+	public Identifier getName() {
 		return name;
 	}
 
@@ -51,7 +34,7 @@ public class SoundBuilder {
 	 *
 	 * @param name The name of the sound as a namespaced ID with relative folder path.
 	 */
-	public static SoundBuilder sound(ResourceLocation name) {
+	public static SoundBuilder sound(Identifier name) {
 		return new SoundBuilder(name, false);
 	}
 
@@ -60,7 +43,7 @@ public class SoundBuilder {
 	 *
 	 * @param name The ID of the sound event.
 	 */
-	public static SoundBuilder event(ResourceLocation name) {
+	public static SoundBuilder event(Identifier name) {
 		return new SoundBuilder(name, true);
 	}
 

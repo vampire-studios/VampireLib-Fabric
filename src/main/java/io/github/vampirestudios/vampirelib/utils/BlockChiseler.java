@@ -1,20 +1,3 @@
-/*
- * Copyright (c) 2024 OliviaTheVampire
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
 package io.github.vampirestudios.vampirelib.utils;
 
 import java.util.Collection;
@@ -28,13 +11,12 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedDeque;
 
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -48,11 +30,11 @@ import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 
 public class BlockChiseler {
 
-	public static Map<ResourceLocation, ChiselEntry> chiselRegistry = new HashMap<>();
+	public static Map<Identifier, ChiselEntry> chiselRegistry = new HashMap<>();
 	public static Map<TagKey<Item>, Set<ChiselEntry>> toolTagsToEntries = new HashMap<>();
 	public static Map<Item, Set<ChiselEntry>> itemsToEntries = new HashMap<>();
 
-	public static void create(ResourceLocation identifier, TagKey<Item> toolTag, Collection<Block> chiselBlocks) {
+	public static void create(Identifier identifier, TagKey<Item> toolTag, Collection<Block> chiselBlocks) {
 		ChiselEntry chiselEntry = new ChiselEntry(chiselBlocks);
 		chiselRegistry.put(identifier, chiselEntry);
 		if (toolTagsToEntries.containsKey(toolTag)) {
@@ -62,7 +44,7 @@ public class BlockChiseler {
 		}
 	}
 
-	public static void create(ResourceLocation identifier, Item item, Collection<Block> chiselBlocks) {
+	public static void create(Identifier identifier, Item item, Collection<Block> chiselBlocks) {
 		ChiselEntry chiselEntry = new ChiselEntry(chiselBlocks);
 		chiselRegistry.put(identifier, chiselEntry);
 		if (itemsToEntries.containsKey(item)) {
@@ -72,7 +54,7 @@ public class BlockChiseler {
 		}
 	}
 
-	public static void create(ResourceLocation identifier, TagKey<Item> toolTag, ChiselEntry chiselEntry) {
+	public static void create(Identifier identifier, TagKey<Item> toolTag, ChiselEntry chiselEntry) {
 		chiselRegistry.put(identifier, chiselEntry);
 		if (toolTagsToEntries.containsKey(toolTag)) {
 			toolTagsToEntries.get(toolTag).add(chiselEntry);
@@ -81,7 +63,7 @@ public class BlockChiseler {
 		}
 	}
 
-	public static void create(ResourceLocation identifier, Item item, ChiselEntry chiselEntry) {
+	public static void create(Identifier identifier, Item item, ChiselEntry chiselEntry) {
 		chiselRegistry.put(identifier, chiselEntry);
 		if (itemsToEntries.containsKey(item)) {
 			itemsToEntries.get(item).add(chiselEntry);
@@ -90,7 +72,7 @@ public class BlockChiseler {
 		}
 	}
 
-	public static void add(ResourceLocation identifier, Collection<Block> carvedBlocks) {
+	public static void add(Identifier identifier, Collection<Block> carvedBlocks) {
 		if (chiselRegistry.containsKey(identifier)) {
 			chiselRegistry.get(identifier).chiselDeque.addAll(carvedBlocks);
 		} else
@@ -134,21 +116,27 @@ public class BlockChiseler {
 			level.playSound(null, hitResult.getBlockPos(), SoundEvents.PUMPKIN_CARVE, SoundSource.BLOCKS, 1.0F, 1.0F);
 			level.setBlockAndUpdate(hitResult.getBlockPos(), copyTo(hitBlockState, newBlock.defaultBlockState()));
 			if (heldStack.has(DataComponents.MAX_DAMAGE))
-				heldStack.hurtAndBreak(1, player, LivingEntity.getSlotForHand(hand));
+				heldStack.hurtAndBreak(1, player, hand);
 		}
 		return InteractionResult.SUCCESS;
 	}
 
-	@SuppressWarnings("rawtypes")
 	private static BlockState copyTo(BlockState from, BlockState to) {
-		Collection<Property<?>> fromProperties = from.getValues().keySet();
-		Collection<Property<?>> toProperties = to.getValues().keySet();
-		for (Property property : fromProperties) {
-			if (toProperties.contains(property)) {
-				to = to.setValue(property, from.getValue(property));
+		for (Property<?> property : from.getProperties()) {
+			if (to.hasProperty(property)) {
+				to = copyProperty(from, to, property);
 			}
 		}
+
 		return to;
+	}
+
+	private static <T extends Comparable<T>> BlockState copyProperty(
+		BlockState from,
+		BlockState to,
+		Property<T> property
+	) {
+		return to.setValue(property, from.getValue(property));
 	}
 
 	public static class ChiselEntry {

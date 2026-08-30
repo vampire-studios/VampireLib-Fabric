@@ -1,20 +1,3 @@
-/*
- * Copyright (c) 2024 OliviaTheVampire
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
 package io.github.vampirestudios.vampirelib.api.datagen;
 
 import java.util.ArrayList;
@@ -29,7 +12,7 @@ import com.google.gson.JsonPrimitive;
 import org.apache.commons.lang3.Validate;
 import org.jetbrains.annotations.Nullable;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvent;
 
 /**
@@ -88,7 +71,7 @@ public final class SoundDefinition {
 	 * @return this
 	 */
 	public static SoundBuilder sound(Supplier<SoundEvent> sound) {
-		return new SoundBuilder(ResourceLocation.fromNamespaceAndPath(sound.get().location().getNamespace(),
+		return new SoundBuilder(Identifier.fromNamespaceAndPath(sound.get().location().getNamespace(),
 				sound.get().location().getPath().replaceAll("\\.", "/")));
 	}
 
@@ -99,7 +82,7 @@ public final class SoundDefinition {
 	 *
 	 * @return this
 	 */
-	public static SoundBuilder sound(ResourceLocation path) {
+	public static SoundBuilder sound(Identifier path) {
 		return new SoundDefinition.SoundBuilder(path);
 	}
 
@@ -189,7 +172,7 @@ public final class SoundDefinition {
 	 * @since 1.0.0
 	 */
 	public static class SoundBuilder {
-		private final ResourceLocation path;
+		private final Identifier path;
 		private float volume;
 		private float pitch;
 		private int weight;
@@ -198,7 +181,7 @@ public final class SoundDefinition {
 		private boolean stream;
 		private int attenuationDistance;
 
-		public SoundBuilder(ResourceLocation path) {
+		public SoundBuilder(Identifier path) {
 			this.path = path;
 			this.volume = 1.0F;
 			this.pitch = 1.0F;
@@ -238,7 +221,7 @@ public final class SoundDefinition {
 		/**
 		 * @return The path to the actual <code>ogg</code> file, excluding <code>sounds/</code>
 		 */
-		public ResourceLocation getPath() {
+		public Identifier getPath() {
 			return this.path;
 		}
 

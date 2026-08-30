@@ -1,41 +1,37 @@
-accessWidener v2 named
+accessWidener v2 official
 transitive-accessible method net/minecraft/world/level/levelgen/feature/trunkplacers/TrunkPlacerType <init> (Lcom/mojang/serialization/MapCodec;)V
 transitive-accessible method net/minecraft/world/level/levelgen/feature/foliageplacers/FoliagePlacerType <init> (Lcom/mojang/serialization/MapCodec;)V
 transitive-accessible method net/minecraft/world/level/levelgen/feature/treedecorators/TreeDecoratorType <init> (Lcom/mojang/serialization/MapCodec;)V
 transitive-accessible method net/minecraft/world/level/levelgen/feature/stateproviders/SimpleStateProvider <init> (Lnet/minecraft/world/level/block/state/BlockState;)V
 
 transitive-accessible method net/minecraft/world/entity/ai/village/poi/PoiType <init> (Ljava/util/Set;II)V
-transitive-accessible method net/minecraft/world/entity/npc/VillagerProfession <init> (Ljava/lang/String;Ljava/util/function/Predicate;Ljava/util/function/Predicate;Lcom/google/common/collect/ImmutableSet;Lcom/google/common/collect/ImmutableSet;Lnet/minecraft/sounds/SoundEvent;)V
 transitive-extendable class net/minecraft/world/entity/npc/VillagerType
-transitive-accessible method net/minecraft/world/entity/npc/VillagerType <init> (Ljava/lang/String;)V
 transitive-accessible field net/minecraft/world/entity/npc/VillagerType BY_BIOME Ljava/util/Map;
 
 transitive-accessible field net/minecraft/data/tags/TagsProvider pathProvider Lnet/minecraft/data/PackOutput$PathProvider;
 transitive-mutable field net/minecraft/data/tags/TagsProvider pathProvider Lnet/minecraft/data/PackOutput$PathProvider;
-transitive-accessible method net/minecraft/data/tags/TagsProvider$TagAppender <init> (Lnet/minecraft/tags/TagBuilder;)V
-transitive-accessible field net/minecraft/data/tags/TagsProvider$TagAppender builder Lnet/minecraft/tags/TagBuilder;
 
 transitive-accessible method net/minecraft/data/BlockFamilies  familyBuilder (Lnet/minecraft/world/level/block/Block;)Lnet/minecraft/data/BlockFamily$Builder;
 
 transitive-accessible class net/minecraft/client/data/models/BlockModelGenerators$WoodProvider
 transitive-accessible class net/minecraft/client/data/models/BlockModelGenerators$BlockFamilyProvider
 transitive-accessible class net/minecraft/client/data/models/BlockModelGenerators$PlantType
+transitive-accessible class net/minecraft/client/data/models/BlockModelGenerators$BookSlotModelCacheKey
 transitive-accessible field net/minecraft/client/data/models/BlockModelGenerators  blockStateOutput    Ljava/util/function/Consumer;
 transitive-accessible field net/minecraft/client/data/models/BlockModelGenerators  modelOutput Ljava/util/function/BiConsumer;
+transitive-accessible method net/minecraft/client/data/models/BlockModelGenerators$BlockFamilyProvider getOrCreateModel (Lnet/minecraft/client/data/models/model/ModelTemplate;Lnet/minecraft/world/level/block/Block;)Lnet/minecraft/resources/ResourceLocation;
+transitive-accessible field net/minecraft/client/data/models/BlockModelGenerators ROTATION_HORIZONTAL_FACING Lnet/minecraft/client/data/models/blockstates/PropertyDispatch;
+transitive-accessible method net/minecraft/client/data/models/BlockModelGenerators$BookSlotModelCacheKey <init> (Lnet/minecraft/client/data/models/model/ModelTemplate;Ljava/lang/String;)V
 
 transitive-accessible method net/minecraft/client/data/models/model/TexturedModel createDefault (Ljava/util/function/Function;Lnet/minecraft/client/data/models/model/ModelTemplate;)Lnet/minecraft/client/data/models/model/TexturedModel$Provider;
 
 transitive-accessible field net/minecraft/client/resources/ClientPackSource VERSION_METADATA_SECTION Lnet/minecraft/server/packs/metadata/pack/PackMetadataSection;
 
 accessible class net/minecraft/world/level/block/entity/BlockEntityType$BlockEntitySupplier
-accessible field net/minecraft/client/renderer/block/model/BlockModel parent Lnet/minecraft/client/resources/model/UnbakedModel;
-accessible field net/minecraft/client/renderer/block/model/BlockModel parentLocation Lnet/minecraft/resources/ResourceLocation;
 accessible class net/minecraft/client/renderer/block/model/BlockElement$Deserializer
 accessible method net/minecraft/client/renderer/block/model/BlockElement$Deserializer <init> ()V
 accessible class net/minecraft/client/renderer/block/model/BlockElementFace$Deserializer
 accessible method net/minecraft/client/renderer/block/model/BlockElementFace$Deserializer <init> ()V
-accessible class net/minecraft/client/renderer/block/model/BlockFaceUV$Deserializer
-accessible method net/minecraft/client/renderer/block/model/BlockFaceUV$Deserializer <init> ()V
 accessible class net/minecraft/client/renderer/block/model/ItemTransform$Deserializer
 accessible method net/minecraft/client/renderer/block/model/ItemTransform$Deserializer <init> ()V
 accessible class net/minecraft/client/renderer/block/model/ItemTransforms$Deserializer
@@ -75,8 +71,8 @@ transitive-accessible field net/minecraft/client/model/geom/builders/MeshDefinit
 transitive-mutable field net/minecraft/client/model/geom/builders/MeshDefinition root Lnet/minecraft/client/model/geom/builders/PartDefinition;
 
 transitive-accessible method net/minecraft/client/model/geom/builders/CubeDefinition <init> (Ljava/lang/String;FFFFFFFFLnet/minecraft/client/model/geom/builders/CubeDeformation;ZFFLjava/util/Set;)V
-transitive-accessible field net/minecraft/client/model/geom/builders/CubeDefinition origin Lorg/joml/Vector3f;
-transitive-accessible field net/minecraft/client/model/geom/builders/CubeDefinition dimensions Lorg/joml/Vector3f;
+transitive-accessible field net/minecraft/client/model/geom/builders/CubeDefinition origin Lorg/joml/Vector3fc;
+transitive-accessible field net/minecraft/client/model/geom/builders/CubeDefinition dimensions Lorg/joml/Vector3fc;
 transitive-accessible field net/minecraft/client/model/geom/builders/CubeDefinition grow Lnet/minecraft/client/model/geom/builders/CubeDeformation;
 transitive-accessible field net/minecraft/client/model/geom/builders/CubeDefinition mirror Z
 transitive-accessible field net/minecraft/client/model/geom/builders/CubeDefinition texCoord Lnet/minecraft/client/model/geom/builders/UVPair;
@@ -92,7 +88,6 @@ transitive-accessible field net/minecraft/client/model/geom/builders/MaterialDef
 transitive-accessible field net/minecraft/client/model/geom/builders/MaterialDefinition yTexSize I
 
 transitive-accessible class net/minecraft/client/renderer/RenderStateShard$TextureStateShard
-transitive-accessible field net/minecraft/client/renderer/RenderStateShard$TextureStateShard blur Lnet/minecraft/util/TriState;
 transitive-accessible field net/minecraft/client/renderer/RenderStateShard$TextureStateShard mipmap Z
 transitive-accessible field net/minecraft/client/renderer/RenderStateShard setupState Ljava/lang/Runnable;
 
@@ -103,11 +98,9 @@ transitive-accessible field net/minecraft/client/renderer/RenderStateShard PARTI
 transitive-accessible class net/minecraft/client/renderer/RenderType$CompositeState
 transitive-accessible class net/minecraft/client/renderer/RenderType$CompositeRenderType
 
-transitive-accessible method net/minecraft/client/renderer/RenderType create (Ljava/lang/String;Lcom/mojang/blaze3d/vertex/VertexFormat;Lcom/mojang/blaze3d/vertex/VertexFormat$Mode;IZZLnet/minecraft/client/renderer/RenderType$CompositeState;)Lnet/minecraft/client/renderer/RenderType$CompositeRenderType;
+transitive-accessible method net/minecraft/client/renderer/RenderType create (Ljava/lang/String;ILcom/mojang/blaze3d/pipeline/RenderPipeline;Lnet/minecraft/client/renderer/RenderType$CompositeState;)Lnet/minecraft/client/renderer/RenderType$CompositeRenderType;
 
 transitive-accessible method net/minecraft/client/renderer/block/model/ItemModelGenerator processFrames (ILjava/lang/String;Lnet/minecraft/client/renderer/texture/SpriteContents;)Ljava/util/List;
-
-accessible class net/minecraft/client/renderer/FogRenderer$FogData
 
 accessible field net/minecraft/world/item/SpawnEggItem BY_ID Ljava/util/Map;
 
@@ -115,15 +108,12 @@ accessible field net/minecraft/client/renderer/block/model/ItemTransform$Deseria
 accessible field net/minecraft/client/renderer/block/model/ItemTransform$Deserializer DEFAULT_TRANSLATION Lorg/joml/Vector3f;
 accessible field net/minecraft/client/renderer/block/model/ItemTransform$Deserializer DEFAULT_SCALE Lorg/joml/Vector3f;
 
-accessible method net/minecraft/client/renderer/block/model/BlockElement uvsByFace (Lnet/minecraft/core/Direction;)[F
-
 accessible field net/minecraft/world/level/block/FireBlock igniteOdds Lit/unimi/dsi/fastutil/objects/Object2IntMap;
 accessible field net/minecraft/world/level/block/FireBlock burnOdds Lit/unimi/dsi/fastutil/objects/Object2IntMap;
 accessible field net/minecraft/world/item/ShovelItem FLATTENABLES Ljava/util/Map;
 accessible field net/minecraft/world/item/AxeItem STRIPPABLES Ljava/util/Map;
 
 accessible method net/minecraft/sounds/SoundEvent createVariableRangeEvent (Lnet/minecraft/resources/ResourceLocation;)Lnet/minecraft/sounds/SoundEvent;
-extendable method net/minecraft/data/tags/TagsProvider$TagAppender add (Lnet/minecraft/resources/ResourceKey;)Lnet/minecraft/data/tags/TagsProvider$TagAppender;
 accessible method net/minecraft/resources/ResourceLocation isValidPath (Ljava/lang/String;)Z
 
 accessible method net/minecraft/client/resources/ClientPackSource createVanillaPackSource (Ljava/nio/file/Path;)Lnet/minecraft/server/packs/VanillaPackResources;

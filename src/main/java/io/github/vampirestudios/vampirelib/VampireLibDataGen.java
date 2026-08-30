@@ -1,21 +1,6 @@
-/*
- * Copyright (c) 2024 OliviaTheVampire
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
 package io.github.vampirestudios.vampirelib;
+
+import static io.github.vampirestudios.vampirelib.VampireLib.TEST_CONTENT_ENABLED;
 
 import java.io.File;
 import java.io.Reader;
@@ -25,30 +10,33 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
+import net.minecraft.advancements.Advancement;
 import net.minecraft.client.data.models.BlockModelGenerators;
 import net.minecraft.client.data.models.ItemModelGenerators;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.RecipeProvider;
+import net.minecraft.data.worldgen.BootstrapContext;
+import net.minecraft.references.BlockItemIds;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.Recipe;
 
 import net.fabricmc.fabric.api.client.datagen.v1.provider.FabricModelProvider;
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootTableProvider;
+import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootSubProvider;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagsProvider;
 
-import io.github.vampirestudios.vampirelib.api.datagen.CustomTagProviders;
 import io.github.vampirestudios.vampirelib.utils.registry.WoodRegistry;
 
 public class VampireLibDataGen implements DataGeneratorEntrypoint {
 	@Override
 	public void onInitializeDataGenerator(FabricDataGenerator dataGenerator) {
 		FabricDataGenerator.Pack pack = dataGenerator.createPack();
-		/*if (TEST_CONTENT_ENABLED) {
+		if (TEST_CONTENT_ENABLED) {
 			FabricDataGenerator.Pack pack1 = dataGenerator.createBuiltinResourcePack(VampireLib.INSTANCE.identifier("wood_types"));
 			pack1.addProvider(WoodTypeBlockStateDefinitionProvider::new);
 			pack1.addProvider((output, registriesFuture) -> new WoodTypeTranslationProvider(output, "en_us", registriesFuture));
@@ -64,14 +52,20 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
 			WoodTypeBlockTagProvider blockTagsProvider = pack1.addProvider(WoodTypeBlockTagProvider::new);
 			pack1.addProvider((output, registriesFuture) -> new WoodTypeItemTagProvider(output, blockTagsProvider, registriesFuture));
 			pack1.addProvider(WoodTypeBlockLootTableProvider::new);
-		}*/
+		}
 		VBlockTagsProvider blockTagsProvider = pack.addProvider(VBlockTagsProvider::new);
 		pack.addProvider((output, registriesFuture) -> new VItemTagsProvider(output, registriesFuture, blockTagsProvider));
 	}
 
+	/*@Override
+	public void buildRegistry(RegistrySetBuilder registryBuilder) {
+		registryBuilder.add(Registries.CONFIGURED_FEATURE, VConfiguredFeatures::bootstrap);
+		registryBuilder.add(Registries.PLACED_FEATURE, VPlacedFeatures::bootstrap);
+	}*/
+
 	//Wood Type Test Generation
 	private static class WoodTypeBlockStateDefinitionProvider extends FabricModelProvider {
-		private WoodTypeBlockStateDefinitionProvider(FabricDataOutput generator) {
+		private WoodTypeBlockStateDefinitionProvider(FabricPackOutput generator) {
 			super(generator);
 		}
 
@@ -124,7 +118,7 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
 	private static class WoodTypeTranslationProvider extends FabricLanguageProvider {
 		private Map<String, String> lang;
 
-		private WoodTypeTranslationProvider(FabricDataOutput dataGenerator, String langCode, CompletableFuture<HolderLookup.Provider> registryLookup) {
+		private WoodTypeTranslationProvider(FabricPackOutput dataGenerator, String langCode, CompletableFuture<HolderLookup.Provider> registryLookup) {
 			super(dataGenerator, langCode, registryLookup);
 			File file = new File("translations/" + langCode + ".json");
 			try (Reader reader = Files.newBufferedReader(Paths.get(file.toURI()))) {
@@ -176,47 +170,47 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
 	}
 
 	private static class WoodTypeRecipeProvider extends FabricRecipeProvider {
-		private WoodTypeRecipeProvider(FabricDataOutput dataGenerator, CompletableFuture<HolderLookup.Provider> registriesFuture) {
+		private WoodTypeRecipeProvider(FabricPackOutput dataGenerator, CompletableFuture<HolderLookup.Provider> registriesFuture) {
 			super(dataGenerator, registriesFuture);
 		}
 
 		@Override
-		protected RecipeProvider createRecipeProvider(HolderLookup.Provider registryLookup, RecipeOutput exporter) {
-			return new RecipeProvider(registryLookup, exporter) {
+		protected RecipeProvider createRecipeProvider(HolderLookup.Provider registries, BootstrapContext<Recipe<?>> recipes, BootstrapContext<Advancement> advancements) {
+			return new RecipeProvider(recipes, advancements) {
 				@Override
 				public void buildRecipes() {
-					generateWoodTypeRecipes(this, exporter, VampireLib.TEST_WOOD);
-					generateWoodTypeRecipes(this, exporter, VampireLib.TEST_WOOD1);
-					generateWoodTypeRecipes(this, exporter, VampireLib.TEST_WOOD2);
-					generateWoodTypeRecipes(this, exporter, VampireLib.TEST_WOOD3);
-					generateWoodTypeRecipes(this, exporter, VampireLib.TEST_WOOD4);
-					generateWoodTypeRecipes(this, exporter, VampireLib.TEST_WOOD5);
-					generateWoodTypeRecipes(this, exporter, VampireLib.TEST_WOOD6);
-					generateWoodTypeRecipes(this, exporter, VampireLib.TEST_WOOD7);
-					generateWoodTypeRecipes(this, exporter, VampireLib.TEST_WOOD8);
-					generateWoodTypeRecipes(this, exporter, VampireLib.TEST_WOOD9);
-					generateWoodTypeRecipes(this, exporter, VampireLib.TEST_WOOD10);
-					generateWoodTypeRecipes(this, exporter, VampireLib.TEST_WOOD11);
-					generateWoodTypeRecipes(this, exporter, VampireLib.TEST_WOOD12);
-					generateWoodTypeRecipes(this, exporter, VampireLib.TEST_WOOD13);
-					generateWoodTypeRecipes(this, exporter, VampireLib.TEST_WOOD14);
-					generateWoodTypeRecipes(this, exporter, VampireLib.TEST_WOOD15);
-					generateWoodTypeRecipes(this, exporter, VampireLib.TEST_WOOD16);
+					generateWoodTypeRecipes(this, output, VampireLib.TEST_WOOD);
+					generateWoodTypeRecipes(this, output, VampireLib.TEST_WOOD1);
+					generateWoodTypeRecipes(this, output, VampireLib.TEST_WOOD2);
+					generateWoodTypeRecipes(this, output, VampireLib.TEST_WOOD3);
+					generateWoodTypeRecipes(this, output, VampireLib.TEST_WOOD4);
+					generateWoodTypeRecipes(this, output, VampireLib.TEST_WOOD5);
+					generateWoodTypeRecipes(this, output, VampireLib.TEST_WOOD6);
+					generateWoodTypeRecipes(this, output, VampireLib.TEST_WOOD7);
+					generateWoodTypeRecipes(this, output, VampireLib.TEST_WOOD8);
+					generateWoodTypeRecipes(this, output, VampireLib.TEST_WOOD9);
+					generateWoodTypeRecipes(this, output, VampireLib.TEST_WOOD10);
+					generateWoodTypeRecipes(this, output, VampireLib.TEST_WOOD11);
+					generateWoodTypeRecipes(this, output, VampireLib.TEST_WOOD12);
+					generateWoodTypeRecipes(this, output, VampireLib.TEST_WOOD13);
+					generateWoodTypeRecipes(this, output, VampireLib.TEST_WOOD14);
+					generateWoodTypeRecipes(this, output, VampireLib.TEST_WOOD15);
+					generateWoodTypeRecipes(this, output, VampireLib.TEST_WOOD16);
 
-					generateWoodTypeRecipes(this, exporter, VampireLib.TEST_NETHER_WOOD);
-					generateWoodTypeRecipes(this, exporter, VampireLib.TEST_NETHER_WOOD1);
-					generateWoodTypeRecipes(this, exporter, VampireLib.TEST_NETHER_WOOD2);
-					generateWoodTypeRecipes(this, exporter, VampireLib.TEST_NETHER_WOOD3);
-					generateWoodTypeRecipes(this, exporter, VampireLib.TEST_NETHER_WOOD4);
-					generateWoodTypeRecipes(this, exporter, VampireLib.TEST_NETHER_WOOD5);
-					generateWoodTypeRecipes(this, exporter, VampireLib.TEST_NETHER_WOOD6);
-					generateWoodTypeRecipes(this, exporter, VampireLib.TEST_NETHER_WOOD7);
-					generateWoodTypeRecipes(this, exporter, VampireLib.TEST_NETHER_WOOD8);
-					generateWoodTypeRecipes(this, exporter, VampireLib.TEST_NETHER_WOOD9);
-					generateWoodTypeRecipes(this, exporter, VampireLib.TEST_NETHER_WOOD10);
-					generateWoodTypeRecipes(this, exporter, VampireLib.TEST_NETHER_WOOD11);
-					generateWoodTypeRecipes(this, exporter, VampireLib.TEST_NETHER_WOOD12);
-					generateWoodTypeRecipes(this, exporter, VampireLib.TEST_NETHER_WOOD13);
+					generateWoodTypeRecipes(this, output, VampireLib.TEST_NETHER_WOOD);
+					generateWoodTypeRecipes(this, output, VampireLib.TEST_NETHER_WOOD1);
+					generateWoodTypeRecipes(this, output, VampireLib.TEST_NETHER_WOOD2);
+					generateWoodTypeRecipes(this, output, VampireLib.TEST_NETHER_WOOD3);
+					generateWoodTypeRecipes(this, output, VampireLib.TEST_NETHER_WOOD4);
+					generateWoodTypeRecipes(this, output, VampireLib.TEST_NETHER_WOOD5);
+					generateWoodTypeRecipes(this, output, VampireLib.TEST_NETHER_WOOD6);
+					generateWoodTypeRecipes(this, output, VampireLib.TEST_NETHER_WOOD7);
+					generateWoodTypeRecipes(this, output, VampireLib.TEST_NETHER_WOOD8);
+					generateWoodTypeRecipes(this, output, VampireLib.TEST_NETHER_WOOD9);
+					generateWoodTypeRecipes(this, output, VampireLib.TEST_NETHER_WOOD10);
+					generateWoodTypeRecipes(this, output, VampireLib.TEST_NETHER_WOOD11);
+					generateWoodTypeRecipes(this, output, VampireLib.TEST_NETHER_WOOD12);
+					generateWoodTypeRecipes(this, output, VampireLib.TEST_NETHER_WOOD13);
 				}
 			};
 		}
@@ -231,8 +225,8 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
 		}
 	}
 
-	private static class WoodTypeBlockTagProvider extends CustomTagProviders.CustomBlockTagProvider {
-		private WoodTypeBlockTagProvider(FabricDataOutput dataGenerator, CompletableFuture<HolderLookup.Provider> completableFuture) {
+	private static class WoodTypeBlockTagProvider extends FabricTagsProvider.BlockTagsProvider {
+		private WoodTypeBlockTagProvider(FabricPackOutput dataGenerator, CompletableFuture<HolderLookup.Provider> completableFuture) {
 			super(dataGenerator, completableFuture);
 		}
 
@@ -277,8 +271,8 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
 		}
 	}
 
-	private static class WoodTypeItemTagProvider extends CustomTagProviders.CustomItemTagProvider {
-		private WoodTypeItemTagProvider(FabricDataOutput dataGenerator, CustomBlockTagProvider blockTagProvider, CompletableFuture<HolderLookup.Provider> registriesFuture) {
+	private static class WoodTypeItemTagProvider extends FabricTagsProvider.ItemTagsProvider {
+		private WoodTypeItemTagProvider(FabricPackOutput dataGenerator, BlockTagsProvider blockTagProvider, CompletableFuture<HolderLookup.Provider> registriesFuture) {
 			super(dataGenerator, registriesFuture, blockTagProvider);
 		}
 
@@ -323,10 +317,10 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
 		}
 	}
 
-	private static class WoodTypeBlockLootTableProvider extends FabricBlockLootTableProvider {
+	private static class WoodTypeBlockLootTableProvider extends FabricBlockLootSubProvider {
 
-		protected WoodTypeBlockLootTableProvider(FabricDataOutput dataOutput, CompletableFuture<HolderLookup.Provider> registriesFuture) {
-			super(dataOutput, registriesFuture);
+		protected WoodTypeBlockLootTableProvider(FabricPackOutput output, CompletableFuture<HolderLookup.Provider> registryLookupFuture) {
+			super(output, registryLookupFuture);
 		}
 
 		@Override
@@ -368,12 +362,11 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
 		private void generateWoodTypeLoot(WoodRegistry woodRegistry) {
 			woodRegistry.generateLoot(this);
 		}
-
 	}
 
 	//VampireLib generators
-	private static class VBlockTagsProvider extends CustomTagProviders.CustomBlockTagProvider {
-		private VBlockTagsProvider(FabricDataOutput dataGenerator, CompletableFuture<HolderLookup.Provider> completableFuture) {
+	private static class VBlockTagsProvider extends FabricTagsProvider.BlockTagsProvider {
+		private VBlockTagsProvider(FabricPackOutput dataGenerator, CompletableFuture<HolderLookup.Provider> completableFuture) {
 			super(dataGenerator, completableFuture);
 		}
 
@@ -381,8 +374,8 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
 		protected void addTags(HolderLookup.Provider arg) {}
 	}
 
-	private static class VItemTagsProvider extends CustomTagProviders.CustomItemTagProvider {
-		private VItemTagsProvider(FabricDataOutput dataGenerator, CompletableFuture<HolderLookup.Provider> completableFuture, CustomBlockTagProvider blockTagProvider) {
+	private static class VItemTagsProvider extends FabricTagsProvider.ItemTagsProvider {
+		private VItemTagsProvider(FabricPackOutput dataGenerator, CompletableFuture<HolderLookup.Provider> completableFuture, BlockTagsProvider blockTagProvider) {
 			super(dataGenerator, completableFuture, blockTagProvider);
 		}
 
@@ -392,9 +385,9 @@ public class VampireLibDataGen implements DataGeneratorEntrypoint {
 		}
 
 		private void copyCobblestoneTags() {
-			getOrCreateTagBuilder(ItemTags.STONE_CRAFTING_MATERIALS)
-					.add(Items.ANDESITE, Items.DIORITE, Items.GRANITE);
-			getOrCreateTagBuilder(ItemTags.STONE_TOOL_MATERIALS)
+			builder(ItemTags.STONE_CRAFTING_MATERIALS)
+					.add(BlockItemIds.ANDESITE, BlockItemIds.DIORITE, BlockItemIds.GRANITE);
+			builder(ItemTags.STONE_TOOL_MATERIALS)
 					.addTag(ItemTags.STONE_CRAFTING_MATERIALS);
 		}
 	}
